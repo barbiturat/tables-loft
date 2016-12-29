@@ -18,6 +18,10 @@
       background: #3e8fc4 url(../../public/img/pool-table-borders.svg) 0 0 no-repeat;
       background-size: auto 100%;
       @include border-radius(22px);
+
+      &.table_status_active {
+        background: #d74045 url(../../public/img/pool-table-borders_active.svg) 0 0 no-repeat;
+      }
     }
 
     &_tennis {
@@ -70,6 +74,9 @@
       left: 27px;
       right: 27px;
       background-color: #367096;
+    }
+    .table_type_pool.table_status_active & {
+      background-color: #a13c42;
     }
   }
 
