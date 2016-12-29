@@ -30,10 +30,8 @@
 
 @mixin button-hover-behavior($background-color) {
   cursor: pointer;
-  transition: background-color 0.2s;
-  animation-timing-function: ease-in-out;
   &:hover {
-    background-color: darken( $background-color, 5% );
+    background-color: lighten( $background-color, 3% );
   }
 }
 

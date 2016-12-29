@@ -16,7 +16,10 @@
 
   &_role {
     &_manager {
-      background-color: map-get($roles-palette, manager);
+      $manager-btn-bcg-color: map-get($roles-palette, manager);
+
+      background-color: $manager-btn-bcg-color;
+      @include button-hover-behavior($manager-btn-bcg-color);
     }
   }
 }

@@ -35,6 +35,9 @@
   &__hamburger-btn {
     $hamburger-btn-width: 48px;
     $hamburger-btn-height: 48px;
+    $hamburger-bcg-color: #12cc3d;
+
+    @include button-hover-behavior($hamburger-bcg-color);
 
     position: relative;
     width: $hamburger-btn-width;

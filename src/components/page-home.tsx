@@ -20,15 +20,15 @@ class PageHome extends React.Component<ComponentProps, AnyDict> {
       <div className="page">
         <div className="header">
           <div className="header__section header__section_role_hamburger">
-            <div className="header__hamburger-btn">
+            <a href="" className="header__hamburger-btn">
               <div className="header__hamburger-btn-content"></div>
-            </div>
+            </a>
           </div>
           <div className="header__section header__section_role_caption">
             <span className="header__caption">Boston Pool Loft</span>
           </div>
           <div className="header__section header__section_role_utils">
-            <a className="button button_role_manager">Manager Mode</a>
+            <a href="" className="button button_role_manager">Manager Mode</a>
           </div>
         </div>
 
