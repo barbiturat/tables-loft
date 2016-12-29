@@ -48,7 +48,6 @@ module.exports = {
       'react-redux',
       'react-redux-form',
       'react-router',
-      'react-select',
       'redux',
       'redux-observable',
       'redux-router',
