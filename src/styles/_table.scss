@@ -46,6 +46,16 @@
         background-color: #c43e3f;
       }
     }
+
+    &_default {
+      background-color: #8f8f8f;
+      border: 12px solid $white;
+
+      &.table_status_active {
+        background-color: #c43e3f;
+        border-color: #951418;
+      }
+    }
   }
 
   &_status {
@@ -207,18 +217,28 @@
         background-color: rgba(0, 0, 0, 0.7);
         background-blend-mode: multiply;
 
+        &:after {
+          background-size: auto 100%;
+        }
+
         .table_type_pool & {
           top: 50px;
           &:after {
             background-image: url(../../public/img/icons/pool-table-yellow.svg);
-            background-size: auto 100%;
           }
         }
 
         .table_type_tennis & {
           &:after {
             background-image: url(../../public/img/icons/tennis-table-yellow.svg);
-            background-size: auto 100%;
+          }
+        }
+
+        .table_type_default & {
+          &:after {
+            top: 47%;
+            left: 12px;
+            background: url(../../public/img/icons/default-table-yellow.svg) 0 center no-repeat;
           }
         }
 

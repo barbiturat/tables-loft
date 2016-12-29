@@ -120,6 +120,21 @@ class PageHome extends React.Component<ComponentProps, AnyDict> {
             <a href="" className="table__btn-view-sessions">View More</a>
           </div>
 
+          <div className="table table_type_default table_status_ready tables-set_adjust_table">
+            <div className="table__label table__label_role_table-type">Default Table</div>
+            <a href="" className="table__button table__button_role_change-availability"/>
+            <div className="table__label table__label_role_availability">
+              Available
+            </div>
+            <div className="table__session-info">
+              <span className="table__session-name">Last Session</span>
+              <span className="table__session-finish-time">20:30</span>
+              <span className="table__session-length">1h 10m</span>
+            </div>
+            <a href="" className="table__btn-view-sessions">View More</a>
+          </div>
+
+
         </div>
       </div>
     );
