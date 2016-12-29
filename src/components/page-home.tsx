@@ -32,7 +32,9 @@ class PageHome extends React.Component<ComponentProps, AnyDict> {
           </div>
         </div>
 
+
         <div className="tables-set">
+
           <div className="table table_type_pool table_status_ready tables-set_adjust_table">
             <div className="table__label table__label_role_table-type">Pool Table 1</div>
             <div className="table__label table__label_role_availability">
@@ -45,6 +47,7 @@ class PageHome extends React.Component<ComponentProps, AnyDict> {
             </div>
             <a href="" className="table__btn-view-sessions">View More</a>
           </div>
+
           <div className="table table_type_pool table_status_ready table_status_disabled tables-set_adjust_table">
             <span className="table__label table__label_role_disabled">
               Pool Table 2 Is Not Active
