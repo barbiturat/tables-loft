@@ -1,0 +1,22 @@
+@import 'settings';
+@import 'mixins';
+
+.button {
+  $button-radius: 7px;
+
+  display: inline-block;
+  padding: 0 18px;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  line-height: 46px;
+  white-space: nowrap;
+  color: $white;
+  @include border-radius($button-radius);
+
+  &_role {
+    &_manager {
+      background-color: map-get($roles-palette, manager);
+    }
+  }
+}

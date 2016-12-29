@@ -1,0 +1,55 @@
+@import 'fonts';
+
+$global-font-size: 100%;
+$global-line-height: 1.5;
+$global-border-radius: 5px;
+$app-palette: (
+        primary: #84bef0,
+        secondary: #8e8e8e,
+        third: #f0849c,
+        fourth: #8ed168,
+        success: #3adb76,
+        warning: #ffae00,
+        alert: #ec5840
+);
+$extra-light-gray: #f0f0f0;
+$very-light-gray: #d8d8d8;
+$light-gray: #aaaaaa;
+$medium-gray: #808080;
+$dark-gray: #4c4c4c;
+$black: #000;
+$white: #fff;
+$body-background: #d8e5eb;
+$body-background-manager: #ffd9ac;
+$body-font-color: $dark-gray;
+$body-font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;
+/// Set to `true` to enable antialiased type, using the `-webkit-font-smoothing` and `-moz-osx-font-smoothing` CSS properties.
+$body-antialiased: true !default;
+$global-weight-normal: 400;
+$global-weight-bold: bold;
+$max-page-width: 1200px;
+$input-placeholder-color: $very-light-gray;
+$input-font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;
+//$input-color: $medium-gray;
+$input-radius: 2px;
+$header-height: 90px;
+
+$roles-palette: (
+        manager: #cca711,
+        gm: #c1c1c1,
+        bar-supervisor: #84bef0,
+        bartender: #74dc61,
+        floor-staff: #f3a84d,
+        waitress: #db8ef8,
+        kp: #86a9df,
+        hostess: #ec6a6a,
+        chef: #a9815d,
+        security: #84daf1,
+        pr: #d2d540,
+        bar-back: #1f1f1f
+);
+$sign-palette: (
+        clocked-out: #8e8e8e,
+        clocked-in: #74df77,
+        break: #eebb4e
+);

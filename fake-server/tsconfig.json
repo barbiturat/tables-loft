@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "noEmitOnError": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "target": "es6",
+    "rootDir": "..",
+    "outDir": "./out"
+  },
+  "files": [
+    "./index.ts"
+  ]
+}

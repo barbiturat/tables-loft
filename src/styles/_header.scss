@@ -1,0 +1,85 @@
+@import 'settings';
+@import 'mixins';
+
+.header {
+  @include normalize-block();
+
+  display: flex;
+  height: $header-height;
+  background-color: #464646;
+
+  &__section {
+    display: flex;
+    align-items: center;
+    padding: 15px 26px;
+
+    &_role {
+      &_hamburger {
+      }
+      &_caption {
+        flex-grow: 1;
+        justify-content: center;
+      }
+      &_utils {
+
+      }
+    }
+  }
+
+  &__caption {
+    font-size: 35px;
+    font-weight: 600;
+    color: $white;
+  }
+
+  &__hamburger-btn {
+    $hamburger-btn-width: 48px;
+    $hamburger-btn-height: 48px;
+
+    position: relative;
+    width: $hamburger-btn-width;
+    height: $hamburger-btn-height;
+    background-color: #12cc3d;
+    @include border-radius($global-border-radius);
+
+    &-content {
+      $hamburger-btn-padding-x: 8px;
+      $hamburger-btn-padding-y: 10px;
+      $hamburger-btn-line-width: $hamburger-btn-width - $hamburger-btn-padding-x * 2;
+      $hamburger-btn-line-height: 5px;
+      $hamburger-btn-content-height: $hamburger-btn-height - $hamburger-btn-padding-y * 2;
+
+      left: $hamburger-btn-padding-x;
+      top: $hamburger-btn-padding-y;
+      position: absolute;
+      width: $hamburger-btn-line-width;
+      height: $hamburger-btn-line-height;
+      @include border-radius($hamburger-btn-line-height);
+      background-color: $white;
+
+      &:before {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 0;
+        top: ($hamburger-btn-content-height / 2) - ($hamburger-btn-line-height / 2);
+        width: $hamburger-btn-line-width;
+        height: $hamburger-btn-line-height;
+        @include border-radius($hamburger-btn-line-height);
+        background-color: $white;
+      }
+
+      &:after {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 0;
+        top: $hamburger-btn-content-height - $hamburger-btn-line-height;
+        width: $hamburger-btn-line-width;
+        height: $hamburger-btn-line-height;
+        @include border-radius($hamburger-btn-line-height);
+        background-color: $white;
+      }
+    }
+  }
+}

@@ -1,0 +1,68 @@
+@import 'settings';
+
+@mixin normalize-block() {
+  border-collapse: separate;
+  border-spacing: 0;
+  color: $body-font-color;
+  cursor: auto;
+  empty-cells: show;
+  font-family: $body-font-family;
+  font-size: $global-font-size;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: $global-weight-normal;
+  letter-spacing: normal;
+  line-height: $global-line-height;
+  text-align: left;
+  text-indent: 0;
+  text-transform: none;
+  white-space: normal;
+  word-spacing: normal;
+}
+
+@mixin link-to-button($color) {
+  color: $color;
+  text-decoration: none;
+  &:hover {
+    color: $color;
+  }
+}
+
+@mixin button-hover-behavior($background-color) {
+  cursor: pointer;
+  transition: background-color 0.2s;
+  animation-timing-function: ease-in-out;
+  &:hover {
+    background-color: darken( $background-color, 5% );
+  }
+}
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  border-radius: $radius;
+}
+
+@mixin box-sizing($type) {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+@mixin translate-center-y() {
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+@mixin translate-center-x() {
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  -moz-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  -o-transform: translateX(-50%);
+  transform: translateX(-50%);
+}

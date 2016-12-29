@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "redux-observable": "npm:redux-observable",
+    "rxjs": "npm:rxjs"
+  },
+  "globalDependencies": {}
+}

@@ -1,0 +1,67 @@
+@import 'normalize-scss/sass/_normalize.scss';
+@import 'settings';
+@import 'mixins';
+
+@import 'button';
+@import 'page';
+@import 'header';
+@import 'table';
+
+@include normalize();
+
+html {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+
+  @if ($body-antialiased) {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+#root {
+  display: inline-flex;
+  width: $max-page-width;
+  min-height: 100%;
+  align-items: stretch;
+  margin-top: -1px;
+  padding-top: 1px;
+  background-color: #d8d8d8;
+}
+
+.app {
+  display: flex;
+  flex-grow: 1;
+}
+
+.page {
+  @include normalize-block();
+
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  background-color: #112d42;
+  box-shadow: inset 0 ($header-height + 30px) 60px rgba(0, 0, 0, 0.20);
+}
+
+.tables-set {
+  @include normalize-block();
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 55px 50px;
+
+  &_adjust {
+    &_table {
+      margin-bottom: 60px;
+    }
+  }
+}
