@@ -1,6 +1,9 @@
 @import 'settings';
 @import 'mixins';
 
+$tennis-table-border-width: 6px;
+$default-table-border-width: 12px;
+
 .table {
   $table-width: 524px;
   $table-height: 320px;
@@ -25,15 +28,13 @@
     }
 
     &_tennis {
-      $border-width-tennis-table: 6px;
-
       background: #3fc360 url(../../public/img/tennis-line.svg) center center no-repeat;
       background-size: 100% 100%;
-      border: $border-width-tennis-table solid $white;
+      border: $tennis-table-border-width solid $white;
       &:before {
         content: '';
-        margin-left: -$border-width-tennis-table;
-        margin-top: -$border-width-tennis-table;
+        margin-left: -$tennis-table-border-width;
+        margin-top: -$tennis-table-border-width;
         display: block;
         width: $table-width;
         height: $table-height;
@@ -49,7 +50,7 @@
 
     &_default {
       background-color: #8f8f8f;
-      border: 12px solid $white;
+      border: $default-table-border-width solid $white;
 
       &.table_status_active {
         background-color: #c43e3f;
@@ -144,7 +145,7 @@
           top: 108px;
         }
 
-        .table_status_ready & {
+        .table_status_ready &, .table_status_disabled & {
           background-color: #69df3b;
           background-image: url(../../public/img/icons/timer-white.svg);
           background-size: auto 45px;
@@ -200,6 +201,18 @@
           height: 90px;
           background: url(../../public/img/icons/lock-white.svg) center center no-repeat;
           background-size: auto 100%;
+        }
+
+        .table_type_tennis & {
+          top: -$tennis-table-border-width;
+          left: -$tennis-table-border-width;
+          @include border-radius(0);
+        }
+
+        .table_type_default & {
+          top: -$default-table-border-width;
+          left: -$default-table-border-width;
+          @include border-radius(0);
         }
       }
       &_table-type {
