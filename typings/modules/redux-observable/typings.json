@@ -1,7 +1,7 @@
 {
   "resolution": "main",
   "tree": {
-    "src": "/Users/vadimnekrasov/Work/pool-loft-app/node_modules/redux-observable/package.json",
+    "src": "/Users/vadimnekrasov/Work/pool-loft-app-new/node_modules/redux-observable/package.json",
     "raw": "npm:redux-observable",
     "main": "lib/index.js",
     "typings": "./index.d.ts",

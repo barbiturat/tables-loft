@@ -1,14 +1,14 @@
 {
   "resolution": "main",
   "tree": {
-    "src": "/Users/vadimnekrasov/Work/pool-loft-app/node_modules/rxjs/package.json",
+    "src": "/Users/vadimnekrasov/Work/pool-loft-app-new/node_modules/rxjs/package.json",
     "raw": "npm:rxjs",
     "main": "Rx.js",
     "typings": "Rx.d.ts",
     "version": "5.0.2",
     "dependencies": {
       "symbol-observable": {
-        "src": "/Users/vadimnekrasov/Work/pool-loft-app/node_modules/symbol-observable/package.json",
+        "src": "/Users/vadimnekrasov/Work/pool-loft-app-new/node_modules/symbol-observable/package.json",
         "raw": "npm:symbol-observable",
         "typings": "index.d.ts",
         "version": "1.0.4",
