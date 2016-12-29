@@ -109,6 +109,38 @@
     }
   }
 
+  &__button {
+    &_role {
+      &_change-availability {
+        position: absolute;
+        left: 54px;
+        top: 103px;
+        width: 78px;
+        height: 78px;
+        @include box-sizing(border-box);
+        border: 6px solid $white;
+        background: no-repeat center center;
+        @include border-radius(50%);
+
+        .table_type_pool & {
+          left: 60px;
+          top: 108px;
+        }
+
+        .table_status_ready & {
+          background-color: #69df3b;
+          background-image: url(../../public/img/icons/timer-white.svg);
+          background-size: auto 45px;
+        }
+        .table_status_active & {
+          background-color: #c12c30;
+          background-image: url(../../public/img/icons/stop-white.svg);
+          background-size: 22px 22px;
+        }
+      }
+    }
+  }
+
   &__label {
     color: $white;
     
@@ -198,43 +230,16 @@
       }
       &_availability, &_counter {
         position: absolute;
-        left: 53px;
-        top: 102px;
-        line-height: 78px;
-        padding-left: 95px;
+        left: 151px;
+        top: 117px;
         white-space: normal;
         color: $white;
         font-size: 33px;
         font-weight: 600;
 
         .table_type_pool & {
-          left: 60px;
-          top: 108px;
-        }
-
-        &:before {
-          content: '';
-          display: block;
-          position: absolute;
-          left: 0;
-          top: 0;
-          width: 78px;
-          height: 78px;
-          @include box-sizing(border-box);
-          border: 6px solid $white;
-          background: no-repeat center center;
-          @include border-radius(50%);
-
-          .table_status_ready & {
-            background-color: #69df3b;
-            background-image: url(../../public/img/icons/timer-white.svg);
-            background-size: auto 45px;
-          }
-          .table_status_active & {
-            background-color: #c12c30;
-            background-image: url(../../public/img/icons/stop-white.svg);
-            background-size: 22px 22px;
-          }
+          left: 155px;
+          top: 124px;
         }
       }
     }

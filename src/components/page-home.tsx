@@ -37,6 +37,7 @@ class PageHome extends React.Component<ComponentProps, AnyDict> {
 
           <div className="table table_type_pool table_status_ready tables-set_adjust_table">
             <div className="table__label table__label_role_table-type">Pool Table 1</div>
+            <a href="" className="table__button table__button_role_change-availability"/>
             <div className="table__label table__label_role_availability">
               Available
             </div>
@@ -53,6 +54,7 @@ class PageHome extends React.Component<ComponentProps, AnyDict> {
               Pool Table 2 Is Not Active
             </span>
             <div className="table__label table__label_role_table-type">Pool Table 1</div>
+            <a href="" className="table__button table__button_role_change-availability"/>
             <div className="table__label table__label_role_availability">
               Available
             </div>
@@ -66,6 +68,7 @@ class PageHome extends React.Component<ComponentProps, AnyDict> {
 
           <div className="table table_type_tennis table_status_ready tables-set_adjust_table">
             <div className="table__label table__label_role_table-type">Tennis Table 3</div>
+            <a href="" className="table__button table__button_role_change-availability"/>
             <div className="table__label table__label_role_availability">
               Available
             </div>
@@ -77,6 +80,7 @@ class PageHome extends React.Component<ComponentProps, AnyDict> {
           <div className="table table_type_tennis table_status_active tables-set_adjust_table">
             <div className="table__label table__label_role_table-type">Tennis Table 3</div>
             <div className="table__label table__label_role_start-time">20:30</div>
+            <a href="" className="table__button table__button_role_change-availability"/>
             <div className="table__label table__label_role_counter">
               1h 30m 16s
             </div>
