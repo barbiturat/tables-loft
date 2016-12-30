@@ -12,12 +12,12 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
     const response: ResponseTablesPayload = {
       tables: [
         {
-          name: 'firstPoolTable',
-          id: 12,
+          name: 'Pool Table 1',
+          id: 100,
           tableType: 'pool',
-          status: 'active',
+          status: 'ready',
           currentSession: {
-            id: 5433,
+            id: 10,
             starts_at: moment().utc().subtract({
               hours: 1,
               minutes: 24,
@@ -27,7 +27,24 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
             adminEdited: false
           },
           lastSession: {
-            id: 5433,
+            id: 11,
+            starts_at: moment().utc().subtract({
+              hours: 4,
+              minutes: 24,
+              seconds: 37,
+            }).toISOString(),
+            durationSeconds: moment.duration(1, 'hours').asSeconds(),
+            adminEdited: true
+          }
+        },
+        {
+          name: 'Pool Table 2',
+          id: 101,
+          tableType: 'pool',
+          status: 'active',
+          currentSession: null,
+          lastSession: {
+            id: 13,
             starts_at: moment().utc().subtract({
               hours: 4,
               minutes: 24,
@@ -38,21 +55,207 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           }
         },
         {
-          name: 'otherPoolTable',
-          id: 53,
+          name: 'Pool Table 3',
+          id: 102,
           tableType: 'pool',
+          status: 'disabled',
+          currentSession: {
+            id: 14,
+            starts_at: moment().utc().subtract({
+              hours: 1,
+              minutes: 24,
+              seconds: 37,
+            }).toISOString(),
+            durationSeconds: moment.duration(2, 'hours').asSeconds(),
+            adminEdited: true
+          },
+          lastSession: null
+        },
+
+
+        {
+          name: 'Shuffle Table 1',
+          id: 103,
+          tableType: 'shuffleBoard',
           status: 'ready',
+          currentSession: {
+            id: 15,
+            starts_at: moment().utc().subtract({
+              hours: 1,
+              minutes: 24,
+              seconds: 37,
+            }).toISOString(),
+            durationSeconds: moment.duration(2, 'hours').asSeconds(),
+            adminEdited: false
+          },
+          lastSession: {
+            id: 16,
+            starts_at: moment().utc().subtract({
+              hours: 4,
+              minutes: 24,
+              seconds: 37,
+            }).toISOString(),
+            durationSeconds: moment.duration(1, 'hours').asSeconds(),
+            adminEdited: true
+          }
+        },
+        {
+          name: 'Shuffle Table 2',
+          id: 104,
+          tableType: 'shuffleBoard',
+          status: 'active',
           currentSession: null,
           lastSession: {
-            id: 77,
+            id: 17,
             starts_at: moment().utc().subtract({
-              hours: 5,
-              minutes: 11,
-              seconds: 0,
+              hours: 4,
+              minutes: 24,
+              seconds: 37,
             }).toISOString(),
             durationSeconds: moment.duration(1, 'hours').asSeconds(),
             adminEdited: false
           }
+        },
+        {
+          name: 'Shuffle Table 3',
+          id: 105,
+          tableType: 'shuffleBoard',
+          status: 'disabled',
+          currentSession: {
+            id: 18,
+            starts_at: moment().utc().subtract({
+              hours: 1,
+              minutes: 24,
+              seconds: 37,
+            }).toISOString(),
+            durationSeconds: moment.duration(2, 'hours').asSeconds(),
+            adminEdited: true
+          },
+          lastSession: null
+        },
+
+
+        {
+          name: 'Tennis Table 1',
+          id: 106,
+          tableType: 'tableTennis',
+          status: 'ready',
+          currentSession: {
+            id: 19,
+            starts_at: moment().utc().subtract({
+              hours: 1,
+              minutes: 24,
+              seconds: 37,
+            }).toISOString(),
+            durationSeconds: moment.duration(2, 'hours').asSeconds(),
+            adminEdited: false
+          },
+          lastSession: {
+            id: 20,
+            starts_at: moment().utc().subtract({
+              hours: 4,
+              minutes: 24,
+              seconds: 37,
+            }).toISOString(),
+            durationSeconds: moment.duration(1, 'hours').asSeconds(),
+            adminEdited: true
+          }
+        },
+        {
+          name: 'Tennis Table 2',
+          id: 107,
+          tableType: 'tableTennis',
+          status: 'active',
+          currentSession: null,
+          lastSession: {
+            id: 21,
+            starts_at: moment().utc().subtract({
+              hours: 4,
+              minutes: 24,
+              seconds: 37,
+            }).toISOString(),
+            durationSeconds: moment.duration(1, 'hours').asSeconds(),
+            adminEdited: false
+          }
+        },
+        {
+          name: 'Tennis Table 3',
+          id: 108,
+          tableType: 'tableTennis',
+          status: 'disabled',
+          currentSession: {
+            id: 22,
+            starts_at: moment().utc().subtract({
+              hours: 1,
+              minutes: 24,
+              seconds: 37,
+            }).toISOString(),
+            durationSeconds: moment.duration(2, 'hours').asSeconds(),
+            adminEdited: true
+          },
+          lastSession: null
+        },
+
+
+        {
+          name: 'Generic Table 1',
+          id: 109,
+          tableType: 'generic',
+          status: 'ready',
+          currentSession: {
+            id: 23,
+            starts_at: moment().utc().subtract({
+              hours: 1,
+              minutes: 24,
+              seconds: 37,
+            }).toISOString(),
+            durationSeconds: moment.duration(2, 'hours').asSeconds(),
+            adminEdited: false
+          },
+          lastSession: {
+            id: 24,
+            starts_at: moment().utc().subtract({
+              hours: 4,
+              minutes: 24,
+              seconds: 37,
+            }).toISOString(),
+            durationSeconds: moment.duration(1, 'hours').asSeconds(),
+            adminEdited: true
+          }
+        },
+        {
+          name: 'Generic Table 2',
+          id: 110,
+          tableType: 'generic',
+          status: 'active',
+          currentSession: null,
+          lastSession: {
+            id: 25,
+            starts_at: moment().utc().subtract({
+              hours: 4,
+              minutes: 24,
+              seconds: 37,
+            }).toISOString(),
+            durationSeconds: moment.duration(1, 'hours').asSeconds(),
+            adminEdited: false
+          }
+        },
+        {
+          name: 'Generic Table 3',
+          id: 111,
+          tableType: 'generic',
+          status: 'disabled',
+          currentSession: {
+            id: 26,
+            starts_at: moment().utc().subtract({
+              hours: 1,
+              minutes: 24,
+              seconds: 37,
+            }).toISOString(),
+            durationSeconds: moment.duration(2, 'hours').asSeconds(),
+            adminEdited: true
+          },
+          lastSession: null
         }
       ]
     };
