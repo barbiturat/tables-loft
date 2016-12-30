@@ -8,6 +8,7 @@ export interface Table {
   status: TableStatus;
   currentSessionId: number;
   lastSessionId?: number;
+  isInPending: boolean;
 }
 
 export interface TableSession extends TableSessionBackend {}

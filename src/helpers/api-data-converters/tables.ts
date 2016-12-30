@@ -12,7 +12,8 @@ export const tablesToFront = (tables: BackendTable[]): FrontendTable[] => {
       tableType: table.tableType,
       status: table.status,
       currentSessionId,
-      lastSessionId
+      lastSessionId,
+      isInPending: false
     };
   });
 };
