@@ -199,7 +199,7 @@ class PageHome extends React.Component<ComponentProps, AnyDict> {
           </div>
 
           <div className="table table_type_shuffle table_status_active tables-set_adjust_table">
-            <div className="table__label table__label_role_table-type">Tennis Table 3</div>
+            <div className="table__label table__label_role_table-type">Shuffle Board 6</div>
             <div className="table__label table__label_role_start-time">20:30</div>
             <a href="" className="table__button table__button_role_change-availability"/>
             <div className="table__label table__label_role_counter">

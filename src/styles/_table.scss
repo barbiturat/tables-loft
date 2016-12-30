@@ -3,6 +3,8 @@
 
 $tennis-table-border-width: 6px;
 $default-table-border-width: 12px;
+$shuffle-table-border-width: 22px;
+$shuffle-table-border-radius: 50px;
 
 .table {
   $table-width: 524px;
@@ -48,34 +50,39 @@ $default-table-border-width: 12px;
     }
 
     &_shuffle {
-      $border-width: 22px;
-      $inner-width: $table-width - ($border-width * 2);
-      $inner-height: $table-height - ($border-width * 2);
+      $inner-width: $table-width - ($shuffle-table-border-width * 2);
 
       background-color: #383435;
-      border: $border-width solid #c69836;
-      @include border-radius(50px);
+      border: $shuffle-table-border-width solid #c69836;
+      @include border-radius($shuffle-table-border-radius);
       -webkit-box-shadow: inset 6px 5px 0 rgba(0, 0, 0, 0.3), 6px 5px 0 rgba(0, 0, 0, 0.3);
       -moz-box-shadow: inset 6px 5px 0 rgba(0, 0, 0, 0.3), 6px 5px 0 rgba(0, 0, 0, 0.3);
       box-shadow: inset 6px 5px 0 rgba(0, 0, 0, 0.3), 6px 5px 0 rgba(0, 0, 0, 0.3);
 
       &:before {
-        $element-width: 420px;
-        $element-height: 155px;
+        $element-width: 435px;
 
         content: '';
         position: absolute;
         width: $element-width;
-        height: $element-height;
+        height: 170px;
         left: ($inner-width / 2) - ($element-width / 2);
-        top: ($inner-height / 2) - ($element-height / 2);
-        background: url(../../public/img/shuffle-board-background-field.svg) center center no-repeat;
+        top: 64px;
+        @include box-sizing(border-box);
+        background: #c69836 url(../../public/img/shuffle-board-background-field.svg) center center no-repeat;
         background-size: 100% auto;
+        border: 7px solid $white;
+        -webkit-box-shadow: 6px 5px 0 rgba(0, 0, 0, 0.3);
+        -moz-box-shadow: 6px 5px 0 rgba(0, 0, 0, 0.3);
+        box-shadow: 6px 5px 0 rgba(0, 0, 0, 0.3);
       }
 
       &.table_status_active {
-        background-color: #c43e3f;
         border-color: #951418;
+
+        &:before {
+          background-color: #951418;
+        }
       }
     }
 
@@ -120,6 +127,13 @@ $default-table-border-width: 12px;
     .table_type_pool.table_status_active & {
       background-color: #a13c42;
     }
+
+    .table_type_shuffle & {
+      top: 183px;
+      padding: 0 17px;
+      left: 30px;
+      right: 30px;
+    }
   }
 
   &__session-name {
@@ -156,6 +170,11 @@ $default-table-border-width: 12px;
       background: url(../../public/img/icons/arrow-simple-yellow.svg) 0 center no-repeat;
       background-size: auto 100%;
     }
+
+    .table_type_shuffle & {
+      top: 246px;
+      left: 48px;
+    }
   }
 
   &__button {
@@ -174,6 +193,11 @@ $default-table-border-width: 12px;
         .table_type_pool & {
           left: 60px;
           top: 108px;
+        }
+
+        .table_type_shuffle & {
+          left: 38px;
+          top: 85px;
         }
 
         .table_status_ready &, .table_status_disabled & {
@@ -203,6 +227,11 @@ $default-table-border-width: 12px;
         font-weight: 500;
         background: url(../../public/img/icons/clock-white.svg) 0 center no-repeat;
         background-size: 13px auto;
+
+        .table_type_shuffle & {
+          top: 89px;
+          left: 138px;
+        }
       }
       &_disabled {
         position: absolute;
@@ -245,12 +274,18 @@ $default-table-border-width: 12px;
           left: -$default-table-border-width;
           @include border-radius(0);
         }
+
+        .table_type_shuffle & {
+          top: -$shuffle-table-border-width;
+          left: -$shuffle-table-border-width;
+          @include border-radius($shuffle-table-border-radius);
+        }
       }
       &_table-type {
         position: absolute;
         top: 45px;
         @include translate-center-x();
-        padding: 0 12px 0 36px;
+        padding: 0 12px 0 32px;
         line-height: 35px;
         white-space: normal;
         color: #ffff00;
@@ -279,12 +314,16 @@ $default-table-border-width: 12px;
         }
 
         .table_type_shuffle & {
+          top: 18px;
           &:after {
+            width: 14px;
+            height: 14px;
             background-image: url(../../public/img/icons/shuffle-board-yellow.svg);
           }
         }
 
         .table_type_default & {
+          top: 40px;
           &:after {
             top: 47%;
             left: 12px;
@@ -317,6 +356,11 @@ $default-table-border-width: 12px;
         .table_type_pool & {
           left: 155px;
           top: 124px;
+        }
+
+        .table_type_shuffle & {
+          left: 135px;
+          top: 100px;
         }
       }
     }
