@@ -161,6 +161,13 @@ $shuffle-table-border-radius: 50px;
     color: #ffff00;
     font-size: 11px;
 
+    &:hover {
+      color: $white;
+      &:after {
+        background-image: url(../../public/img/icons/arrow-simple-white.svg);
+      }
+    }
+
     &:after {
       content: '';
       display: inline-block;
@@ -201,14 +208,18 @@ $shuffle-table-border-radius: 50px;
         }
 
         .table_status_ready &, .table_status_disabled & {
-          background-color: #69df3b;
+          $bg-color: #69df3b;
+          background-color: $bg-color;
           background-image: url(../../public/img/icons/timer-white.svg);
           background-size: auto 45px;
+          @include button-hover-behavior($bg-color, 7);
         }
         .table_status_active & {
-          background-color: #c12c30;
+          $bg-color: #c12c30;
+          background-color: $bg-color;
           background-image: url(../../public/img/icons/stop-white.svg);
           background-size: 22px 22px;
+          @include button-hover-behavior($bg-color, 7);
         }
       }
     }
