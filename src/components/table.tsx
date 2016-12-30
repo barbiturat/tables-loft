@@ -7,7 +7,8 @@ import {TableSession} from '../interfaces/store-models';
 interface Props {
   type?: TableType;
   status?: TableStatus;
-  sessions?: TableSession[];
+  currentSession?: TableSession;
+  lastSession?: TableSession;
   name?: string;
 }
 
@@ -15,7 +16,8 @@ export default class Table extends React.Component<Props, AnyDict> {
   static defaultProps = {
     type: 'generic',
     status: 'ready',
-    sessions: [] as TableSession[],
+    currentSession: (null as TableSession),
+    lastSession: (null as TableSession),
     name: 'No Name'
   };
 
@@ -23,7 +25,7 @@ export default class Table extends React.Component<Props, AnyDict> {
     return '1h 30m 16s';
   };
 
-  getSessionsInfo = (lastSession: TableSession) => {
+  getLastSessionInfo = (lastSession: TableSession) => {
     return lastSession ? (
         <div className="table__session-info">
           <span className="table__session-name">Last Session</span>
@@ -46,7 +48,7 @@ export default class Table extends React.Component<Props, AnyDict> {
   };
 
   render() {
-    const {sessions, name, status, type} = this.props;
+    const {name, status, type, lastSession} = this.props;
 
     const tableTypeClassName = {
       pool: 'table_type_pool',
@@ -73,7 +75,7 @@ export default class Table extends React.Component<Props, AnyDict> {
         <div className="table__label table__label_role_availability">
           {labelAvailableText}
         </div>
-        {this.getSessionsInfo(sessions[0])}
+        {this.getLastSessionInfo(lastSession)}
         <a href="" className="table__btn-view-sessions">View More</a>
       </div>
     );

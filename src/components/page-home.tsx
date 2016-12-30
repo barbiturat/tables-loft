@@ -29,24 +29,29 @@ class PageHome extends React.Component<ComponentProps, AnyDict> {
     return (
       <div className="page">
         <Header/>
-        <TablesGroup/>
+        <TablesGroup tables={this.props.tables}/>
       </div>
     );
   }
 }
+
+const getSessionById = (sessions: TableSessionInStore[], id: number) => {
+  return isNaN(id) ? null : find(sessions, (session: TableSessionInStore) => {
+      return session.id === id;
+    });
+};
 
 const mapStateToProps = (state: StoreStructure, ownProps?: AnyDict): MappedProps => {
   const appData = state.app;
   const tableSessions = appData.tableSessionsData.tableSessions;
 
   const formattedTables: ComponentTable[] = appData.tablesData.tables.map((table) => {
-    const lastSessionId = table.lastSessionId;
-    const lastSession = isNaN(lastSessionId) ? null : find(tableSessions, (session: TableSessionInStore) => {
-      return session.id === lastSessionId;
-    });
+    const lastSession = getSessionById(tableSessions, table.lastSessionId);
+    const currentSession = getSessionById(tableSessions, table.currentSessionId);
 
     return assign({}, table, {
-      lastSession: lastSession
+      currentSession,
+      lastSession
     });
   });
 
