@@ -20,6 +20,7 @@
 
       background-color: $manager-btn-bcg-color;
       @include button-hover-behavior($manager-btn-bcg-color);
+      text-decoration: none;
     }
   }
 }
