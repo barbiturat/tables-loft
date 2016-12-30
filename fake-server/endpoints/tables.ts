@@ -42,7 +42,17 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           id: 101,
           tableType: 'pool',
           status: 'active',
-          currentSession: null,
+          currentSession: {
+            id: 12,
+            starts_at: moment().utc().subtract({
+              hours: 1,
+              minutes: 33,
+              seconds: 37,
+            }).toISOString(),
+            durationSeconds: moment.duration(1, 'hours').asSeconds(),
+            adminEdited: false
+          }
+          ,
           lastSession: {
             id: 13,
             starts_at: moment().utc().subtract({
@@ -104,7 +114,16 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           id: 104,
           tableType: 'shuffleBoard',
           status: 'active',
-          currentSession: null,
+          currentSession: {
+            id: 166,
+            starts_at: moment().utc().subtract({
+              hours: 2,
+              minutes: 2,
+              seconds: 33,
+            }).toISOString(),
+            durationSeconds: moment.duration(1, 'hours').asSeconds(),
+            adminEdited: false
+          },
           lastSession: {
             id: 17,
             starts_at: moment().utc().subtract({
@@ -166,8 +185,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           id: 107,
           tableType: 'tableTennis',
           status: 'active',
-          currentSession: null,
-          lastSession: {
+          currentSession: {
             id: 21,
             starts_at: moment().utc().subtract({
               hours: 7,
@@ -176,7 +194,8 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
             }).toISOString(),
             durationSeconds: moment.duration(1, 'hours').asSeconds(),
             adminEdited: false
-          }
+          },
+          lastSession: null
         },
         {
           name: 'Tennis Table 3',
@@ -228,7 +247,16 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           id: 110,
           tableType: 'generic',
           status: 'active',
-          currentSession: null,
+          currentSession: {
+            id: 244,
+            starts_at: moment().utc().subtract({
+              hours: 9,
+              minutes: 55,
+              seconds: 44,
+            }).toISOString(),
+            durationSeconds: moment.duration(1, 'hours').asSeconds(),
+            adminEdited: false
+          },
           lastSession: {
             id: 25,
             starts_at: moment().utc().subtract({

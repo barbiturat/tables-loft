@@ -39,7 +39,7 @@ export default class Table extends React.Component<Props, AnyDict> {
         hours: duration.hours(),
         minutes: duration.minutes()
       })
-        .format("H[h]:mm[m]");
+        .format("H[h] mm[m]");
 
       return (
         <div className="table__session-info">
@@ -65,8 +65,21 @@ export default class Table extends React.Component<Props, AnyDict> {
       ) : null;
   };
 
+  renderActiveSessionStartTime = (currentSession: TableSession) => {
+    if (!currentSession || !currentSession.starts_at) {
+      return null;
+    } else {
+      const startTime = moment(currentSession.starts_at, moment.ISO_8601)
+        .format('hh:mm');
+
+      return (
+        <div className="table__label table__label_role_start-time">{startTime}</div>
+      )
+    }
+  };
+
   render() {
-    const {name, status, type, lastSession} = this.props;
+    const {name, status, type, lastSession, currentSession} = this.props;
 
     const tableTypeClassName = {
       pool: 'table_type_pool',
@@ -81,7 +94,8 @@ export default class Table extends React.Component<Props, AnyDict> {
       disabled: 'table_status_disabled'
     }[status];
 
-    const labelAvailableText = status === 'active' ? 'Available' : this.getTimerText();
+    const isActive = status === 'active';
+    const labelAvailableText = !isActive ? 'Available' : this.getTimerText();
 
     return (
       <div className={`table ${tableTypeClassName} ${statusClassName} tables-set_adjust_table`}>
@@ -89,6 +103,7 @@ export default class Table extends React.Component<Props, AnyDict> {
         <div className="table__label table__label_role_table-type">
           {name}
         </div>
+        {isActive ? this.renderActiveSessionStartTime(currentSession) : ''}
         <a href="" className="table__button table__button_role_change-availability"/>
         <div className="table__label table__label_role_availability">
           {labelAvailableText}
