@@ -35,7 +35,6 @@ $default-table-border-width: 12px;
         content: '';
         margin-left: -$tennis-table-border-width;
         margin-top: -$tennis-table-border-width;
-        display: block;
         width: $table-width;
         height: $table-height;
         background: url(../../public/img/tennis-net.svg) center center no-repeat;
@@ -45,6 +44,38 @@ $default-table-border-width: 12px;
 
       &.table_status_active {
         background-color: #c43e3f;
+      }
+    }
+
+    &_shuffle {
+      $border-width: 22px;
+      $inner-width: $table-width - ($border-width * 2);
+      $inner-height: $table-height - ($border-width * 2);
+
+      background-color: #383435;
+      border: $border-width solid #c69836;
+      @include border-radius(50px);
+      -webkit-box-shadow: inset 6px 5px 0 rgba(0, 0, 0, 0.3), 6px 5px 0 rgba(0, 0, 0, 0.3);
+      -moz-box-shadow: inset 6px 5px 0 rgba(0, 0, 0, 0.3), 6px 5px 0 rgba(0, 0, 0, 0.3);
+      box-shadow: inset 6px 5px 0 rgba(0, 0, 0, 0.3), 6px 5px 0 rgba(0, 0, 0, 0.3);
+
+      &:before {
+        $element-width: 420px;
+        $element-height: 155px;
+
+        content: '';
+        position: absolute;
+        width: $element-width;
+        height: $element-height;
+        left: ($inner-width / 2) - ($element-width / 2);
+        top: ($inner-height / 2) - ($element-height / 2);
+        background: url(../../public/img/shuffle-board-background-field.svg) center center no-repeat;
+        background-size: 100% auto;
+      }
+
+      &.table_status_active {
+        background-color: #c43e3f;
+        border-color: #951418;
       }
     }
 
@@ -244,6 +275,12 @@ $default-table-border-width: 12px;
         .table_type_tennis & {
           &:after {
             background-image: url(../../public/img/icons/tennis-table-yellow.svg);
+          }
+        }
+
+        .table_type_shuffle & {
+          &:after {
+            background-image: url(../../public/img/icons/shuffle-board-yellow.svg);
           }
         }
 
