@@ -5,10 +5,11 @@ import MouseEvent = React.MouseEvent;
 import {AnyDict} from '../interfaces/index';
 import {TableType, TableStatus} from '../interfaces/backend-models';
 import {TableSession} from '../interfaces/store-models';
-import requestingStatusChange from '../action-creators/requesting-status-change';
 import store from '../store/index';
+import requestingTableStart from '../action-creators/requesting-table-start';
 
 interface Props {
+  id: number;
   type?: TableType;
   status?: TableStatus;
   currentSession?: TableSession;
@@ -84,17 +85,14 @@ export default class Table extends React.Component<Props, AnyDict> {
   onChangeStatusClick = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
 
-    const {status} = this.props;
+    const {status, id} = this.props;
 
     if (status === 'disabled') {
       return;
     }
 
-    const newStatus = {
-      ready: 'active' as TableStatus,
-      active: 'ready' as TableStatus
-    }[status];
-    const action = requestingStatusChange(newStatus);
+    const action = requestingTableStart(id);
+
     store.dispatch(action);
   };
 

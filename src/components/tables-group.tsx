@@ -13,6 +13,7 @@ export default class TablesGroup extends React.Component<Props, AnyDict> {
     return tables.map((table, idx) => {
       return <Table
         key={idx}
+        id={table.id}
         name={table.name}
         lastSession={table.lastSession}
         currentSession={table.currentSession}

@@ -7,16 +7,12 @@ import {ResponseStartTablePayload} from '../../src/interfaces/api-responses';
 import {urlStartTable} from '../../src/constants/urls';
 
 const startTable = (server: Application, bodyParser: RequestHandler) => {
-  server.post(urlStartTable, bodyParser, sendWithTimeout(500, (req, res) => {
+  server.post(urlStartTable, bodyParser, sendWithTimeout(2500, (req, res) => {
 
     const response: ResponseStartTablePayload = {
       session: {
         id: req.params.table_id,
-        starts_at: moment().utc().add({
-          hours: 2,
-          minutes: 24,
-          seconds: 37,
-        }).toISOString(),
+        starts_at: moment().utc().toISOString(),
         durationSeconds: moment.duration(1, 'hours').asSeconds(),
         adminEdited: false
       }
