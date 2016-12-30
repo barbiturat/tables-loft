@@ -24,7 +24,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
               seconds: 37,
             }).toISOString(),
             durationSeconds: moment.duration(2, 'hours').asSeconds(),
-            adminEdited: false
+            adminEdited: true
           },
           lastSession: {
             id: 11,

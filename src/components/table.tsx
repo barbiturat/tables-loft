@@ -32,7 +32,7 @@ export default class Table extends React.Component<Props, AnyDict> {
 
   getLastSessionInfo = (lastSession: TableSession) => {
     if (lastSession && lastSession.starts_at && lastSession.durationSeconds) {
-      const {durationSeconds, starts_at} = lastSession;
+      const {durationSeconds, starts_at, adminEdited} = lastSession;
       const finishTime = moment(starts_at, moment.ISO_8601)
           .add({
             seconds: durationSeconds
@@ -44,12 +44,13 @@ export default class Table extends React.Component<Props, AnyDict> {
         minutes: duration.minutes()
       })
         .format("H[h] mm[m]");
+      const adminEditedClassName = adminEdited ? 'table__session-length_admin-edited' : '';
 
       return (
         <div className="table__session-info">
           <span className="table__session-name">Last Session</span>
           <span className="table__session-finish-time">{finishTime}</span>
-          <span className="table__session-length">{durationString}</span>
+          <span className={`table__session-length ${adminEditedClassName}`}>{durationString}</span>
         </div>
       );
     } else {
