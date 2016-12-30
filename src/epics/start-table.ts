@@ -19,8 +19,8 @@ type ResponseError = AjaxErrorTyped<ResponseFailedPayload>;
 const startTable = ((action$) => {
   return action$.ofType(REQUESTING_TABLE_START)
     .switchMap((action: ActionType) => {
-      const pendingStart$ = Observable.of(pendingRequestTableStart(true));
       const tableId = action.payload;
+      const pendingStart$ = Observable.of(pendingRequestTableStart(true, tableId));
       const url = urlStartTable.replace(':table_id', String(tableId));
       const request$ = Observable.of(null)
         .mergeMap(() =>
@@ -28,7 +28,7 @@ const startTable = ((action$) => {
             .mergeMap((ajaxData: ResponseOk | ResponseError) => {
               if (ajaxData.status === STATUS_OK) {
                 const session = (ajaxData as ResponseOk).response.session;
-                const pendingStop = pendingRequestTableStart(false);
+                const pendingStop = pendingRequestTableStart(false, tableId);
 
                 return Observable.of<any>(
                   requestingTableStartSucceeded(session),
