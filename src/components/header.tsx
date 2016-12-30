@@ -1,15 +1,11 @@
 import * as React from 'react';
 
 import {AnyDict} from '../interfaces/index';
-import {BaseComponentProps} from '../interfaces/component';
 import MouseEvent = React.MouseEvent;
-
-interface MappedProps {}
 
 export default class Header extends React.Component<AnyDict, AnyDict> {
   onBtnManagerClick = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
-    console.log('onBtnManagerClick');
   };
 
   render() {
