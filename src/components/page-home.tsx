@@ -23,13 +23,19 @@ class PageHome extends React.Component<ComponentProps, AnyDict> {
     this.props.dispatch(fetchingTables);
   }
 
-  render() {
-    console.log('this.props.tables', this.props.tables);
+  renderTablesGroup = (tables: ComponentTable[], isInPending: boolean) => {
+    return isInPending ? (
+        <span className="label label_type_wait label_role_wait-tables">Loading Tables...</span>
+      ) : (
+        <TablesGroup tables={tables}/>
+      );
+  };
 
+  render() {
     return (
       <div className="page">
         <Header/>
-        <TablesGroup tables={this.props.tables}/>
+        {this.renderTablesGroup(this.props.tables, this.props.areTablesInPending)}
       </div>
     );
   }
