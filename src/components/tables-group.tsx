@@ -1,11 +1,17 @@
 import * as React from 'react';
 
 import {AnyDict} from '../interfaces/index';
+import Table from './table';
 
 export default class TablesGroup extends React.Component<AnyDict, AnyDict> {
   render() {
     return (
       <div className="tables-set">
+
+        <Table />
+        <Table status="disabled" />
+        <Table status="active" />
+        <Table />
 
         <div className="table table_type_pool table_status_ready tables-set_adjust_table">
           <div className="table__label table__label_role_table-type">Pool Table 1</div>
@@ -123,9 +129,9 @@ export default class TablesGroup extends React.Component<AnyDict, AnyDict> {
         </div>
 
         <div className="table table_type_tennis table_status_disabled tables-set_adjust_table">
-            <span className="table__label table__label_role_disabled">
-              Pool Table 2 Is Not Active
-            </span>
+          <span className="table__label table__label_role_disabled">
+            Pool Table 2 Is Not Active
+          </span>
           <div className="table__label table__label_role_table-type">Tennis Table 1</div>
           <a href="" className="table__button table__button_role_change-availability"/>
           <div className="table__label table__label_role_availability">
@@ -140,9 +146,9 @@ export default class TablesGroup extends React.Component<AnyDict, AnyDict> {
         </div>
 
         <div className="table table_type_default table_status_disabled tables-set_adjust_table">
-            <span className="table__label table__label_role_disabled">
-              Pool Table 2 Is Not Active
-            </span>
+          <span className="table__label table__label_role_disabled">
+            Pool Table 2 Is Not Active
+          </span>
           <div className="table__label table__label_role_table-type">Default Table 1</div>
           <a href="" className="table__button table__button_role_change-availability"/>
           <div className="table__label table__label_role_availability">
