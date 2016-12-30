@@ -1,9 +1,12 @@
 import * as React from 'react';
+import * as moment from 'moment';
+import MouseEvent = React.MouseEvent;
 
 import {AnyDict} from '../interfaces/index';
 import {TableType, TableStatus} from '../interfaces/backend-models';
 import {TableSession} from '../interfaces/store-models';
-import * as moment from 'moment';
+import requestingStatusChange from '../action-creators/requesting-status-change';
+import store from '../store/index';
 
 interface Props {
   type?: TableType;
@@ -78,6 +81,23 @@ export default class Table extends React.Component<Props, AnyDict> {
     }
   };
 
+  onChangeStatusClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+
+    const {status} = this.props;
+
+    if (status === 'disabled') {
+      return;
+    }
+
+    const newStatus = {
+      ready: 'active' as TableStatus,
+      active: 'ready' as TableStatus
+    }[status];
+    const action = requestingStatusChange(newStatus);
+    store.dispatch(action);
+  };
+
   render() {
     const {name, status, type, lastSession, currentSession} = this.props;
 
@@ -104,7 +124,10 @@ export default class Table extends React.Component<Props, AnyDict> {
           {name}
         </div>
         {isActive ? this.renderActiveSessionStartTime(currentSession) : ''}
-        <a href="" className="table__button table__button_role_change-availability"/>
+        <a href=""
+           className="table__button table__button_role_change-availability"
+           onClick={this.onChangeStatusClick}
+        />
         <div className="table__label table__label_role_availability">
           {labelAvailableText}
         </div>
