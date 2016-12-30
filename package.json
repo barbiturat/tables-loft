@@ -33,7 +33,9 @@
   },
   "dependencies": {
     "@types/history": "2.0.41",
+    "@types/lodash": "^4.14.45",
     "classnames": "2.2.5",
+    "lodash": "^4.17.3",
     "moment": "2.17.1",
     "react": "15.4.1",
     "react-dom": "15.4.1",

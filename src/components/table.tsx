@@ -4,14 +4,14 @@ import {AnyDict} from '../interfaces/index';
 import {TableType, TableStatus} from '../interfaces/backend-models';
 import {TableSession} from '../interfaces/store-models';
 
-interface TableProps {
+interface Props {
   type?: TableType;
   status?: TableStatus;
   sessions?: TableSession[];
   name?: string;
 }
 
-export default class Table extends React.Component<TableProps, AnyDict> {
+export default class Table extends React.Component<Props, AnyDict> {
   static defaultProps = {
     type: 'generic',
     status: 'ready',

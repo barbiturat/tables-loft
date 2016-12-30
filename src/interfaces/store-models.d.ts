@@ -7,7 +7,7 @@ export interface Table {
   tableType: TableType;
   status: TableStatus;
   currentSessionId: number;
-  lastSessionId: number;
+  lastSessionId?: number;
 }
 
 export interface TableSession extends TableSessionBackend {}
