@@ -3,6 +3,7 @@ import * as React from 'react';
 import {AnyDict} from '../interfaces/index';
 import {TableType, TableStatus} from '../interfaces/backend-models';
 import {TableSession} from '../interfaces/store-models';
+import * as moment from 'moment';
 
 interface Props {
   type?: TableType;
@@ -26,17 +27,34 @@ export default class Table extends React.Component<Props, AnyDict> {
   };
 
   getLastSessionInfo = (lastSession: TableSession) => {
-    return lastSession ? (
+    if (lastSession && lastSession.starts_at && lastSession.durationSeconds) {
+      const {durationSeconds, starts_at} = lastSession;
+      const finishTime = moment(starts_at, moment.ISO_8601)
+          .add({
+            seconds: durationSeconds
+          })
+          .format('hh:mm');
+      const duration = moment.duration(durationSeconds, 'seconds');
+      const durationString = moment({
+        hours: duration.hours(),
+        minutes: duration.minutes()
+      })
+        .format("H[h]:mm[m]");
+
+      return (
         <div className="table__session-info">
           <span className="table__session-name">Last Session</span>
-          <span className="table__session-finish-time">20:30</span>
-          <span className="table__session-length">1h 10m</span>
+          <span className="table__session-finish-time">{finishTime}</span>
+          <span className="table__session-length">{durationString}</span>
         </div>
-      ) : (
+      );
+    } else {
+      return (
         <div className="table__session-info">
           <div className="table__label table__label_role_no-session">No Sessions Today</div>
         </div>
       );
+    }
   };
 
   getDisabledLabel = (isDisabled: boolean) => {

@@ -46,8 +46,8 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           lastSession: {
             id: 13,
             starts_at: moment().utc().subtract({
-              hours: 4,
-              minutes: 24,
+              hours: 7,
+              minutes: 11,
               seconds: 37,
             }).toISOString(),
             durationSeconds: moment.duration(1, 'hours').asSeconds(),
@@ -91,8 +91,8 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           lastSession: {
             id: 16,
             starts_at: moment().utc().subtract({
-              hours: 4,
-              minutes: 24,
+              hours: 6,
+              minutes: 55,
               seconds: 37,
             }).toISOString(),
             durationSeconds: moment.duration(1, 'hours').asSeconds(),
@@ -108,8 +108,8 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           lastSession: {
             id: 17,
             starts_at: moment().utc().subtract({
-              hours: 4,
-              minutes: 24,
+              hours: 3,
+              minutes: 4,
               seconds: 37,
             }).toISOString(),
             durationSeconds: moment.duration(1, 'hours').asSeconds(),
@@ -153,8 +153,8 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           lastSession: {
             id: 20,
             starts_at: moment().utc().subtract({
-              hours: 4,
-              minutes: 24,
+              hours: 2,
+              minutes: 44,
               seconds: 37,
             }).toISOString(),
             durationSeconds: moment.duration(1, 'hours').asSeconds(),
@@ -170,8 +170,8 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           lastSession: {
             id: 21,
             starts_at: moment().utc().subtract({
-              hours: 4,
-              minutes: 24,
+              hours: 7,
+              minutes: 45,
               seconds: 37,
             }).toISOString(),
             durationSeconds: moment.duration(1, 'hours').asSeconds(),
