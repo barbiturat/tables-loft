@@ -5,7 +5,6 @@ import {BaseComponentProps} from '../interfaces/component';
 import {connect} from 'react-redux';
 import fetchingTables from '../action-creators/fetching-tables';
 import {StoreStructure} from '../interfaces/store-models';
-import Header from './header';
 
 interface MappedProps {}
 
@@ -19,7 +18,20 @@ class PageHome extends React.Component<ComponentProps, AnyDict> {
   render() {
     return (
       <div className="page">
-        <Header/>
+        <div className="header">
+          <div className="header__section header__section_role_hamburger">
+            <a href="" className="header__hamburger-btn">
+              <div className="header__hamburger-btn-content"></div>
+            </a>
+          </div>
+          <div className="header__section header__section_role_caption">
+            <span className="header__caption">Boston Pool Loft</span>
+          </div>
+          <div className="header__section header__section_role_utils">
+            <a href="" className="button button_role_manager">Manager Mode</a>
+          </div>
+        </div>
+
 
         <div className="tables-set">
 
