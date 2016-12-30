@@ -25,7 +25,7 @@ class PageHome extends React.Component<ComponentProps, AnyDict> {
 
   renderTablesGroup = (tables: ComponentTable[], isInPending: boolean) => {
     return isInPending ? (
-        <span className="label label_type_wait label_role_wait-tables">Loading Tables...</span>
+        <div className="label label_type_wait label_role_wait-tables"/>
       ) : (
         <TablesGroup tables={tables}/>
       );
