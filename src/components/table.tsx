@@ -15,6 +15,7 @@ interface Props {
   currentSession?: TableSession;
   lastSession?: TableSession;
   name?: string;
+  isInPending?: boolean;
 }
 
 export default class Table extends React.Component<Props, AnyDict> {
@@ -23,7 +24,8 @@ export default class Table extends React.Component<Props, AnyDict> {
     status: 'ready',
     currentSession: (null as TableSession),
     lastSession: (null as TableSession),
-    name: 'No Name'
+    name: 'No Name',
+    isInPending: false
   };
 
   getTimerText = () => {
@@ -98,7 +100,7 @@ export default class Table extends React.Component<Props, AnyDict> {
   };
 
   render() {
-    const {name, status, type, lastSession, currentSession} = this.props;
+    const {name, status, type, lastSession, currentSession, isInPending} = this.props;
 
     const tableTypeClassName = {
       pool: 'table_type_pool',
@@ -113,11 +115,13 @@ export default class Table extends React.Component<Props, AnyDict> {
       disabled: 'table_status_disabled'
     }[status];
 
+    const pendingClassName = isInPending ? 'table_state_in-pending' : '';
+
     const isActive = status === 'active';
     const labelAvailableText = !isActive ? 'Available' : this.getTimerText();
 
     return (
-      <div className={`table ${tableTypeClassName} ${statusClassName} tables-set_adjust_table`}>
+      <div className={`table ${tableTypeClassName} ${statusClassName} ${pendingClassName} tables-set_adjust_table`}>
         {this.getDisabledLabel(status === 'disabled')}
         <div className="table__label table__label_role_table-type">
           {name}

@@ -19,6 +19,7 @@ export default class TablesGroup extends React.Component<Props, AnyDict> {
         currentSession={table.currentSession}
         status={table.status}
         type={table.tableType}
+        isInPending={table.isInPending}
       />
     });
   };
