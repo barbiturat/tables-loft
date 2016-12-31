@@ -1,11 +1,11 @@
-import {FETCHING_TABLES_SUCCEEDED, CHANGING_TABLES} from '../constants/action-names';
+import {FETCHING_TABLES_SUCCEEDED, TABLES_CHANGED} from '../constants/action-names';
 import {Table} from '../interfaces/store-models';
 import {ActionWithPayload} from '../interfaces/actions';
 
 export type Structure = Table[];
 
 const tables = (state: Structure = [], action: ActionWithPayload<Structure>): Structure => {
-  if (action.type == FETCHING_TABLES_SUCCEEDED || action.type == CHANGING_TABLES) {
+  if (action.type == FETCHING_TABLES_SUCCEEDED || action.type == TABLES_CHANGED) {
     return action.payload.concat([]);
   } else {
     return state;
