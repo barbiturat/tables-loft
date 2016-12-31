@@ -4,10 +4,12 @@ import MouseEvent = React.MouseEvent;
 
 import {AnyDict} from '../interfaces/index';
 import {TableType} from '../interfaces/backend-models';
-import {TableSession, TableStatus} from '../interfaces/store-models';
+import {TableSession} from '../interfaces/store-models';
 import store from '../store/index';
 import requestingTableStart from '../action-creators/requesting-table-start';
 import requestingTableStop from '../action-creators/requesting-table-stop';
+
+export type TableStatus = 'ready' | 'active';
 
 interface Props {
   id: number;
@@ -22,8 +24,6 @@ interface Props {
 export default class Table extends React.Component<Props, AnyDict> {
   static defaultProps = {
     type: 'generic',
-    currentSession: (null as TableSession),
-    lastSession: (null as TableSession),
     name: 'No Name',
     isInPending: false,
     isDisabled: false
@@ -36,7 +36,7 @@ export default class Table extends React.Component<Props, AnyDict> {
   };
 
   getLastSessionInfo = (lastSession: TableSession) => {
-    if (lastSession && lastSession.starts_at && lastSession.durationSeconds) {
+    if (lastSession) {
       const {durationSeconds, starts_at, adminEdited} = lastSession;
       const finishTime = moment(starts_at, moment.ISO_8601)
           .add({

@@ -1,8 +1,6 @@
 import {TableType, TableSession as TableSessionBackend} from './backend-models';
 import {Structure as ReducersStructure} from '../reducers/index';
 
-export type TableStatus = 'ready' | 'active';
-
 export interface Table {
   name: string;
   id: number;
