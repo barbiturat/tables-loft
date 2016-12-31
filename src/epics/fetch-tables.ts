@@ -11,7 +11,7 @@ import fetchingTablesFailed from '../action-creators/fetching-tables-failed';
 import {urlTables} from '../constants/urls';
 import {SimpleAction} from '../interfaces/actions';
 import fetchingTablesSucceeded from '../action-creators/fetching-tables-succeeded';
-import {tablesToFront} from '../helpers/api-data-converters/tables';
+import {tablesToFront, tableSessionsToFront} from '../helpers/api-data-converters/index';
 import {TableSession, Table as TableBackend} from '../interfaces/backend-models';
 import tableSessionsChanged from '../action-creators/table-sessions-changed';
 
@@ -42,9 +42,10 @@ const fetchTables = ((action$) => {
                 const tables = (ajaxData as ResponseOk).response.tables;
                 const tableSessions = getTableSessionsFromTables(tables);
                 const convertedTables = tablesToFront(tables);
+                const convertedTableSessions = tableSessionsToFront(tableSessions);
 
                 const setTables = fetchingTablesSucceeded(convertedTables);
-                const setTableSessions = tableSessionsChanged(tableSessions);
+                const setTableSessions = tableSessionsChanged(convertedTableSessions);
                 const tablesPendingStop = pendingTables(false);
 
                 return Observable.of<any>(

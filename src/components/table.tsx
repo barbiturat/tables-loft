@@ -37,13 +37,13 @@ export default class Table extends React.Component<Props, AnyDict> {
 
   getLastSessionInfo = (lastSession: TableSession) => {
     if (lastSession) {
-      const {durationSeconds, starts_at, adminEdited} = lastSession;
-      const finishTime = moment(starts_at, moment.ISO_8601)
+      const {durationSeconds, startsAt, adminEdited} = lastSession;
+      const finishTime = moment.utc(startsAt)
           .add({
             seconds: durationSeconds
           })
           .format('hh:mm');
-      const duration = moment.duration(durationSeconds, 'seconds');
+      const duration = moment.duration({seconds: durationSeconds});
       const durationString = moment({
         hours: duration.hours(),
         minutes: duration.minutes()
@@ -76,11 +76,10 @@ export default class Table extends React.Component<Props, AnyDict> {
   };
 
   renderActiveSessionStartTime = (currentSession: TableSession) => {
-    if (!currentSession || !currentSession.starts_at) {
+    if (!currentSession) {
       return null;
     } else {
-      const startTime = moment(currentSession.starts_at, moment.ISO_8601)
-        .format('hh:mm');
+      const startTime = moment(currentSession.startsAt).format('hh:mm');
 
       return (
         <div className="table__label table__label_role_start-time">{startTime}</div>

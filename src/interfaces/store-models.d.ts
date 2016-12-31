@@ -11,6 +11,11 @@ export interface Table {
   isDisabled: boolean;
 }
 
-export interface TableSession extends TableSessionBackend {}
+export interface TableSession {
+  id: number;
+  startsAt: number;
+  durationSeconds: number;
+  adminEdited: boolean;
+}
 
 export type StoreStructure = ReducersStructure;

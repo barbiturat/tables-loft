@@ -16,6 +16,7 @@ import pendingRequestTableStatusChange from '../action-creators/pending-request-
 import {StoreStructure, Table} from '../interfaces/store-models';
 import tablesChanged from '../action-creators/tables-changed';
 import tableSessionsChanged from '../action-creators/table-sessions-changed';
+import {tableSessionToFront} from '../helpers/api-data-converters/index';
 
 type ResponseOk = AjaxResponseTyped<ResponseStartTablePayload>;
 type ResponseError = AjaxErrorTyped<ResponseFailedPayload>;
@@ -36,14 +37,15 @@ const startTable = ((action$, store: MiddlewareAPI<StoreStructure>) => {
                 const newTables: Table[] = currTables.concat([]);
                 const currSessions = appData.tableSessionsData.tableSessions;
                 const session = (ajaxData as ResponseOk).response.session;
-                const newSessions = currSessions.concat([session]);
+                const convertedSession = tableSessionToFront(session);
+                const newSessions = currSessions.concat([convertedSession]);
                 const pendingStopAction = pendingRequestTableStatusChange(false, tableId);
                 const tableSessionsChangedAction = tableSessionsChanged(newSessions);
 
                 const changedTable = find(newTables, (table) => table.id === tableId);
 
                 if (changedTable) {
-                  changedTable.currentSessionId = session.id;
+                  changedTable.currentSessionId = convertedSession.id;
                 }
 
                 const tablesChangedAction = tablesChanged(newTables);
