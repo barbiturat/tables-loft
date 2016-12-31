@@ -17,6 +17,7 @@ interface Props {
   lastSession?: TableSession;
   name?: string;
   isInPending?: boolean;
+  isDisabled?: boolean;
 }
 
 export default class Table extends React.Component<Props, AnyDict> {
@@ -26,7 +27,8 @@ export default class Table extends React.Component<Props, AnyDict> {
     currentSession: (null as TableSession),
     lastSession: (null as TableSession),
     name: 'No Name',
-    isInPending: false
+    isInPending: false,
+    isDisabled: false
   };
 
   getTimerText = () => {

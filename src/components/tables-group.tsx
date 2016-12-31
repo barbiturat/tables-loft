@@ -20,6 +20,7 @@ export default class TablesGroup extends React.Component<Props, AnyDict> {
         status={table.status}
         type={table.tableType}
         isInPending={table.isInPending}
+        isDisabled={table.isDisabled}
       />
     });
   };
