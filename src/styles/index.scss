@@ -19,6 +19,7 @@ body {
   padding: 0;
   margin: 0;
   text-align: center;
+  background-color: #18232d;
 
   @if ($body-antialiased) {
     -webkit-font-smoothing: antialiased;
