@@ -9,7 +9,7 @@ import {ResponseSessionHistoryPayload} from '../../src/interfaces/api-responses'
 import {urlSessionHistory} from '../../src/constants/urls';
 
 const sessionHistory = (server: Application, bodyParser: RequestHandler) => {
-  server.get(urlSessionHistory, bodyParser, sendWithTimeout(500, (req: CustomRequest<RequestSessionHistoryPayload>, res) => {
+  server.get(urlSessionHistory, bodyParser, sendWithTimeout(500, (req: CustomRequest<RequestSessionHistoryPayload, any>, res) => {
 
     const response: ResponseSessionHistoryPayload = {
       sessions: [

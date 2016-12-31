@@ -7,7 +7,7 @@ import {ResponseGetAdminTokenPayload} from '../../src/interfaces/api-responses';
 import {urlAdminToken} from '../../src/constants/urls';
 
 const getAdminToken = (server: Application, bodyParser: RequestHandler) => {
-  server.post(urlAdminToken, bodyParser, sendWithTimeout(500, (req: CustomRequest<RequestGetAdminTokenPayload>, res) => {
+  server.post(urlAdminToken, bodyParser, sendWithTimeout(500, (req: CustomRequest<RequestGetAdminTokenPayload, any>, res) => {
 
     const response: ResponseGetAdminTokenPayload = {
       accessToken: 'someToken'
