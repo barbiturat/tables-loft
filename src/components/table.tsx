@@ -29,8 +29,22 @@ export default class Table extends React.Component<Props, AnyDict> {
     isDisabled: false
   };
 
-  componentWillReceiveProps() {
+  status: TableStatus;
 
+  constructor(props: Props) {
+    super(props);
+
+    this.status = Table.getTableStatus(props.currentSession);
+  }
+
+  componentWillReceiveProps(nextProps: Props) {
+    const thisCurrentSession = this.props.currentSession;
+    const nextCurrentSession = nextProps.currentSession;
+
+    if (nextCurrentSession.startsAt !== thisCurrentSession.startsAt ||
+          nextCurrentSession.durationSeconds !== thisCurrentSession.durationSeconds) {
+      this.status = Table.getTableStatus(this.props.currentSession);
+    }
   }
 
   getTimerText = () => {
