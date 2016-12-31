@@ -3,8 +3,8 @@ import * as moment from 'moment';
 import MouseEvent = React.MouseEvent;
 
 import {AnyDict} from '../interfaces/index';
-import {TableType, TableStatus} from '../interfaces/backend-models';
-import {TableSession} from '../interfaces/store-models';
+import {TableType} from '../interfaces/backend-models';
+import {TableSession, TableStatus} from '../interfaces/store-models';
 import store from '../store/index';
 import requestingTableStart from '../action-creators/requesting-table-start';
 import requestingTableStop from '../action-creators/requesting-table-stop';
@@ -12,7 +12,6 @@ import requestingTableStop from '../action-creators/requesting-table-stop';
 interface Props {
   id: number;
   type?: TableType;
-  status?: TableStatus;
   currentSession?: TableSession;
   lastSession?: TableSession;
   name?: string;
@@ -23,13 +22,14 @@ interface Props {
 export default class Table extends React.Component<Props, AnyDict> {
   static defaultProps = {
     type: 'generic',
-    status: 'ready',
     currentSession: (null as TableSession),
     lastSession: (null as TableSession),
     name: 'No Name',
     isInPending: false,
     isDisabled: false
   };
+
+  status: TableStatus = 'ready';
 
   getTimerText = () => {
     return '1h 30m 16s';
@@ -91,42 +91,34 @@ export default class Table extends React.Component<Props, AnyDict> {
   onChangeStatusClick = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
 
-    const {status, id} = this.props;
+    const {id, isDisabled} = this.props;
 
-    if (status === 'disabled') {
+    if (isDisabled) {
       return;
     }
 
-    const actionCreator = status === 'ready' ? requestingTableStart : requestingTableStop;
+    const actionCreator = this.status === 'ready' ? requestingTableStart : requestingTableStop;
     const action = actionCreator(id);
 
     store.dispatch(action);
   };
 
   render() {
-    const {name, status, type, lastSession, currentSession, isInPending} = this.props;
-
+    const {name, type, lastSession, currentSession, isInPending, isDisabled} = this.props;
+    const isActive = this.status === 'active';
     const tableTypeClassName = {
       pool: 'table_type_pool',
       shuffleBoard: 'table_type_shuffle',
       tableTennis: 'table_type_tennis',
       generic: 'table_type_default'
     }[type];
-
-    const statusClassName = {
-      ready: 'table_status_ready',
-      active: 'table_status_active',
-      disabled: 'table_status_disabled'
-    }[status];
-
+    const statusClassName = isActive ? 'table_status_active' : 'table_status_ready';
     const pendingClassName = isInPending ? 'table_state_in-pending' : '';
-
-    const isActive = status === 'active';
     const labelAvailableText = !isActive ? 'Available' : this.getTimerText();
 
     return (
       <div className={`table ${tableTypeClassName} ${statusClassName} ${pendingClassName} tables-set_adjust_table`}>
-        {this.getDisabledLabel(status === 'disabled')}
+        {this.getDisabledLabel(isDisabled)}
         <div className="table__label table__label_role_table-type">
           {name}
         </div>

@@ -17,7 +17,6 @@ export default class TablesGroup extends React.Component<Props, AnyDict> {
         name={table.name}
         lastSession={table.lastSession}
         currentSession={table.currentSession}
-        status={table.status}
         type={table.tableType}
         isInPending={table.isInPending}
         isDisabled={table.isDisabled}

@@ -10,7 +10,6 @@ export const tablesToFront = (tables: BackendTable[]): FrontendTable[] => {
       name: table.name,
       id: table.id,
       tableType: table.tableType,
-      status: table.status,
       currentSessionId,
       lastSessionId,
       isInPending: false,
