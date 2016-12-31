@@ -29,11 +29,30 @@ export default class Table extends React.Component<Props, AnyDict> {
     isDisabled: false
   };
 
-  status: TableStatus = 'ready';
+  componentWillReceiveProps() {
+
+  }
 
   getTimerText = () => {
     return '1h 30m 16s';
   };
+
+  static getTableStatus(currentSession: TableSession): TableStatus {
+    if (!currentSession) {
+      return 'ready';
+    }
+
+    const {startsAt, durationSeconds} = currentSession;
+    const now = moment.utc().valueOf();
+    const sessionFinishTime = moment.utc(startsAt)
+      .add({
+        seconds: durationSeconds
+      })
+      .valueOf();
+    const isNotFinished = sessionFinishTime - now >= 0;
+
+    return isNotFinished ? 'active' : 'ready';
+  }
 
   getLastSessionInfo = (lastSession: TableSession) => {
     if (lastSession) {
@@ -90,13 +109,13 @@ export default class Table extends React.Component<Props, AnyDict> {
   onChangeStatusClick = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
 
-    const {id, isDisabled} = this.props;
+    const {id, isDisabled, currentSession} = this.props;
 
     if (isDisabled) {
       return;
     }
 
-    const actionCreator = this.status === 'ready' ? requestingTableStart : requestingTableStop;
+    const actionCreator = Table.getTableStatus(currentSession) === 'ready' ? requestingTableStart : requestingTableStop;
     const action = actionCreator(id);
 
     store.dispatch(action);
@@ -104,7 +123,7 @@ export default class Table extends React.Component<Props, AnyDict> {
 
   render() {
     const {name, type, lastSession, currentSession, isInPending, isDisabled} = this.props;
-    const isActive = this.status === 'active';
+    const isActive = Table.getTableStatus(currentSession) === 'active';
     const tableTypeClassName = {
       pool: 'table_type_pool',
       shuffleBoard: 'table_type_shuffle',
