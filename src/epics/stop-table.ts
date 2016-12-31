@@ -1,27 +1,27 @@
 import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
 
-import {REQUESTING_TABLE_START} from '../constants/action-names';
+import {REQUESTING_TABLE_STOP} from '../constants/action-names';
 import {post} from '../helpers/requests';
-import {ResponseFailedPayload, ResponseStartTablePayload} from '../interfaces/api-responses';
+import {ResponseFailedPayload, ResponseStopTablePayload} from '../interfaces/api-responses';
 import {AjaxResponseTyped, AjaxErrorTyped} from '../interfaces/index';
 import {STATUS_OK} from '../constants/used-http-status-codes';
-import {urlStartTable} from '../constants/urls';
+import {urlStopTable} from '../constants/urls';
 import {SimpleAction} from '../interfaces/actions';
-import requestingTableStartSucceeded from '../action-creators/requesting-table-start-succeeded';
-import requestingTableStartFailed from '../action-creators/requesting-table-start-failed';
-import {ActionType} from '../action-creators/requesting-table-start';
 import pendingRequestTableStatusChange from '../action-creators/pending-request-table-status-change';
+import requestingTableStopSucceeded from '../action-creators/requesting-table-stop-succeeded';
+import {ActionType} from '../action-creators/requesting-table-stop';
+import requestingTableStopFailed from '../action-creators/requesting-table-stop-failed';
 
-type ResponseOk = AjaxResponseTyped<ResponseStartTablePayload>;
+type ResponseOk = AjaxResponseTyped<ResponseStopTablePayload>;
 type ResponseError = AjaxErrorTyped<ResponseFailedPayload>;
 
-const startTable = ((action$) => {
-  return action$.ofType(REQUESTING_TABLE_START)
+const stopTable = ((action$) => {
+  return action$.ofType(REQUESTING_TABLE_STOP)
     .switchMap((action: ActionType) => {
       const tableId = action.payload;
       const pendingStart$ = Observable.of(pendingRequestTableStatusChange(true, tableId));
-      const url = urlStartTable.replace(':table_id', String(tableId));
+      const url = urlStopTable.replace(':table_id', String(tableId));
       const request$ = Observable.of(null)
         .mergeMap(() =>
           post(url)
@@ -29,17 +29,17 @@ const startTable = ((action$) => {
               if (ajaxData.status === STATUS_OK) {
                 const session = (ajaxData as ResponseOk).response.session;
                 const pendingStop = pendingRequestTableStatusChange(false, tableId);
-                const tableStartSucceeded = requestingTableStartSucceeded(session);
+                const tableStopSucceeded = requestingTableStopSucceeded(session);
 
                 return Observable.of<any>(
-                  tableStartSucceeded,
+                  tableStopSucceeded,
                   pendingStop
                 );
               } else {
                 const ajaxErrorData = (ajaxData as ResponseError);
 
                 return Observable.of<any>(
-                  requestingTableStartFailed(ajaxErrorData.xhr.response.error)
+                  requestingTableStopFailed(ajaxErrorData.xhr.response.error)
                 );
               }
             })
@@ -52,4 +52,4 @@ const startTable = ((action$) => {
     });
 }) as Epic<SimpleAction>;
 
-export default startTable;
+export default stopTable;

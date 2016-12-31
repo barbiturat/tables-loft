@@ -7,6 +7,7 @@ import {TableType, TableStatus} from '../interfaces/backend-models';
 import {TableSession} from '../interfaces/store-models';
 import store from '../store/index';
 import requestingTableStart from '../action-creators/requesting-table-start';
+import requestingTableStop from '../action-creators/requesting-table-stop';
 
 interface Props {
   id: number;
@@ -94,7 +95,8 @@ export default class Table extends React.Component<Props, AnyDict> {
       return;
     }
 
-    const action = requestingTableStart(id);
+    const actionCreator = status === 'ready' ? requestingTableStart : requestingTableStop;
+    const action = actionCreator(id);
 
     store.dispatch(action);
   };
