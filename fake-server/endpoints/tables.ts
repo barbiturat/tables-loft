@@ -15,7 +15,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           name: 'Pool Table 1',
           id: 100,
           tableType: 'pool',
-          status: 'ready',
+          status: 'enabled',
           currentSession: {
             id: 10,
             starts_at: moment().utc().subtract({
@@ -41,7 +41,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           name: 'Pool Table 2',
           id: 101,
           tableType: 'pool',
-          status: 'active',
+          status: 'enabled',
           currentSession: {
             id: 12,
             starts_at: moment().utc().subtract({
@@ -87,7 +87,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           name: 'Shuffle Table 1',
           id: 103,
           tableType: 'shuffleBoard',
-          status: 'ready',
+          status: 'enabled',
           currentSession: {
             id: 15,
             starts_at: moment().utc().subtract({
@@ -113,7 +113,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           name: 'Shuffle Table 2',
           id: 104,
           tableType: 'shuffleBoard',
-          status: 'active',
+          status: 'enabled',
           currentSession: {
             id: 166,
             starts_at: moment().utc().subtract({
@@ -158,7 +158,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           name: 'Tennis Table 1',
           id: 106,
           tableType: 'tableTennis',
-          status: 'ready',
+          status: 'enabled',
           currentSession: {
             id: 19,
             starts_at: moment().utc().subtract({
@@ -184,7 +184,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           name: 'Tennis Table 2',
           id: 107,
           tableType: 'tableTennis',
-          status: 'active',
+          status: 'enabled',
           currentSession: {
             id: 21,
             starts_at: moment().utc().subtract({
@@ -220,7 +220,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           name: 'Generic Table 1',
           id: 109,
           tableType: 'generic',
-          status: 'ready',
+          status: 'enabled',
           currentSession: {
             id: 23,
             starts_at: moment().utc().subtract({
@@ -246,7 +246,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           name: 'Generic Table 2',
           id: 110,
           tableType: 'generic',
-          status: 'active',
+          status: 'enabled',
           currentSession: {
             id: 244,
             starts_at: moment().utc().subtract({

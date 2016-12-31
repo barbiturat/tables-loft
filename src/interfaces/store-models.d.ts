@@ -1,4 +1,4 @@
-import {TableType, TableStatus, TableSession as TableSessionBackend} from './backend-models';
+import {TableType, TableSession as TableSessionBackend} from './backend-models';
 import {Structure as ReducersStructure} from '../reducers/index';
 
 export type TableStatus = 'ready' | 'active';

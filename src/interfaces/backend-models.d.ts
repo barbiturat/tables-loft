@@ -1,5 +1,5 @@
 export type TableType = 'pool' | 'shuffleBoard' | 'tableTennis' | 'generic';
-export type TableStatus = 'ready' | 'active' | 'disabled';
+export type TableStatus = 'enabled' | 'disabled';
 
 export interface TableSession {
   id: number;
