@@ -1,15 +1,13 @@
 import {PENDING_TABLES} from '../constants/action-names';
-import {ActionType} from '../action-creators/pending-tables';
+import {ActionWithPayload} from '../interfaces/actions';
 
 export type Structure = boolean;
 
-const isInPending = (state: Structure = false, action: ActionType): Structure => {
-  switch (action.type) {
-    case PENDING_TABLES:
-      return action.payload;
-
-    default:
-      return state;
+const isInPending = (state: Structure = false, action: ActionWithPayload<Structure>): Structure => {
+  if (action.type == PENDING_TABLES) {
+    return action.payload;
+  } else {
+    return state;
   }
 };
 

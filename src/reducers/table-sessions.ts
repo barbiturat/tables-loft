@@ -1,16 +1,14 @@
 import {TABLE_SESSIONS_CHANGED} from '../constants/action-names';
-import {ActionType} from '../action-creators/table-sessions-changed';
 import {TableSession} from '../interfaces/store-models';
+import {ActionWithPayload} from '../interfaces/actions';
 
 export type Structure = TableSession[];
 
-const tableSessions = (state: Structure = [], action: ActionType): Structure => {
-  switch (action.type) {
-    case TABLE_SESSIONS_CHANGED:
-      return action.payload;
-
-    default:
-      return state;
+const tableSessions = (state: Structure = [], action: ActionWithPayload<Structure>): Structure => {
+  if (action.type == TABLE_SESSIONS_CHANGED) {
+    return action.payload.concat([]);
+  } else {
+    return state;
   }
 };
 
