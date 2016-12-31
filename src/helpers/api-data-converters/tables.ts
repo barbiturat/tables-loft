@@ -13,7 +13,8 @@ export const tablesToFront = (tables: BackendTable[]): FrontendTable[] => {
       status: table.status,
       currentSessionId,
       lastSessionId,
-      isInPending: false
+      isInPending: false,
+      isDisabled: table.status === 'disabled'
     };
   });
 };
