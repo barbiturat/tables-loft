@@ -41,9 +41,13 @@ export default class Table extends React.Component<Props, AnyDict> {
     const thisCurrentSession = this.props.currentSession;
     const nextCurrentSession = nextProps.currentSession;
 
-    if (nextCurrentSession.startsAt !== thisCurrentSession.startsAt ||
-          nextCurrentSession.durationSeconds !== thisCurrentSession.durationSeconds) {
-      this.status = Table.getTableStatus(this.props.currentSession);
+    if (thisCurrentSession && nextCurrentSession) {
+      if (
+          nextCurrentSession.startsAt !== thisCurrentSession.startsAt ||
+          nextCurrentSession.durationSeconds !== thisCurrentSession.durationSeconds
+      ) {
+        this.status = Table.getTableStatus(this.props.currentSession);
+      }
     }
   }
 
