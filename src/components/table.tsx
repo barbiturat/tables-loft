@@ -2,7 +2,6 @@ import * as React from 'react';
 import * as moment from 'moment';
 import MouseEvent = React.MouseEvent;
 
-import {AnyDict} from '../interfaces/index';
 import {TableType} from '../interfaces/backend-models';
 import {TableSession} from '../interfaces/store-models';
 import store from '../store/index';
@@ -21,7 +20,11 @@ interface Props {
   isDisabled?: boolean;
 }
 
-export default class Table extends React.Component<Props, AnyDict> {
+interface State {
+  status: TableStatus
+}
+
+export default class Table extends React.Component<Props, State> {
   static defaultProps = {
     type: 'generic',
     name: 'No Name',
@@ -29,25 +32,26 @@ export default class Table extends React.Component<Props, AnyDict> {
     isDisabled: false
   };
 
-  status: TableStatus;
-
   constructor(props: Props) {
     super(props);
 
-    this.status = Table.getTableStatus(props.currentSession);
+    this.state = {
+      status: Table.getTableStatus(props.currentSession)
+    };
   }
 
   componentWillReceiveProps(nextProps: Props) {
     const thisCurrentSession = this.props.currentSession;
     const nextCurrentSession = nextProps.currentSession;
 
-    if (thisCurrentSession && nextCurrentSession) {
-      if (
-          nextCurrentSession.startsAt !== thisCurrentSession.startsAt ||
-          nextCurrentSession.durationSeconds !== thisCurrentSession.durationSeconds
-      ) {
-        this.status = Table.getTableStatus(this.props.currentSession);
-      }
+    if (
+      nextCurrentSession !== thisCurrentSession ||
+      nextCurrentSession.startsAt !== thisCurrentSession.startsAt ||
+      nextCurrentSession.durationSeconds !== thisCurrentSession.durationSeconds
+    ) {
+      this.setState({
+        status: Table.getTableStatus(nextCurrentSession)
+      });
     }
   }
 
@@ -133,7 +137,7 @@ export default class Table extends React.Component<Props, AnyDict> {
       return;
     }
 
-    const actionCreator = Table.getTableStatus(currentSession) === 'ready' ? requestingTableStart : requestingTableStop;
+    const actionCreator = this.state.status === 'ready' ? requestingTableStart : requestingTableStop;
     const action = actionCreator(id);
 
     store.dispatch(action);
@@ -141,7 +145,7 @@ export default class Table extends React.Component<Props, AnyDict> {
 
   render() {
     const {name, type, lastSession, currentSession, isInPending, isDisabled} = this.props;
-    const isActive = Table.getTableStatus(currentSession) === 'active';
+    const isActive = this.state.status === 'active';
     const tableTypeClassName = {
       pool: 'table_type_pool',
       shuffleBoard: 'table_type_shuffle',
