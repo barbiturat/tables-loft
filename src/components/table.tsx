@@ -21,7 +21,8 @@ interface Props {
 }
 
 interface State {
-  status: TableStatus
+  activeTimer?: number;
+  isTableActive: boolean;
 }
 
 export default class Table extends React.Component<Props, State> {
@@ -36,7 +37,7 @@ export default class Table extends React.Component<Props, State> {
     super(props);
 
     this.state = {
-      status: Table.getTableStatus(props.currentSession)
+      isTableActive: Table.getTableStatus(props.currentSession) === 'active'
     };
   }
 
@@ -50,7 +51,7 @@ export default class Table extends React.Component<Props, State> {
       nextCurrentSession.durationSeconds !== thisCurrentSession.durationSeconds
     ) {
       this.setState({
-        status: Table.getTableStatus(nextCurrentSession)
+        isTableActive: Table.getTableStatus(nextCurrentSession) === 'active'
       });
     }
   }
@@ -131,13 +132,13 @@ export default class Table extends React.Component<Props, State> {
   onChangeStatusClick = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
 
-    const {id, isDisabled, currentSession} = this.props;
+    const {id, isDisabled} = this.props;
 
     if (isDisabled) {
       return;
     }
 
-    const actionCreator = this.state.status === 'ready' ? requestingTableStart : requestingTableStop;
+    const actionCreator = this.state.isTableActive ? requestingTableStop : requestingTableStart;
     const action = actionCreator(id);
 
     store.dispatch(action);
@@ -145,7 +146,7 @@ export default class Table extends React.Component<Props, State> {
 
   render() {
     const {name, type, lastSession, currentSession, isInPending, isDisabled} = this.props;
-    const isActive = this.state.status === 'active';
+    const isActive = this.state.isTableActive;
     const tableTypeClassName = {
       pool: 'table_type_pool',
       shuffleBoard: 'table_type_shuffle',
