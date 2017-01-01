@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as moment from 'moment';
 import MouseEvent = React.MouseEvent;
+import {assign} from 'lodash';
 
 import {TableType} from '../interfaces/backend-models';
 import {TableSession} from '../interfaces/store-models';
@@ -21,8 +22,8 @@ interface Props {
 }
 
 interface State {
-  activeTimer?: number;
   isTableActive: boolean;
+  durationOfActivityStr: string;
 }
 
 export default class Table extends React.Component<Props, State> {
@@ -33,12 +34,32 @@ export default class Table extends React.Component<Props, State> {
     isDisabled: false
   };
 
+  activityTimer: number = null;
+
   constructor(props: Props) {
     super(props);
 
+    const isTableActive = Table.getTableStatus(props.currentSession) === 'active';
+    const startsAt = props.currentSession ? props.currentSession.startsAt : null;
+
     this.state = {
-      isTableActive: Table.getTableStatus(props.currentSession) === 'active'
+      isTableActive,
+      durationOfActivityStr: Table.getDurationActivityString(startsAt)
     };
+
+    if (isTableActive) {
+      this.activityTimer = window.setInterval((() => {
+        this.setState(assign({}, this.state, {
+          durationOfActivityStr: Table.getDurationActivityString(this.props.currentSession.startsAt)
+        }));
+      }), 1000);
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.activityTimer) {
+      clearInterval(this.activityTimer);
+    }
   }
 
   componentWillReceiveProps(nextProps: Props) {
@@ -50,15 +71,23 @@ export default class Table extends React.Component<Props, State> {
       nextCurrentSession.startsAt !== thisCurrentSession.startsAt ||
       nextCurrentSession.durationSeconds !== thisCurrentSession.durationSeconds
     ) {
-      this.setState({
+      this.setState(assign({}, this.state, {
         isTableActive: Table.getTableStatus(nextCurrentSession) === 'active'
-      });
+      }));
     }
   }
 
-  static getTimerText(currentSession: TableSession) {
-    return moment.utc(currentSession.startsAt).format('H[h] mm[m] ss[s]');
-  };
+  static getDurationActivityString(startsAt: number) {
+    if (!startsAt) {
+      return ''
+    }
+
+    const now = moment.utc().valueOf();
+    const durationMs = now - startsAt;
+
+    return moment.utc(durationMs)
+      .format('H[h] mm[m] ss[s]');
+  }
 
   static getTableStatus(currentSession: TableSession): TableStatus {
     if (!currentSession) {
@@ -155,7 +184,7 @@ export default class Table extends React.Component<Props, State> {
     }[type];
     const statusClassName = isActive ? 'table_status_active' : 'table_status_ready';
     const pendingClassName = isInPending ? 'table_state_in-pending' : '';
-    const labelAvailableText = !isActive ? 'Available' : Table.getTimerText(currentSession);
+    const labelAvailableText = !isActive ? 'Available' : this.state.durationOfActivityStr;
 
     return (
       <div className={`table ${tableTypeClassName} ${statusClassName} ${pendingClassName} tables-set_adjust_table`}>
