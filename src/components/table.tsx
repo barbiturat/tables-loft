@@ -51,8 +51,8 @@ export default class Table extends React.Component<Props, AnyDict> {
     }
   }
 
-  getTimerText = () => {
-    return '1h 30m 16s';
+  static getTimerText(currentSession: TableSession) {
+    return moment.utc(currentSession.startsAt).format('H[h] mm[m] ss[s]');
   };
 
   static getTableStatus(currentSession: TableSession): TableStatus {
@@ -81,7 +81,7 @@ export default class Table extends React.Component<Props, AnyDict> {
           })
           .format('hh:mm');
       const duration = moment.duration({seconds: durationSeconds});
-      const durationString = moment({
+      const durationString = moment.utc({
         hours: duration.hours(),
         minutes: duration.minutes()
       })
@@ -116,7 +116,7 @@ export default class Table extends React.Component<Props, AnyDict> {
     if (!currentSession) {
       return null;
     } else {
-      const startTime = moment(currentSession.startsAt).format('hh:mm');
+      const startTime = moment.utc(currentSession.startsAt).format('H[h] mm[m]');
 
       return (
         <div className="table__label table__label_role_start-time">{startTime}</div>
@@ -150,7 +150,7 @@ export default class Table extends React.Component<Props, AnyDict> {
     }[type];
     const statusClassName = isActive ? 'table_status_active' : 'table_status_ready';
     const pendingClassName = isInPending ? 'table_state_in-pending' : '';
-    const labelAvailableText = !isActive ? 'Available' : this.getTimerText();
+    const labelAvailableText = !isActive ? 'Available' : Table.getTimerText(currentSession);
 
     return (
       <div className={`table ${tableTypeClassName} ${statusClassName} ${pendingClassName} tables-set_adjust_table`}>

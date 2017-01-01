@@ -21,7 +21,6 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
             starts_at: moment().utc().subtract({
               hours: 1,
               minutes: 24,
-              seconds: 37,
             }).toISOString(),
             durationSeconds: moment.duration(2, 'hours').asSeconds(),
             adminEdited: true
@@ -30,8 +29,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
             id: 11,
             starts_at: moment().utc().subtract({
               hours: 4,
-              minutes: 24,
-              seconds: 37,
+              minutes: 11,
             }).toISOString(),
             durationSeconds: moment.duration(1, 'hours').asSeconds(),
             adminEdited: true
@@ -45,9 +43,8 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           currentSession: {
             id: 12,
             starts_at: moment().utc().subtract({
-              hours: 1,
+              hours: 2,
               minutes: 33,
-              seconds: 37,
             }).toISOString(),
             durationSeconds: moment.duration(1, 'hours').asSeconds(),
             adminEdited: false
@@ -58,7 +55,6 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
             starts_at: moment().utc().subtract({
               hours: 7,
               minutes: 11,
-              seconds: 37,
             }).toISOString(),
             durationSeconds: moment.duration(1, 'hours').asSeconds(),
             adminEdited: false
@@ -72,9 +68,8 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           currentSession: {
             id: 14,
             starts_at: moment().utc().subtract({
-              hours: 1,
-              minutes: 24,
-              seconds: 37,
+              hours: 3,
+              minutes: 56,
             }).toISOString(),
             durationSeconds: moment.duration(2, 'hours').asSeconds(),
             adminEdited: true
@@ -91,9 +86,8 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           currentSession: {
             id: 15,
             starts_at: moment().utc().subtract({
-              hours: 1,
-              minutes: 24,
-              seconds: 37,
+              hours: 4,
+              minutes: 43,
             }).toISOString(),
             durationSeconds: moment.duration(2, 'hours').asSeconds(),
             adminEdited: false
@@ -103,7 +97,6 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
             starts_at: moment().utc().subtract({
               hours: 6,
               minutes: 55,
-              seconds: 37,
             }).toISOString(),
             durationSeconds: moment.duration(1, 'hours').asSeconds(),
             adminEdited: true
@@ -117,9 +110,8 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           currentSession: {
             id: 166,
             starts_at: moment().utc().subtract({
-              hours: 2,
+              hours: 0,
               minutes: 2,
-              seconds: 33,
             }).toISOString(),
             durationSeconds: moment.duration(1, 'hours').asSeconds(),
             adminEdited: false
@@ -129,7 +121,6 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
             starts_at: moment().utc().subtract({
               hours: 3,
               minutes: 4,
-              seconds: 37,
             }).toISOString(),
             durationSeconds: moment.duration(1, 'hours').asSeconds(),
             adminEdited: false
@@ -144,8 +135,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
             id: 18,
             starts_at: moment().utc().subtract({
               hours: 1,
-              minutes: 24,
-              seconds: 37,
+              minutes: 38,
             }).toISOString(),
             durationSeconds: moment.duration(2, 'hours').asSeconds(),
             adminEdited: true
@@ -162,9 +152,8 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           currentSession: {
             id: 19,
             starts_at: moment().utc().subtract({
-              hours: 1,
-              minutes: 24,
-              seconds: 37,
+              hours: 2,
+              minutes: 18,
             }).toISOString(),
             durationSeconds: moment.duration(2, 'hours').asSeconds(),
             adminEdited: false
@@ -174,7 +163,6 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
             starts_at: moment().utc().subtract({
               hours: 2,
               minutes: 44,
-              seconds: 37,
             }).toISOString(),
             durationSeconds: moment.duration(1, 'hours').asSeconds(),
             adminEdited: true
@@ -188,9 +176,8 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           currentSession: {
             id: 21,
             starts_at: moment().utc().subtract({
-              hours: 7,
+              hours: 3,
               minutes: 45,
-              seconds: 37,
             }).toISOString(),
             durationSeconds: moment.duration(1, 'hours').asSeconds(),
             adminEdited: false
@@ -205,9 +192,8 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           currentSession: {
             id: 22,
             starts_at: moment().utc().subtract({
-              hours: 1,
-              minutes: 24,
-              seconds: 37,
+              hours: 4,
+              minutes: 48,
             }).toISOString(),
             durationSeconds: moment.duration(2, 'hours').asSeconds(),
             adminEdited: true
@@ -224,9 +210,8 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           currentSession: {
             id: 23,
             starts_at: moment().utc().subtract({
-              hours: 1,
-              minutes: 24,
-              seconds: 37,
+              hours: 5,
+              minutes: 7,
             }).toISOString(),
             durationSeconds: moment.duration(2, 'hours').asSeconds(),
             adminEdited: false
@@ -235,8 +220,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
             id: 24,
             starts_at: moment().utc().subtract({
               hours: 4,
-              minutes: 24,
-              seconds: 37,
+              minutes: 53,
             }).toISOString(),
             durationSeconds: moment.duration(1, 'hours').asSeconds(),
             adminEdited: true
@@ -252,7 +236,6 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
             starts_at: moment().utc().subtract({
               hours: 9,
               minutes: 55,
-              seconds: 44,
             }).toISOString(),
             durationSeconds: moment.duration(1, 'hours').asSeconds(),
             adminEdited: false
@@ -261,8 +244,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
             id: 25,
             starts_at: moment().utc().subtract({
               hours: 4,
-              minutes: 24,
-              seconds: 37,
+              minutes: 33,
             }).toISOString(),
             durationSeconds: moment.duration(1, 'hours').asSeconds(),
             adminEdited: false
@@ -276,9 +258,8 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           currentSession: {
             id: 26,
             starts_at: moment().utc().subtract({
-              hours: 1,
-              minutes: 24,
-              seconds: 37,
+              hours: 6,
+              minutes: 21,
             }).toISOString(),
             durationSeconds: moment.duration(2, 'hours').asSeconds(),
             adminEdited: true
