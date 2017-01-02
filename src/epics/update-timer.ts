@@ -1,17 +1,14 @@
 import {Epic} from 'redux-observable';
-import {MiddlewareAPI} from 'redux';
+import * as moment from 'moment';
 
 import {UPDATING_TIMER} from '../constants/action-names';
 import {SimpleAction} from '../interfaces/actions';
-import {StoreStructure} from '../interfaces/store-models';
 import timerUpdated from '../action-creators/timer-updated';
 
-const updateTimer = ((action$, store: MiddlewareAPI<StoreStructure>) => {
+const updateTimer = ((action$) => {
   return action$.ofType(UPDATING_TIMER)
     .map(() => {
-      const currentTimerValue = store.getState().app.timer;
-
-      return timerUpdated(currentTimerValue + 1);
+      return timerUpdated(moment.utc().valueOf());
     });
 }) as Epic<SimpleAction>;
 
