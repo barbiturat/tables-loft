@@ -4,17 +4,17 @@ import {ReducersOfType} from '../interfaces/index';
 import userInfo, {Structure as UserInfoStructure} from './user-info';
 import tablesData, {Structure as TablesDataStructure} from './tables-data';
 import tableSessionsData, {Structure as TableSessionsDataStructure} from './table-sessions-data';
-import timer, {Structure as TimerDataStructure} from './timer';
+import utcMilliseconds, {Structure as UtcMillisecondsDataStructure} from './utc-milliseconds';
 
 export interface Structure {
-  timer: TimerDataStructure;
+  utcMilliseconds: UtcMillisecondsDataStructure;
   userInfo: UserInfoStructure;
   tablesData: TablesDataStructure;
   tableSessionsData: TableSessionsDataStructure;
 }
 
 const reducers: ReducersOfType<Structure> = {
-  timer,
+  utcMilliseconds,
   userInfo,
   tablesData,
   tableSessionsData

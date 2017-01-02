@@ -6,23 +6,23 @@ import * as styles from '../styles/index.scss';
 import fetchingTables from '../action-creators/fetching-tables';
 import {PropsExtendedByConnect} from '../interfaces/component';
 import {StoreStructure} from '../interfaces/store-models';
-import changingTimer from '../action-creators/changing-timer';
+import changingUtcMilliseconds from '../action-creators/changing-utc-milliseconds';
 
 type PropsFromConnect = PropsExtendedByConnect<AnyDict, AnyDict>;
 
 class App extends React.Component<PropsFromConnect, AnyDict> {
-  timer: number;
+  utcMilliseconds: number;
 
   componentWillMount() {
     this.props.dispatch(fetchingTables);
 
-    this.timer = window.setInterval(() => {
-      this.props.dispatch(changingTimer);
+    this.utcMilliseconds = window.setInterval(() => {
+      this.props.dispatch(changingUtcMilliseconds);
     }, 1000);
   }
 
   componentWillUnmount() {
-    window.clearInterval(this.timer);
+    window.clearInterval(this.utcMilliseconds);
   }
 
   render() {
