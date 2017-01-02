@@ -36,9 +36,14 @@ class Component extends React.Component<PropsFromConnect, State> {
     this.durationActivityStringSelector = createSelector(
       Component.startsAtSelector,
       Component.utcMillisecondsSelector,
+      this.isFormatOfMinutesSelector.bind(this),
       Component.getDurationActivityString
     );
   }
+
+  isFormatOfMinutesSelector = (props: PropsFromConnect): boolean => {
+    return this.state.isFormatOfMinutes;
+  };
 
   static startsAtSelector(props: PropsFromConnect) {
     return props.startsAt;
@@ -48,7 +53,7 @@ class Component extends React.Component<PropsFromConnect, State> {
     return props.utcMilliseconds;
   };
 
-  static getDurationActivityString(startsAt: number, utcMilliseconds: number) {
+  static getDurationActivityString(startsAt: number, utcMilliseconds: number, isFormatOfMinutes: boolean) {
     if (!startsAt || !utcMilliseconds) {
       return 'Wrong Parameters!';
     }
@@ -56,8 +61,15 @@ class Component extends React.Component<PropsFromConnect, State> {
     const utcMillisecondsFixed = Math.max(startsAt, utcMilliseconds);
     const durationMs = utcMillisecondsFixed - startsAt;
 
-    return moment.utc(durationMs)
-      .format('H[h] mm[m] ss[s]');
+    if (isFormatOfMinutes) {
+      const duration = moment.duration(durationMs);
+      const minutes = Math.floor( duration.asMinutes() );
+
+      return `${minutes}m`;
+    } else {
+      return moment.utc(durationMs)
+        .format('H[h] mm[m] ss[s]');
+    }
   }
 
   onClick = (event: MouseEvent<HTMLDivElement>) => {

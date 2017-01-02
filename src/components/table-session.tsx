@@ -38,7 +38,9 @@ class Component extends React.Component<PropsFromConnect, State> {
     const duration = moment.duration({seconds: durationSeconds});
 
     if (isFormatOfMinutes) {
-      return `${duration.asMinutes()}m`;
+      const minutes = Math.floor( duration.asMinutes() );
+
+      return `${minutes}m`;
     } else {
       return moment.utc({
         hours: duration.hours(),
