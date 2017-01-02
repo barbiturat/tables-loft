@@ -54,17 +54,17 @@ class Table extends React.Component<PropsFromConnect, {}> {
 
     this.durationActivityStringSelector = createSelector(
       Table.startsAtSelector,
+      Table.utcMillisecondsSelector,
       Table.getDurationActivityString
     )
   }
 
-  static getDurationActivityString(startsAt: number) {
-    if (!startsAt) {
-      return ''
+  static getDurationActivityString(startsAt: number, utcMilliseconds: number) {
+    if (!startsAt || !utcMilliseconds) {
+      return '';
     }
 
-    const now = moment.utc().valueOf();
-    const durationMs = now - startsAt;
+    const durationMs = utcMilliseconds - startsAt;
 
     return moment.utc(durationMs)
       .format('H[h] mm[m] ss[s]');
@@ -89,6 +89,10 @@ class Table extends React.Component<PropsFromConnect, {}> {
 
   static startsAtSelector(props: PropsFromConnect) {
     return props.currentSession ? props.currentSession.startsAt : null;
+  };
+
+  static utcMillisecondsSelector(props: PropsFromConnect) {
+    return props.utcMilliseconds;
   };
 
   static durationSecondsSelector(props: PropsFromConnect) {
