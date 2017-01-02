@@ -23,17 +23,13 @@ interface Props {
   isDisabled?: boolean;
 }
 
-interface State {
-  durationOfActivityStr: string;
-}
-
 interface MappedProps {
   utcMilliseconds: number;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
-class Table extends React.Component<PropsFromConnect, State> {
+class Table extends React.Component<PropsFromConnect, {}> {
   static defaultProps = {
     type: 'generic',
     name: 'No Name',
@@ -42,15 +38,10 @@ class Table extends React.Component<PropsFromConnect, State> {
   };
 
   isTableActiveSelector: Selector<TableSession, boolean>;
+  durationActivityStringSelector: Selector<TableSession, string>;
 
   constructor(props: Props) {
     super(props);
-
-    const startsAt = props.currentSession ? props.currentSession.startsAt : null;
-
-    this.state = {
-      durationOfActivityStr: Table.getDurationActivityString(startsAt)
-    };
 
     this.isTableActiveSelector = createSelector(
       Table.startsAtSelector,
@@ -59,6 +50,11 @@ class Table extends React.Component<PropsFromConnect, State> {
         const tableStatus = Table.getTableStatus(startsAt, durationSeconds);
         return tableStatus == 'active';
       }
+    );
+
+    this.durationActivityStringSelector = createSelector(
+      Table.startsAtSelector,
+      Table.getDurationActivityString
     )
   }
 
@@ -177,7 +173,7 @@ class Table extends React.Component<PropsFromConnect, State> {
     }[type];
     const statusClassName = isActive ? 'table_status_active' : 'table_status_ready';
     const pendingClassName = isInPending ? 'table_state_in-pending' : '';
-    const labelAvailableText = !isActive ? 'Available' : this.state.durationOfActivityStr;
+    const labelAvailableText = !isActive ? 'Available' : this.durationActivityStringSelector(currentSession);
 
     return (
       <div className={`table ${tableTypeClassName} ${statusClassName} ${pendingClassName} tables-set_adjust_table`}>
