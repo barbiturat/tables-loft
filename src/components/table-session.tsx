@@ -83,9 +83,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
 const TableSession = connect<any, any, Props>(
   (state: StoreStructure, ownProps: Props): MappedProps => {
-    return {
-      utcMilliseconds: state.app.utcMilliseconds
-    };
+    return {};
   }
 )(Component);
 

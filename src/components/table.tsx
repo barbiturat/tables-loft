@@ -11,6 +11,7 @@ import store from '../store/index';
 import requestingTableStart from '../action-creators/requesting-table-start';
 import requestingTableStop from '../action-creators/requesting-table-stop';
 import {PropsExtendedByConnect} from '../interfaces/component';
+import TableTimer from './table-timer';
 
 export type TableStatus = 'ready' | 'active';
 
@@ -25,7 +26,6 @@ interface Props {
 }
 
 interface MappedProps {
-  utcMilliseconds: number;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
@@ -39,7 +39,6 @@ class Component extends React.Component<PropsFromConnect, {}> {
   };
 
   isTableActiveSelector: Selector<PropsFromConnect, boolean>;
-  durationActivityStringSelector: Selector<PropsFromConnect, string>;
 
   constructor(props: Props) {
     super(props);
@@ -52,24 +51,6 @@ class Component extends React.Component<PropsFromConnect, {}> {
         return tableStatus === 'active';
       }
     );
-
-    this.durationActivityStringSelector = createSelector(
-      Component.startsAtSelector,
-      Component.utcMillisecondsSelector,
-      Component.getDurationActivityString
-    );
-  }
-
-  static getDurationActivityString(startsAt: number, utcMilliseconds: number) {
-    if (!startsAt || !utcMilliseconds) {
-      return '';
-    }
-
-    const utcMillisecondsFixed = Math.max(startsAt, utcMilliseconds);
-    const durationMs = utcMillisecondsFixed - startsAt;
-
-    return moment.utc(durationMs)
-      .format('H[h] mm[m] ss[s]');
   }
 
   static getTableStatus(startsAt: number, durationSeconds: number): TableStatus {
@@ -91,10 +72,6 @@ class Component extends React.Component<PropsFromConnect, {}> {
 
   static startsAtSelector(props: PropsFromConnect) {
     return props.currentSession ? props.currentSession.startsAt : null;
-  };
-
-  static utcMillisecondsSelector(props: PropsFromConnect) {
-    return props.utcMilliseconds;
   };
 
   static durationSecondsSelector(props: PropsFromConnect) {
@@ -147,7 +124,6 @@ class Component extends React.Component<PropsFromConnect, {}> {
     }[type];
     const statusClassName = isActive ? 'table_status_active' : 'table_status_ready';
     const pendingClassName = isInPending ? 'table_state_in-pending' : '';
-    const labelAvailableText = !isActive ? 'Available' : this.durationActivityStringSelector(this.props);
 
     return (
       <div className={`table ${tableTypeClassName} ${statusClassName} ${pendingClassName} tables-set_adjust_table`}>
@@ -160,9 +136,10 @@ class Component extends React.Component<PropsFromConnect, {}> {
            className="table__button table__button_role_change-availability"
            onClick={this.onChangeStatusClick}
         />
-        <div className="table__label table__label_role_availability">
-          {labelAvailableText}
-        </div>
+        <TableTimer
+          isActive={isActive}
+          startsAt={Component.startsAtSelector(this.props)}
+        />
         <TableSession session={lastSession} />
         <a href="" className="table__btn-view-sessions">View More</a>
       </div>
@@ -172,9 +149,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
 
 const Table = connect<any, any, Props>(
   (state: StoreStructure, ownProps: Props): MappedProps => {
-    return {
-      utcMilliseconds: state.app.utcMilliseconds
-    };
+    return {};
   }
 )(Component);
 
