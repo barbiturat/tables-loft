@@ -37,8 +37,8 @@ class Table extends React.Component<PropsFromConnect, {}> {
     isDisabled: false
   };
 
-  isTableActiveSelector: Selector<TableSession, boolean>;
-  durationActivityStringSelector: Selector<TableSession, string>;
+  isTableActiveSelector: Selector<PropsFromConnect, boolean>;
+  durationActivityStringSelector: Selector<PropsFromConnect, string>;
 
   constructor(props: Props) {
     super(props);
@@ -87,12 +87,12 @@ class Table extends React.Component<PropsFromConnect, {}> {
   };
 
 
-  static startsAtSelector(currentSession: TableSession) {
-    return currentSession ? currentSession.startsAt : null;
+  static startsAtSelector(props: PropsFromConnect) {
+    return props.currentSession ? props.currentSession.startsAt : null;
   };
 
-  static durationSecondsSelector(currentSession: TableSession) {
-    return currentSession ? currentSession.durationSeconds : null;
+  static durationSecondsSelector(props: PropsFromConnect) {
+    return props.currentSession ? props.currentSession.durationSeconds : null;
   };
 
   static getLastSessionInfo(lastSession: TableSession) {
@@ -156,7 +156,7 @@ class Table extends React.Component<PropsFromConnect, {}> {
       return;
     }
 
-    const actionCreator = this.isTableActiveSelector(currentSession) ? requestingTableStop : requestingTableStart;
+    const actionCreator = this.isTableActiveSelector(this.props) ? requestingTableStop : requestingTableStart;
     const action = actionCreator(id);
 
     store.dispatch(action);
@@ -164,7 +164,7 @@ class Table extends React.Component<PropsFromConnect, {}> {
 
   render() {
     const {name, type, lastSession, currentSession, isInPending, isDisabled} = this.props;
-    const isActive = this.isTableActiveSelector(currentSession);
+    const isActive = this.isTableActiveSelector(this.props);
     const tableTypeClassName = {
       pool: 'table_type_pool',
       shuffleBoard: 'table_type_shuffle',
@@ -173,7 +173,7 @@ class Table extends React.Component<PropsFromConnect, {}> {
     }[type];
     const statusClassName = isActive ? 'table_status_active' : 'table_status_ready';
     const pendingClassName = isInPending ? 'table_state_in-pending' : '';
-    const labelAvailableText = !isActive ? 'Available' : this.durationActivityStringSelector(currentSession);
+    const labelAvailableText = !isActive ? 'Available' : this.durationActivityStringSelector(this.props);
 
     return (
       <div className={`table ${tableTypeClassName} ${statusClassName} ${pendingClassName} tables-set_adjust_table`}>

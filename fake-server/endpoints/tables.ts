@@ -7,7 +7,7 @@ import {urlTables} from '../../src/constants/urls';
 import {ResponseTablesPayload} from '../../src/interfaces/api-responses';
 
 const tables = (server: Application, bodyParser: RequestHandler) => {
-  server.get(urlTables, bodyParser, sendWithTimeout(2000, (req, res) => {
+  server.get(urlTables, bodyParser, sendWithTimeout(1000, (req, res) => {
 
     const response: ResponseTablesPayload = {
       tables: [
