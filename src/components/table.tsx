@@ -2,8 +2,7 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import * as moment from 'moment';
 import MouseEvent = React.MouseEvent;
-import {assign} from 'lodash';
-import { createSelector } from 'reselect'
+import { createSelector, Selector } from 'reselect'
 
 import {TableType} from '../interfaces/backend-models';
 import {TableSession, StoreStructure} from '../interfaces/store-models';
@@ -29,19 +28,20 @@ interface State {
 }
 
 interface MappedProps {
-  isTableActive: boolean,
   utcMilliseconds: number;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
-class Table extends React.Component<Props, State> {
+class Table extends React.Component<PropsFromConnect, State> {
   static defaultProps = {
     type: 'generic',
     name: 'No Name',
     isInPending: false,
     isDisabled: false
   };
+
+  isTableActiveSelector: Selector<TableSession, boolean>;
 
   constructor(props: Props) {
     super(props);
@@ -51,11 +51,15 @@ class Table extends React.Component<Props, State> {
     this.state = {
       durationOfActivityStr: Table.getDurationActivityString(startsAt)
     };
-  }
 
-  componentWillReceiveProps(nextProps: PropsFromConnect) {
-    const thisCurrentSession = this.props.currentSession;
-    const nextCurrentSession = nextProps.currentSession;
+    this.isTableActiveSelector = createSelector(
+      Table.startsAtSelector,
+      Table.durationSecondsSelector,
+      (startsAt, durationSeconds) => {
+        const tableStatus = Table.getTableStatus(startsAt, durationSeconds);
+        return tableStatus == 'active';
+      }
+    )
   }
 
   static getDurationActivityString(startsAt: number) {
@@ -70,12 +74,11 @@ class Table extends React.Component<Props, State> {
       .format('H[h] mm[m] ss[s]');
   }
 
-  static getTableStatus(currentSession: TableSession): TableStatus {
-    if (!currentSession) {
+  static getTableStatus(startsAt: number, durationSeconds: number): TableStatus {
+    if (!startsAt || !durationSeconds) {
       return 'ready';
     }
 
-    const {startsAt, durationSeconds} = currentSession;
     const now = moment.utc().valueOf();
     const sessionFinishTime = moment.utc(startsAt)
       .add({
@@ -85,9 +88,18 @@ class Table extends React.Component<Props, State> {
     const isNotFinished = sessionFinishTime - now >= 0;
 
     return isNotFinished ? 'active' : 'ready';
-  }
+  };
 
-  getLastSessionInfo = (lastSession: TableSession) => {
+
+  static startsAtSelector(currentSession: TableSession) {
+    return currentSession ? currentSession.startsAt : null;
+  };
+
+  static durationSecondsSelector(currentSession: TableSession) {
+    return currentSession ? currentSession.durationSeconds : null;
+  };
+
+  static getLastSessionInfo(lastSession: TableSession) {
     if (lastSession) {
       const {durationSeconds, startsAt, adminEdited} = lastSession;
       const finishTime = moment.utc(startsAt)
@@ -119,7 +131,7 @@ class Table extends React.Component<Props, State> {
     }
   };
 
-  getDisabledLabel = (isDisabled: boolean) => {
+  static getDisabledLabel(isDisabled: boolean) {
     return isDisabled ? (
         <span className="table__label table__label_role_disabled">
           Pool Table 2 Is Not Active
@@ -127,7 +139,7 @@ class Table extends React.Component<Props, State> {
       ) : null;
   };
 
-  renderActiveSessionStartTime = (currentSession: TableSession) => {
+  static renderActiveSessionStartTime(currentSession: TableSession) {
     if (!currentSession) {
       return null;
     } else {
@@ -142,13 +154,13 @@ class Table extends React.Component<Props, State> {
   onChangeStatusClick = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
 
-    const {id, isDisabled} = this.props;
+    const {id, isDisabled, currentSession} = this.props;
 
     if (isDisabled) {
       return;
     }
 
-    const actionCreator = (this.props as PropsFromConnect).isTableActive ? requestingTableStop : requestingTableStart;
+    const actionCreator = this.isTableActiveSelector(currentSession) ? requestingTableStop : requestingTableStart;
     const action = actionCreator(id);
 
     store.dispatch(action);
@@ -156,7 +168,7 @@ class Table extends React.Component<Props, State> {
 
   render() {
     const {name, type, lastSession, currentSession, isInPending, isDisabled} = this.props;
-    const isActive = (this.props as PropsFromConnect).isTableActive;
+    const isActive = this.isTableActiveSelector(currentSession);
     const tableTypeClassName = {
       pool: 'table_type_pool',
       shuffleBoard: 'table_type_shuffle',
@@ -169,11 +181,11 @@ class Table extends React.Component<Props, State> {
 
     return (
       <div className={`table ${tableTypeClassName} ${statusClassName} ${pendingClassName} tables-set_adjust_table`}>
-        {this.getDisabledLabel(isDisabled)}
+        {Table.getDisabledLabel(isDisabled)}
         <div className="table__label table__label_role_table-type">
           {name}
         </div>
-        {isActive ? this.renderActiveSessionStartTime(currentSession) : ''}
+        {isActive ? Table.renderActiveSessionStartTime(currentSession) : ''}
         <a href=""
            className="table__button table__button_role_change-availability"
            onClick={this.onChangeStatusClick}
@@ -181,38 +193,16 @@ class Table extends React.Component<Props, State> {
         <div className="table__label table__label_role_availability">
           {labelAvailableText}
         </div>
-        {this.getLastSessionInfo(lastSession)}
+        {Table.getLastSessionInfo(lastSession)}
         <a href="" className="table__btn-view-sessions">View More</a>
       </div>
     );
   }
 }
 
-const getTableStatus = (currentSession: TableSession): TableStatus => {
-  if (!currentSession) {
-    return 'ready';
-  }
-
-  const {startsAt, durationSeconds} = currentSession;
-  const now = moment.utc().valueOf();
-  const sessionFinishTime = moment.utc(startsAt)
-    .add({
-      seconds: durationSeconds
-    })
-    .valueOf();
-  const isNotFinished = sessionFinishTime - now >= 0;
-
-  return isNotFinished ? 'active' : 'ready';
-};
-
-const isTableActive = (currentSession: TableSession) => {
-  return getTableStatus(currentSession) === 'active';
-};
-
 export default connect<any, any, Props>(
-  (state: StoreStructure, ownProps?: Props): MappedProps => {
+  (state: StoreStructure, ownProps: Props): MappedProps => {
     return {
-      isTableActive: isTableActive(ownProps.currentSession),
       utcMilliseconds: state.app.utcMilliseconds
     };
   }
