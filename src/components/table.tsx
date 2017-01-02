@@ -64,7 +64,8 @@ class Table extends React.Component<PropsFromConnect, {}> {
       return '';
     }
 
-    const durationMs = utcMilliseconds - startsAt;
+    const utcMillisecondsFixed = Math.max(startsAt, utcMilliseconds);
+    const durationMs = utcMillisecondsFixed - startsAt;
 
     return moment.utc(durationMs)
       .format('H[h] mm[m] ss[s]');
