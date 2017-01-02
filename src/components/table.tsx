@@ -1,13 +1,15 @@
 import * as React from 'react';
+import {connect} from 'react-redux';
 import * as moment from 'moment';
 import MouseEvent = React.MouseEvent;
 import {assign} from 'lodash';
 
 import {TableType} from '../interfaces/backend-models';
-import {TableSession} from '../interfaces/store-models';
+import {TableSession, StoreStructure} from '../interfaces/store-models';
 import store from '../store/index';
 import requestingTableStart from '../action-creators/requesting-table-start';
 import requestingTableStop from '../action-creators/requesting-table-stop';
+import {PropsExtendedByConnect} from '../interfaces/component';
 
 export type TableStatus = 'ready' | 'active';
 
@@ -26,7 +28,13 @@ interface State {
   durationOfActivityStr: string;
 }
 
-export default class Table extends React.Component<Props, State> {
+interface MappedProps {
+  qqq: number;
+}
+
+type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
+
+class Table extends React.Component<Props, State> {
   static defaultProps = {
     type: 'generic',
     name: 'No Name',
@@ -206,3 +214,11 @@ export default class Table extends React.Component<Props, State> {
     );
   }
 }
+
+export default connect<any, any, Props>(
+  (state: StoreStructure, ownProps?: Props): MappedProps => {
+    return {
+      qqq: 12
+    };
+  }
+)(Table);
