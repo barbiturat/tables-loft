@@ -4,7 +4,6 @@ import {find, assign} from 'lodash';
 import {AnyDict} from '../interfaces/index';
 import {PropsExtendedByConnect} from '../interfaces/component';
 import {connect} from 'react-redux';
-import fetchingTables from '../action-creators/fetching-tables';
 import {StoreStructure, TableSession as TableSessionInStore} from '../interfaces/store-models';
 import Header from './header';
 import TablesGroup from './tables-group';
@@ -19,10 +18,6 @@ interface MappedProps {
 type PropsFromConnect = PropsExtendedByConnect<AnyDict, MappedProps>;
 
 class PageHome extends React.Component<PropsFromConnect, AnyDict> {
-  componentWillMount() {
-    this.props.dispatch(fetchingTables);
-  }
-
   renderTablesGroup = (tables: ComponentTable[], isInPending: boolean) => {
     return isInPending ? (
         <div className="label label_type_wait label_role_wait-tables"/>
