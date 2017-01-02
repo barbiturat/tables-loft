@@ -150,9 +150,6 @@ $shuffle-table-border-radius: 50px;
   &__session-length {
     display: inline-block;
     position: relative;
-    padding-left: 20px;
-    background: url(../../public/img/icons/printer-white.svg) 0 center no-repeat;
-    background-size: 13px auto;
 
     &_admin-edited {
       &:after {
