@@ -7,7 +7,7 @@ import {AnyDict, StringDict} from '../interfaces';
 import {isNotEmpty as isFilled} from '../helpers';
 import {renderErrorComponent, renderErrorsBlock} from '../helpers/renderers';
 import {isRequiredField} from '../constants/messages';
-import {BaseComponentProps} from '../interfaces/component';
+import {PropsExtendedByConnect} from '../interfaces/component';
 import {LoginForm} from '../reducers/forms';
 import requestingLogin from '../action-creators/requesting-login';
 import {loginForm} from '../constants/form-fields';
@@ -17,11 +17,11 @@ interface MappedProps {
   loginForm: LoginForm;
 }
 
-interface ComponentProps extends BaseComponentProps, MappedProps {}
+type PropsFromConnect = PropsExtendedByConnect<AnyDict, MappedProps>;
 
 const {validators: {email: emailChecks, password: passwordChecks}} = loginForm;
 
-class PageLogin extends React.Component<ComponentProps, AnyDict> {
+class PageLogin extends React.Component<PropsFromConnect, AnyDict> {
   static getWaitMessage(isPending: boolean) {
     return isPending ? (
         <div className="form-message form-message_type_wait">Wait...</div>

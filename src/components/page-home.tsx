@@ -2,7 +2,7 @@ import * as React from 'react';
 import {find, assign} from 'lodash';
 
 import {AnyDict} from '../interfaces/index';
-import {BaseComponentProps} from '../interfaces/component';
+import {PropsExtendedByConnect} from '../interfaces/component';
 import {connect} from 'react-redux';
 import fetchingTables from '../action-creators/fetching-tables';
 import {StoreStructure, TableSession as TableSessionInStore} from '../interfaces/store-models';
@@ -16,9 +16,9 @@ interface MappedProps {
   tableSessions: TableSessionInStore[];
 }
 
-interface ComponentProps extends BaseComponentProps, MappedProps {}
+type PropsFromConnect = PropsExtendedByConnect<AnyDict, MappedProps>;
 
-class PageHome extends React.Component<ComponentProps, AnyDict> {
+class PageHome extends React.Component<PropsFromConnect, AnyDict> {
   componentWillMount() {
     this.props.dispatch(fetchingTables);
   }
