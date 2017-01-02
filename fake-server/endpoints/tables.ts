@@ -31,7 +31,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
               hours: 4,
               minutes: 11,
             }).toISOString(),
-            durationSeconds: moment.duration(1, 'hours').asSeconds(),
+            durationSeconds: moment.duration({hours: 2, minutes: 54}).asSeconds(),
             adminEdited: true
           }
         },
