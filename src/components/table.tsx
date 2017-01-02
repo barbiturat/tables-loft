@@ -2,15 +2,15 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import * as moment from 'moment';
 import MouseEvent = React.MouseEvent;
-import { createSelector, Selector } from 'reselect'
+import { createSelector, Selector } from 'reselect';
 
+import TableSession from './table-session';
 import {TableType} from '../interfaces/backend-models';
 import {TableSession as TableSessionType, StoreStructure} from '../interfaces/store-models';
 import store from '../store/index';
 import requestingTableStart from '../action-creators/requesting-table-start';
 import requestingTableStop from '../action-creators/requesting-table-stop';
 import {PropsExtendedByConnect} from '../interfaces/component';
-import TableSession from './table-session';
 
 export type TableStatus = 'ready' | 'active';
 
@@ -49,7 +49,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
       Component.durationSecondsSelector,
       (startsAt, durationSeconds) => {
         const tableStatus = Component.getTableStatus(startsAt, durationSeconds);
-        return tableStatus == 'active';
+        return tableStatus === 'active';
       }
     );
 
@@ -57,7 +57,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
       Component.startsAtSelector,
       Component.utcMillisecondsSelector,
       Component.getDurationActivityString
-    )
+    );
   }
 
   static getDurationActivityString(startsAt: number, utcMilliseconds: number) {
@@ -117,7 +117,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
 
       return (
         <div className="table__label table__label_role_start-time">{startTime}</div>
-      )
+      );
     }
   };
 
