@@ -29,7 +29,7 @@ interface State {
 }
 
 interface MappedProps {
-  qqq: number;
+
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
@@ -42,8 +42,6 @@ class Table extends React.Component<Props, State> {
     isDisabled: false
   };
 
-  activityTimer: number = null;
-
   constructor(props: Props) {
     super(props);
 
@@ -54,20 +52,6 @@ class Table extends React.Component<Props, State> {
       isTableActive,
       durationOfActivityStr: Table.getDurationActivityString(startsAt)
     };
-
-    if (isTableActive) {
-      this.activityTimer = window.setInterval((() => {
-        this.setState(assign({}, this.state, {
-          durationOfActivityStr: Table.getDurationActivityString(this.props.currentSession.startsAt)
-        }));
-      }), 1000);
-    }
-  }
-
-  componentWillUnmount() {
-    if (this.activityTimer) {
-      clearInterval(this.activityTimer);
-    }
   }
 
   componentWillReceiveProps(nextProps: Props) {
