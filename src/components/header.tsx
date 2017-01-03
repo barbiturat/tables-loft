@@ -1,11 +1,15 @@
 import * as React from 'react';
 
-import {AnyDict} from '../interfaces/index';
 import MouseEvent = React.MouseEvent;
+import modalAdminLoginOpened from '../action-creators/modal-admin-login-opened';
+import store from '../store/index';
 
-export default class Header extends React.Component<AnyDict, AnyDict> {
+export default class Header extends React.Component<{}, {}> {
   onBtnManagerClick = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
+
+    store.dispatch( modalAdminLoginOpened(true) );
+    event.currentTarget.blur();
   };
 
   render() {

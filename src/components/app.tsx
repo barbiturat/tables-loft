@@ -7,6 +7,7 @@ import fetchingTables from '../action-creators/fetching-tables';
 import {PropsExtendedByConnect} from '../interfaces/component';
 import {StoreStructure} from '../interfaces/store-models';
 import changingUtcMilliseconds from '../action-creators/changing-utc-milliseconds';
+import ModalAdminLogin from './modal-admin-login';
 
 type PropsFromConnect = PropsExtendedByConnect<AnyDict, AnyDict>;
 
@@ -33,6 +34,8 @@ class App extends React.Component<PropsFromConnect, AnyDict> {
           data-styles={styles}
       >
         {this.props.children}
+
+        <ModalAdminLogin/>
       </div>
     );
   }

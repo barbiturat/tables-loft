@@ -45,6 +45,7 @@ module.exports = {
       'moment',
       'react',
       'react-dom',
+      'react-modal',
       'react-redux',
       'react-redux-form',
       'react-router',
