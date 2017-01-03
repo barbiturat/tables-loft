@@ -102,7 +102,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
 const ModalAdminLogin = connect<any, any, Props>(
   (state: StoreStructure, ownProps: Props): MappedProps => {
     return {
-      isOpen: state.app.modals.adminLogin,
+      isOpen: state.app.modals.adminLogin && state.app.adminToken === null,
       managerLoginForm: state.formsData.forms.managerLoginForm
     };
   }
