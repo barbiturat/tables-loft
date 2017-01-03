@@ -1,9 +1,9 @@
 import sendWithTimeout from '../helpers/send-with-timeout';
 import {Application, RequestHandler} from 'express-serve-static-core';
-import {STATUS_OK} from '../../src/constants/used-http-status-codes';
+import {STATUS_OK, STATUS_FORBIDDEN} from '../../src/constants/used-http-status-codes';
 import {CustomRequest} from '../interfaces/index';
 import {RequestGetAdminTokenPayload} from '../../src/interfaces/api-requests';
-import {ResponseGetAdminTokenPayload} from '../../src/interfaces/api-responses';
+import {ResponseGetAdminTokenPayload, ResponseGetAdminTokenFailedPayload} from '../../src/interfaces/api-responses';
 import {urlGetAdminToken} from '../../src/constants/urls';
 
 const getAdminToken = (server: Application, bodyParser: RequestHandler) => {
@@ -16,6 +16,18 @@ const getAdminToken = (server: Application, bodyParser: RequestHandler) => {
     res
       .status(STATUS_OK)
       .send(response);
+
+    /*const response: ResponseGetAdminTokenFailedPayload = {
+      errors: {
+        password: {
+          isCorrect: false
+        }
+      }
+    };
+
+    res
+      .status(STATUS_FORBIDDEN)
+      .send(response);*/
 
   }));
 };
