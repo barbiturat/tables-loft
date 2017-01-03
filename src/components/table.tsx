@@ -53,7 +53,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
     );
   }
 
-  static getTableStatus(startsAt: number, durationSeconds: number): TableStatus {
+  static getTableStatus(startsAt?: number, durationSeconds?: number): TableStatus {
     if (!startsAt || !durationSeconds) {
       return 'ready';
     }
@@ -71,14 +71,14 @@ class Component extends React.Component<PropsFromConnect, {}> {
 
 
   static startsAtSelector(props: PropsFromConnect) {
-    return props.currentSession ? props.currentSession.startsAt : null;
+    return props.currentSession ? props.currentSession.startsAt : undefined;
   };
 
   static durationSecondsSelector(props: PropsFromConnect) {
-    return props.currentSession ? props.currentSession.durationSeconds : null;
+    return props.currentSession ? props.currentSession.durationSeconds : undefined;
   };
 
-  static getDisabledLabel(isDisabled: boolean) {
+  static getDisabledLabel(isDisabled?: boolean) {
     return isDisabled ? (
         <span className="table__label table__label_role_disabled">
           Pool Table 2 Is Not Active
@@ -86,7 +86,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
       ) : null;
   };
 
-  static renderActiveSessionStartTime(currentSession: TableSessionType) {
+  static renderActiveSessionStartTime(currentSession?: TableSessionType) {
     if (!currentSession) {
       return null;
     } else {
@@ -116,12 +116,12 @@ class Component extends React.Component<PropsFromConnect, {}> {
   render() {
     const {name, type, lastSession, currentSession, isInPending, isDisabled} = this.props;
     const isActive = this.isTableActiveSelector(this.props);
-    const tableTypeClassName = {
+    const tableTypeClassName = type ? {
       pool: 'table_type_pool',
       shuffleBoard: 'table_type_shuffle',
       tableTennis: 'table_type_tennis',
       generic: 'table_type_default'
-    }[type];
+    }[type] : '';
     const statusClassName = isActive ? 'table_status_active' : 'table_status_ready';
     const pendingClassName = isInPending ? 'table_state_in-pending' : '';
 

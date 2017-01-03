@@ -41,10 +41,16 @@ const requestLogin = ((action$) => {
                 const errors = ajaxErrorData.xhr.response && ajaxErrorData.xhr.response.errors ?
                   ajaxErrorData.xhr.response.errors : null;
 
-                const setFieldsValidityAction = actions.setFieldsValidity(formModelPath, {
-                  email: errors && errors.email || false,
-                  password: errors && errors.password || false
-                });
+                const validityErrors: FieldsObject<ValidityObject> = {
+                  email: errors && errors.email || {
+                    isRegistered: false
+                  },
+                  password: errors && errors.password || {
+                    isCorrect: false
+                  }
+                };
+
+                const setFieldsValidityAction = actions.setFieldsValidity(formModelPath, validityErrors);
 
                 return Observable.of(
                   setFormSubmitFailedAction,

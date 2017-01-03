@@ -13,8 +13,8 @@ export interface Table {
   id: number;
   tableType: TableType;
   status: TableStatus;
-  currentSession?: TableSession | null;
-  lastSession?: TableSession | null;
+  currentSession?: TableSession;
+  lastSession?: TableSession;
 }
 
 export interface LoginErrors {

@@ -74,7 +74,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
             durationSeconds: moment.duration(2, 'hours').asSeconds(),
             adminEdited: true
           },
-          lastSession: null
+          // lastSession: null
         },
 
 
@@ -140,7 +140,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
             durationSeconds: moment.duration(2, 'hours').asSeconds(),
             adminEdited: true
           },
-          lastSession: null
+          // lastSession: null
         },
 
 
@@ -182,7 +182,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
             durationSeconds: moment.duration(1, 'hours').asSeconds(),
             adminEdited: false
           },
-          lastSession: null
+          // lastSession: null
         },
         {
           name: 'Tennis Table 3',
@@ -198,7 +198,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
             durationSeconds: moment.duration(2, 'hours').asSeconds(),
             adminEdited: true
           },
-          lastSession: null
+          // lastSession: null
         },
 
 
@@ -264,7 +264,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
             durationSeconds: moment.duration(2, 'hours').asSeconds(),
             adminEdited: true
           },
-          lastSession: null
+          // lastSession: null
         }
       ]
     };

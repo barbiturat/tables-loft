@@ -36,5 +36,5 @@ interface AjaxResponseTyped<TResponse> extends AjaxResponse {
 }
 
 interface AjaxErrorTyped<TResponse> extends AjaxError {
-  xhr: CustomXHR<TResponse | null>;
+  xhr: CustomXHR<TResponse>;
 }

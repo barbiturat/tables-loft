@@ -4,8 +4,8 @@ import * as moment from 'moment';
 
 export const tablesToFront = (tables: BackendTable[]): FrontendTable[] => {
   return tables.map((table) => {
-    const currentSessionId = table.currentSession ? table.currentSession.id : null;
-    const lastSessionId = table.lastSession ? table.lastSession.id : null;
+    const currentSessionId = table.currentSession ? table.currentSession.id : undefined;
+    const lastSessionId = table.lastSession ? table.lastSession.id : undefined;
 
     return {
       name: table.name,
