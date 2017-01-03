@@ -5,13 +5,13 @@ import * as moment from 'moment';
 
 import {CustomRequest} from '../interfaces/index';
 import {RequestSessionHistoryPayload} from '../../src/interfaces/api-requests';
-import {ResponseSessionHistoryPayload} from '../../src/interfaces/api-responses';
+import {ResponseSessionsHistoryPayload} from '../../src/interfaces/api-responses';
 import {urlSessionHistory} from '../../src/constants/urls';
 
 const sessionHistory = (server: Application, bodyParser: RequestHandler) => {
   server.get(urlSessionHistory, bodyParser, sendWithTimeout(500, (req: CustomRequest<RequestSessionHistoryPayload, any>, res) => {
 
-    const response: ResponseSessionHistoryPayload = {
+    const response: ResponseSessionsHistoryPayload = {
       sessions: [
         {
           id: 5433,

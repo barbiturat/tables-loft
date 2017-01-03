@@ -20,7 +20,7 @@ export interface ResponseTablesPayload {
   tables: Table[];
 }
 
-export interface ResponseSessionHistoryPayload {
+export interface ResponseSessionsHistoryPayload {
   sessions: TableSession[];
 }
 

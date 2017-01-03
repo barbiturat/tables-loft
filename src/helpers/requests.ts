@@ -22,7 +22,7 @@ const prolongSession = (ajaxData: AjaxResponse) => {
 */
 
 export const get = (url: string, headers?: Object): Observable<AjaxResponse | AjaxError> => {
-  return Observable.ajax.get(url)
+  return Observable.ajax.get(url, headers)
     // .map(prolongSession)
     .catch((ajaxErrorData: AjaxError) => {
       return handleError(ajaxErrorData);
