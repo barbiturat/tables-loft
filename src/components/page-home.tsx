@@ -36,8 +36,8 @@ class PageHome extends React.Component<PropsFromConnect, AnyDict> {
   }
 }
 
-const getSessionById = (sessions: TableSessionInStore[], id: number) => {
-  return isNaN(id) ? null : find(sessions, (session: TableSessionInStore) => {
+const getSessionById = (sessions: TableSessionInStore[], id?: number) => {
+  return isNaN(Number(id)) ? null : find(sessions, (session: TableSessionInStore) => {
       return session.id === id;
     });
 };
