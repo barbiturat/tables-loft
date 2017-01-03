@@ -21,6 +21,7 @@ interface Props {
 interface MappedProps {
   isOpen: boolean;
   managerLoginForm: ManagerLoginForm;
+  pending: boolean;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
@@ -47,6 +48,12 @@ class Component extends React.Component<PropsFromConnect, {}> {
     this.props.dispatch(action);
   };
 
+  static getWaitMessage(isPending: boolean) {
+    return isPending ? (
+        <div>Wait...</div>
+      ) : null;
+  };
+
   render() {
     return (
       <Modal
@@ -60,6 +67,8 @@ class Component extends React.Component<PropsFromConnect, {}> {
         >
           close
         </a>
+
+        {Component.getWaitMessage(this.props.pending)}
 
         <Form
           model="formsData.managerLoginForm"
@@ -103,7 +112,8 @@ const ModalAdminLogin = connect<any, any, Props>(
   (state: StoreStructure, ownProps: Props): MappedProps => {
     return {
       isOpen: state.app.modals.adminLogin && state.app.adminToken === null,
-      managerLoginForm: state.formsData.forms.managerLoginForm
+      managerLoginForm: state.formsData.forms.managerLoginForm,
+      pending: state.formsData.forms.managerLoginForm.$form.pending
     };
   }
 )(Component);
