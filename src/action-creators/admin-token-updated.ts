@@ -7,7 +7,7 @@ type PayloadType = AdminToken;
 
 export type ActionType = ActionWithPayload<PayloadType>;
 
-const adminTokenUpdated = (utcMillisecondsValue: PayloadType): ActionType =>
-  createActionWithPayload(ADMIN_TOKEN_UPDATED, utcMillisecondsValue);
+const adminTokenUpdated = (token: PayloadType): ActionType =>
+  createActionWithPayload(ADMIN_TOKEN_UPDATED, token);
 
 export default adminTokenUpdated;

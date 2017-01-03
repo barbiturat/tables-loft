@@ -11,6 +11,7 @@ import {STATUS_OK} from '../constants/used-http-status-codes';
 import {RequestGetAdminTokenPayload} from '../interfaces/api-requests';
 import {urlGetAdminToken} from '../constants/urls';
 import {SimpleAction, FormSubmitAction} from '../interfaces/actions';
+import adminTokenUpdated from '../action-creators/admin-token-updated';
 
 type ResponseOk = AjaxResponseTyped<ResponseGetAdminTokenPayload>;
 type ResponseError = AjaxErrorTyped<ResponseGetAdminTokenFailedPayload>;
@@ -27,10 +28,14 @@ const requestAdminToken = ((action$) => {
           post(urlGetAdminToken, dataToSend)
             .mergeMap((ajaxData: ResponseOk | ResponseError) => {
               if (ajaxData.status === STATUS_OK) {
+                const accessToken = (ajaxData as ResponseOk).response.accessToken;
+
                 const setSubmittedAction = actions.setSubmitted(formModelPath, true);
+                const setAdminTokenAction = adminTokenUpdated(accessToken);
 
                 return Observable.of<any>(
-                  setSubmittedAction
+                  setSubmittedAction,
+                  setAdminTokenAction
                 );
               } else {
                 const ajaxErrorData = (ajaxData as ResponseError);
