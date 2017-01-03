@@ -33,7 +33,7 @@ const login = (server: Application, bodyParser: RequestHandler) => {
         password: {}
       };
 
-      if (emails.indexOf(email) === -1) {
+      if (email && emails.indexOf(email) === -1) {
         errors.email.isRegistered = false;
       } else {
         if (password !== testUserPassword) {

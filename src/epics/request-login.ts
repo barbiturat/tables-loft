@@ -1,6 +1,6 @@
 import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
-import {actions} from 'react-redux-form';
+import {actions, FieldsObject, ValidityObject} from 'react-redux-form';
 import {push} from 'redux-router';
 
 import {REQUESTING_LOGIN} from '../constants/action-names';
@@ -34,12 +34,16 @@ const requestLogin = ((action$) => {
                   redirectToIndexAction
                 );
               } else {
+                const qqq: FieldsObject<ValidityObject | boolean> = {};
+
                 const ajaxErrorData = (ajaxData as AjaxErrorTyped<ResponseLoginFailedPayload>);
-                const {errors} = ajaxErrorData.xhr.response;
                 const setFormSubmitFailedAction = actions.setSubmitFailed(formModelPath);
+                const errors = ajaxErrorData.xhr.response && ajaxErrorData.xhr.response.errors ?
+                  ajaxErrorData.xhr.response.errors : null;
+
                 const setFieldsValidityAction = actions.setFieldsValidity(formModelPath, {
-                  email: errors.email,
-                  password: errors.password
+                  email: errors && errors.email || false,
+                  password: errors && errors.password || false
                 });
 
                 return Observable.of(

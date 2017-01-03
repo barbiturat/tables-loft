@@ -1,5 +1,6 @@
 import {Observable, AjaxResponse, AjaxError} from 'rxjs';
-import {ErrorObservable} from 'rxjs/observable/ErrorObservable';
+import {AjaxErrorTyped} from '../interfaces/index';
+import {ResponseFailedPayload} from '../interfaces/api-responses';
 
 const handleError = (ajaxErrorData: AjaxError): Observable<AjaxError> => {
   /*if (ajaxErrorData.status === 401) {
@@ -34,4 +35,12 @@ export const post = (url: string, body?: any, headers?: Object): Observable<Ajax
     .catch((ajaxErrorData: AjaxError) => {
       return handleError(ajaxErrorData);
     });
+};
+
+export const getErrorMessageFromResponse = (ajaxData?: AjaxErrorTyped<ResponseFailedPayload>) => {
+  const defaultErrorMessage = 'Error!';
+
+  return ajaxData && ajaxData.xhr && ajaxData.xhr.response && ajaxData.xhr.response.error ?
+    ajaxData.xhr.response.error :
+    defaultErrorMessage;
 };

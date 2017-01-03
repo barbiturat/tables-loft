@@ -13,15 +13,15 @@ export interface Table {
   id: number;
   tableType: TableType;
   status: TableStatus;
-  currentSession: TableSession;
-  lastSession: TableSession;
+  currentSession?: TableSession | null;
+  lastSession?: TableSession | null;
 }
 
 export interface LoginErrors {
   email: {
-    isRegistered?: boolean;
+    isRegistered: boolean;
   };
   password: {
-    isCorrect?: boolean;
+    isCorrect: boolean;
   };
 }

@@ -2,7 +2,7 @@ import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
 
 import {FETCHING_TABLES} from '../constants/action-names';
-import {get} from '../helpers/requests';
+import {get, getErrorMessageFromResponse} from '../helpers/requests';
 import {ResponseTablesPayload, ResponseFailedPayload} from '../interfaces/api-responses';
 import {AjaxResponseTyped, AjaxErrorTyped} from '../interfaces/index';
 import {STATUS_OK} from '../constants/used-http-status-codes';
@@ -54,10 +54,10 @@ const fetchTables = ((action$) => {
                   tablesPendingStop
                 );
               } else {
-                const ajaxErrorData = (ajaxData as ResponseError);
+                const errorMessage = getErrorMessageFromResponse(ajaxData as ResponseError);
 
                 return Observable.of<any>(
-                  fetchingTablesFailed(ajaxErrorData.xhr.response.error)
+                  fetchingTablesFailed(errorMessage)
                 );
               }
             })

@@ -5,8 +5,8 @@ export interface Table {
   name: string;
   id: number;
   tableType: TableType;
-  currentSessionId: number;
-  lastSessionId?: number;
+  currentSessionId?: number | null;
+  lastSessionId?: number | null;
   isInPending: boolean;
   isDisabled: boolean;
 }

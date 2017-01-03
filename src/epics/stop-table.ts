@@ -4,7 +4,7 @@ import {MiddlewareAPI} from 'redux';
 import {find} from 'lodash';
 
 import {REQUESTING_TABLE_STOP} from '../constants/action-names';
-import {post} from '../helpers/requests';
+import {post, getErrorMessageFromResponse} from '../helpers/requests';
 import {ResponseFailedPayload, ResponseStopTablePayload} from '../interfaces/api-responses';
 import {AjaxResponseTyped, AjaxErrorTyped} from '../interfaces/index';
 import {STATUS_OK} from '../constants/used-http-status-codes';
@@ -56,10 +56,10 @@ const stopTable = ((action$, store: MiddlewareAPI<StoreStructure>) => {
                   tablesChangedAction
                 );
               } else {
-                const ajaxErrorData = (ajaxData as ResponseError);
+                const errorMessage = getErrorMessageFromResponse(ajaxData as ResponseError);
 
                 return Observable.of<any>(
-                  requestingTableStopFailed(ajaxErrorData.xhr.response.error)
+                  requestingTableStopFailed(errorMessage)
                 );
               }
             })
