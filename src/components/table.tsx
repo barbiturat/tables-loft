@@ -71,11 +71,11 @@ class Component extends React.Component<PropsFromConnect, {}> {
 
 
   static startsAtSelector(props: PropsFromConnect) {
-    return props.currentSession ? props.currentSession.startsAt : undefined;
+    return props.currentSession && props.currentSession.startsAt;
   };
 
   static durationSecondsSelector(props: PropsFromConnect) {
-    return props.currentSession ? props.currentSession.durationSeconds : undefined;
+    return props.currentSession && props.currentSession.durationSeconds;
   };
 
   static getDisabledLabel(isDisabled?: boolean) {
