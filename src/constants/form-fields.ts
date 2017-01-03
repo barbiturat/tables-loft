@@ -11,3 +11,12 @@ export const loginForm = {
     }
   }
 };
+
+export const managerLoginForm = {
+  validators: {
+    password: {
+      isFilled: 'isFilled',
+      isCorrect: 'isCorrect'
+    }
+  }
+};

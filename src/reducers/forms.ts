@@ -18,21 +18,31 @@ interface LoginFormFields {
   password?: any;
 }
 
+interface ManagerLoginFormFields {
+  password?: any;
+}
+
 interface FormModels {
   loginForm: FieldsOfType<LoginFormFields, string>;
+  managerLoginForm: FieldsOfType<ManagerLoginFormFields, string>;
 }
 
 const formsData = combineForms({
   loginForm: {
     email: ''
+  },
+  managerLoginForm: {
+    password: ''
   }
 }, 'formsData');
 
 export type LoginForm = FormStructure<LoginFormFields>;
+export type ManagerLoginForm = FormStructure<ManagerLoginFormFields>;
 
 export interface Structure extends FormModels {
   forms: {
     loginForm: LoginForm;
+    managerLoginForm: ManagerLoginForm;
     $form: FormStateWithValue<FormModels>;
   };
 }
