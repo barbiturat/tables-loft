@@ -12,6 +12,7 @@ import requestingTableStart from '../action-creators/requesting-table-start';
 import requestingTableStop from '../action-creators/requesting-table-stop';
 import {PropsExtendedByConnect} from '../interfaces/component';
 import TableTimer from './table-timer';
+import fetchingTableSessionsHistory from '../action-creators/fetching-table-sessions-history';
 
 export type TableStatus = 'ready' | 'active';
 
@@ -113,6 +114,13 @@ class Component extends React.Component<PropsFromConnect, {}> {
     store.dispatch(action);
   };
 
+  onViewMoreClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+
+    const action = fetchingTableSessionsHistory(this.props.id);
+    this.props.dispatch(action);
+  };
+
   render() {
     const {name, type, lastSession, currentSession, isInPending, isDisabled} = this.props;
     const isActive = this.isTableActiveSelector(this.props);
@@ -141,7 +149,12 @@ class Component extends React.Component<PropsFromConnect, {}> {
           startsAt={Component.startsAtSelector(this.props)}
         />
         <TableSession session={lastSession} />
-        <a href="" className="table__btn-view-sessions">View More</a>
+        <a href=""
+            className="table__btn-view-sessions"
+            onClick={this.onViewMoreClick}
+        >
+          View More
+        </a>
       </div>
     );
   }
