@@ -1,5 +1,6 @@
 import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
+import {MiddlewareAPI} from 'redux';
 
 import {FETCHING_TABLE_SESSIONS_HISTORY} from '../constants/action-names';
 import {get, getErrorMessageFromResponse} from '../helpers/requests';
@@ -17,11 +18,12 @@ import pendingTableSessionsHistory from '../action-creators/pending-table-sessio
 import fetchingTableSessionsHistoryFailed from '../action-creators/fetching-table-sessions-history-failed';
 import {ActionType} from '../action-creators/fetching-table-sessions-history';
 import {RequestSessionHistoryPayload} from '../interfaces/api-requests';
+import {StoreStructure} from '../interfaces/store-models';
 
 type ResponseOk = AjaxResponseTyped<ResponseSessionsHistoryPayload>;
 type ResponseError = AjaxErrorTyped<ResponseFailedPayload>;
 
-const fetchSessionsHistory = ((action$) => {
+const fetchSessionsHistory = ((action$, store: MiddlewareAPI<StoreStructure>) => {
   return action$.ofType(FETCHING_TABLE_SESSIONS_HISTORY)
     .switchMap((action: ActionType) => {
       const historyPendingStart$ = Observable.of(pendingTableSessionsHistory(true));
@@ -36,9 +38,11 @@ const fetchSessionsHistory = ((action$) => {
             .mergeMap((ajaxData: ResponseOk | ResponseError) => {
               if (ajaxData.status === STATUS_OK) {
                 const sessions = (ajaxData as ResponseOk).response.sessions;
-                const convertedSessions = tableSessionsToFront(sessions);
+                const currentSessions = store.getState().app.tableSessionsData.tableSessions;
+                const convertedNewSessions = tableSessionsToFront(sessions);
+                const newSessions = currentSessions.concat(convertedNewSessions);
 
-                const setTableSessionsAction = tableSessionsChanged(convertedSessions);
+                const setTableSessionsAction = tableSessionsChanged(newSessions);
                 const historyPendingStartStopAction = pendingTableSessionsHistory(false);
 
                 return Observable.of<any>(
