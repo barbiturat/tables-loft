@@ -19,3 +19,5 @@ export interface TableSession {
 }
 
 export type StoreStructure = ReducersStructure;
+
+export type AdminToken = string | null;

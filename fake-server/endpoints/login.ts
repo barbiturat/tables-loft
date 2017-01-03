@@ -29,8 +29,12 @@ const login = (server: Application, bodyParser: RequestHandler) => {
     } else {
       const emails: string[] = [testUserEmail];
       const errors: LoginErrors = {
-        email: {},
-        password: {}
+        email: {
+          isRegistered: false
+        },
+        password: {
+          isCorrect: false
+        }
       };
 
       if (email && emails.indexOf(email) === -1) {
