@@ -1,54 +1,48 @@
 import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
-import {actions, FieldsObject, ValidityObject} from 'react-redux-form';
-import {push} from 'redux-router';
+import {actions} from 'react-redux-form';
 
-import {REQUESTING_LOGIN} from '../constants/action-names';
+import {REQUESTING_ADMIN_TOKEN} from '../constants/action-names';
 import {post} from '../helpers/requests';
-import {ResponseDefaultPayload, ResponseLoginFailedPayload} from '../interfaces/api-responses';
+import {ResponseGetAdminTokenFailedPayload, ResponseGetAdminTokenPayload
+} from '../interfaces/api-responses';
 import {AjaxResponseTyped, AjaxErrorTyped} from '../interfaces/index';
 import {STATUS_OK} from '../constants/used-http-status-codes';
-import {RequestLoginPayload} from '../interfaces/api-requests';
-import {urlLogin} from '../constants/urls';
+import {RequestGetAdminTokenPayload} from '../interfaces/api-requests';
+import {urlGetAdminToken} from '../constants/urls';
 import {SimpleAction, FormSubmitAction} from '../interfaces/actions';
 
-const requestLogin = ((action$) => {
-  return action$.ofType(REQUESTING_LOGIN)
+type ResponseOk = AjaxResponseTyped<ResponseGetAdminTokenPayload>;
+type ResponseError = AjaxErrorTyped<ResponseGetAdminTokenFailedPayload>;
+
+const requestAdminToken = ((action$) => {
+  return action$.ofType(REQUESTING_ADMIN_TOKEN)
     .switchMap((action: FormSubmitAction) => {
       const {formModelPath} = action.payload;
-      const dataToSend: RequestLoginPayload = action.payload.formData;
+      const dataToSend: RequestGetAdminTokenPayload = action.payload.formData;
 
       const formPendingTurnOn$ = Observable.of(actions.setPending(formModelPath, true));
-      const loginRequest$ = Observable.of(null)
+      const tokenRequest$ = Observable.of(null)
         .mergeMap(() =>
-          post(urlLogin, dataToSend)
-            .mergeMap((ajaxData: AjaxResponseTyped<ResponseDefaultPayload> | AjaxErrorTyped<ResponseLoginFailedPayload>) => {
+          post(urlGetAdminToken, dataToSend)
+            .mergeMap((ajaxData: ResponseOk | ResponseError) => {
               if (ajaxData.status === STATUS_OK) {
                 const setSubmittedAction = actions.setSubmitted(formModelPath, true);
-                const redirectToIndexAction = push({
-                  pathname: '/'
-                });
 
                 return Observable.of<any>(
-                  setSubmittedAction,
-                  redirectToIndexAction
+                  setSubmittedAction
                 );
               } else {
-                const ajaxErrorData = (ajaxData as AjaxErrorTyped<ResponseLoginFailedPayload>);
+                const ajaxErrorData = (ajaxData as ResponseError);
                 const setFormSubmitFailedAction = actions.setSubmitFailed(formModelPath);
                 const errors = ajaxErrorData.xhr.response && ajaxErrorData.xhr.response.errors ?
                   ajaxErrorData.xhr.response.errors : null;
 
-                const validityErrors: FieldsObject<ValidityObject> = {
-                  email: errors && errors.email || {
-                    isRegistered: false
-                  },
+                const setFieldsValidityAction = actions.setFieldsValidity(formModelPath, {
                   password: errors && errors.password || {
                     isCorrect: false
                   }
-                };
-
-                const setFieldsValidityAction = actions.setFieldsValidity(formModelPath, validityErrors);
+                });
 
                 return Observable.of(
                   setFormSubmitFailedAction,
@@ -60,9 +54,9 @@ const requestLogin = ((action$) => {
 
       return Observable.concat(
         formPendingTurnOn$,
-        loginRequest$
+        tokenRequest$
       );
     });
 }) as Epic<SimpleAction>;
 
-export default requestLogin;
+export default requestAdminToken;

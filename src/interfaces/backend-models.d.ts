@@ -25,3 +25,10 @@ export interface LoginErrors {
     isCorrect: boolean;
   };
 }
+
+export interface AdminTokenErrors {
+  password: {
+    isCorrect: boolean;
+  };
+}
+

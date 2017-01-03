@@ -4,10 +4,10 @@ import {STATUS_OK} from '../../src/constants/used-http-status-codes';
 import {CustomRequest} from '../interfaces/index';
 import {RequestGetAdminTokenPayload} from '../../src/interfaces/api-requests';
 import {ResponseGetAdminTokenPayload} from '../../src/interfaces/api-responses';
-import {urlAdminToken} from '../../src/constants/urls';
+import {urlGetAdminToken} from '../../src/constants/urls';
 
 const getAdminToken = (server: Application, bodyParser: RequestHandler) => {
-  server.post(urlAdminToken, bodyParser, sendWithTimeout(500, (req: CustomRequest<RequestGetAdminTokenPayload, any>, res) => {
+  server.post(urlGetAdminToken, bodyParser, sendWithTimeout(500, (req: CustomRequest<RequestGetAdminTokenPayload, any>, res) => {
 
     const response: ResponseGetAdminTokenPayload = {
       accessToken: 'someToken'

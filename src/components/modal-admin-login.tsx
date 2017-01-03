@@ -13,7 +13,7 @@ import {isRequiredField} from '../constants/messages';
 import {isNotEmpty as isFilled} from '../helpers';
 import {renderErrorsBlock, renderErrorComponent} from '../helpers/renderers';
 import {StringDict} from '../interfaces/index';
-import requestingManagerLogin from '../action-creators/requesting-manager-login';
+import requestingManagerLogin from '../action-creators/requesting-admin-token';
 
 interface Props {
 }

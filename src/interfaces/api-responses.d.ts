@@ -1,4 +1,4 @@
-import {TableSession, Table, LoginErrors} from './backend-models';
+import {TableSession, Table, LoginErrors, AdminTokenErrors} from './backend-models';
 
 export interface ResponseDefaultPayload {
   isOk: true;
@@ -10,6 +10,10 @@ export interface ResponseFailedPayload {
 
 export interface ResponseLoginFailedPayload {
   errors: LoginErrors;
+}
+
+export interface ResponseGetAdminTokenFailedPayload {
+  errors: AdminTokenErrors;
 }
 
 export interface ResponseTablesPayload {

@@ -14,7 +14,7 @@ export interface ActionWithPayload<TPayload> extends SimpleAction {
 
 interface FormSubmitActionPayload {
   formModelPath: string;
-  formData: StringDict;
+  formData: any;
 }
 
 export type FormSubmitAction = ActionWithPayload<FormSubmitActionPayload>;

@@ -1,9 +1,9 @@
 import {StringDict} from '../interfaces/index';
-import {REQUESTING_MANAGER_LOGIN} from '../constants/action-names';
+import {REQUESTING_ADMIN_TOKEN} from '../constants/action-names';
 import {FormSubmitAction} from '../interfaces/actions';
 
 const requestingManagerLogin = (formModelPath: string, formData: StringDict): FormSubmitAction => ({
-  type: REQUESTING_MANAGER_LOGIN,
+  type: REQUESTING_ADMIN_TOKEN,
   payload: {
     formModelPath,
     formData
