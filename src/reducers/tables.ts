@@ -5,7 +5,7 @@ import {ActionWithPayload} from '../interfaces/actions';
 export type Structure = Table[];
 
 const tables = (state: Structure = [], action: ActionWithPayload<Structure>): Structure => {
-  if (action.type == FETCHING_TABLES_SUCCEEDED || action.type == TABLES_CHANGED) {
+  if (action.type === FETCHING_TABLES_SUCCEEDED || action.type === TABLES_CHANGED) {
     return action.payload.concat([]);
   } else {
     return state;

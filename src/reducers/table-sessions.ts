@@ -1,11 +1,11 @@
-import {TABLE_SESSIONS_CHANGED} from '../constants/action-names';
+import {TABLE_SESSIONS_CHANGED, FETCHING_TABLE_SESSIONS_HISTORY_SUCCEEDED} from '../constants/action-names';
 import {TableSession} from '../interfaces/store-models';
 import {ActionWithPayload} from '../interfaces/actions';
 
 export type Structure = TableSession[];
 
 const tableSessions = (state: Structure = [], action: ActionWithPayload<Structure>): Structure => {
-  if (action.type == TABLE_SESSIONS_CHANGED) {
+  if (action.type === FETCHING_TABLE_SESSIONS_HISTORY_SUCCEEDED || action.type === TABLE_SESSIONS_CHANGED) {
     return action.payload.concat([]);
   } else {
     return state;
