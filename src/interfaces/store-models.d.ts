@@ -9,6 +9,7 @@ export interface Table {
   lastSessionId?: number;
   isInPending: boolean;
   isDisabled: boolean;
+  isSessionsHistoryInPending: boolean;
 }
 
 export interface TableSession {

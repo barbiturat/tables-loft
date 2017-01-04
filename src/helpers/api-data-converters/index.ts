@@ -14,7 +14,8 @@ export const tablesToFront = (tables: BackendTable[]): FrontendTable[] => {
       currentSessionId,
       lastSessionId,
       isInPending: false,
-      isDisabled: table.status === 'disabled'
+      isDisabled: table.status === 'disabled',
+      isSessionsHistoryInPending: false
     };
   });
 };
