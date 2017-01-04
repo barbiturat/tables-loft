@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import {TableSession} from '../interfaces/store-models';
+import TableHistorySession from './table-history-session';
 
 interface Props {
   tableSessions?: TableSession[];
@@ -16,7 +17,10 @@ export default class SessionsHistory extends React.Component<Props, {}> {
     } else {
       return tableSessions.map((tableSession, idx) => {
         return (
-          <div key={idx}>111</div>
+          <TableHistorySession
+            key={idx}
+            session={tableSession}
+          />
         );
       });
     }
