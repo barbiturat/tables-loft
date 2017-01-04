@@ -8,6 +8,7 @@ import stopTable from './stop-table';
 import updateUtcMilliseconds from './update-utc-milliseconds';
 import requestAdminToken from './request-admin-token';
 import fetchSessionsHistory from './fetch-sessions-history';
+import requestTableSessionChange from './request-table-session-change';
 
 export default combineEpics(
   formValidation,
@@ -17,5 +18,6 @@ export default combineEpics(
   startTable,
   setTablePending,
   updateUtcMilliseconds,
-  stopTable
+  stopTable,
+  requestTableSessionChange
 );

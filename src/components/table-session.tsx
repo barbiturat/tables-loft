@@ -7,7 +7,7 @@ import {assign} from 'lodash';
 
 import {StoreStructure, TableSession as TableSessionType, AdminToken} from '../interfaces/store-models';
 import {PropsExtendedByConnect} from '../interfaces/component';
-import tableSessionChanged from '../action-creators/table-session-changed';
+import requestingTableSessionChange from '../action-creators/requesting-table-session-change';
 
 interface Props {
   session?: TableSessionType;
@@ -92,11 +92,11 @@ class Component extends React.Component<PropsFromConnect, State> {
       event.preventDefault();
     }
 
-    if (isEnter) {
+    if (isEnter && adminToken) {
       const newMinutes = Number(input.value);
       const duration = moment.duration({minutes: newMinutes});
       const newSeconds = duration.asSeconds();
-      const action = tableSessionChanged(id, newSeconds, adminToken);
+      const action = requestingTableSessionChange(id, newSeconds, adminToken);
 
       dispatch(action);
       this.setEditingMode(false);

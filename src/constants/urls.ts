@@ -7,4 +7,4 @@ export const urlSessionHistory = `${API_PREFIX}/table_sessions/history.json`;
 export const urlStartTable = `${API_PREFIX}/tables/:table_id/start.json`;
 export const urlStopTable = `${API_PREFIX}/tables/:table_id/stop.json`;
 export const urlTables = `${API_PREFIX}/tables.json`;
-export const urlUpdateTableSession = `${API_PREFIX}/table_sessions/:table_id.json`;
+export const urlUpdateTableSession = `${API_PREFIX}/table_sessions/:session_id.json`;

@@ -39,7 +39,8 @@ export const tableSessionToFront = (tableSession: TableSessionBackend): TableSes
     id: tableSession.id,
     startsAt: startsAtMs,
     durationSeconds: tableSession.durationSeconds,
-    adminEdited: tableSession.adminEdited
+    adminEdited: tableSession.adminEdited,
+    isInPending: false
   };
 };
 

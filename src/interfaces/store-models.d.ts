@@ -18,6 +18,7 @@ export interface TableSession {
   startsAt: number;
   durationSeconds: number;
   adminEdited: boolean;
+  isInPending: boolean;
 }
 
 export type StoreStructure = ReducersStructure;
