@@ -8,6 +8,7 @@ import {PropsExtendedByConnect} from '../interfaces/component';
 import {StoreStructure} from '../interfaces/store-models';
 import changingUtcMilliseconds from '../action-creators/changing-utc-milliseconds';
 import ModalAdminLogin from './modal-admin-login';
+import ModalSessionsHistory from './modal-sessions-history';
 
 type PropsFromConnect = PropsExtendedByConnect<AnyDict, AnyDict>;
 
@@ -36,6 +37,7 @@ class App extends React.Component<PropsFromConnect, AnyDict> {
         {this.props.children}
 
         <ModalAdminLogin/>
+        <ModalSessionsHistory/>
       </div>
     );
   }

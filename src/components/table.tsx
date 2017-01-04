@@ -13,6 +13,7 @@ import requestingTableStop from '../action-creators/requesting-table-stop';
 import {PropsExtendedByConnect} from '../interfaces/component';
 import TableTimer from './table-timer';
 import fetchingTableSessionsHistory from '../action-creators/fetching-table-sessions-history';
+import modalSessionsHistoryOpened from '../action-creators/modal-sessions-history-opened';
 
 export type TableStatus = 'ready' | 'active';
 
@@ -117,8 +118,10 @@ class Component extends React.Component<PropsFromConnect, {}> {
   onViewMoreClick = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
 
-    const action = fetchingTableSessionsHistory(this.props.id);
-    this.props.dispatch(action);
+    this.props.dispatch( fetchingTableSessionsHistory(this.props.id) );
+    this.props.dispatch( modalSessionsHistoryOpened(true) );
+
+    event.currentTarget.blur();
   };
 
   render() {
