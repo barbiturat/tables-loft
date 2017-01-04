@@ -14,20 +14,22 @@ import {PropsExtendedByConnect} from '../interfaces/component';
 import TableTimer from './table-timer';
 import fetchingTableSessionsHistory from '../action-creators/fetching-table-sessions-history';
 import modalSessionsHistoryChanged from '../action-creators/modal-sessions-history-changed';
+import {getElementById} from '../helpers/index';
 
 export type TableStatus = 'ready' | 'active';
 
 interface Props {
   id: number;
   type?: TableType;
-  currentSession?: TableSessionType;
-  lastSession?: TableSessionType;
+  currentSessionId?: number;
+  lastSessionId?: number;
   name?: string;
   isInPending?: boolean;
   isDisabled?: boolean;
 }
 
 interface MappedProps {
+  sessions: TableSessionType[];
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
@@ -40,7 +42,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
     isDisabled: false
   };
 
-  isTableActiveSelector: Selector<PropsFromConnect, boolean>;
+  isTableActiveSelector: Selector<TableSessionType | undefined, boolean>;
 
   constructor(props: Props) {
     super(props);
@@ -53,6 +55,14 @@ class Component extends React.Component<PropsFromConnect, {}> {
         return tableStatus === 'active';
       }
     );
+  }
+
+  getCurrentSession() {
+    return getElementById(this.props.sessions, this.props.currentSessionId);
+  }
+
+  getLastSession() {
+    return getElementById(this.props.sessions, this.props.lastSessionId);
   }
 
   static getTableStatus(startsAt?: number, durationSeconds?: number): TableStatus {
@@ -72,12 +82,12 @@ class Component extends React.Component<PropsFromConnect, {}> {
   };
 
 
-  static startsAtSelector(props: PropsFromConnect) {
-    return props.currentSession && props.currentSession.startsAt;
+  static startsAtSelector(currentSession?: TableSessionType) {
+    return currentSession && currentSession.startsAt;
   };
 
-  static durationSecondsSelector(props: PropsFromConnect) {
-    return props.currentSession && props.currentSession.durationSeconds;
+  static durationSecondsSelector(currentSession?: TableSessionType) {
+    return currentSession && currentSession.durationSeconds;
   };
 
   static getDisabledLabel(isDisabled?: boolean) {
@@ -109,7 +119,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
       return;
     }
 
-    const actionCreator = this.isTableActiveSelector(this.props) ? requestingTableStop : requestingTableStart;
+    const actionCreator = this.isTableActiveSelector( this.getCurrentSession() ) ? requestingTableStop : requestingTableStart;
     const action = actionCreator(id);
 
     store.dispatch(action);
@@ -125,8 +135,8 @@ class Component extends React.Component<PropsFromConnect, {}> {
   };
 
   render() {
-    const {name, type, lastSession, currentSession, isInPending, isDisabled} = this.props;
-    const isActive = this.isTableActiveSelector(this.props);
+    const {name, type, isInPending, isDisabled} = this.props;
+    const isActive = this.isTableActiveSelector( this.getCurrentSession() );
     const tableTypeClassName = type ? {
       pool: 'table_type_pool',
       shuffleBoard: 'table_type_shuffle',
@@ -142,16 +152,16 @@ class Component extends React.Component<PropsFromConnect, {}> {
         <div className="table__label table__label_role_table-type">
           {name}
         </div>
-        {isActive ? Component.renderActiveSessionStartTime(currentSession) : ''}
+        {isActive ? Component.renderActiveSessionStartTime( this.getCurrentSession() ) : ''}
         <a href=""
            className="table__button table__button_role_change-availability"
            onClick={this.onChangeStatusClick}
         />
         <TableTimer
           isActive={isActive}
-          startsAt={Component.startsAtSelector(this.props)}
+          startsAt={Component.startsAtSelector( this.getCurrentSession() )}
         />
-        <TableSession session={lastSession} />
+        <TableSession session={ this.getLastSession() } />
         <a href=""
             className="table__btn-view-sessions"
             onClick={this.onViewMoreClick}
@@ -165,7 +175,9 @@ class Component extends React.Component<PropsFromConnect, {}> {
 
 const Table = connect<any, any, Props>(
   (state: StoreStructure, ownProps: Props): MappedProps => {
-    return {};
+    return {
+      sessions: state.app.tableSessionsData.tableSessions
+    };
   }
 )(Component);
 

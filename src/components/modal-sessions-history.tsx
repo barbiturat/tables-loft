@@ -2,12 +2,12 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import MouseEvent = React.MouseEvent;
 import * as Modal from 'react-modal';
-import {find} from 'lodash';
 
 import {StoreStructure, Table, TableSession} from '../interfaces/store-models';
 import {PropsExtendedByConnect} from '../interfaces/component';
 import modalSessionsHistoryChanged from '../action-creators/modal-sessions-history-changed';
 import SessionsHistory from './sessions-history';
+import {getElementById} from '../helpers/index';
 
 interface Props {
 }
@@ -22,12 +22,6 @@ interface MappedProps {
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
 class Component extends React.Component<PropsFromConnect, {}> {
-
-  static getElementById<T extends { id: number }> (array: T[], id?: number) {
-    return find(array, (el: T) => {
-      return el.id === id;
-    });
-  };
 
   static getSessionsHistoryInPending(currentTable?: Table) {
     return currentTable ? currentTable.isSessionsHistoryInPending : false;
@@ -49,7 +43,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
   static getTableSessions(allSessions: TableSession[], table?: Table) {
     if (table) {
       return table.sessionsHistory.reduce((memoArr: TableSession[], id) => {
-        const session = Component.getElementById<TableSession>(allSessions, id);
+        const session = getElementById<TableSession>(allSessions, id);
 
         return memoArr.concat(session ? [session] : []);
       }, [] as TableSession[]);
@@ -59,7 +53,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
   };
 
   render() {
-    const currentTable = Component.getElementById<Table>(this.props.tables, this.props.tableId);
+    const currentTable = getElementById<Table>(this.props.tables, this.props.tableId);
     const historyPending = Component.getSessionsHistoryInPending(currentTable);
     const sessions = Component.getTableSessions(this.props.allTableSessions, currentTable);
 
