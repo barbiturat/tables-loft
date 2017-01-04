@@ -5,8 +5,9 @@ import MouseEvent = React.MouseEvent;
 import KeyboardEvent = React.KeyboardEvent;
 import {assign} from 'lodash';
 
-import {StoreStructure, TableSession as TableSessionType} from '../interfaces/store-models';
+import {StoreStructure, TableSession as TableSessionType, AdminToken} from '../interfaces/store-models';
 import {PropsExtendedByConnect} from '../interfaces/component';
+import tableSessionChanged from '../action-creators/table-session-changed';
 
 interface Props {
   session?: TableSessionType;
@@ -18,7 +19,7 @@ interface State {
 }
 
 interface MappedProps {
-  isInManagerMode: boolean;
+  adminToken: AdminToken;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
@@ -33,6 +34,12 @@ class Component extends React.Component<PropsFromConnect, State> {
       isInEditing: false
     };
   }
+
+  setEditingMode = (turnOn: boolean) => {
+    this.setState(assign({}, this.state, {
+      isInEditing: turnOn
+    }));
+  };
 
   onSessionInfoClick = (event: MouseEvent<HTMLDivElement>) => {
     this.setState(assign({}, this.state, {
@@ -57,9 +64,7 @@ class Component extends React.Component<PropsFromConnect, State> {
   }
 
   onEditButtonClick = (event: MouseEvent<HTMLDivElement>) => {
-    this.setState(assign({}, this.state, {
-      isInEditing: !this.state.isInEditing
-    }));
+    this.setEditingMode(true);
   };
 
   drawEditIcon(toDraw: boolean) {
@@ -72,10 +77,34 @@ class Component extends React.Component<PropsFromConnect, State> {
   }
 
   onInputKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.keyCode === 27) { // esc key
-      this.setState(assign({}, this.state, {
-        isInEditing: false
-      }));
+    const {session, dispatch, adminToken} = this.props;
+
+    if (!session) {
+      return;
+    }
+
+    const input = event.currentTarget;
+    const {id, durationSeconds} = session;
+    const isEsc = event.keyCode === 27;
+    const isEnter = event.keyCode === 13;
+
+    if (isEsc || isEnter) {
+      event.preventDefault();
+    }
+
+    if (isEnter) {
+      const newMinutes = Number(input.value);
+      const duration = moment.duration({minutes: newMinutes});
+      const newSeconds = duration.asSeconds();
+      const action = tableSessionChanged(id, newSeconds, adminToken);
+
+      dispatch(action);
+      this.setEditingMode(false);
+      return;
+    }
+
+    if (isEsc) {
+      this.setEditingMode(false);
     }
   };
 
@@ -132,7 +161,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           <span className="table__session-name">Last Session</span>
           <span className="table__session-finish-time">{finishTime}</span>
           {this.drawDuration(session, this.state.isFormatOfMinutes)}
-          {this.drawEditIcon(this.props.isInManagerMode && !this.state.isInEditing)}
+          {this.drawEditIcon(!!this.props.adminToken && !this.state.isInEditing)}
         </div>
       );
     } else {
@@ -148,7 +177,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 const TableSession = connect<any, any, Props>(
   (state: StoreStructure, ownProps: Props): MappedProps => {
     return {
-      isInManagerMode: !!state.app.adminToken
+      adminToken: state.app.adminToken
     };
   }
 )(Component);

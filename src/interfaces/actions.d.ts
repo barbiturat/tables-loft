@@ -1,6 +1,6 @@
 import {Action} from 'redux';
 
-import {StringDict} from './index';
+import {ModalSessionsHistory} from './store-models';
 
 export interface SimpleAction extends Action {
   type: string;
@@ -18,3 +18,5 @@ interface FormSubmitActionPayload {
 }
 
 export type FormSubmitAction = ActionWithPayload<FormSubmitActionPayload>;
+
+export interface ModalSessionsHistoryChanged extends ModalSessionsHistory {}
