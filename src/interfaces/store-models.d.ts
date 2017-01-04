@@ -23,3 +23,8 @@ export interface TableSession {
 export type StoreStructure = ReducersStructure;
 
 export type AdminToken = string | null;
+
+export interface ModalSessionsHistory {
+  isOpened: boolean;
+  tableId?: number;
+}

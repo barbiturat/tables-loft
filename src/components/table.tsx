@@ -119,7 +119,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
     event.preventDefault();
 
     this.props.dispatch( fetchingTableSessionsHistory(this.props.id) );
-    this.props.dispatch( modalSessionsHistoryChanged(true) );
+    this.props.dispatch( modalSessionsHistoryChanged(true, this.props.id) );
 
     event.currentTarget.blur();
   };

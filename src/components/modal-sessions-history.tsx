@@ -52,7 +52,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
 const ModalSessionsHistory = connect<any, any, Props>(
   (state: StoreStructure, ownProps: Props): MappedProps => {
     return {
-      isOpen: state.app.modals.modalSessionsHistory
+      isOpen: state.app.modals.modalSessionsHistory.isOpened
     };
   }
 )(Component);

@@ -1,4 +1,3 @@
-import * as moment from 'moment';
 import {ActionWithPayload} from '../interfaces/actions';
 import {ADMIN_TOKEN_UPDATED} from '../constants/action-names';
 import {AdminToken} from '../interfaces/store-models';

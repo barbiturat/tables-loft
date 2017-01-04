@@ -1,12 +1,14 @@
 import {MODAL_SESSIONS_HISTORY_CHANGED} from '../constants/action-names';
 import {createActionWithPayload} from '../helpers/index';
 import {ActionWithPayload} from '../interfaces/actions';
+import {ModalSessionsHistory} from '../interfaces/store-models';
 
-type PayloadType = boolean;
+export type ActionType = ActionWithPayload<ModalSessionsHistory>;
 
-export type ActionType = ActionWithPayload<PayloadType>;
-
-const modalSessionsHistoryChanged = (isOpened: PayloadType): ActionType =>
-  createActionWithPayload(MODAL_SESSIONS_HISTORY_CHANGED, isOpened);
+const modalSessionsHistoryChanged = (isOpened: boolean, tableId?: number): ActionType =>
+  createActionWithPayload(MODAL_SESSIONS_HISTORY_CHANGED, {
+    isOpened,
+    tableId
+  });
 
 export default modalSessionsHistoryChanged;
