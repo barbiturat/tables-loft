@@ -14,7 +14,9 @@ interface State {
   isFormatOfMinutes: boolean;
 }
 
-interface MappedProps {}
+interface MappedProps {
+  isInManagerMode: boolean;
+}
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
@@ -50,6 +52,12 @@ class Component extends React.Component<PropsFromConnect, State> {
     }
   }
 
+  static drawEditIcon(toDraw: boolean) {
+    return toDraw ? (
+      <div className="table__session-edit"/>
+    ) : null;
+  }
+
   render() {
     const session = this.props.session;
 
@@ -71,7 +79,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           <span className="table__session-name">Last Session</span>
           <span className="table__session-finish-time">{finishTime}</span>
           <span className={`table__session-length ${adminEditedClassName}`}>{durationString}</span>
-          <div className="table__session-edit"/>
+          {Component.drawEditIcon(this.props.isInManagerMode)}
         </div>
       );
     } else {
@@ -86,7 +94,9 @@ class Component extends React.Component<PropsFromConnect, State> {
 
 const TableSession = connect<any, any, Props>(
   (state: StoreStructure, ownProps: Props): MappedProps => {
-    return {};
+    return {
+      isInManagerMode: !!state.app.adminToken
+    };
   }
 )(Component);
 
