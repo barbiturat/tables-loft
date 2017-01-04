@@ -13,7 +13,7 @@ import requestingTableStop from '../action-creators/requesting-table-stop';
 import {PropsExtendedByConnect} from '../interfaces/component';
 import TableTimer from './table-timer';
 import fetchingTableSessionsHistory from '../action-creators/fetching-table-sessions-history';
-import modalSessionsHistoryOpened from '../action-creators/modal-sessions-history-opened';
+import modalSessionsHistoryChanged from '../action-creators/modal-sessions-history-changed';
 
 export type TableStatus = 'ready' | 'active';
 
@@ -119,7 +119,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
     event.preventDefault();
 
     this.props.dispatch( fetchingTableSessionsHistory(this.props.id) );
-    this.props.dispatch( modalSessionsHistoryOpened(true) );
+    this.props.dispatch( modalSessionsHistoryChanged(true) );
 
     event.currentTarget.blur();
   };

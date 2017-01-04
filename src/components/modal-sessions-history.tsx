@@ -5,7 +5,7 @@ import * as Modal from 'react-modal';
 
 import {StoreStructure} from '../interfaces/store-models';
 import {PropsExtendedByConnect} from '../interfaces/component';
-import modalSessionsHistoryOpened from '../action-creators/modal-sessions-history-opened';
+import modalSessionsHistoryChanged from '../action-creators/modal-sessions-history-changed';
 
 interface Props {
 }
@@ -18,7 +18,7 @@ type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
 class Component extends React.Component<PropsFromConnect, {}> {
   requestToClose = () => {
-    this.props.dispatch( modalSessionsHistoryOpened(false) );
+    this.props.dispatch( modalSessionsHistoryChanged(false) );
   };
 
   onCloseClick = (event: MouseEvent<HTMLAnchorElement>) => {
