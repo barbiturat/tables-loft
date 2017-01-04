@@ -10,6 +10,7 @@ export interface Table {
   isInPending: boolean;
   isDisabled: boolean;
   isSessionsHistoryInPending: boolean;
+  sessionsHistory: number[];
 }
 
 export interface TableSession {

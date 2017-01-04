@@ -6,6 +6,17 @@ export const tablesToFront = (tables: BackendTable[]): FrontendTable[] => {
   return tables.map((table) => {
     const currentSessionId = table.currentSession && table.currentSession.id;
     const lastSessionId = table.lastSession && table.lastSession.id;
+    const sessionsHistory: number[] = [];
+    const lastSessionIdNum = Number(lastSessionId);
+    const currentSessionIdNum = Number(currentSessionId);
+
+    if (!isNaN(lastSessionIdNum)) {
+      sessionsHistory.push(lastSessionIdNum);
+    }
+
+    if (!isNaN(currentSessionIdNum)) {
+      sessionsHistory.push(currentSessionIdNum);
+    }
 
     return {
       name: table.name,
@@ -15,7 +26,8 @@ export const tablesToFront = (tables: BackendTable[]): FrontendTable[] => {
       lastSessionId,
       isInPending: false,
       isDisabled: table.status === 'disabled',
-      isSessionsHistoryInPending: false
+      isSessionsHistoryInPending: false,
+      sessionsHistory
     };
   });
 };
