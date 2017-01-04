@@ -118,7 +118,6 @@ $shuffle-table-border-radius: 50px;
     color: $white;
     font-size: 14px;
     font-weight: 500;
-    cursor: pointer;
 
     .table_type_pool & {
       padding: 0 43px;
@@ -156,11 +155,12 @@ $shuffle-table-border-radius: 50px;
     margin-left: -60px;
     background: url(../../public/img/icons/pencil-white.svg) center center no-repeat;
     background-size: 13px auto;
+    cursor: pointer;
   }
 
   &__session-length {
     display: inline-block;
-    position: relative;
+    cursor: pointer;
 
     &_admin-edited {
       &:after {
@@ -169,6 +169,14 @@ $shuffle-table-border-radius: 50px;
         padding-left: 1px;
       }
     }
+  }
+
+  &__session-length-edit-label-span {
+    padding-right: 4px;
+  }
+
+  &__session-length-edit-input {
+    width: 70px;
   }
 
   &__btn-view-sessions {
