@@ -10,10 +10,10 @@ import pendingTables from '../action-creators/pending-tables';
 import fetchingTablesFailed from '../action-creators/fetching-tables-failed';
 import {urlTables} from '../constants/urls';
 import {SimpleAction} from '../interfaces/actions';
-import fetchingTablesSucceeded from '../action-creators/fetching-tables-succeeded';
 import {tablesToFront, tableSessionsToFront} from '../helpers/api-data-converters/index';
 import {TableSession, Table as TableBackend} from '../interfaces/backend-models';
 import tableSessionsChanged from '../action-creators/table-sessions-changed';
+import tablesChanged from '../action-creators/tables-changed';
 
 type ResponseOk = AjaxResponseTyped<ResponseTablesPayload>;
 type ResponseError = AjaxErrorTyped<ResponseFailedPayload>;
@@ -44,7 +44,7 @@ const fetchTables = ((action$) => {
                 const convertedTables = tablesToFront(tables);
                 const convertedTableSessions = tableSessionsToFront(tableSessions);
 
-                const setTables = fetchingTablesSucceeded(convertedTables);
+                const setTables = tablesChanged(convertedTables);
                 const setTableSessions = tableSessionsChanged(convertedTableSessions);
                 const tablesPendingStop = pendingTables(false);
 
