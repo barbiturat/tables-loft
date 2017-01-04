@@ -71,6 +71,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           <span className="table__session-name">Last Session</span>
           <span className="table__session-finish-time">{finishTime}</span>
           <span className={`table__session-length ${adminEditedClassName}`}>{durationString}</span>
+          <div className="table__session-edit"/>
         </div>
       );
     } else {
