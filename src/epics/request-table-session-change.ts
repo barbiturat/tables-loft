@@ -4,7 +4,7 @@ import {MiddlewareAPI} from 'redux';
 import {find, assign} from 'lodash';
 
 import {REQUESTING_TABLE_SESSION_CHANGE} from '../constants/action-names';
-import {post} from '../helpers/requests';
+import {request} from '../helpers/requests';
 import {
   ResponseFailedPayload,
   ResponseUpdateTableSessionPayload
@@ -56,7 +56,7 @@ const requestTableSessionChange = ((action$, store: MiddlewareAPI<StoreStructure
 
       const request$ = Observable.of(null)
         .mergeMap(() =>
-          post(url, dataToSend)
+          request('PATCH', url, dataToSend)
             .mergeMap((ajaxData: ResponseOk | ResponseError) => {
               if (ajaxData.status === STATUS_OK) {
                 const sessionsClone: TableSession[] = store.getState().app.tableSessionsData.tableSessions.concat([]);

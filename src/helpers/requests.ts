@@ -37,6 +37,19 @@ export const post = (url: string, body?: any, headers?: Object): Observable<Ajax
     });
 };
 
+export const request = (method: string, url: string, body?: any, headers?: Object): Observable<AjaxResponse | AjaxError> => {
+  return Observable.ajax({
+    method,
+    url,
+    body,
+    headers
+  })
+  // .map(prolongSession)
+    .catch((ajaxErrorData: AjaxError) => {
+      return handleError(ajaxErrorData);
+    });
+};
+
 export const getErrorMessageFromResponse = (ajaxData?: AjaxErrorTyped<ResponseFailedPayload>) => {
   const defaultErrorMessage = 'Error!';
 

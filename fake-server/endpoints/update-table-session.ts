@@ -7,7 +7,7 @@ import {ResponseUpdateTableSessionPayload} from '../../src/interfaces/api-respon
 import {urlUpdateTableSession} from '../../src/constants/urls';
 
 const updateTableSession = (server: Application, bodyParser: RequestHandler) => {
-  server.post(urlUpdateTableSession, bodyParser, sendWithTimeout(500, (req: CustomRequest<RequestUpdateTableSessionPayload, any>, res) => {
+  server.patch(urlUpdateTableSession, bodyParser, sendWithTimeout(500, (req: CustomRequest<RequestUpdateTableSessionPayload, any>, res) => {
 
     const response: ResponseUpdateTableSessionPayload = {};
 
