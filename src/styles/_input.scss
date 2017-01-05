@@ -1,0 +1,10 @@
+@import 'settings';
+@import 'mixins';
+
+[type=text].input {
+  &_type {
+    &_big {
+      margin-bottom: 95px;
+    }
+  }
+}

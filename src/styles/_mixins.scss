@@ -47,6 +47,18 @@
   border-radius: $radius;
 }
 
+@mixin border-top-left-radius($radius) {
+  -webkit-border-top-left-radius: $radius;
+  -moz-border-radius-topleft: $radius;
+  border-top-left-radius: $radius;
+}
+
+@mixin border-top-right-radius($radius) {
+  -webkit-border-top-right-radius: $radius;
+  -moz-border-radius-topright: $radius;
+  border-top-right-radius: $radius;
+}
+
 @mixin box-sizing($type) {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;

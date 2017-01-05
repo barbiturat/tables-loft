@@ -61,25 +61,29 @@ class Component extends React.Component<PropsFromConnect, {}> {
         isOpen={this.props.isOpen}
         shouldCloseOnOverlayClick={true}
         onRequestClose={this.handleRequestCloseFunc}
-        className="modal"
+        className="modal modal_role_login-manager"
         overlayClassName="modal__overlay"
       >
-        <a href=""
+        <a className="modal__button-close" href=""
            onClick={this.onCloseClick}
         >
           close
         </a>
+        <h3 className="modal__header">Manager Mode</h3>
+        <h4 className="modal__description">Type password to enter manager mode</h4>
 
         {Component.getWaitMessage(this.props.pending)}
 
         <Form
+          className="modal__form modal__form_role_login"
           model="formsData.managerLoginForm"
           onSubmit={this.handleSubmit}
         >
-          <label className="form-label">
+          <label className="label label_type_big modal_adjust_form-label">
             Password:
             <Control
               type="password"
+              className="input input_type_big"
               autoComplete="false"
               model=".password"
               validators={{
@@ -101,7 +105,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
 
           </label>
 
-          <input type="submit" value="submit"/>
+          <input type="submit" value="Login" className="modal__button modal__button_role_login"/>
         </Form>
 
 

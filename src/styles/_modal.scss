@@ -2,11 +2,38 @@
 @import 'mixins';
 
 .modal {
+  $border-radius: 15px;
+
+  @include normalize-block();
+
   position: absolute;
   @include pos-center();
-  min-width: 400px;
-  min-height: 400px;
+  min-width: 550px;
+  padding-bottom: 45px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background-color: $white;
+  @include border-radius($border-radius);
+  @include border-top-left-radius( $border-radius+ 2 );
+  @include border-top-right-radius( $border-radius+ 2 );
+  outline: none;
+
+  &:after {
+    content: '';
+    position: absolute;
+    height: 2px;
+    left: 0;
+    right: 0;
+    bottom: 110px;
+    background-color: #f2f2f2;
+  }
+
+  &_role {
+    &_login-manager {
+      width: 100px;
+    }
+  }
 
   &__overlay {
     position: fixed;
@@ -15,5 +42,66 @@
     bottom: 0;
     left: 0;
     background-color: rgba(0, 0, 0, 0.6);
+    z-index: 100;
+  }
+
+  &__button-close {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    right: -30px;
+    top: -30px;
+  }
+  
+  &__header {
+    align-self: stretch;
+    margin: 0 0 30px;
+    padding: 18px 0;
+    text-align: center;
+    text-transform: uppercase;
+    color: #fff;
+    background-color: #cca711;
+    font-size: 22px;
+    font-weight: 600;
+    @include border-top-left-radius( $border-radius );
+    @include border-top-right-radius( $border-radius );
+  }
+
+  &__description {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0 0 50px;
+    color: #6c6c6c;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    align-self: stretch;
+  }
+
+  &__button {
+    &_role {
+      &_login {
+        display: block;
+        margin: 0 auto;
+        padding: 0;
+        background-color: transparent;
+        border: none;
+        color: #259cee;
+        text-transform: uppercase;
+        font-size: 30px;
+        font-weight: 500;
+        cursor: pointer;
+      }
+    }
+  }
+
+  &_adjust {
+    &_form-label {
+      display: block;
+      margin: 0 auto 95px auto;
+    }
   }
 }
