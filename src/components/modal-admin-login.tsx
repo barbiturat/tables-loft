@@ -66,9 +66,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
       >
         <a className="modal__button-close" href=""
            onClick={this.onCloseClick}
-        >
-          close
-        </a>
+        />
         <h3 className="modal__header">Manager Mode</h3>
         <h4 className="modal__description">Type password to enter manager mode</h4>
 
@@ -79,7 +77,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
           model="formsData.managerLoginForm"
           onSubmit={this.handleSubmit}
         >
-          <label className="form-label form-label_type_big modal_adjust_form-label">
+          <label className="form-label form-label_type_big form-label_role_password modal_adjust_form-label">
             <Control
               type="password"
               className="input input_type_big"

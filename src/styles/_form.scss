@@ -17,7 +17,16 @@
         display: inline-block;
         width: 50px;
         border-right: 2px solid $very-light-gray;
-        background-color: $extra-light-gray;
+        background: $extra-light-gray url(../../public/img/icons/lock-gray.svg) center center no-repeat;
+        @include background-size(20px auto);
+      }
+
+      &.form-label_role {
+        &_password {
+          &:before {
+            background-image: url(../../public/img/icons/lock-gray.svg);
+          }
+        }
       }
     }
   }
