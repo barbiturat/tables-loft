@@ -27,7 +27,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
     return currentTable ? currentTable.isSessionsHistoryInPending : false;
   }
 
-  requestToClose = () => {
+  requestToClose() {
     this.props.dispatch( modalSessionsHistoryChanged(false) );
   };
 
@@ -36,7 +36,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
     this.requestToClose();
   };
 
-  handleRequestCloseFunc = () => {
+  handleRequestClose = () => {
     this.requestToClose();
   };
 
@@ -62,7 +62,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
         contentLabel="Sessions History"
         isOpen={this.props.isOpen}
         shouldCloseOnOverlayClick={true}
-        onRequestClose={this.handleRequestCloseFunc}
+        onRequestClose={this.handleRequestClose}
       >
         <a href=""
            onClick={this.onCloseClick}

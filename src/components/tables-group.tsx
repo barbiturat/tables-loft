@@ -9,7 +9,7 @@ interface Props {
 }
 
 export default class TablesGroup extends React.Component<Props, AnyDict> {
-  getTables = (tables: TableStructure[]) => {
+  static getTables(tables: TableStructure[]) {
     return tables.map((table, idx) => {
       return (
         <Table
@@ -29,7 +29,7 @@ export default class TablesGroup extends React.Component<Props, AnyDict> {
   render() {
     return (
       <div className="tables-set">
-        {this.getTables(this.props.tables)}
+        {TablesGroup.getTables(this.props.tables)}
       </div>
     );
   }

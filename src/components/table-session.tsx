@@ -8,9 +8,10 @@ import {assign} from 'lodash';
 import {StoreStructure, TableSession as TableSessionType, AdminToken} from '../interfaces/store-models';
 import {PropsExtendedByConnect} from '../interfaces/component';
 import requestingTableSessionChange from '../action-creators/requesting-table-session-change';
+import {getElementById} from '../helpers/index';
 
 interface Props {
-  session?: TableSessionType;
+  sessionId?: number;
 }
 
 interface State {
@@ -20,6 +21,7 @@ interface State {
 
 interface MappedProps {
   adminToken: AdminToken;
+  sessions: TableSessionType[];
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
@@ -35,17 +37,21 @@ class Component extends React.Component<PropsFromConnect, State> {
     };
   }
 
-  setEditingMode = (turnOn: boolean) => {
+  setEditingMode(turnOn: boolean) {
     this.setState(assign({}, this.state, {
       isInEditing: turnOn
     }));
-  };
+  }
 
   onSessionInfoClick = (event: MouseEvent<HTMLDivElement>) => {
     this.setState(assign({}, this.state, {
       isFormatOfMinutes: !this.state.isFormatOfMinutes
     }));
   };
+
+  getSession() {
+    return getElementById(this.props.sessions, this.props.sessionId);
+  }
 
   static getDurationString(durationSeconds: number, isFormatOfMinutes: boolean): string {
     const duration = moment.duration({seconds: durationSeconds});
@@ -77,14 +83,14 @@ class Component extends React.Component<PropsFromConnect, State> {
   }
 
   onInputKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    const {session, dispatch, adminToken} = this.props;
+    const {sessionId, dispatch, adminToken} = this.props;
 
-    if (!session) {
+    if (typeof sessionId !== 'number') {
       return;
     }
 
+    const session = this.getSession();
     const input = event.currentTarget;
-    const {id, durationSeconds} = session;
     const isEsc = event.keyCode === 27;
     const isEnter = event.keyCode === 13;
 
@@ -92,7 +98,8 @@ class Component extends React.Component<PropsFromConnect, State> {
       event.preventDefault();
     }
 
-    if (isEnter && adminToken) {
+    if (isEnter && adminToken && session) {
+      const {id} = session;
       const newMinutes = Number(input.value);
       const duration = moment.duration({minutes: newMinutes});
       const newSeconds = duration.asSeconds();
@@ -108,7 +115,7 @@ class Component extends React.Component<PropsFromConnect, State> {
     }
   };
 
-  drawDuration = (session: TableSessionType, isFormatOfMinutes: boolean) => {
+  drawDuration(session: TableSessionType, isFormatOfMinutes: boolean) {
     const {durationSeconds, adminEdited} = session;
 
     if (this.state.isInEditing) {
@@ -146,7 +153,7 @@ class Component extends React.Component<PropsFromConnect, State> {
   };
 
   render() {
-    const session = this.props.session;
+    const session = this.getSession();
 
     if (session) {
       const {durationSeconds, startsAt} = session;
@@ -177,7 +184,8 @@ class Component extends React.Component<PropsFromConnect, State> {
 const TableSession = connect<any, any, Props>(
   (state: StoreStructure, ownProps: Props): MappedProps => {
     return {
-      adminToken: state.app.adminToken
+      adminToken: state.app.adminToken,
+      sessions: state.app.tableSessionsData.tableSessions
     };
   }
 )(Component);

@@ -41,7 +41,7 @@ class Component extends React.Component<PropsFromConnect, State> {
     );
   }
 
-  isFormatOfMinutesSelector = (props: PropsFromConnect): boolean => {
+  isFormatOfMinutesSelector(props: PropsFromConnect) {
     return this.state.isFormatOfMinutes;
   };
 

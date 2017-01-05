@@ -16,7 +16,7 @@ type PropsFromConnect = PropsExtendedByConnect<any, MappedProps>;
 
 class Component extends React.Component<PropsFromConnect, any> {
 
-  renderTablesGroup = (tables: Table[], isInPending: boolean) => {
+  static renderTablesGroup(tables: Table[], isInPending: boolean) {
     return isInPending ? (
         <div className="label label_type_wait label_role_wait-tables"/>
       ) : (
@@ -28,7 +28,7 @@ class Component extends React.Component<PropsFromConnect, any> {
     return (
       <div className="page">
         <Header/>
-        {this.renderTablesGroup(this.props.tables, this.props.areTablesInPending)}
+        {Component.renderTablesGroup(this.props.tables, this.props.areTablesInPending)}
       </div>
     );
   }

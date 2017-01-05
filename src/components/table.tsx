@@ -61,10 +61,6 @@ class Component extends React.Component<PropsFromConnect, {}> {
     return getElementById(this.props.sessions, this.props.currentSessionId);
   }
 
-  getLastSession() {
-    return getElementById(this.props.sessions, this.props.lastSessionId);
-  }
-
   static getTableStatus(startsAt?: number, durationSeconds?: number): TableStatus {
     if (!startsAt || !durationSeconds) {
       return 'ready';
@@ -161,7 +157,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
           isActive={isActive}
           startsAt={Component.startsAtSelector( this.getCurrentSession() )}
         />
-        <TableSession session={ this.getLastSession() } />
+        <TableSession sessionId={ this.props.lastSessionId } />
         <a href=""
             className="table__btn-view-sessions"
             onClick={this.onViewMoreClick}

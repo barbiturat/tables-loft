@@ -29,7 +29,7 @@ type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 const {validators: {password: passwordChecks}} = managerLoginForm;
 
 class Component extends React.Component<PropsFromConnect, {}> {
-  requestToClose = () => {
+  requestToClose() {
     this.props.dispatch( modalAdminLoginOpened(false) );
   };
 
