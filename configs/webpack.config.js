@@ -13,9 +13,6 @@ function pathFromRoot(url = '') {
 }
 
 const plugins = [
-  new webpack.optimize.CommonsChunkPlugin({
-    names: ['vendor', 'manifest']
-  }),
   new webpack.DefinePlugin({
     'process.env': {
       NODE_ENV: JSON.stringify(nodeEnv)  // NODE_ENV: '"production"' for decreasing size of react library
@@ -39,24 +36,7 @@ module.exports = {
   devtool: isProd ? 'source-map' : 'eval',
   context: sourcePath,
   entry: {
-    bundle: './index.tsx',
-    vendor: [
-      'classnames',
-      'lodash',
-      'moment',
-      'react',
-      'react-dom',
-      'react-modal',
-      'react-redux',
-      'react-redux-form',
-      'react-router',
-      'redux',
-      'redux-observable',
-      'redux-router',
-      'reselect',
-      'rxjs',
-      'validator'
-    ]
+    bundle: './index.tsx'
   },
   output: {
     filename: '[name].js',
