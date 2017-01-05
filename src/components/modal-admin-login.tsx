@@ -61,6 +61,8 @@ class Component extends React.Component<PropsFromConnect, {}> {
         isOpen={this.props.isOpen}
         shouldCloseOnOverlayClick={true}
         onRequestClose={this.handleRequestCloseFunc}
+        className="modal"
+        overlayClassName="modal__overlay"
       >
         <a href=""
            onClick={this.onCloseClick}
