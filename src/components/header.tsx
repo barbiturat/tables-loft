@@ -24,9 +24,33 @@ class Component extends React.Component<PropsFromConnect, {}> {
     event.currentTarget.blur();
   };
 
-  render() {
-    const managerModeButtonClass = `button button_role_manager ${this.props.isAdminTokenSet ? '' : 'hidden'}`;
+  onBtnLogOutClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
 
+    this.props.dispatch( modalAdminLoginOpened(true) );
+
+    event.currentTarget.blur();
+  };
+
+  drawManagerButton(toLogIn: boolean) {
+    if (toLogIn) {
+      return (
+        <a href=""
+           className="button button_role_manager"
+           onClick={this.onBtnManagerClick}
+        >Manager Mode</a>
+      );
+    } else {
+      return (
+        <a href=""
+           className="button button_role_log-out"
+           onClick={this.onBtnLogOutClick}
+        >Log Out</a>
+      );
+    }
+  }
+
+  render() {
     return (
       <div className="header">
         <div className="header__section header__section_role_hamburger">
@@ -35,10 +59,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
           <span className="header__caption">Boston Pool Loft</span>
         </div>
         <div className="header__section header__section_role_utils">
-          <a href=""
-              className={managerModeButtonClass}
-              onClick={this.onBtnManagerClick}
-          >Manager Mode</a>
+          { this.drawManagerButton(this.props.isAdminTokenSet) }
         </div>
       </div>
     );

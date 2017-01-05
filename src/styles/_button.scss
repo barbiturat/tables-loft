@@ -16,10 +16,17 @@
 
   &_role {
     &_manager {
-      $manager-btn-bcg-color: map-get($roles-palette, manager);
+      $color: map-get($roles-palette, manager);
 
-      background-color: $manager-btn-bcg-color;
-      @include button-hover-behavior($manager-btn-bcg-color);
+      background-color: $color;
+      @include button-hover-behavior($color);
+      text-decoration: none;
+    }
+    &_log-out {
+      $color: map-get($roles-palette, log-out);
+
+      background-color: $color;
+      @include button-hover-behavior($color);
       text-decoration: none;
     }
   }
