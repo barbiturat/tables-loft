@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import {AnyDict} from '../interfaces/index';
 import Table from './table';
-import {Table as TableStructure} from '../interfaces/component-models';
+import {Table as TableStructure} from '../interfaces/store-models';
 
 interface Props {
   tables: TableStructure[];
