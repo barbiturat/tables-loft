@@ -1,0 +1,42 @@
+@import 'settings';
+@import 'mixins';
+
+.form-label {
+  @include normalize-block();
+
+  &_type {
+    &_big {
+      display: flex;
+      width: 450px;
+      height: 50px;
+      border: 2px solid $very-light-gray;
+      align-items: stretch;
+
+      &:before {
+        content: '';
+        display: inline-block;
+        width: 50px;
+        border-right: 2px solid $very-light-gray;
+        background-color: $extra-light-gray;
+      }
+    }
+  }
+}
+
+.input {
+  @include normalize-block();
+
+  color: $medium-gray;
+
+  &_type {
+    &_big {
+      font-size: 20px;
+      padding: 0 7px;
+
+      .form-label_type_big & {
+        flex-grow: 1;
+        border: none;
+      }
+    }
+  }
+}

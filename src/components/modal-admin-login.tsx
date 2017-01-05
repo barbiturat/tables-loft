@@ -79,8 +79,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
           model="formsData.managerLoginForm"
           onSubmit={this.handleSubmit}
         >
-          <label className="label label_type_big modal_adjust_form-label">
-            Password:
+          <label className="form-label form-label_type_big modal_adjust_form-label">
             <Control
               type="password"
               className="input input_type_big"
@@ -105,7 +104,9 @@ class Component extends React.Component<PropsFromConnect, {}> {
 
           </label>
 
-          <input type="submit" value="Login" className="modal__button modal__button_role_login"/>
+          <div className="modal__buttons-group">
+            <input type="submit" value="Login" className="button button_type_modal-big"/>
+          </div>
         </Form>
 
 
