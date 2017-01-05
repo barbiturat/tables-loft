@@ -161,6 +161,7 @@ $shuffle-table-border-radius: 50px;
   &__session-length {
     display: inline-block;
     cursor: pointer;
+    @include user-select();
 
     &_admin-edited {
       &:after {
@@ -392,7 +393,7 @@ $shuffle-table-border-radius: 50px;
         color: $white;
         font-size: 33px;
         font-weight: 600;
-        cursor: pointer;
+        @include user-select();
 
         .table_type_pool & {
           left: 155px;
@@ -403,6 +404,9 @@ $shuffle-table-border-radius: 50px;
           left: 135px;
           top: 100px;
         }
+      }
+      &_counter {
+        cursor: pointer;
       }
     }
   }

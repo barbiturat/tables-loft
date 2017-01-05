@@ -79,11 +79,14 @@ class Component extends React.Component<PropsFromConnect, State> {
   };
 
   render() {
-    const labelAvailableText = !this.props.isActive ? 'Available' : this.durationActivityStringSelector(this.props);
+    const isAvailable = !this.props.isActive;
+    const labelAvailableText = isAvailable ? 'Available' : this.durationActivityStringSelector(this.props);
+    const availabilityClass = isAvailable ?
+      'table__label table__label_role_availability' : 'table__label table__label_role_counter';
 
     return (
       <div
-          className="table__label table__label_role_availability"
+          className={availabilityClass}
           onClick={this.onClick}
       >
         {labelAvailableText}
