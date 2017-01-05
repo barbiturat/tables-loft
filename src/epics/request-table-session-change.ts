@@ -61,7 +61,7 @@ const requestTableSessionChange = ((action$, store: MiddlewareAPI<StoreStructure
               if (ajaxData.status === STATUS_OK) {
                 const sessionsClone: TableSession[] = store.getState().app.tableSessionsData.tableSessions.concat([]);
                 const editedSessions = setNewParamsToSession(sessionsClone, sessionId, {
-                  isInPending: true,
+                  isInPending: false,
                   durationSeconds,
                   adminEdited: true
                 });
