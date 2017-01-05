@@ -30,9 +30,6 @@ class Component extends React.Component<PropsFromConnect, {}> {
     return (
       <div className="header">
         <div className="header__section header__section_role_hamburger">
-          <a href="" className="header__hamburger-btn">
-            <div className="header__hamburger-btn-content"></div>
-          </a>
         </div>
         <div className="header__section header__section_role_caption">
           <span className="header__caption">Boston Pool Loft</span>
