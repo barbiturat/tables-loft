@@ -5,6 +5,7 @@ import modalAdminLoginOpened from '../action-creators/modal-admin-login-opened';
 import {connect} from 'react-redux';
 import {StoreStructure} from '../interfaces/store-models';
 import {PropsExtendedByConnect} from '../interfaces/component';
+import adminTokenRemoved from '../action-creators/admin-token-removed';
 
 interface Props {
 }
@@ -27,9 +28,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
   onBtnLogOutClick = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
 
-    this.props.dispatch( modalAdminLoginOpened(true) );
-
-    event.currentTarget.blur();
+    this.props.dispatch( adminTokenRemoved );
   };
 
   drawManagerButton(toLogIn: boolean) {

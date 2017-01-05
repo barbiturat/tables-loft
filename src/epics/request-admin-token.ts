@@ -12,6 +12,7 @@ import {RequestGetAdminTokenPayload} from '../interfaces/api-requests';
 import {urlGetAdminToken} from '../constants/urls';
 import {SimpleAction, FormSubmitAction} from '../interfaces/actions';
 import adminTokenUpdated from '../action-creators/admin-token-updated';
+import modalAdminLoginOpened from '../action-creators/modal-admin-login-opened';
 
 type ResponseOk = AjaxResponseTyped<ResponseGetAdminTokenPayload>;
 type ResponseError = AjaxErrorTyped<ResponseGetAdminTokenFailedPayload>;
@@ -32,9 +33,11 @@ const requestAdminToken = ((action$) => {
 
                 const setSubmittedAction = actions.setSubmitted(formModelPath, true);
                 const setAdminTokenAction = adminTokenUpdated(accessToken);
+                const closeAdminModalAction = modalAdminLoginOpened(false);
 
                 return Observable.of<any>(
                   setSubmittedAction,
+                  closeAdminModalAction,
                   setAdminTokenAction
                 );
               } else {
