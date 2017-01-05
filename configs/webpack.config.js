@@ -42,6 +42,7 @@ module.exports = {
     bundle: './index.tsx',
     vendor: [
       'classnames',
+      'lodash',
       'moment',
       'react',
       'react-dom',
@@ -53,7 +54,8 @@ module.exports = {
       'redux-observable',
       'redux-router',
       'reselect',
-      'rxjs'
+      'rxjs',
+      'validator'
     ]
   },
   output: {
