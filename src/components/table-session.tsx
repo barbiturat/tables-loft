@@ -116,7 +116,7 @@ class Component extends React.Component<PropsFromConnect, State> {
   };
 
   drawDuration(session: TableSessionType, isFormatOfMinutes: boolean) {
-    const {durationSeconds, adminEdited} = session;
+    const {durationSeconds, adminEdited, isInPending} = session;
 
     if (this.state.isInEditing) {
       const duration = moment.duration({seconds: durationSeconds});
@@ -139,7 +139,8 @@ class Component extends React.Component<PropsFromConnect, State> {
       );
     } else {
       const adminEditedClassName = adminEdited ? 'table__session-length_admin-edited' : '';
-      const durationString = Component.getDurationString(durationSeconds, isFormatOfMinutes);
+      const durationString = isInPending ?
+        'wait...' : Component.getDurationString(durationSeconds, isFormatOfMinutes);
 
       return (
         <span
