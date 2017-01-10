@@ -2,12 +2,12 @@ import * as React from 'react';
 
 import {PropsExtendedByConnect} from '../interfaces/component';
 import {connect} from 'react-redux';
-import {StoreStructure, TableSession as TableSessionInStore, Table} from '../interfaces/store-models';
+import {StoreStructure, TableSession as TableSessionInStore, Tables} from '../interfaces/store-models';
 import Header from './header';
 import TablesGroup from './tables-group';
 
 interface MappedProps {
-  tables: Table[];
+  tables: Tables;
   areTablesInPending: boolean;
   tableSessions: TableSessionInStore[];
 }
@@ -16,7 +16,7 @@ type PropsFromConnect = PropsExtendedByConnect<any, MappedProps>;
 
 class Component extends React.Component<PropsFromConnect, any> {
 
-  static renderTablesGroup(tables: Table[], isInPending: boolean) {
+  static renderTablesGroup(tables: Tables, isInPending: boolean) {
     return isInPending ? (
         <div className="label label_type_wait label_role_wait-tables"/>
       ) : (
@@ -25,10 +25,12 @@ class Component extends React.Component<PropsFromConnect, any> {
   };
 
   render() {
+    const {tables, areTablesInPending} = this.props;
+
     return (
       <div className="page">
         <Header/>
-        {Component.renderTablesGroup(this.props.tables, this.props.areTablesInPending)}
+        {Component.renderTablesGroup(tables, areTablesInPending)}
       </div>
     );
   }

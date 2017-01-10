@@ -1,5 +1,6 @@
 import {TableType, TableSession as TableSessionBackend} from './backend-models';
 import {Structure as ReducersStructure} from '../reducers/index';
+import {IndexedDict} from './index';
 
 export interface Table {
   name: string;
@@ -12,6 +13,8 @@ export interface Table {
   isSessionsHistoryInPending: boolean;
   sessionsHistory: number[];
 }
+
+export type Tables = IndexedDict<Table>;
 
 export interface TableSession {
   id: number;

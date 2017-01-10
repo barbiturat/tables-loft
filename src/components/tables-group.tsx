@@ -2,15 +2,18 @@ import * as React from 'react';
 
 import {AnyDict} from '../interfaces/index';
 import Table from './table';
-import {Table as TableStructure} from '../interfaces/store-models';
+import {Tables} from '../interfaces/store-models';
 
 interface Props {
-  tables: TableStructure[];
+  tables: Tables;
 }
 
 export default class TablesGroup extends React.Component<Props, AnyDict> {
-  static getTables(tables: TableStructure[]) {
-    return tables.map((table, idx) => {
+  static getTables(tables: Tables) {
+    return Object.keys(tables).map((value) => {
+      const idx = Number(value);
+      const table = tables[idx];
+
       return (
         <Table
           key={idx}

@@ -14,6 +14,7 @@ import {tablesToFront, tableSessionsToFront} from '../helpers/api-data-converter
 import {TableSession, Table as TableBackend} from '../interfaces/backend-models';
 import tableSessionsChanged from '../action-creators/table-sessions-changed';
 import tablesChanged from '../action-creators/tables-changed';
+import {Tables} from '../interfaces/store-models';
 
 type ResponseOk = AjaxResponseTyped<ResponseTablesPayload>;
 type ResponseError = AjaxErrorTyped<ResponseFailedPayload>;
@@ -41,7 +42,7 @@ const fetchTables = ((action$) => {
               if (ajaxData.status === STATUS_OK) {
                 const tables = (ajaxData as ResponseOk).response.tables;
                 const tableSessions = getTableSessionsFromTables(tables);
-                const convertedTables = tablesToFront(tables);
+                const convertedTables: Tables = tablesToFront(tables);
                 const convertedTableSessions = tableSessionsToFront(tableSessions);
 
                 const setTables = tablesChanged(convertedTables);

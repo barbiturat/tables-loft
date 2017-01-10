@@ -1,7 +1,7 @@
 import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
 import {MiddlewareAPI} from 'redux';
-import {find} from 'lodash';
+import {clone} from 'lodash';
 
 import {FETCHING_TABLE_SESSIONS_HISTORY} from '../constants/action-names';
 import {get, getErrorMessageFromResponse} from '../helpers/requests';
@@ -18,16 +18,14 @@ import tableSessionsChanged from '../action-creators/table-sessions-changed';
 import fetchingTableSessionsHistoryFailed from '../action-creators/fetching-table-sessions-history-failed';
 import {ActionType} from '../action-creators/fetching-table-sessions-history';
 import {RequestSessionHistoryPayload} from '../interfaces/api-requests';
-import {StoreStructure, Table} from '../interfaces/store-models';
+import {StoreStructure, Tables} from '../interfaces/store-models';
 import tablesChanged from '../action-creators/tables-changed';
 
 type ResponseOk = AjaxResponseTyped<ResponseSessionsHistoryPayload>;
 type ResponseError = AjaxErrorTyped<ResponseFailedPayload>;
 
-const getTablesWithSetHistoryPending = (tables: Table[], tableId: number, isInPending: boolean): Table[] => {
-  const currentTable = find(tables, (table: Table) => {
-    return table.id === tableId;
-  });
+const getTablesWithSetHistoryPending = (tables: Tables, tableId: number, isInPending: boolean): Tables => {
+  const currentTable = tables[tableId];
 
   if (currentTable) {
     currentTable.isSessionsHistoryInPending = isInPending;
@@ -43,7 +41,7 @@ const fetchSessionsHistory = ((action$, store: MiddlewareAPI<StoreStructure>) =>
       const dataToSend: RequestSessionHistoryPayload = {
         tableId
       };
-      const currentTablesClone: Table[] = store.getState().app.tablesData.tables.concat([]);
+      const currentTablesClone: Tables = clone( store.getState().app.tablesData.tables );
       const tablesWithSetPending = getTablesWithSetHistoryPending(currentTablesClone, tableId, true);
       const setTablesWithPending$ = Observable.of( tablesChanged(tablesWithSetPending) );
 
@@ -52,9 +50,10 @@ const fetchSessionsHistory = ((action$, store: MiddlewareAPI<StoreStructure>) =>
           get(urlSessionHistory, dataToSend)
             .mergeMap((ajaxData: ResponseOk | ResponseError) => {
               if (ajaxData.status === STATUS_OK) {
-                const tablesClone = store.getState().app.tablesData.tables.concat([]);
+                const appData = store.getState().app;
+                const tablesClone = clone( appData.tablesData.tables );
                 const sessions = (ajaxData as ResponseOk).response.sessions;
-                const currentSessions = store.getState().app.tableSessionsData.tableSessions;
+                const currentSessions = appData.tableSessionsData.tableSessions;
                 const convertedNewSessions = tableSessionsToFront(sessions);
                 const newSessions = currentSessions.concat(convertedNewSessions);
                 const tablesWithUnsetPending = getTablesWithSetHistoryPending(tablesClone, tableId, false);

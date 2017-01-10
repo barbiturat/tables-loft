@@ -1,7 +1,7 @@
 import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
 import {MiddlewareAPI} from 'redux';
-import {find} from 'lodash';
+import {clone} from 'lodash';
 
 import {REQUESTING_TABLE_STOP} from '../constants/action-names';
 import {post, getErrorMessageFromResponse} from '../helpers/requests';
@@ -12,7 +12,7 @@ import {urlStopTable} from '../constants/urls';
 import {SimpleAction} from '../interfaces/actions';
 import {ActionType} from '../action-creators/requesting-table-start';
 import pendingRequestTableStatusChange from '../action-creators/pending-request-table-status-change';
-import {StoreStructure, Table} from '../interfaces/store-models';
+import {StoreStructure, Tables} from '../interfaces/store-models';
 import tablesChanged from '../action-creators/tables-changed';
 import tableSessionsChanged from '../action-creators/table-sessions-changed';
 import {tableSessionToFront} from '../helpers/api-data-converters/index';
@@ -34,7 +34,7 @@ const stopTable = ((action$, store: MiddlewareAPI<StoreStructure>) => {
               if (ajaxData.status === STATUS_OK) {
                 const appData = store.getState().app;
                 const currTables = appData.tablesData.tables;
-                const newTables: Table[] = currTables.concat([]);
+                const newTables: Tables = clone(currTables);
                 const currSessions = appData.tableSessionsData.tableSessions;
                 const session = (ajaxData as ResponseOk).response.session;
                 const convertedSession = tableSessionToFront(session);
@@ -42,7 +42,7 @@ const stopTable = ((action$, store: MiddlewareAPI<StoreStructure>) => {
                 const pendingStopAction = pendingRequestTableStatusChange(false, tableId);
                 const tableSessionsChangedAction = tableSessionsChanged(newSessions);
 
-                const changedTable = find(newTables, (table) => table.id === tableId);
+                const changedTable = newTables[tableId];
 
                 if (changedTable) {
                   changedTable.currentSessionId = convertedSession.id;

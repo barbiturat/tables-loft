@@ -1,12 +1,14 @@
+import {clone} from 'lodash';
+
 import {TABLES_CHANGED} from '../constants/action-names';
-import {Table} from '../interfaces/store-models';
+import {Tables} from '../interfaces/store-models';
 import {ActionWithPayload} from '../interfaces/actions';
 
-export type Structure = Table[];
+export type Structure = Tables;
 
-const tables = (state: Structure = [], action: ActionWithPayload<Structure>): Structure => {
+const tables = (state: Structure = {}, action: ActionWithPayload<Structure>): Structure => {
   if (action.type === TABLES_CHANGED) {
-    return action.payload.concat([]);
+    return clone(action.payload);
   } else {
     return state;
   }

@@ -1,6 +1,10 @@
 import {AjaxResponse, AjaxError} from 'rxjs';
 import {Reducer} from 'redux';
 
+export interface IndexedDict<T> {
+  [name: number]: T;
+}
+
 export interface Dict<T> {
   [name: string]: T;
 }

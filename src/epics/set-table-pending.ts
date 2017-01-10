@@ -1,6 +1,5 @@
 import {MiddlewareAPI} from 'redux';
 import {Epic} from 'redux-observable';
-import {find} from 'lodash';
 
 import {PENDING_REQUEST_TABLE_STATUS_CHANGED} from '../constants/action-names';
 import {SimpleAction} from '../interfaces/actions';
@@ -13,7 +12,7 @@ const setTablePending = ((action$, store: MiddlewareAPI<StoreStructure>) => {
     .map((action: ActionType) => {
       const {isInPending, tableId} = action.payload;
       const currentTables = store.getState().app.tablesData.tables;
-      const changedTable = find(currentTables, (table) => table.id === tableId);
+      const changedTable = currentTables[tableId];
 
       if (changedTable) {
         changedTable.isInPending = isInPending;

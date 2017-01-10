@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import MouseEvent = React.MouseEvent;
 import * as Modal from 'react-modal';
 
-import {StoreStructure, Table, TableSession} from '../interfaces/store-models';
+import {StoreStructure, Table, TableSession, Tables} from '../interfaces/store-models';
 import {PropsExtendedByConnect} from '../interfaces/component';
 import modalSessionsHistoryChanged from '../action-creators/modal-sessions-history-changed';
 import SessionsHistory from './sessions-history';
@@ -15,7 +15,7 @@ interface Props {
 interface MappedProps {
   isOpen: boolean;
   tableId?: number;
-  tables: Table[];
+  tables: Tables;
   allTableSessions: TableSession[];
 }
 
@@ -53,30 +53,36 @@ class Component extends React.Component<PropsFromConnect, {}> {
   };
 
   render() {
-    const currentTable = getElementById<Table>(this.props.tables, this.props.tableId);
-    const historyPending = Component.getSessionsHistoryInPending(currentTable);
-    const sessions = Component.getTableSessions(this.props.allTableSessions, currentTable);
+    const {tables, tableId, allTableSessions} = this.props;
 
-    return (
-      <Modal
-        contentLabel="Sessions History"
-        isOpen={this.props.isOpen}
-        shouldCloseOnOverlayClick={true}
-        onRequestClose={this.handleRequestClose}
-      >
-        <a href=""
-           onClick={this.onCloseClick}
+    if (tableId) {
+      const currentTable = tables[tableId];
+      const historyPending = Component.getSessionsHistoryInPending(currentTable);
+      const sessions = Component.getTableSessions(allTableSessions, currentTable);
+
+      return (
+        <Modal
+          contentLabel="Sessions History"
+          isOpen={this.props.isOpen}
+          shouldCloseOnOverlayClick={true}
+          onRequestClose={this.handleRequestClose}
         >
-          close
-        </a>
+          <a href=""
+             onClick={this.onCloseClick}
+          >
+            close
+          </a>
 
-        <SessionsHistory
-          isInPending={historyPending}
-          tableSessions={sessions}
-        />
+          <SessionsHistory
+            isInPending={historyPending}
+            tableSessions={sessions}
+          />
 
-      </Modal>
-    );
+        </Modal>
+      );
+    } else {
+      return null;
+    }
   }
 }
 
