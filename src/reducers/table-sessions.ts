@@ -6,7 +6,7 @@ export type Structure = TableSession[];
 
 const tableSessions = (state: Structure = [], action: ActionWithPayload<Structure>): Structure => {
   if (action.type === TABLE_SESSIONS_CHANGED) {
-    return action.payload.concat([]);
+    return action.payload;
   } else {
     return state;
   }
