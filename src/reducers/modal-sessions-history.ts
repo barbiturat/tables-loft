@@ -1,3 +1,5 @@
+import {clone} from 'lodash';
+
 import {ActionWithPayload} from '../interfaces/actions';
 import {MODAL_SESSIONS_HISTORY_CHANGED} from '../constants/action-names';
 import {ModalSessionsHistory} from '../interfaces/store-models';
@@ -8,7 +10,7 @@ const modalSessionsHistory = (state: Structure = {
   isOpened: false
 }, action: ActionWithPayload<Structure>): Structure => {
   if (action.type === MODAL_SESSIONS_HISTORY_CHANGED) {
-    return action.payload;
+    return clone(action.payload);
   } else {
     return state;
   }

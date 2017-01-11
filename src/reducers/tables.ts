@@ -8,7 +8,7 @@ export type Structure = Tables;
 
 const tables = (state: Structure = {}, action: ActionWithPayload<Structure>): Structure => {
   if (action.type === TABLES_CHANGED) {
-    return action.payload;
+    return clone(action.payload);
   } else {
     return state;
   }
