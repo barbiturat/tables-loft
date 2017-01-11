@@ -1,4 +1,4 @@
-import {TableType, TableSession as TableSessionBackend} from './backend-models';
+import {TableType} from './backend-models';
 import {Structure as ReducersStructure} from '../reducers/index';
 import {IndexedDict} from './index';
 
@@ -23,6 +23,8 @@ export interface TableSession {
   adminEdited: boolean;
   isInPending: boolean;
 }
+
+export type TableSessions = IndexedDict<TableSession>;
 
 export type StoreStructure = ReducersStructure;
 

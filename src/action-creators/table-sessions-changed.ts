@@ -1,13 +1,11 @@
 import {TABLE_SESSIONS_CHANGED} from '../constants/action-names';
 import {createActionWithPayload} from '../helpers/index';
 import {ActionWithPayload} from '../interfaces/actions';
-import {TableSession} from '../interfaces/store-models';
+import {TableSessions} from '../interfaces/store-models';
 
-type PayloadType = TableSession[];
+export type ActionType = ActionWithPayload<TableSessions>;
 
-export type ActionType = ActionWithPayload<PayloadType>;
-
-const tableSessionsChanged = (tableSessions: PayloadType): ActionType =>
+const tableSessionsChanged = (tableSessions: TableSessions): ActionType =>
   createActionWithPayload(TABLE_SESSIONS_CHANGED, tableSessions);
 
 export default tableSessionsChanged;

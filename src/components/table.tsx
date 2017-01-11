@@ -6,7 +6,7 @@ import { createSelector, Selector } from 'reselect';
 
 import TableSession from './table-session';
 import {TableType} from '../interfaces/backend-models';
-import {TableSession as TableSessionType, StoreStructure} from '../interfaces/store-models';
+import {TableSession as TableSessionType, StoreStructure, TableSessions} from '../interfaces/store-models';
 import store from '../store/index';
 import requestingTableStart from '../action-creators/requesting-table-start';
 import requestingTableStop from '../action-creators/requesting-table-stop';
@@ -14,7 +14,6 @@ import {PropsExtendedByConnect} from '../interfaces/component';
 import TableTimer from './table-timer';
 import fetchingTableSessionsHistory from '../action-creators/fetching-table-sessions-history';
 import modalSessionsHistoryChanged from '../action-creators/modal-sessions-history-changed';
-import {getElementById} from '../helpers/index';
 
 export type TableStatus = 'ready' | 'active';
 
@@ -29,7 +28,7 @@ interface Props {
 }
 
 interface MappedProps {
-  sessions: TableSessionType[];
+  sessions: TableSessions;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
@@ -42,23 +41,22 @@ class Component extends React.Component<PropsFromConnect, {}> {
     isDisabled: false
   };
 
-  isTableActiveSelector: Selector<TableSessionType | undefined, boolean>;
-
-  constructor(props: Props) {
-    super(props);
-
-    this.isTableActiveSelector = createSelector(
-      Component.startsAtSelector,
-      Component.durationSecondsSelector,
-      (startsAt, durationSeconds) => {
-        const tableStatus = Component.getTableStatus(startsAt, durationSeconds);
-        return tableStatus === 'active';
-      }
-    );
-  }
+  static isTableActive(currentSession?: TableSessionType): boolean {
+    if (currentSession) {
+      const tableStatus = Component.getTableStatus(currentSession.startsAt, currentSession.durationSeconds);
+      return tableStatus === 'active';
+    } else {
+      return false;
+    }
+  };
 
   getCurrentSession() {
-    return getElementById(this.props.sessions, this.props.currentSessionId);
+    const {sessions, currentSessionId} = this.props;
+
+    if (currentSessionId) {
+      return sessions[currentSessionId];
+    }
+    return;
   }
 
   static getTableStatus(startsAt?: number, durationSeconds?: number): TableStatus {
@@ -80,10 +78,6 @@ class Component extends React.Component<PropsFromConnect, {}> {
 
   static startsAtSelector(currentSession?: TableSessionType) {
     return currentSession && currentSession.startsAt;
-  };
-
-  static durationSecondsSelector(currentSession?: TableSessionType) {
-    return currentSession && currentSession.durationSeconds;
   };
 
   static getDisabledLabel(isDisabled?: boolean) {
@@ -115,7 +109,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
       return;
     }
 
-    const actionCreator = this.isTableActiveSelector( this.getCurrentSession() ) ? requestingTableStop : requestingTableStart;
+    const actionCreator = Component.isTableActive( this.getCurrentSession() ) ? requestingTableStop : requestingTableStart;
     const action = actionCreator(id);
 
     store.dispatch(action);
@@ -132,7 +126,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
 
   render() {
     const {name, type, isInPending, isDisabled} = this.props;
-    const isActive = this.isTableActiveSelector( this.getCurrentSession() );
+    const isActive = Component.isTableActive( this.getCurrentSession() );
     const tableTypeClassName = type ? {
       pool: 'table_type_pool',
       shuffleBoard: 'table_type_shuffle',

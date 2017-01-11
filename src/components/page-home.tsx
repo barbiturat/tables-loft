@@ -2,14 +2,14 @@ import * as React from 'react';
 
 import {PropsExtendedByConnect} from '../interfaces/component';
 import {connect} from 'react-redux';
-import {StoreStructure, TableSession as TableSessionInStore, Tables} from '../interfaces/store-models';
+import {StoreStructure, Tables, TableSessions} from '../interfaces/store-models';
 import Header from './header';
 import TablesGroup from './tables-group';
 
 interface MappedProps {
   tables: Tables;
   areTablesInPending: boolean;
-  tableSessions: TableSessionInStore[];
+  tableSessions: TableSessions;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<any, MappedProps>;

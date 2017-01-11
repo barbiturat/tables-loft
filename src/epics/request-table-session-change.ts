@@ -1,7 +1,7 @@
 import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
 import {MiddlewareAPI} from 'redux';
-import {find, assign} from 'lodash';
+import {find, assign, clone} from 'lodash';
 
 import {REQUESTING_TABLE_SESSION_CHANGE} from '../constants/action-names';
 import {request} from '../helpers/requests';
@@ -15,7 +15,7 @@ import {urlUpdateTableSession} from '../constants/urls';
 import {SimpleAction} from '../interfaces/actions';
 import tableSessionsChanged from '../action-creators/table-sessions-changed';
 import {RequestUpdateTableSessionPayload} from '../interfaces/api-requests';
-import {StoreStructure, TableSession} from '../interfaces/store-models';
+import {StoreStructure, TableSession, TableSessions} from '../interfaces/store-models';
 import {ActionType} from '../action-creators/requesting-table-session-change';
 
 type ResponseOk = AjaxResponseTyped<ResponseUpdateTableSessionPayload>;
@@ -27,8 +27,8 @@ const getSessionById = (array: TableSession[], id: number) => {
   });
 };
 
-const setNewParamsToSession = (sessions: TableSession[], sessionId: number, params: Partial<TableSession>) => {
-  const session = getSessionById(sessions, sessionId);
+const setNewParamsToSession = (sessions: TableSessions, sessionId: number, params: Partial<TableSession>) => {
+  const session = sessions[sessionId];
 
   if (session) {
     assign(session, params);
@@ -47,7 +47,7 @@ const requestTableSessionChange = ((action$, store: MiddlewareAPI<StoreStructure
         durationSeconds,
         adminToken
       };
-      const currSessionsClone: TableSession[] = store.getState().app.tableSessionsData.tableSessions.concat([]);
+      const currSessionsClone = clone( store.getState().app.tableSessionsData.tableSessions );
       const newSessions = setNewParamsToSession(currSessionsClone, sessionId, {
         isInPending: true
       });
@@ -59,7 +59,7 @@ const requestTableSessionChange = ((action$, store: MiddlewareAPI<StoreStructure
           request('PATCH', url, dataToSend)
             .mergeMap((ajaxData: ResponseOk | ResponseError) => {
               if (ajaxData.status === STATUS_OK) {
-                const sessionsClone: TableSession[] = store.getState().app.tableSessionsData.tableSessions.concat([]);
+                const sessionsClone: TableSessions = clone( store.getState().app.tableSessionsData.tableSessions );
                 const editedSessions = setNewParamsToSession(sessionsClone, sessionId, {
                   isInPending: false,
                   durationSeconds,

@@ -1,7 +1,7 @@
 import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
 import {MiddlewareAPI} from 'redux';
-import {clone} from 'lodash';
+import {assign, clone} from 'lodash';
 
 import {REQUESTING_TABLE_STOP} from '../constants/action-names';
 import {post, getErrorMessageFromResponse} from '../helpers/requests';
@@ -33,12 +33,13 @@ const stopTable = ((action$, store: MiddlewareAPI<StoreStructure>) => {
             .mergeMap((ajaxData: ResponseOk | ResponseError) => {
               if (ajaxData.status === STATUS_OK) {
                 const appData = store.getState().app;
-                const currTables = appData.tablesData.tables;
-                const newTables: Tables = clone(currTables);
-                const currSessions = appData.tableSessionsData.tableSessions;
+                const newTables: Tables = clone( appData.tablesData.tables );
+                const currSessions = clone( appData.tableSessionsData.tableSessions );
                 const session = (ajaxData as ResponseOk).response.session;
                 const convertedSession = tableSessionToFront(session);
-                const newSessions = currSessions.concat([convertedSession]);
+                const newSessions = assign({
+                  [convertedSession.id]: convertedSession
+                }, currSessions);
                 const pendingStopAction = pendingRequestTableStatusChange(false, tableId);
                 const tableSessionsChangedAction = tableSessionsChanged(newSessions);
 

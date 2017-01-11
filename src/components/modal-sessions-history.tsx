@@ -3,11 +3,10 @@ import {connect} from 'react-redux';
 import MouseEvent = React.MouseEvent;
 import * as Modal from 'react-modal';
 
-import {StoreStructure, Table, TableSession, Tables} from '../interfaces/store-models';
+import {StoreStructure, Table, TableSession, Tables, TableSessions} from '../interfaces/store-models';
 import {PropsExtendedByConnect} from '../interfaces/component';
 import modalSessionsHistoryChanged from '../action-creators/modal-sessions-history-changed';
 import SessionsHistory from './sessions-history';
-import {getElementById} from '../helpers/index';
 
 interface Props {
 }
@@ -16,7 +15,7 @@ interface MappedProps {
   isOpen: boolean;
   tableId?: number;
   tables: Tables;
-  allTableSessions: TableSession[];
+  allTableSessions: TableSessions;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
@@ -40,16 +39,16 @@ class Component extends React.Component<PropsFromConnect, {}> {
     this.requestToClose();
   };
 
-  static getTableSessions(allSessions: TableSession[], table?: Table) {
-    if (table) {
-      return table.sessionsHistory.reduce((memoArr: TableSession[], id) => {
-        const session = getElementById<TableSession>(allSessions, id);
+  static getTableSessions(allSessions: TableSessions, table: Table): TableSessions {
+    return table.sessionsHistory.reduce((memo: TableSession[], id) => {
+      const session = allSessions[id];
 
-        return memoArr.concat(session ? [session] : []);
-      }, [] as TableSession[]);
-    } else {
-      return;
-    }
+      if (session) {
+        memo[session.id] = session;
+      }
+
+      return memo;
+    }, {} as TableSessions);
   };
 
   render() {
@@ -58,7 +57,11 @@ class Component extends React.Component<PropsFromConnect, {}> {
     if (tableId) {
       const currentTable = tables[tableId];
       const historyPending = Component.getSessionsHistoryInPending(currentTable);
-      const sessions = Component.getTableSessions(allTableSessions, currentTable);
+      let sessions;
+
+      if (currentTable) {
+        sessions = Component.getTableSessions(allTableSessions, currentTable);
+      }
 
       return (
         <Modal

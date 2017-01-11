@@ -1,7 +1,7 @@
 import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
 import {MiddlewareAPI} from 'redux';
-import {clone} from 'lodash';
+import {clone, assign} from 'lodash';
 
 import {REQUESTING_TABLE_START} from '../constants/action-names';
 import {post, getErrorMessageFromResponse} from '../helpers/requests';
@@ -35,10 +35,12 @@ const startTable = ((action$, store: MiddlewareAPI<StoreStructure>) => {
                 const appData = store.getState().app;
                 const currTables = appData.tablesData.tables;
                 const newTables: Tables = clone(currTables);
-                const currSessions = appData.tableSessionsData.tableSessions;
+                const currSessions = clone( appData.tableSessionsData.tableSessions );
                 const session = (ajaxData as ResponseOk).response.session;
                 const convertedSession = tableSessionToFront(session);
-                const newSessions = currSessions.concat([convertedSession]);
+                const newSessions = assign({}, currSessions, {
+                  [convertedSession.id]: convertedSession
+                });
                 const pendingStopAction = pendingRequestTableStatusChange(false, tableId);
                 const tableSessionsChangedAction = tableSessionsChanged(newSessions);
 

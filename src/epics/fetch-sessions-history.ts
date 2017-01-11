@@ -1,7 +1,7 @@
 import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
 import {MiddlewareAPI} from 'redux';
-import {clone} from 'lodash';
+import {clone, assign} from 'lodash';
 
 import {FETCHING_TABLE_SESSIONS_HISTORY} from '../constants/action-names';
 import {get, getErrorMessageFromResponse} from '../helpers/requests';
@@ -18,7 +18,7 @@ import tableSessionsChanged from '../action-creators/table-sessions-changed';
 import fetchingTableSessionsHistoryFailed from '../action-creators/fetching-table-sessions-history-failed';
 import {ActionType} from '../action-creators/fetching-table-sessions-history';
 import {RequestSessionHistoryPayload} from '../interfaces/api-requests';
-import {StoreStructure, Tables} from '../interfaces/store-models';
+import {StoreStructure, Tables, TableSessions} from '../interfaces/store-models';
 import tablesChanged from '../action-creators/tables-changed';
 
 type ResponseOk = AjaxResponseTyped<ResponseSessionsHistoryPayload>;
@@ -55,7 +55,7 @@ const fetchSessionsHistory = ((action$, store: MiddlewareAPI<StoreStructure>) =>
                 const sessions = (ajaxData as ResponseOk).response.sessions;
                 const currentSessions = appData.tableSessionsData.tableSessions;
                 const convertedNewSessions = tableSessionsToFront(sessions);
-                const newSessions = currentSessions.concat(convertedNewSessions);
+                const newSessions: TableSessions = assign({}, currentSessions, convertedNewSessions);
                 const tablesWithUnsetPending = getTablesWithSetHistoryPending(tablesClone, tableId, false);
 
                 const setTableSessionsAction = tableSessionsChanged(newSessions);

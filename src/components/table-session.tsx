@@ -5,10 +5,9 @@ import MouseEvent = React.MouseEvent;
 import KeyboardEvent = React.KeyboardEvent;
 import {assign} from 'lodash';
 
-import {StoreStructure, TableSession as TableSessionType, AdminToken} from '../interfaces/store-models';
+import {StoreStructure, TableSession as TableSessionType, AdminToken, TableSessions} from '../interfaces/store-models';
 import {PropsExtendedByConnect} from '../interfaces/component';
 import requestingTableSessionChange from '../action-creators/requesting-table-session-change';
-import {getElementById} from '../helpers/index';
 
 interface Props {
   sessionId?: number;
@@ -21,7 +20,7 @@ interface State {
 
 interface MappedProps {
   adminToken: AdminToken;
-  sessions: TableSessionType[];
+  sessions: TableSessions;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
@@ -48,10 +47,6 @@ class Component extends React.Component<PropsFromConnect, State> {
       isFormatOfMinutes: !this.state.isFormatOfMinutes
     }));
   };
-
-  getSession() {
-    return getElementById(this.props.sessions, this.props.sessionId);
-  }
 
   static getDurationString(durationSeconds: number, isFormatOfMinutes: boolean): string {
     const duration = moment.duration({seconds: durationSeconds});
@@ -83,13 +78,13 @@ class Component extends React.Component<PropsFromConnect, State> {
   }
 
   onInputKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    const {sessionId, dispatch, adminToken} = this.props;
+    const {sessionId, dispatch, adminToken, sessions} = this.props;
 
     if (typeof sessionId !== 'number') {
       return;
     }
 
-    const session = this.getSession();
+    const session = sessions[sessionId];
     const input = event.currentTarget;
     const isEsc = event.keyCode === 27;
     const isEnter = event.keyCode === 13;
@@ -154,7 +149,8 @@ class Component extends React.Component<PropsFromConnect, State> {
   };
 
   render() {
-    const session = this.getSession();
+    const {sessions, sessionId} = this.props;
+    const session = typeof sessionId === 'number' ? sessions[sessionId] : null;
 
     if (session) {
       const {durationSeconds, startsAt} = session;

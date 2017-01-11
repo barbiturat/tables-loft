@@ -1,8 +1,11 @@
 import {Table as BackendTable, TableSession as TableSessionBackend} from '../../interfaces/backend-models';
-import {Table as FrontendTable, TableSession as TableSessionFrontend, Tables} from '../../interfaces/store-models';
+import {
+  Table as FrontendTable, TableSession as TableSessionFrontend, Tables,
+  TableSessions
+} from '../../interfaces/store-models';
 import * as moment from 'moment';
 
-const getFrontendTable = (table: BackendTable): FrontendTable => {
+const tableToFront = (table: BackendTable): FrontendTable => {
   const currentSessionId = table.currentSession && table.currentSession.id;
   const lastSessionId = table.lastSession && table.lastSession.id;
   const sessionsHistory: number[] = [];
@@ -32,7 +35,7 @@ const getFrontendTable = (table: BackendTable): FrontendTable => {
 
 export const tablesToFront = (tables: BackendTable[]): Tables => {
   return tables.reduce((memo: Tables, table) => {
-    const convertedTable = getFrontendTable(table);
+    const convertedTable = tableToFront(table);
 
     memo[convertedTable.id] = convertedTable;
 
@@ -52,6 +55,12 @@ export const tableSessionToFront = (tableSession: TableSessionBackend): TableSes
   };
 };
 
-export const tableSessionsToFront = (tableSessions: TableSessionBackend[]): TableSessionFrontend[] => {
-  return tableSessions.map((session) => tableSessionToFront(session));
+export const tableSessionsToFront = (tableSessions: TableSessionBackend[]): TableSessions => {
+  return tableSessions.reduce((memo: TableSessions, tableSession) => {
+    const convertedTableSession = tableSessionToFront(tableSession);
+
+    memo[convertedTableSession.id] = convertedTableSession;
+
+    return memo;
+  }, {} as TableSessions);
 };
