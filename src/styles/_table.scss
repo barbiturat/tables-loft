@@ -344,13 +344,13 @@ $shuffle-table-border-radius: 50px;
         .table_type_pool & {
           top: 50px;
           &:after {
-            background-image: url(../../public/img/icons/pool-table-yellow.svg);
+            background-image: url(../../public/img/icons/table-pool-yellow.svg);
           }
         }
 
         .table_type_tennis & {
           &:after {
-            background-image: url(../../public/img/icons/tennis-table-yellow.svg);
+            background-image: url(../../public/img/icons/table-tennis-yellow.svg);
           }
         }
 
@@ -359,7 +359,7 @@ $shuffle-table-border-radius: 50px;
           &:after {
             width: 14px;
             height: 14px;
-            background-image: url(../../public/img/icons/shuffle-board-yellow.svg);
+            background-image: url(../../public/img/icons/table-shuffle-board-yellow.svg);
           }
         }
 
@@ -368,7 +368,7 @@ $shuffle-table-border-radius: 50px;
           &:after {
             top: 47%;
             left: 12px;
-            background: url(../../public/img/icons/default-table-yellow.svg) 0 center no-repeat;
+            background: url(../../public/img/icons/table-default-yellow.svg) 0 center no-repeat;
           }
         }
 
