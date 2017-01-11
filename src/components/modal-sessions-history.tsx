@@ -69,7 +69,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
           isOpen={this.props.isOpen}
           shouldCloseOnOverlayClick={true}
           onRequestClose={this.handleRequestClose}
-          className="modal modal_role_sessions-history"
+          className="modal modal_role_sessions-history modal_table_shuffle"
           overlayClassName="modal__overlay"
         >
           <a className="modal__button-close" href=""

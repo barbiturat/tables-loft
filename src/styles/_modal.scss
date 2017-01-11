@@ -51,8 +51,7 @@
     top: -22px;
     @include border-radius(50%);
     background: $white url(../../public/img/icons/close-yellow.svg) center center no-repeat;
-    -webkit-background-size: 20px auto;
-    background-size: 20px auto;
+    @include background-size(20px auto);
     @include box-shadow(5px 5px 40px rgba(0, 0, 0, 0.3));
   }
   
@@ -81,8 +80,24 @@
   &__header-caption {
     display: inline-block;
     margin: 0;
+    padding-left: 30px;
     font-size: 22px;
     font-weight: 600;
+    background: url(../../public/img/icons/table-default-white.svg) left center no-repeat;
+    @include background-size(20px auto);
+
+    .modal_table_shuffle & {
+      background-image: url(../../public/img/icons/table-shuffle-board-white.svg);
+    }
+    .modal_table_pool & {
+      background-image: url(../../public/img/icons/table-pool-white.svg);
+    }
+    .modal_table_default & {
+      background-image: url(../../public/img/icons/table-default-white.svg);
+    }
+    .modal_table_tennis & {
+      background-image: url(../../public/img/icons/table-tennis-white.svg);
+    }
   }
 
   &__header-sub-caption {
