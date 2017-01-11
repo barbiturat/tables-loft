@@ -75,9 +75,9 @@ class Component extends React.Component<PropsFromConnect, {}> {
           <a className="modal__button-close" href=""
              onClick={this.onCloseClick}
           />
-          <div className="modal__header modal__header_role_sessions-history">
-            <h3 className="modal__header-caption modal__header-caption_role_sessions-history">Shuffle board 6</h3>
-            <h4 className="modal__header-sub-caption modal__header-sub-caption_role_sessions-history">History Today</h4>
+          <div className="modal__header">
+            <h3 className="modal__header-caption">Shuffle board 6</h3>
+            <h4 className="modal__header-sub-caption">History Today</h4>
           </div>
 
           <SessionsHistory

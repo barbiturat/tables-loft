@@ -70,13 +70,11 @@
     @include border-top-left-radius( $border-radius );
     @include border-top-right-radius( $border-radius );
 
-    &_role {
-      &_login-manager {
-        background-color: #cca711;
-      }
-      &_sessions-history {
-        background-color: #c69836;
-      }
+    .modal_role_login-manager {
+      background-color: #cca711;
+    }
+    .modal_role_sessions-history & {
+      background-color: #c69836;
     }
   }
 
@@ -85,10 +83,6 @@
     margin: 0;
     font-size: 22px;
     font-weight: 600;
-    &_role {
-      &_login-manager {}
-      &_sessions-history {}
-    }
   }
 
   &__header-sub-caption {
