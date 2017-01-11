@@ -18,5 +18,3 @@ interface FormSubmitActionPayload {
 }
 
 export type FormSubmitAction = ActionWithPayload<FormSubmitActionPayload>;
-
-export interface ModalSessionsHistoryChanged extends ModalSessionsHistory {}

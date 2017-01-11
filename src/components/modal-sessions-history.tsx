@@ -13,14 +13,21 @@ interface Props {
 
 interface MappedProps {
   isOpen: boolean;
-  tableId?: number;
   tables: Tables;
+  currentTable?: Table;
   allTableSessions: TableSessions;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
 class Component extends React.Component<PropsFromConnect, {}> {
+
+  static modalClasses = {
+    pool: 'modal_table_pool',
+    shuffleBoard: 'modal_table_shuffle',
+    tableTennis: 'modal_table_tennis',
+    generic: 'modal_table_default'
+  };
 
   static getSessionsHistoryInPending(currentTable?: Table) {
     return currentTable ? currentTable.isSessionsHistoryInPending : false;
@@ -52,16 +59,13 @@ class Component extends React.Component<PropsFromConnect, {}> {
   };
 
   render() {
-    const {tables, tableId, allTableSessions} = this.props;
+    const {allTableSessions, currentTable} = this.props;
 
-    if (tableId) {
-      const currentTable = tables[tableId];
+    if (currentTable) {
       const historyPending = Component.getSessionsHistoryInPending(currentTable);
-      let sessions;
-
-      if (currentTable) {
-        sessions = Component.getTableSessions(allTableSessions, currentTable);
-      }
+      const sessions = Component.getTableSessions(allTableSessions, currentTable);
+      const modalClass = Component.modalClasses[currentTable.tableType] || '';
+      const caption = currentTable.name;
 
       return (
         <Modal
@@ -69,14 +73,14 @@ class Component extends React.Component<PropsFromConnect, {}> {
           isOpen={this.props.isOpen}
           shouldCloseOnOverlayClick={true}
           onRequestClose={this.handleRequestClose}
-          className="modal modal_role_sessions-history modal_table_shuffle"
+          className={`modal modal_role_sessions-history ${modalClass}`}
           overlayClassName="modal__overlay"
         >
           <a className="modal__button-close" href=""
              onClick={this.onCloseClick}
           />
           <div className="modal__header">
-            <h3 className="modal__header-caption">Shuffle board 6</h3>
+            <h3 className="modal__header-caption">{caption}</h3>
             <h4 className="modal__header-sub-caption">History Today</h4>
           </div>
 
@@ -95,11 +99,21 @@ class Component extends React.Component<PropsFromConnect, {}> {
 
 const ModalSessionsHistory = connect<any, any, Props>(
   (state: StoreStructure, ownProps: Props): MappedProps => {
+    const appData = state.app;
+    const modalData = appData.modals.modalSessionsHistory;
+    const tables = appData.tablesData.tables;
+    const tableId = modalData.tableId;
+    let currentTable;
+
+    if (tableId) {
+      currentTable = tables[tableId];
+    }
+
     return {
-      isOpen: state.app.modals.modalSessionsHistory.isOpened,
-      tableId: state.app.modals.modalSessionsHistory.tableId,
-      tables: state.app.tablesData.tables,
-      allTableSessions: state.app.tableSessionsData.tableSessions
+      isOpen: modalData.isOpened,
+      tables,
+      currentTable,
+      allTableSessions: appData.tableSessionsData.tableSessions
     };
   }
 )(Component);
