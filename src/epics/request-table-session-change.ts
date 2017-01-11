@@ -1,7 +1,7 @@
 import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
 import {MiddlewareAPI} from 'redux';
-import {find, assign, clone} from 'lodash';
+import {assign, clone} from 'lodash';
 
 import {REQUESTING_TABLE_SESSION_CHANGE} from '../constants/action-names';
 import {request} from '../helpers/requests';
@@ -20,12 +20,6 @@ import {ActionType} from '../action-creators/requesting-table-session-change';
 
 type ResponseOk = AjaxResponseTyped<ResponseUpdateTableSessionPayload>;
 type ResponseError = AjaxErrorTyped<ResponseFailedPayload>;
-
-const getSessionById = (array: TableSession[], id: number) => {
-  return find(array, (el: TableSession) => {
-    return el.id === id;
-  });
-};
 
 const setNewParamsToSession = (sessions: TableSessions, sessionId: number, params: Partial<TableSession>) => {
   const session = sessions[sessionId];
