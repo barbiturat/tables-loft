@@ -69,12 +69,16 @@ class Component extends React.Component<PropsFromConnect, {}> {
           isOpen={this.props.isOpen}
           shouldCloseOnOverlayClick={true}
           onRequestClose={this.handleRequestClose}
+          className="modal modal_role_sessions-history"
+          overlayClassName="modal__overlay"
         >
-          <a href=""
+          <a className="modal__button-close" href=""
              onClick={this.onCloseClick}
-          >
-            close
-          </a>
+          />
+          <div className="modal__header modal__header_role_sessions-history">
+            <h3 className="modal__header-caption modal__header-caption_role_sessions-history">Shuffle board 6</h3>
+            <h4 className="modal__header-sub-caption modal__header-sub-caption_role_sessions-history">History Today</h4>
+          </div>
 
           <SessionsHistory
             isInPending={historyPending}

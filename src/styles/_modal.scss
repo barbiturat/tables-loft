@@ -22,6 +22,9 @@
     &_login-manager {
       width: 100px;
     }
+    &_sessions-history {
+      width: 100px;
+    }
   }
 
   &_adjust {
@@ -54,6 +57,9 @@
   }
   
   &__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     align-self: stretch;
     margin: 0 0 30px;
     padding: 18px 0;
@@ -61,10 +67,35 @@
     text-transform: uppercase;
     color: #fff;
     background-color: #cca711;
-    font-size: 22px;
-    font-weight: 600;
     @include border-top-left-radius( $border-radius );
     @include border-top-right-radius( $border-radius );
+
+    &_role {
+      &_login-manager {
+        background-color: #cca711;
+      }
+      &_sessions-history {
+        background-color: #c69836;
+      }
+    }
+  }
+
+  &__header-caption {
+    display: inline-block;
+    margin: 0;
+    font-size: 22px;
+    font-weight: 600;
+    &_role {
+      &_login-manager {}
+      &_sessions-history {}
+    }
+  }
+
+  &__header-sub-caption {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 400;
+    text-transform: uppercase;
   }
 
   &__description {

@@ -67,7 +67,9 @@ class Component extends React.Component<PropsFromConnect, {}> {
         <a className="modal__button-close" href=""
            onClick={this.onCloseClick}
         />
-        <h3 className="modal__header">Manager Mode</h3>
+        <div className="modal__header modal__header_role_login-manager">
+          <h3 className="modal__header-caption modal__header-caption_role_login-manager">Manager Mode</h3>
+        </div>
         <h4 className="modal__description">Type password to enter manager mode</h4>
 
         {Component.getWaitMessage(this.props.pending)}
