@@ -61,27 +61,6 @@ module.exports = {
         options: {
           limit: 100000
         }
-      },
-      {
-        test: /\.scss$/,
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              importLoaders: 1
-            }
-          },
-          'postcss-loader',
-          {
-            loader: 'sass-loader',
-            options: {
-              includePaths: [
-                pathFromRoot('./node_modules')
-              ]
-            }
-          }
-        ]
       }
     ]
   },
