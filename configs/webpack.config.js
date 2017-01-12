@@ -19,18 +19,6 @@ const plugins = [
       ROLLBAR_TOKEN: JSON.stringify(ROLLBAR_TOKEN),
       NODE_ENV: JSON.stringify(nodeEnv)  // NODE_ENV: '"production"' for decreasing size of react library
     }
-  }),
-  new webpack.LoaderOptionsPlugin({
-    test: /\.scss$/,
-    options: {
-      context: sourcePath,
-      debug: true,
-      postcss: () => [
-        autoprefixer({
-          browsers: ['> 1%', 'IE 7']
-        })
-      ]
-    }
   })
 ];
 
