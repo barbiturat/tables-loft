@@ -35,6 +35,7 @@ const plugins = [
 ];
 
 module.exports = {
+  devtool: isProd ? 'source-map' : 'eval',
   context: sourcePath,
   entry: {
     rollbar: './external-tools/rollbar-snippet.js'
@@ -42,5 +43,13 @@ module.exports = {
   output: {
     filename: '[name].js',
     path: outputPath
-  }
+  },
+  resolve: {
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
+    modules: [
+      sourcePath,
+      'node_modules'
+    ]
+  },
+  plugins: plugins
 };
