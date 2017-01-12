@@ -1,7 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const autoprefixer = require('autoprefixer');
-const appSettings = require("../package.json").appSettings;
+const appSettings = require('../package.json').appSettings;
 
 const isProd = process.argv.includes('-p');
 const nodeEnv = isProd ? 'production' : 'development';
@@ -14,6 +14,7 @@ function pathFromRoot(url = '') {
 
 const plugins = [
   new webpack.DefinePlugin({
+    rollbarToken: '"someToken"',
     'process.env': {
       NODE_ENV: JSON.stringify(nodeEnv)  // NODE_ENV: '"production"' for decreasing size of react library
     }
@@ -36,6 +37,7 @@ module.exports = {
   devtool: isProd ? 'source-map' : 'eval',
   context: sourcePath,
   entry: {
+    rollbar: './external-tools/rollbar-snippet.js',
     bundle: './index.tsx'
   },
   output: {
