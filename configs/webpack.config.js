@@ -3,6 +3,7 @@ const path = require('path');
 const autoprefixer = require('autoprefixer');
 const appSettings = require('../package.json').appSettings;
 
+const ROLLBAR_TOKEN = process.env.ROLLBAR_TOKEN || '';
 const isProd = process.argv.includes('-p');
 const nodeEnv = isProd ? 'production' : 'development';
 const sourcePath = pathFromRoot('./src');
@@ -14,8 +15,8 @@ function pathFromRoot(url = '') {
 
 const plugins = [
   new webpack.DefinePlugin({
-    rollbarToken: '"someToken"',
     'process.env': {
+      ROLLBAR_TOKEN: JSON.stringify(ROLLBAR_TOKEN),
       NODE_ENV: JSON.stringify(nodeEnv)  // NODE_ENV: '"production"' for decreasing size of react library
     }
   }),

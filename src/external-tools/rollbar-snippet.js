@@ -1,9 +1,9 @@
 var _rollbarConfig = {
-  accessToken: rollbarToken,
+  accessToken: process.env.ROLLBAR_TOKEN,
   captureUncaught: true,
   captureUnhandledRejections: true,
   payload: {
-    environment: process.env
+    environment: process.env.NODE_ENV
   }
 };
 

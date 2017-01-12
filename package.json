@@ -7,7 +7,7 @@
     "clean": "rimraf public/resources",
     "build:dev": "webpack --config ./configs/webpack.config.js",
     "build:dev:watch": "webpack --watch --config ./configs/webpack.config.js",
-    "build:prod": "webpack -p --bail --config configs/webpack.config.js",
+    "build:prod": "ROLLBAR_TOKEN=lalala webpack -p --bail --config configs/webpack.config.js",
     "build-dev": "npm run clean && npm run build:dev",
     "build-prod": "npm run clean && npm run build:prod",
     "dev-server": "webpack-dev-server --config ./configs/webpack.config.js",
