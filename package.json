@@ -19,7 +19,7 @@
     "build-fake-server-watch": "rimraf fake-server/out && tsc --watch --project ./fake-server/tsconfig.json",
     "build-and-run-fake-server": "npm run build-fake-server && node ./fake-server/out/fake-server",
     "run-fake-server": "node ./fake-server/out/fake-server",
-    "postinstall": "typings install && npm run build:dev",
+    "postinstall": "typings install && npm run build-prod",
     "test": "karma start configs/karma.conf.js",
     "test:cov": "karma start configs/karma.conf.js --single-run && remap-istanbul -i coverage/coverage-raw.json -o coverage/coverage.txt -t lcovonly"
   },
