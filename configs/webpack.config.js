@@ -44,6 +44,46 @@ module.exports = {
     filename: '[name].js',
     path: outputPath
   },
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        exclude: /node_modules/,
+        loader: 'ts-loader',
+        options: {
+          configFileName: pathFromRoot('./configs/tsconfig.json')
+        }
+      },
+      {
+        test: /\.(png|woff|woff2|eot|ttf|otf|svg)$/,
+        loader: 'url-loader',
+        options: {
+          limit: 100000
+        }
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1
+            }
+          },
+          'postcss-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              includePaths: [
+                pathFromRoot('./node_modules')
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
     modules: [
