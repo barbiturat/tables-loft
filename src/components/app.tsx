@@ -2,6 +2,7 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 
 import {AnyDict} from '../interfaces/index';
+import * as styles from '../styles/index.scss';
 import fetchingTables from '../action-creators/fetching-tables';
 import {PropsExtendedByConnect} from '../interfaces/component';
 import {StoreStructure} from '../interfaces/store-models';
@@ -28,8 +29,10 @@ class App extends React.Component<PropsFromConnect, AnyDict> {
 
   render() {
     return (
+      /* data-styles is used just to load styles */
       <div
           className="app"
+          data-styles={styles}
       >
         {this.props.children}
 
