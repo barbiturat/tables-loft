@@ -7,7 +7,6 @@ import {StoreStructure, Table, TableSession, Tables, TableSessions} from '../int
 import {PropsExtendedByConnect} from '../interfaces/component';
 import modalSessionsHistoryChanged from '../action-creators/modal-sessions-history-changed';
 import SessionsHistory from './sessions-history';
-import SessionsScreen from './sessions-screen';
 
 interface Props {
 }
@@ -29,6 +28,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
     tableTennis: 'modal_table_tennis',
     generic: 'modal_table_default'
   };
+
 
   static getSessionsHistoryInPending(currentTable?: Table) {
     return currentTable ? currentTable.isSessionsHistoryInPending : false;
@@ -89,7 +89,6 @@ class Component extends React.Component<PropsFromConnect, {}> {
             isInPending={historyPending}
             tableSessions={sessions}
           />
-          <SessionsScreen sessions={sessions}/>
 
         </Modal>
       );

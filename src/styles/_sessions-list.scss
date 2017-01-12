@@ -1,0 +1,62 @@
+@import 'settings';
+@import 'mixins';
+
+$table-side-padding: 70px;
+$table-columns-padding: $table-side-padding / 2;
+
+.sessions-list {
+  @include normalize-block();
+
+  display: table;
+  min-width: 550px;
+  font-size: 13px;
+
+  &__header {
+    display: table-row;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  &__tr {
+    display: table-row;
+
+    &:nth-child(even) {
+      background-color: $extra-light-gray;
+    }
+  }
+
+  &__th {
+    display: table-cell;
+    padding: 0 $table-columns-padding 12px;
+
+    &_role {
+      &_index {
+        padding-left: $table-side-padding;
+      }
+      &_time {
+      }
+      &_duration {
+        padding-right: $table-side-padding;
+      }
+    }
+  }
+
+  &__td {
+    display: table-cell;
+    padding: 13px $table-columns-padding;
+
+    &_role {
+      &_index {
+        padding-left: $table-side-padding;
+      }
+      &_time {
+        padding-left: $table-columns-padding + 22px;
+        background: url(../../public/img/icons/clock-black.svg) $table-columns-padding center no-repeat;
+        @include background-size(auto 13px);
+      }
+      &_duration {
+        padding-right: $table-side-padding;
+      }
+    }
+  }
+}
