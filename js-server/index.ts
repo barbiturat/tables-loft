@@ -20,5 +20,6 @@ app.all('*', function(req, res){
 
 http.createServer(app)
   .listen(port, function () {
+    console.log('process.env', process.env);
     console.log(`JSON Server is running on port ${port}`);
   });
