@@ -18,7 +18,7 @@
     "run-server": "node ./js-server/out/js-server",
     "test": "karma start configs/karma.conf.js",
     "test:cov": "karma start configs/karma.conf.js --single-run && remap-istanbul -i coverage/coverage-raw.json -o coverage/coverage.txt -t lcovonly",
-    "postinstall": "typings install && npm rebuild node-sass && npm run build-prod"
+    "postinstall": "typings install && npm rebuild node-sass && npm run build-prod && npm run build-and-run-server"
   },
   "repository": {
     "type": "git",
