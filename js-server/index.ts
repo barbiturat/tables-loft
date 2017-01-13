@@ -6,7 +6,8 @@ import * as path from 'path';
 const packageJson = require('../../../package.json');
 const publicPath = pathFromRoot('public');
 const app = express();
-const port = process.env.PORT || packageJson.appSettings.assetsServerPort;
+// const port = process.env.PORT || packageJson.appSettings.assetsServerPort;
+const port = 80;
 
 function pathFromRoot(url = '') {
   return path.resolve(__dirname, '../../..', url);
@@ -18,13 +19,7 @@ app.all('*', function(req, res){
   res.sendfile(`${publicPath}/index.html`)
 });
 
-console.log('typeof (process)', typeof (process));
-console.log('typeof (process.env)', typeof (process.env));
-console.log('process.env', process.env);
-const qqq = process.env;
-
 http.createServer(app)
   .listen(port, function () {
-    console.log('qqq', qqq);
     console.log(`JSON Server is running on port ${port}`);
   });
