@@ -3,5 +3,5 @@
 node_modules/
 typings/
 public/resources/
-fake-server/out/
+js-server/out/
 *.log

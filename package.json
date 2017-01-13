@@ -13,15 +13,12 @@
     "build:prod": "webpack -p --bail --config configs/webpack.config.js",
     "build-dev": "npm run clean && npm run build:dev",
     "build-prod": "npm run clean && npm run build:prod",
-    "dev-server": "webpack-dev-server --config ./configs/webpack.config.js",
-    "start": "npm run clean && npm run build:dev:watch & npm run dev-server",
-    "build-fake-server": "rimraf fake-server/out && tsc --project ./fake-server/tsconfig.json",
-    "build-fake-server-watch": "rimraf fake-server/out && tsc --watch --project ./fake-server/tsconfig.json",
-    "build-and-run-fake-server": "npm run build-fake-server && node ./fake-server/out/fake-server",
-    "run-fake-server": "node ./fake-server/out/fake-server",
-    "postinstall": "typings install && npm run build-prod",
+    "build-server": "rimraf js-server/out && tsc --project ./js-server/tsconfig.json",
+    "build-and-run-server": "npm run build-server && node ./js-server/out/js-server",
+    "run-server": "node ./js-server/out/js-server",
     "test": "karma start configs/karma.conf.js",
-    "test:cov": "karma start configs/karma.conf.js --single-run && remap-istanbul -i coverage/coverage-raw.json -o coverage/coverage.txt -t lcovonly"
+    "test:cov": "karma start configs/karma.conf.js --single-run && remap-istanbul -i coverage/coverage-raw.json -o coverage/coverage.txt -t lcovonly",
+    "postinstall": "typings install && npm run build-prod"
   },
   "repository": {
     "type": "git",
@@ -31,11 +28,10 @@
   "license": "ISC",
   "homepage": "https://bitbucket.org/gdekefir/boilerplate_1#readme",
   "appSettings": {
-    "devServerPort": 8080,
+    "assetsServerPort": 5000,
     "apiServerPort": 8081
   },
   "dependencies": {
-    "@types/body-parser": "0.0.33",
     "@types/classnames": "0.0.32",
     "@types/express": "4.0.34",
     "@types/history": "2.0.41",
@@ -47,7 +43,6 @@
     "@types/react-router": "2.0.41",
     "@types/redux-router": "1.0.35",
     "@types/validator": "5.7.35",
-    "body-parser": "1.15.2",
     "chai": "3.5.0",
     "chai-enzyme": "0.6.1",
     "classnames": "2.2.5",
