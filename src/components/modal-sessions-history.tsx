@@ -2,6 +2,7 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import MouseEvent = React.MouseEvent;
 import * as Modal from 'react-modal';
+import * as ReactPaginate from 'react-paginate';
 
 import {StoreStructure, Table, TableSession, Tables, TableSessions} from '../interfaces/store-models';
 import {PropsExtendedByConnect} from '../interfaces/component';
@@ -88,6 +89,23 @@ class Component extends React.Component<PropsFromConnect, {}> {
           <SessionsHistory
             isInPending={historyPending}
             tableSessions={sessions}
+          />
+
+          <ReactPaginate
+            pageCount={15}
+            pageRangeDisplayed={3}
+            marginPagesDisplayed={1}
+            initialPage={7}
+            previousLabel="previous"
+            nextLabel="next"
+            breakLabel={<a href="">...</a>}
+            breakClassName="break-me"
+            containerClassName="paginator"
+            pageClassName="paginator__button paginator__button_role_page"
+            previousClassName="paginator__button paginator__button_role_prev"
+            nextClassName="paginator__button paginator__button_role_next"
+            activeClassName="active"
+            disabledClassName="disabled"
           />
 
         </Modal>
