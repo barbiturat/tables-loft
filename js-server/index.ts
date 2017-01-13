@@ -4,9 +4,9 @@ import * as path from 'path';
 
 // tslint:disable-next-line:no-require-imports
 const packageJson = require('../../../package.json');
-const appPort = packageJson.appSettings.assetsServerPort;
 const publicPath = pathFromRoot('public');
 const app = express();
+const port = process.env.PORT || packageJson.appSettings.assetsServerPort;
 
 function pathFromRoot(url = '') {
   return path.resolve(__dirname, '../../..', url);
@@ -19,6 +19,6 @@ app.all('*', function(req, res){
 });
 
 http.createServer(app)
-  .listen(appPort, function () {
-    console.log(`JSON Server is running on port ${appPort}`);
+  .listen(port, function () {
+    console.log(`JSON Server is running on port ${port}`);
   });
