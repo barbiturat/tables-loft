@@ -18,8 +18,13 @@ app.all('*', function(req, res){
   res.sendfile(`${publicPath}/index.html`)
 });
 
+console.log('typeof (process)', typeof (process));
+console.log('typeof (process.env)', typeof (process.env));
+console.log('process.env', process.env);
+const qqq = process.env;
+
 http.createServer(app)
   .listen(port, function () {
-    console.log('process.env', process.env);
-    // console.log(`JSON Server is running on port ${port}`);
+    console.log('qqq', qqq);
+    console.log(`JSON Server is running on port ${port}`);
   });
