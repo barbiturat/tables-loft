@@ -20,10 +20,10 @@
 
   &_role {
     &_login-manager {
-      width: 100px;
+      min-width: 550px;
     }
     &_sessions-history {
-      width: 100px;
+      min-width: 550px;
     }
   }
 
@@ -105,6 +105,7 @@
     font-size: 17px;
     font-weight: 400;
     text-transform: uppercase;
+    line-height: 1;
   }
 
   &__description {

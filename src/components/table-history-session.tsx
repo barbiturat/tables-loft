@@ -65,12 +65,12 @@ class Component extends React.Component<PropsFromConnect, State> {
 
       return (
         <div
-            className=""
+            className="sessions-list__tr"
             onClick={this.onSessionInfoClick}
         >
-          <span className="">Last Session</span>
-          <span className="">{finishTime}</span>
-          <span className={`${adminEditedClassName}`}>{durationString}</span>
+          <div className="sessions-list__td sessions-list__td_role_index">1</div>
+          <div className="sessions-list__td sessions-list__td_role_time">{finishTime}</div>
+          <div className="sessions-list__td sessions-list__td_role_duration">{durationString}</div>
         </div>
       );
     } else {
