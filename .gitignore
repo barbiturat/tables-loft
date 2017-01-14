@@ -5,3 +5,4 @@ typings/
 public/resources/
 js-server/out/
 *.log
+fake-api-server/out/fake-api-server/

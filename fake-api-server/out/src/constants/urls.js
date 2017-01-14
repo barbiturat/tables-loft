@@ -1,0 +1,10 @@
+"use strict";
+const index_1 = require("./index");
+exports.urlGetAdminToken = `${index_1.API_PREFIX}/api_tokens.json`;
+exports.urlLogin = `${index_1.API_PREFIX}/login`;
+exports.urlLogout = `${index_1.API_PREFIX}/logout`;
+exports.urlSessionHistory = `${index_1.API_PREFIX}/table_sessions/history.json`;
+exports.urlStartTable = `${index_1.API_PREFIX}/tables/:table_id/start.json`;
+exports.urlStopTable = `${index_1.API_PREFIX}/tables/:table_id/stop.json`;
+exports.urlTables = `${index_1.API_PREFIX}/tables.json`;
+exports.urlUpdateTableSession = `${index_1.API_PREFIX}/table_sessions/:session_id.json`;
