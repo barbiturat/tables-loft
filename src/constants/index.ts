@@ -1,1 +1,1 @@
-export const API_PREFIX = '/v1';
+export const API_PREFIX = 'https://boston-pool-api.jsmbars.co.uk:9927';
