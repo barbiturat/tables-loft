@@ -1,6 +1,7 @@
 import {Observable, AjaxResponse, AjaxError} from 'rxjs';
-import {AjaxErrorTyped} from '../interfaces/index';
+import {AjaxErrorTyped, AjaxResponseDefined, Defined} from '../interfaces/index';
 import {ResponseFailedPayload} from '../interfaces/api-responses';
+import {STATUS_OK} from '../constants/used-http-status-codes';
 
 const handleError = (ajaxErrorData: AjaxError): Observable<AjaxError> => {
   /*if (ajaxErrorData.status === 401) {
@@ -57,3 +58,9 @@ export const getErrorMessageFromResponse = (ajaxData?: AjaxErrorTyped<ResponseFa
     ajaxData.xhr.response.error :
     defaultErrorMessage;
 };
+
+export const isAjaxResponseDefined = < TResponseDefined extends AjaxResponseDefined<Defined> >
+  (ajaxResponse: any): ajaxResponse is TResponseDefined => {
+  return ajaxResponse!.response !== null && ajaxResponse!.status === STATUS_OK;
+};
+

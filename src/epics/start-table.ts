@@ -4,10 +4,9 @@ import {MiddlewareAPI} from 'redux';
 import {clone, assign} from 'lodash';
 
 import {REQUESTING_TABLE_START} from '../constants/action-names';
-import {post, getErrorMessageFromResponse} from '../helpers/requests';
+import {post, getErrorMessageFromResponse, isAjaxResponseDefined} from '../helpers/requests';
 import {ResponseFailedPayload, ResponseStartTablePayload} from '../interfaces/api-responses';
-import {AjaxResponseTyped, AjaxErrorTyped} from '../interfaces/index';
-import {STATUS_OK} from '../constants/used-http-status-codes';
+import {AjaxResponseTyped, AjaxErrorTyped, AjaxResponseDefined} from '../interfaces/index';
 import {urlStartTable} from '../constants/urls';
 import {SimpleAction} from '../interfaces/actions';
 import requestingTableStartFailed from '../action-creators/requesting-table-start-failed';
@@ -19,6 +18,7 @@ import tableSessionsChanged from '../action-creators/table-sessions-changed';
 import {tableSessionToFront} from '../helpers/api-data-converters/index';
 
 type ResponseOk = AjaxResponseTyped<ResponseStartTablePayload>;
+type ResponseOkDefined = AjaxResponseDefined<ResponseStartTablePayload>;
 type ResponseError = AjaxErrorTyped<ResponseFailedPayload>;
 
 const startTable = ((action$, store: MiddlewareAPI<StoreStructure>) => {
@@ -31,12 +31,12 @@ const startTable = ((action$, store: MiddlewareAPI<StoreStructure>) => {
         .mergeMap(() =>
           post(url)
             .mergeMap((ajaxData: ResponseOk | ResponseError) => {
-              if (ajaxData.status === STATUS_OK) {
+              if ( isAjaxResponseDefined<ResponseOkDefined>(ajaxData) ) {
                 const appData = store.getState().app;
                 const currTables = appData.tablesData.tables;
                 const newTables: Tables = clone(currTables);
                 const currSessions = clone( appData.tableSessionsData.tableSessions );
-                const session = (ajaxData as ResponseOk).response.session;
+                const session = ajaxData.response.session;
                 const convertedSession = tableSessionToFront(session);
                 const newSessions = assign({}, currSessions, {
                   [convertedSession.id]: convertedSession

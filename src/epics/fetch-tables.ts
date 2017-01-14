@@ -2,10 +2,9 @@ import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
 
 import {FETCHING_TABLES} from '../constants/action-names';
-import {get, getErrorMessageFromResponse} from '../helpers/requests';
+import {get, getErrorMessageFromResponse, isAjaxResponseDefined} from '../helpers/requests';
 import {ResponseTablesPayload, ResponseFailedPayload} from '../interfaces/api-responses';
-import {AjaxResponseTyped, AjaxErrorTyped} from '../interfaces/index';
-import {STATUS_OK} from '../constants/used-http-status-codes';
+import {AjaxResponseTyped, AjaxErrorTyped, AjaxResponseDefined} from '../interfaces/index';
 import pendingTables from '../action-creators/pending-tables';
 import fetchingTablesFailed from '../action-creators/fetching-tables-failed';
 import {urlTables} from '../constants/urls';
@@ -17,6 +16,7 @@ import tablesChanged from '../action-creators/tables-changed';
 import {Tables} from '../interfaces/store-models';
 
 type ResponseOk = AjaxResponseTyped<ResponseTablesPayload>;
+type ResponseOkDefined = AjaxResponseDefined<ResponseTablesPayload>;
 type ResponseError = AjaxErrorTyped<ResponseFailedPayload>;
 
 const getTableSessionsFromTables = (tables: TableBackend[]) => {
@@ -28,7 +28,6 @@ const getTableSessionsFromTables = (tables: TableBackend[]) => {
 
     return memo;
   }, []);
-
 };
 
 const fetchTables = ((action$) => {
@@ -39,8 +38,8 @@ const fetchTables = ((action$) => {
         .mergeMap(() =>
           get(urlTables)
             .mergeMap((ajaxData: ResponseOk | ResponseError) => {
-              if (ajaxData.status === STATUS_OK) {
-                const tables = (ajaxData as ResponseOk).response.tables;
+              if ( isAjaxResponseDefined<ResponseOkDefined>(ajaxData) ) {
+                const tables = ajaxData.response.tables;
                 const tableSessions = getTableSessionsFromTables(tables);
                 const convertedTables: Tables = tablesToFront(tables);
                 const convertedTableSessions = tableSessionsToFront(tableSessions);
@@ -56,8 +55,10 @@ const fetchTables = ((action$) => {
                 );
               } else {
                 const errorMessage = getErrorMessageFromResponse(ajaxData as ResponseError);
+                const tablesPendingStop = pendingTables(false);
 
                 return Observable.of<any>(
+                  tablesPendingStop,
                   fetchingTablesFailed(errorMessage)
                 );
               }

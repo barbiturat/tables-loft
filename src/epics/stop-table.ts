@@ -4,10 +4,9 @@ import {MiddlewareAPI} from 'redux';
 import {assign, clone} from 'lodash';
 
 import {REQUESTING_TABLE_STOP} from '../constants/action-names';
-import {post, getErrorMessageFromResponse} from '../helpers/requests';
+import {post, getErrorMessageFromResponse, isAjaxResponseDefined} from '../helpers/requests';
 import {ResponseFailedPayload, ResponseStopTablePayload} from '../interfaces/api-responses';
-import {AjaxResponseTyped, AjaxErrorTyped} from '../interfaces/index';
-import {STATUS_OK} from '../constants/used-http-status-codes';
+import {AjaxResponseTyped, AjaxErrorTyped, AjaxResponseDefined} from '../interfaces/index';
 import {urlStopTable} from '../constants/urls';
 import {SimpleAction} from '../interfaces/actions';
 import {ActionType} from '../action-creators/requesting-table-start';
@@ -19,6 +18,7 @@ import {tableSessionToFront} from '../helpers/api-data-converters/index';
 import requestingTableStopFailed from '../action-creators/requesting-table-stop-failed';
 
 type ResponseOk = AjaxResponseTyped<ResponseStopTablePayload>;
+type ResponseOkDefined = AjaxResponseDefined<ResponseStopTablePayload>;
 type ResponseError = AjaxErrorTyped<ResponseFailedPayload>;
 
 const stopTable = ((action$, store: MiddlewareAPI<StoreStructure>) => {
@@ -31,11 +31,11 @@ const stopTable = ((action$, store: MiddlewareAPI<StoreStructure>) => {
         .mergeMap(() =>
           post(url)
             .mergeMap((ajaxData: ResponseOk | ResponseError) => {
-              if (ajaxData.status === STATUS_OK) {
+              if ( isAjaxResponseDefined<ResponseOkDefined>(ajaxData) ) {
                 const appData = store.getState().app;
                 const newTables: Tables = clone( appData.tablesData.tables );
                 const currSessions = clone( appData.tableSessionsData.tableSessions );
-                const session = (ajaxData as ResponseOk).response.session;
+                const session = ajaxData.response.session;
                 const convertedSession = tableSessionToFront(session);
                 const newSessions = assign({
                   [convertedSession.id]: convertedSession

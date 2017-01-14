@@ -3,11 +3,10 @@ import {Epic} from 'redux-observable';
 import {actions} from 'react-redux-form';
 
 import {REQUESTING_ADMIN_TOKEN} from '../constants/action-names';
-import {post} from '../helpers/requests';
+import {post, isAjaxResponseDefined} from '../helpers/requests';
 import {ResponseGetAdminTokenFailedPayload, ResponseGetAdminTokenPayload
 } from '../interfaces/api-responses';
-import {AjaxResponseTyped, AjaxErrorTyped} from '../interfaces/index';
-import {STATUS_OK} from '../constants/used-http-status-codes';
+import {AjaxResponseTyped, AjaxErrorTyped, AjaxResponseDefined} from '../interfaces/index';
 import {RequestGetAdminTokenPayload} from '../interfaces/api-requests';
 import {urlGetAdminToken} from '../constants/urls';
 import {SimpleAction, FormSubmitAction} from '../interfaces/actions';
@@ -15,6 +14,7 @@ import adminTokenUpdated from '../action-creators/admin-token-updated';
 import modalAdminLoginOpened from '../action-creators/modal-admin-login-opened';
 
 type ResponseOk = AjaxResponseTyped<ResponseGetAdminTokenPayload>;
+type ResponseOkDefined = AjaxResponseDefined<ResponseGetAdminTokenPayload>;
 type ResponseError = AjaxErrorTyped<ResponseGetAdminTokenFailedPayload>;
 
 const requestAdminToken = ((action$) => {
@@ -28,8 +28,8 @@ const requestAdminToken = ((action$) => {
         .mergeMap(() =>
           post(urlGetAdminToken, dataToSend)
             .mergeMap((ajaxData: ResponseOk | ResponseError) => {
-              if (ajaxData.status === STATUS_OK) {
-                const accessToken = (ajaxData as ResponseOk).response.accessToken;
+              if ( isAjaxResponseDefined<ResponseOkDefined>(ajaxData) ) {
+                const accessToken = ajaxData.response.accessToken;
 
                 const setSubmittedAction = actions.setSubmitted(formModelPath, true);
                 const setAdminTokenAction = adminTokenUpdated(accessToken);
