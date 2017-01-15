@@ -33,7 +33,7 @@
   "license": "ISC",
   "homepage": "https://bitbucket.org/gdekefir/boilerplate_1#readme",
   "appSettings": {
-    "assetsServerPort": 5000,
+    "assetsServerPort": 433,
     "apiServerPort": 8081
   },
   "dependencies": {
