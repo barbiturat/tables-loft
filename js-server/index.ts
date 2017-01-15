@@ -7,7 +7,7 @@ const packageJson = require('../../../package.json');
 const publicPath = pathFromRoot('public');
 const app = express();
 // const port = process.env.PORT || packageJson.appSettings.assetsServerPort;
-const port = 433;
+const port = 5000;
 
 function pathFromRoot(url = '') {
   return path.resolve(__dirname, '../../..', url);
