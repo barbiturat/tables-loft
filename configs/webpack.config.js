@@ -1,7 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const autoprefixer = require('autoprefixer');
-const appSettings = require('../package.json').appSettings;
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const ROLLBAR_TOKEN = process.env.ROLLBAR_TOKEN || '';
 const isProd = process.argv.includes('-p');
@@ -14,11 +14,18 @@ function pathFromRoot(url = '') {
 }
 
 const plugins = [
+  new webpack.optimize.CommonsChunkPlugin({
+    names: ['vendor', 'manifest']
+  }),
   new webpack.DefinePlugin({
     'process.env': {
       ROLLBAR_TOKEN: JSON.stringify(ROLLBAR_TOKEN),
       NODE_ENV: JSON.stringify(nodeEnv)  // NODE_ENV: '"production"' for decreasing size of react library
     }
+  }),
+  new HtmlWebpackPlugin({
+    filename: pathFromRoot('./public/index.html'),
+    template: `${sourcePath}/index.ejs`
   })
 ];
 
@@ -27,10 +34,27 @@ module.exports = {
   context: sourcePath,
   entry: {
     rollbar: './external-tools/rollbar-snippet.js',
-    bundle: './index.tsx'
+    bundle: './index.tsx',
+    vendor: [
+      'classnames',
+      'lodash',
+      'moment',
+      'react',
+      'react-dom',
+      'react-modal',
+      'react-redux',
+      'react-redux-form',
+      'react-router',
+      'redux',
+      'redux-observable',
+      'redux-router',
+      'reselect',
+      'rxjs',
+      'validator'
+    ]
   },
   output: {
-    filename: '[name].js',
+    filename: '[name].[chunkhash].js',
     path: outputPath
   },
   module: {
