@@ -1,4 +1,5 @@
 import {Observable, AjaxResponse, AjaxError} from 'rxjs';
+import * as queryString from 'query-string';
 
 import {AjaxErrorTyped, AjaxResponseDefined, Defined} from '../interfaces/index';
 import {ResponseFailedPayload} from '../interfaces/api-responses';
@@ -27,17 +28,19 @@ const prolongSession = (ajaxData: AjaxResponse) => {
 };
 */
 
-export const get = (url: string, headers?: Object): Observable<AjaxResponse | AjaxError> => {
+export const get = (url: string, dataToSend = {}, headers = {}): Observable<AjaxResponse | AjaxError> => {
+  const serializedData = queryString.stringify(dataToSend);
   const extendedHeaders = getExtendedHeaders(headers);
+  const newUrl = `${url}?${serializedData}`;
 
-  return Observable.ajax.get(url, extendedHeaders)
-    // .map(prolongSession)
+  return Observable.ajax.get(newUrl, extendedHeaders)
+  // .map(prolongSession)
     .catch((ajaxErrorData: AjaxError) => {
       return handleError(ajaxErrorData);
     });
 };
 
-export const post = (url: string, body?: any, headers?: Object): Observable<AjaxResponse | AjaxError> => {
+export const post = (url: string, body?: any, headers = {}): Observable<AjaxResponse | AjaxError> => {
   const extendedHeaders = getExtendedHeaders(headers);
 
   return Observable.ajax.post(url, body, extendedHeaders)
@@ -47,7 +50,7 @@ export const post = (url: string, body?: any, headers?: Object): Observable<Ajax
     });
 };
 
-export const request = (method: string, url: string, body?: any, headers?: Object): Observable<AjaxResponse | AjaxError> => {
+export const request = (method: string, url: string, body?: any, headers = {}): Observable<AjaxResponse | AjaxError> => {
   const extendedHeaders = getExtendedHeaders(headers);
 
   return Observable.ajax({
