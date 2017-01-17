@@ -23,6 +23,7 @@
     "test": "karma start configs/karma.conf.js",
     "test:cov": "karma start configs/karma.conf.js --single-run && remap-istanbul -i coverage/coverage-raw.json -o coverage/coverage.txt -t lcovonly",
     "start": "node ./js-server/out/js-server",
+    "start-locally": "npm run build-dev & npm run build-and-run-fake-api-server & npm run build-and-run-server",
     "postinstall": "typings install && npm rebuild node-sass && npm run build-prod && npm run build-server"
   },
   "repository": {
