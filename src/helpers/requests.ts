@@ -1,10 +1,8 @@
 import {Observable, AjaxResponse, AjaxError} from 'rxjs';
-import {assign} from 'lodash';
 
 import {AjaxErrorTyped, AjaxResponseDefined, Defined} from '../interfaces/index';
 import {ResponseFailedPayload} from '../interfaces/api-responses';
 import {STATUS_OK} from '../constants/used-http-status-codes';
-import store from '../store/index';
 
 const handleError = (ajaxErrorData: AjaxError): Observable<AjaxError> => {
   /*if (ajaxErrorData.status === 401) {
@@ -14,12 +12,7 @@ const handleError = (ajaxErrorData: AjaxError): Observable<AjaxError> => {
 };
 
 const getExtendedHeaders = (headers = {}): Object => {
-  const token = store.getState().app.adminToken;
-  const dataToAdd = token ? {
-      Authorization: `Basic ${token}`
-    } : {};
-
-  return assign(dataToAdd, headers);
+  return headers;
 };
 
 /*
