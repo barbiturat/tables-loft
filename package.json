@@ -8,8 +8,8 @@
   },
   "scripts": {
     "clean": "rimraf public/resources",
-    "build:dev": "API_URL=http://localhost:8081 webpack --config ./configs/webpack.config.js",
-    "build:dev:watch": "API_URL=http://localhost:8081 webpack --watch --config ./configs/webpack.config.js",
+    "build:dev": "API_HOST=http://localhost API_PORT=8081 webpack --config ./configs/webpack.config.js",
+    "build:dev:watch": "API_HOST=http://localhost API_PORT=8081 webpack --watch --config ./configs/webpack.config.js",
     "build:prod": "webpack -p --bail --config configs/webpack.config.js",
     "build-dev": "npm run clean && npm run build:dev",
     "build-prod": "npm run clean && npm run build:prod",
