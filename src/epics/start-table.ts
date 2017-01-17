@@ -60,9 +60,11 @@ const startTable = ((action$, store: Store<StoreStructure>) => {
                 );
               } else {
                 const errorMessage = getErrorMessageFromResponse(ajaxData as ResponseError);
+                const pendingStopAction = pendingRequestTableStatusChange(false, tableId);
 
                 return Observable.of<any>(
-                  requestingTableStartFailed(errorMessage)
+                  requestingTableStartFailed(errorMessage),
+                  pendingStopAction
                 );
               }
             })

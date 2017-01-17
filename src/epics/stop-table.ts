@@ -59,8 +59,10 @@ const stopTable = ((action$, store: Store<StoreStructure>) => {
                 );
               } else {
                 const errorMessage = getErrorMessageFromResponse(ajaxData as ResponseError);
+                const pendingStopAction = pendingRequestTableStatusChange(false, tableId);
 
                 return Observable.of<any>(
+                  pendingStopAction,
                   requestingTableStopFailed(errorMessage)
                 );
               }

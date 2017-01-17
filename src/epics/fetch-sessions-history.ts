@@ -67,9 +67,14 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
                   setTableSessionsAction
                 );
               } else {
+                const appData = store.getState().app;
                 const errorMessage = getErrorMessageFromResponse(ajaxData as ResponseError);
+                const tablesClone = clone( appData.tablesData.tables );
+                const tablesWithUnsetPending = getTablesWithSetHistoryPending(tablesClone, tableId, false);
+                const setTablesWithoutPendingAction = tablesChanged(tablesWithUnsetPending);
 
                 return Observable.of<any>(
+                  setTablesWithoutPendingAction,
                   fetchingTableSessionsHistoryFailed(errorMessage)
                 );
               }
