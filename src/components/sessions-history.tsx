@@ -24,10 +24,16 @@ export default class SessionsHistory extends React.Component<Props, {}> {
 
   }
 
-  static getTableSessions (tableSessions: TableSessions = {}, isInPending: boolean) {
+  static getTableSessions (sessions: TableSessions = {}, isInPending: boolean) {
     if (isInPending) {
       return (
         <div className="sessions-list__wait"/>
+      );
+    } else if (!Object.keys(sessions).length) {
+      return (
+        <div className="sessions-list__message">
+          No sessions
+        </div>
       );
     } else {
       return (
@@ -39,12 +45,9 @@ export default class SessionsHistory extends React.Component<Props, {}> {
             <div className="sessions-list__th sessions-list__th_role_duration">Playing Time</div>
           </div>
 
-          {SessionsHistory.getRenderedSessions(tableSessions)}
-
+          {SessionsHistory.getRenderedSessions(sessions)}
         </div>
-
       );
-
     }
   };
 

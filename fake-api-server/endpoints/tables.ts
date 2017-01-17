@@ -82,25 +82,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           name: 'Shuffle Table 1',
           id: 103,
           tableType: 'shuffleBoard',
-          status: 'enabled',
-          currentSession: {
-            id: 15,
-            starts_at: moment().utc().subtract({
-              hours: 4,
-              minutes: 43,
-            }).toISOString(),
-            durationSeconds: moment.duration(2, 'hours').asSeconds(),
-            adminEdited: false
-          },
-          lastSession: {
-            id: 16,
-            starts_at: moment().utc().subtract({
-              hours: 6,
-              minutes: 55,
-            }).toISOString(),
-            durationSeconds: moment.duration(1, 'hours').asSeconds(),
-            adminEdited: true
-          }
+          status: 'enabled'
         },
         {
           name: 'Shuffle Table 2',
