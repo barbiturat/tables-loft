@@ -27,7 +27,7 @@ export default class SessionsHistory extends React.Component<Props, {}> {
   static getTableSessions (tableSessions: TableSessions = {}, isInPending: boolean) {
     if (isInPending) {
       return (
-        <div>Wait...</div>
+        <div className="sessions-list__wait"/>
       );
     } else {
       return (
@@ -53,13 +53,13 @@ export default class SessionsHistory extends React.Component<Props, {}> {
       <div className="sessions-screen">
         {SessionsHistory.getTableSessions(this.props.tableSessions, this.props.isInPending)}
 
-        <div className="paginator">
+        {/*<div className="paginator">
           <div className="paginator__button paginator__button_role_prev">Prev</div>
           <div className="paginator__button paginator__button_role_page">1</div>
           <div className="paginator__button paginator__button_role_page">2</div>
           <div className="paginator__button paginator__button_role_page">3</div>
           <div className="paginator__button paginator__button_role_next">Next</div>
-        </div>
+        </div>*/}
 
       </div>
     );

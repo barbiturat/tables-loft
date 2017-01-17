@@ -11,6 +11,13 @@ $table-columns-padding: $table-side-padding / 2;
   min-width: 550px;
   font-size: 13px;
 
+  &__wait {
+    width: 40px;
+    height: 40px;
+    background: url(../../public/img/wait-dark.svg) center center no-repeat;
+    @include background-size(auto 100%);
+  }
+
   &__header {
     display: table-row;
     text-transform: uppercase;
