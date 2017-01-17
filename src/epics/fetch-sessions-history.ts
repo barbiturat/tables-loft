@@ -1,7 +1,7 @@
 import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
 import {Store} from 'redux';
-import {clone, assign} from 'lodash';
+import {clone, assign, uniq} from 'lodash';
 
 import {FETCHING_TABLE_SESSIONS_HISTORY} from '../constants/action-names';
 import {get, getErrorMessageFromResponse, isAjaxResponseDefined} from '../helpers/requests';
@@ -17,7 +17,7 @@ import tableSessionsChanged from '../action-creators/table-sessions-changed';
 import fetchingTableSessionsHistoryFailed from '../action-creators/fetching-table-sessions-history-failed';
 import {ActionType} from '../action-creators/fetching-table-sessions-history';
 import {RequestSessionHistoryPayload} from '../interfaces/api-requests';
-import {StoreStructure, Tables, TableSessions} from '../interfaces/store-models';
+import {StoreStructure, Tables, TableSessions, Table} from '../interfaces/store-models';
 import tablesChanged from '../action-creators/tables-changed';
 import {API_URL} from '../constants/index';
 
@@ -25,14 +25,21 @@ type ResponseOk = AjaxResponseTyped<ResponseSessionsHistoryPayload>;
 type ResponseOkDefined = AjaxResponseDefined<ResponseSessionsHistoryPayload>;
 type ResponseError = AjaxErrorTyped<ResponseFailedPayload>;
 
-const getTablesWithSetHistoryPending = (tables: Tables, tableId: number, isInPending: boolean): Tables => {
+const replaceTable = (tables: Tables, tableId: number, newTableData: Partial<Table>): Tables => {
   const currentTable = tables[tableId];
 
   if (currentTable) {
-    currentTable.isSessionsHistoryInPending = isInPending;
+    const newTable = assign({}, currentTable, newTableData);
+    tables[newTable.id] = newTable;
   }
 
   return tables;
+};
+
+const getTablesWithSetHistoryPending = (tables: Tables, tableId: number, isInPending: boolean): Tables => {
+  return replaceTable(tables, tableId, {
+    isSessionsHistoryInPending: isInPending
+  });
 };
 
 const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
@@ -52,24 +59,33 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
             .mergeMap((ajaxData: ResponseOk | ResponseError) => {
               if ( isAjaxResponseDefined<ResponseOkDefined>(ajaxData) ) {
                 const appData = store.getState().app;
-                const tablesClone = clone( appData.tablesData.tables );
-                const sessions = ajaxData.response.sessions;
+                const respSessions = ajaxData.response.sessions;
                 const currentSessions = appData.tableSessionsData.tableSessions;
-                const convertedNewSessions = tableSessionsToFront(sessions);
-                const newSessions: TableSessions = assign({}, currentSessions, convertedNewSessions);
-                const tablesWithUnsetPending = getTablesWithSetHistoryPending(tablesClone, tableId, false);
+                const convertedRespSessions = tableSessionsToFront(respSessions);
+                const respSessionsIds = Object.keys(convertedRespSessions).map((val) => Number(val));
+                const newSessionsAll: TableSessions = assign({}, currentSessions, convertedRespSessions);
 
-                const setTableSessionsAction = tableSessionsChanged(newSessions);
-                const setTablesWithoutPendingAction = tablesChanged(tablesWithUnsetPending);
+                const setSessionsAction = tableSessionsChanged(newSessionsAll);
+                const actions: SimpleAction[] = [setSessionsAction];
 
-                return Observable.of<any>(
-                  setTablesWithoutPendingAction,
-                  setTableSessionsAction
-                );
-              } else {
-                const appData = store.getState().app;
-                const errorMessage = getErrorMessageFromResponse(ajaxData as ResponseError);
                 const tablesClone = clone( appData.tablesData.tables );
+                const currentTable = tablesClone[tableId];
+
+                if (currentTable) {
+                  const fixedSessionsIds = uniq( currentTable.sessionsHistory.concat(respSessionsIds) );
+                  const changedTables = replaceTable(tablesClone, tableId, {
+                    isSessionsHistoryInPending: false,
+                    sessionsHistory: fixedSessionsIds
+                  });
+                  const setTablesAction = tablesChanged(changedTables);
+
+                  actions.push(setTablesAction);
+                }
+
+                return Observable.from(actions);
+              } else {
+                const errorMessage = getErrorMessageFromResponse(ajaxData as ResponseError);
+                const tablesClone = clone( store.getState().app.tablesData.tables );
                 const tablesWithUnsetPending = getTablesWithSetHistoryPending(tablesClone, tableId, false);
                 const setTablesWithoutPendingAction = tablesChanged(tablesWithUnsetPending);
 
