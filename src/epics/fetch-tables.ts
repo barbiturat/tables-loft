@@ -14,7 +14,7 @@ import {TableSession, Table as TableBackend} from '../interfaces/backend-models'
 import tableSessionsChanged from '../action-creators/table-sessions-changed';
 import tablesChanged from '../action-creators/tables-changed';
 import {Tables} from '../interfaces/store-models';
-import {API_PREFIX} from '../constants/index';
+import {API_URL} from '../constants/index';
 
 type ResponseOk = AjaxResponseTyped<ResponseTablesPayload>;
 type ResponseOkDefined = AjaxResponseDefined<ResponseTablesPayload>;
@@ -37,7 +37,7 @@ const fetchTables = ((action$) => {
       const tablesPendingStart$ = Observable.of(pendingTables(true));
       const tablesRequest$ = Observable.of(null)
         .mergeMap(() =>
-          get(`${API_PREFIX}${urlTables}`)
+          get(`${API_URL}${urlTables}`)
             .mergeMap((ajaxData: ResponseOk | ResponseError) => {
               if ( isAjaxResponseDefined<ResponseOkDefined>(ajaxData) ) {
                 const tables = ajaxData.response.tables;

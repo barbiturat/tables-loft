@@ -3,6 +3,7 @@ const path = require('path');
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const API_URL = process.env.API_URL || '';
 const ROLLBAR_TOKEN = process.env.ROLLBAR_TOKEN || '';
 const isProd = process.argv.includes('-p');
 const nodeEnv = isProd ? 'production' : 'development';
@@ -19,6 +20,7 @@ const plugins = [
   }),
   new webpack.DefinePlugin({
     'process.env': {
+      API_URL: JSON.stringify(API_URL),
       ROLLBAR_TOKEN: JSON.stringify(ROLLBAR_TOKEN),
       NODE_ENV: JSON.stringify(nodeEnv)  // NODE_ENV: '"production"' for decreasing size of react library
     }

@@ -8,9 +8,9 @@
   },
   "scripts": {
     "clean": "rimraf public/resources",
-    "build:dev": "webpack --config ./configs/webpack.config.js",
-    "build:dev:watch": "webpack --watch --config ./configs/webpack.config.js",
-    "build:prod": "webpack -p --bail --config configs/webpack.config.js",
+    "build:dev": "API_URL=http://localhost:8081 webpack --config ./configs/webpack.config.js",
+    "build:dev:watch": "API_URL=http://localhost:8081 webpack --watch --config ./configs/webpack.config.js",
+    "build:prod": "API_URL=https://boston-pool-api.jsmbars.co.uk:9927 webpack -p --bail --config configs/webpack.config.js",
     "build-dev": "npm run clean && npm run build:dev",
     "build-prod": "npm run clean && npm run build:prod",
     "build-server": "rimraf js-server/out && tsc --project ./js-server/tsconfig.json",

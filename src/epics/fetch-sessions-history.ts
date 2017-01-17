@@ -19,7 +19,7 @@ import {ActionType} from '../action-creators/fetching-table-sessions-history';
 import {RequestSessionHistoryPayload} from '../interfaces/api-requests';
 import {StoreStructure, Tables, TableSessions} from '../interfaces/store-models';
 import tablesChanged from '../action-creators/tables-changed';
-import {API_PREFIX} from '../constants/index';
+import {API_URL} from '../constants/index';
 
 type ResponseOk = AjaxResponseTyped<ResponseSessionsHistoryPayload>;
 type ResponseOkDefined = AjaxResponseDefined<ResponseSessionsHistoryPayload>;
@@ -48,7 +48,7 @@ const fetchSessionsHistory = ((action$, store: MiddlewareAPI<StoreStructure>) =>
 
       const historyRequest$ = Observable.of(null)
         .mergeMap(() =>
-          get(`${API_PREFIX}${urlSessionHistory}`, dataToSend)
+          get(`${API_URL}${urlSessionHistory}`, dataToSend)
             .mergeMap((ajaxData: ResponseOk | ResponseError) => {
               if ( isAjaxResponseDefined<ResponseOkDefined>(ajaxData) ) {
                 const appData = store.getState().app;

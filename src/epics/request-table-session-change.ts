@@ -17,7 +17,7 @@ import tableSessionsChanged from '../action-creators/table-sessions-changed';
 import {RequestUpdateTableSessionPayload} from '../interfaces/api-requests';
 import {StoreStructure, TableSession, TableSessions} from '../interfaces/store-models';
 import {ActionType} from '../action-creators/requesting-table-session-change';
-import {API_PREFIX} from '../constants/index';
+import {API_URL} from '../constants/index';
 
 type ResponseOk = AjaxResponseTyped<ResponseUpdateTableSessionPayload>;
 type ResponseError = AjaxErrorTyped<ResponseFailedPayload>;
@@ -47,7 +47,7 @@ const requestTableSessionChange = ((action$, store: MiddlewareAPI<StoreStructure
         isInPending: true
       });
       const setSessionsWithPending$ = Observable.of( tableSessionsChanged(newSessions) );
-      const url = `${API_PREFIX}${urlUpdateTableSession}`.replace(':session_id', String(sessionId));
+      const url = `${API_URL}${urlUpdateTableSession}`.replace(':session_id', String(sessionId));
 
       const request$ = Observable.of(null)
         .mergeMap(() =>

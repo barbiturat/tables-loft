@@ -16,7 +16,7 @@ import tablesChanged from '../action-creators/tables-changed';
 import tableSessionsChanged from '../action-creators/table-sessions-changed';
 import {tableSessionToFront} from '../helpers/api-data-converters/index';
 import requestingTableStopFailed from '../action-creators/requesting-table-stop-failed';
-import {API_PREFIX} from '../constants/index';
+import {API_URL} from '../constants/index';
 
 type ResponseOk = AjaxResponseTyped<ResponseStopTablePayload>;
 type ResponseOkDefined = AjaxResponseDefined<ResponseStopTablePayload>;
@@ -27,7 +27,7 @@ const stopTable = ((action$, store: MiddlewareAPI<StoreStructure>) => {
     .switchMap((action: ActionType) => {
       const tableId = action.payload;
       const pendingStart$ = Observable.of(pendingRequestTableStatusChange(true, tableId));
-      const url = `${API_PREFIX}${urlStopTable}`.replace(':table_id', String(tableId));
+      const url = `${API_URL}${urlStopTable}`.replace(':table_id', String(tableId));
       const request$ = Observable.of(null)
         .mergeMap(() =>
           post(url)
