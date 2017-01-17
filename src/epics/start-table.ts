@@ -1,6 +1,6 @@
 import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
-import {MiddlewareAPI} from 'redux';
+import {Store} from 'redux';
 import {clone, assign} from 'lodash';
 
 import {REQUESTING_TABLE_START} from '../constants/action-names';
@@ -22,7 +22,7 @@ type ResponseOk = AjaxResponseTyped<ResponseStartTablePayload>;
 type ResponseOkDefined = AjaxResponseDefined<ResponseStartTablePayload>;
 type ResponseError = AjaxErrorTyped<ResponseFailedPayload>;
 
-const startTable = ((action$, store: MiddlewareAPI<StoreStructure>) => {
+const startTable = ((action$, store: Store<StoreStructure>) => {
   return action$.ofType(REQUESTING_TABLE_START)
     .switchMap((action: ActionType) => {
       const tableId = action.payload;

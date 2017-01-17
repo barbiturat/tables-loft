@@ -1,6 +1,6 @@
 import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
-import {MiddlewareAPI} from 'redux';
+import {Store} from 'redux';
 import {clone, assign} from 'lodash';
 
 import {FETCHING_TABLE_SESSIONS_HISTORY} from '../constants/action-names';
@@ -35,7 +35,7 @@ const getTablesWithSetHistoryPending = (tables: Tables, tableId: number, isInPen
   return tables;
 };
 
-const fetchSessionsHistory = ((action$, store: MiddlewareAPI<StoreStructure>) => {
+const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
   return action$.ofType(FETCHING_TABLE_SESSIONS_HISTORY)
     .switchMap((action: ActionType) => {
       const tableId = action.payload;

@@ -1,6 +1,6 @@
 import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
-import {MiddlewareAPI} from 'redux';
+import {Store} from 'redux';
 import {assign, clone} from 'lodash';
 
 import {REQUESTING_TABLE_SESSION_CHANGE} from '../constants/action-names';
@@ -33,7 +33,7 @@ const setNewParamsToSession = (sessions: TableSessions, sessionId: number, param
 };
 
 
-const requestTableSessionChange = ((action$, store: MiddlewareAPI<StoreStructure>) => {
+const requestTableSessionChange = ((action$, store: Store<StoreStructure>) => {
   return action$.ofType(REQUESTING_TABLE_SESSION_CHANGE)
     .switchMap((action: ActionType) => {
       const {sessionId, durationSeconds, adminToken} = action.payload;
