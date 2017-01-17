@@ -16,6 +16,7 @@ import {StoreStructure, Tables} from '../interfaces/store-models';
 import tablesChanged from '../action-creators/tables-changed';
 import tableSessionsChanged from '../action-creators/table-sessions-changed';
 import {tableSessionToFront} from '../helpers/api-data-converters/index';
+import {API_PREFIX} from '../constants/index';
 
 type ResponseOk = AjaxResponseTyped<ResponseStartTablePayload>;
 type ResponseOkDefined = AjaxResponseDefined<ResponseStartTablePayload>;
@@ -26,7 +27,7 @@ const startTable = ((action$, store: MiddlewareAPI<StoreStructure>) => {
     .switchMap((action: ActionType) => {
       const tableId = action.payload;
       const pendingStart$ = Observable.of(pendingRequestTableStatusChange(true, tableId));
-      const url = urlStartTable.replace(':table_id', String(tableId));
+      const url = `${API_PREFIX}${urlStartTable}`.replace(':table_id', String(tableId));
       const request$ = Observable.of(null)
         .mergeMap(() =>
           post(url)

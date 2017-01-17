@@ -14,7 +14,7 @@ function pathFromRoot(url = '') {
 
 app.use(express.static(publicPath));
 
-app.all('*', function(req, res){
+app.get('/', function(req, res){
   res.sendfile(`${publicPath}/index.html`);
 });
 

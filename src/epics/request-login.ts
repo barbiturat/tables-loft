@@ -11,6 +11,7 @@ import {STATUS_OK} from '../constants/used-http-status-codes';
 import {RequestLoginPayload} from '../interfaces/api-requests';
 import {urlLogin} from '../constants/urls';
 import {SimpleAction, FormSubmitAction} from '../interfaces/actions';
+import {API_PREFIX} from '../constants/index';
 
 const requestLogin = ((action$) => {
   return action$.ofType(REQUESTING_LOGIN)
@@ -21,7 +22,7 @@ const requestLogin = ((action$) => {
       const formPendingTurnOn$ = Observable.of(actions.setPending(formModelPath, true));
       const loginRequest$ = Observable.of(null)
         .mergeMap(() =>
-          post(urlLogin, dataToSend)
+          post(`${API_PREFIX}${urlLogin}`, dataToSend)
             .mergeMap((ajaxData: AjaxResponseTyped<ResponseDefaultPayload> | AjaxErrorTyped<ResponseLoginFailedPayload>) => {
               if (ajaxData.status === STATUS_OK) {
                 const setSubmittedAction = actions.setSubmitted(formModelPath, true);

@@ -37,6 +37,7 @@
     "apiServerPort": 8081
   },
   "dependencies": {
+    "@types/body-parser": "0.0.33",
     "@types/classnames": "0.0.32",
     "@types/express": "4.0.34",
     "@types/history": "2.0.41",

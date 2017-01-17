@@ -12,6 +12,7 @@ import {urlGetAdminToken} from '../constants/urls';
 import {SimpleAction, FormSubmitAction} from '../interfaces/actions';
 import adminTokenUpdated from '../action-creators/admin-token-updated';
 import modalAdminLoginOpened from '../action-creators/modal-admin-login-opened';
+import {API_PREFIX} from '../constants/index';
 
 type ResponseOk = AjaxResponseTyped<ResponseGetAdminTokenPayload>;
 type ResponseOkDefined = AjaxResponseDefined<ResponseGetAdminTokenPayload>;
@@ -26,7 +27,7 @@ const requestAdminToken = ((action$) => {
       const formPendingTurnOn$ = Observable.of(actions.setPending(formModelPath, true));
       const tokenRequest$ = Observable.of(null)
         .mergeMap(() =>
-          post(urlGetAdminToken, dataToSend)
+          post(`${API_PREFIX}${urlGetAdminToken}`, dataToSend)
             .mergeMap((ajaxData: ResponseOk | ResponseError) => {
               if ( isAjaxResponseDefined<ResponseOkDefined>(ajaxData) ) {
                 const accessToken = ajaxData.response.accessToken;
