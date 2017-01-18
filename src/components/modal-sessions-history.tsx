@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import MouseEvent = React.MouseEvent;
 import * as Modal from 'react-modal';
 import * as ReactPaginate from 'react-paginate';
+import {chain, pick} from 'lodash';
 
 import {StoreStructure, Table, TableSession, Tables, TableSessions} from '../interfaces/store-models';
 import {PropsExtendedByConnect} from '../interfaces/component';
@@ -59,14 +60,32 @@ class Component extends React.Component<PropsFromConnect, {}> {
     }, {} as TableSessions);
   };
 
+  static getSessionsPage(sessions: TableSessions, pageIdx: number): TableSessions {
+    const idsPage = chain(sessions)
+      .keys()
+      .chunk(5)
+      .thru((pages: string[][]) => pages[pageIdx])
+      .value();
+
+    if (idsPage) {
+      return chain(idsPage)
+        .map((id: string) => Number(id))
+        .thru((ids: number[]) => pick(sessions, ids))
+        .value() as TableSessions;
+    } else {
+      return {} as TableSessions;
+    }
+  }
+
   render() {
     const {allTableSessions, currentTable} = this.props;
 
     if (currentTable) {
       const historyPending = Component.getSessionsHistoryInPending(currentTable);
-      const sessions = Component.getTableSessions(allTableSessions, currentTable);
       const modalClass = Component.modalClasses[currentTable.tableType] || '';
       const caption = currentTable.name;
+      const sessions = Component.getTableSessions(allTableSessions, currentTable);
+      const sessionsPage = Component.getSessionsPage(sessions, 0);
 
       return (
         <Modal
@@ -87,7 +106,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
 
           <SessionsHistory
             isInPending={historyPending}
-            tableSessions={sessions}
+            tableSessions={sessionsPage}
           />
 
           <ReactPaginate
