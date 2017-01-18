@@ -2,5 +2,48 @@
 @import 'mixins';
 
 .paginator {
+  @include normalize-block();
+
   display: flex;
+  justify-content: center;
+  padding: 0;
+
+  &__button {
+    display: inline-block;
+    margin: 0 7px;
+    list-style: none;
+    color: $dark-gray;
+    border: 2px solid $dark-gray;
+    cursor: pointer;
+    @include user-select();
+
+    &:hover{
+      background-color: $extra-light-gray;
+    }
+
+    &.paginator-active {
+      background-color: $dark-gray;
+      color: $white;
+    }
+
+    &_role {
+      &_break {
+        display: none;
+      }
+    }
+  }
+
+  &__button-link {
+    display: inline-block;
+    height: 35px;
+    padding: 0 14px;
+    text-decoration: none;
+    font-size: 13px;
+    line-height: 35px;
+
+    &:focus {
+      outline: 0;
+    }
+  }
+
 }

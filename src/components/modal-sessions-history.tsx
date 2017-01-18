@@ -24,6 +24,8 @@ type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
 class Component extends React.Component<PropsFromConnect, {}> {
 
+  static PAGE_SIZE = 5;
+
   static modalClasses = {
     pool: 'modal_table_pool',
     shuffleBoard: 'modal_table_shuffle',
@@ -63,7 +65,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
   static getSessionsPage(sessions: TableSessions, pageIdx: number): TableSessions {
     const idsPage = chain(sessions)
       .keys()
-      .chunk(5)
+      .chunk(Component.PAGE_SIZE)
       .thru((pages: string[][]) => pages[pageIdx])
       .value();
 
@@ -86,6 +88,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
       const caption = currentTable.name;
       const sessions = Component.getTableSessions(allTableSessions, currentTable);
       const sessionsPage = Component.getSessionsPage(sessions, 0);
+      const numOfPages = Math.ceil( Object.keys(sessions).length / Component.PAGE_SIZE );
 
       return (
         <Modal
@@ -110,20 +113,23 @@ class Component extends React.Component<PropsFromConnect, {}> {
           />
 
           <ReactPaginate
-            pageCount={15}
-            pageRangeDisplayed={3}
-            marginPagesDisplayed={1}
-            initialPage={7}
+            pageCount={numOfPages}
+            pageRangeDisplayed={2}
+            marginPagesDisplayed={0}
+            initialPage={0}
             previousLabel="previous"
             nextLabel="next"
-            breakLabel={<a href="">...</a>}
-            breakClassName="break-me"
+            breakLabel={<span>...</span>}
             containerClassName="paginator"
             pageClassName="paginator__button paginator__button_role_page"
+            pageLinkClassName="paginator__button-link"
             previousClassName="paginator__button paginator__button_role_prev"
+            previousLinkClassName="paginator__button-link"
             nextClassName="paginator__button paginator__button_role_next"
-            activeClassName="active"
-            disabledClassName="disabled"
+            nextLinkClassName="paginator__button-link"
+            breakClassName="paginator__button paginator__button_role_break"
+            activeClassName="paginator-active"
+            disabledClassName="paginator-disabled"
           />
 
         </Modal>
