@@ -93,6 +93,31 @@ class Component extends React.Component<PropsFromConnect, State> {
     });
   };
 
+  getPaginator(numOfPages: number, initialPage: number, isInPending: boolean) {
+    return numOfPages && !isInPending ? (
+        <ReactPaginate
+          pageCount={numOfPages}
+          pageRangeDisplayed={2}
+          marginPagesDisplayed={0}
+          initialPage={initialPage}
+          previousLabel="previous"
+          nextLabel="next"
+          breakLabel={<span>...</span>}
+          containerClassName="paginator"
+          pageClassName="paginator__button paginator__button_role_page"
+          pageLinkClassName="paginator__button-link"
+          previousClassName="paginator__button paginator__button_role_prev"
+          previousLinkClassName="paginator__button-link"
+          nextClassName="paginator__button paginator__button_role_next"
+          nextLinkClassName="paginator__button-link"
+          breakClassName="paginator__button paginator__button_role_break"
+          activeClassName="paginator-active"
+          disabledClassName="paginator-disabled"
+          onPageChange={this.onPageChangeHandler}
+        />
+      ) : null;
+  }
+
   render() {
     const {allTableSessions, currentTable} = this.props;
 
@@ -127,27 +152,7 @@ class Component extends React.Component<PropsFromConnect, State> {
             tableSessions={sessionsPage}
           />
 
-          <ReactPaginate
-            pageCount={numOfPages}
-            pageRangeDisplayed={2}
-            marginPagesDisplayed={0}
-            initialPage={currentPage}
-            previousLabel="previous"
-            nextLabel="next"
-            breakLabel={<span>...</span>}
-            containerClassName="paginator"
-            pageClassName="paginator__button paginator__button_role_page"
-            pageLinkClassName="paginator__button-link"
-            previousClassName="paginator__button paginator__button_role_prev"
-            previousLinkClassName="paginator__button-link"
-            nextClassName="paginator__button paginator__button_role_next"
-            nextLinkClassName="paginator__button-link"
-            breakClassName="paginator__button paginator__button_role_break"
-            activeClassName="paginator-active"
-            disabledClassName="paginator-disabled"
-            onPageChange={this.onPageChangeHandler}
-          />
-
+          {this.getPaginator(numOfPages, currentPage, historyPending)}
         </Modal>
       );
     } else {

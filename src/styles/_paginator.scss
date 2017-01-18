@@ -6,6 +6,7 @@
 
   display: flex;
   justify-content: center;
+  margin: 24px 0 0;
   padding: 0;
 
   &__button {
@@ -35,11 +36,11 @@
 
   &__button-link {
     display: inline-block;
-    height: 35px;
+    height: 33px;
     padding: 0 14px;
     text-decoration: none;
     font-size: 13px;
-    line-height: 35px;
+    line-height: 33px;
 
     &:focus {
       outline: 0;
