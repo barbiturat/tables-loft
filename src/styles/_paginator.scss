@@ -27,7 +27,35 @@
       color: $white;
     }
 
+    &.paginator-disabled {
+      border-color: $very-light-gray;
+      color: $very-light-gray;
+      cursor: default;
+
+      &:hover{
+        background-color: $white;
+      }
+    }
+
     &_role {
+      &_prev {
+        padding-left: 14px;
+        background: url(../../public/img/arrow-left-dark-gray.svg) 7px center no-repeat;
+        @include background-size(auto 14px);
+
+        &.paginator-disabled {
+          background-image: url(../../public/img/arrow-left-light-gray.svg);
+        }
+      }
+      &_next {
+        padding-right: 14px;
+        background: url(../../public/img/arrow-right-dark-gray.svg) calc(100% - 7px) center no-repeat;
+        @include background-size(auto 14px);
+
+        &.paginator-disabled {
+          background-image: url(../../public/img/arrow-right-light-gray.svg);
+        }
+      }
       &_break {
         display: none;
       }
@@ -36,11 +64,12 @@
 
   &__button-link {
     display: inline-block;
-    height: 33px;
+    height: 32px;
     padding: 0 14px;
     text-decoration: none;
-    font-size: 13px;
-    line-height: 33px;
+    font-size: 14px;
+    line-height: 32px;
+    text-transform: uppercase;
 
     &:focus {
       outline: 0;

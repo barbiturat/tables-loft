@@ -21,7 +21,7 @@ interface MappedProps {
 }
 
 interface State {
-  currentPage: number;
+  currentPageNum: number;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
@@ -42,7 +42,7 @@ class Component extends React.Component<PropsFromConnect, State> {
   }
 
   state = {
-    currentPage: 0
+    currentPageNum: 0
   };
 
   requestToClose() {
@@ -89,7 +89,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   onPageChangeHandler = (data: any) => {
     this.setState({
-      currentPage: data.selected
+      currentPageNum: data.selected
     });
   };
 
@@ -122,13 +122,14 @@ class Component extends React.Component<PropsFromConnect, State> {
     const {allTableSessions, currentTable} = this.props;
 
     if (currentTable) {
-      const currentPage = this.state.currentPage;
+      const currentPageNum = this.state.currentPageNum;
       const historyPending = Component.getSessionsHistoryInPending(currentTable);
       const modalClass = Component.modalClasses[currentTable.tableType] || '';
       const caption = currentTable.name;
       const sessions = Component.getTableSessions(allTableSessions, currentTable);
-      const sessionsPage = Component.getSessionsPage(sessions, currentPage);
+      const sessionsPage = Component.getSessionsPage(sessions, currentPageNum);
       const numOfPages = Math.ceil( Object.keys(sessions).length / Component.PAGE_SIZE );
+      const firstIdx = currentPageNum * Component.PAGE_SIZE;
 
       return (
         <Modal
@@ -150,9 +151,10 @@ class Component extends React.Component<PropsFromConnect, State> {
           <SessionsHistory
             isInPending={historyPending}
             tableSessions={sessionsPage}
+            firstIdx={firstIdx}
           />
 
-          {this.getPaginator(numOfPages, currentPage, historyPending)}
+          {this.getPaginator(numOfPages, currentPageNum, historyPending)}
         </Modal>
       );
     } else {

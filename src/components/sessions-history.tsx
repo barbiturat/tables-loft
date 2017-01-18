@@ -6,25 +6,27 @@ import TableHistorySession from './table-history-session';
 interface Props {
   tableSessions?: TableSessions;
   isInPending: boolean;
+  firstIdx: number;
 }
 
 export default class SessionsHistory extends React.Component<Props, {}> {
-  static getRenderedSessions(tableSessions: TableSessions = {}) {
-    return Object.keys(tableSessions).map((key) => {
-      const idx = Number(key);
-      const session = tableSessions[idx];
+  static getRenderedSessions(tableSessions: TableSessions = {}, firstIdx: number) {
+    return Object.keys(tableSessions).map((key, idx) => {
+      const keyNum = Number(key);
+      const session = tableSessions[keyNum];
 
       return (
         <TableHistorySession
           key={idx}
           session={session}
+          idx={idx + firstIdx + 1}
         />
       );
     });
 
   }
 
-  static getTableSessions (sessions: TableSessions = {}, isInPending: boolean) {
+  static getTableSessions (sessions: TableSessions = {}, isInPending: boolean, firstIdx: number) {
     if (isInPending) {
       return (
         <div className="sessions-list__wait"/>
@@ -45,7 +47,7 @@ export default class SessionsHistory extends React.Component<Props, {}> {
             <div className="sessions-list__th sessions-list__th_role_duration">Playing Time</div>
           </div>
 
-          {SessionsHistory.getRenderedSessions(sessions)}
+          {SessionsHistory.getRenderedSessions(sessions, firstIdx)}
         </div>
       );
     }
@@ -54,16 +56,7 @@ export default class SessionsHistory extends React.Component<Props, {}> {
   render() {
     return (
       <div className="sessions-screen">
-        {SessionsHistory.getTableSessions(this.props.tableSessions, this.props.isInPending)}
-
-        {/*<div className="paginator">
-          <div className="paginator__button paginator__button_role_prev">Prev</div>
-          <div className="paginator__button paginator__button_role_page">1</div>
-          <div className="paginator__button paginator__button_role_page">2</div>
-          <div className="paginator__button paginator__button_role_page">3</div>
-          <div className="paginator__button paginator__button_role_next">Next</div>
-        </div>*/}
-
+        {SessionsHistory.getTableSessions(this.props.tableSessions, this.props.isInPending, this.props.firstIdx)}
       </div>
     );
   }
