@@ -12,6 +12,7 @@
     "build:dev:watch": "API_HOST=http://localhost API_PORT=8081 webpack --watch --config ./configs/webpack.config.js",
     "build:prod": "webpack -p --bail --config configs/webpack.config.js",
     "build-dev": "npm run clean && npm run build:dev",
+    "build-dev-watch": "npm run clean && npm run build:dev:watch",
     "build-prod": "npm run clean && npm run build:prod",
     "build-server": "rimraf js-server/out && tsc --project ./js-server/tsconfig.json",
     "build-fake-api-server": "rimraf fake-api-server/out && tsc --project ./fake-api-server/tsconfig.json",
