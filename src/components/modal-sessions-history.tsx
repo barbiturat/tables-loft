@@ -20,9 +20,13 @@ interface MappedProps {
   allTableSessions: TableSessions;
 }
 
+interface State {
+  currentPage: number;
+}
+
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
-class Component extends React.Component<PropsFromConnect, {}> {
+class Component extends React.Component<PropsFromConnect, State> {
 
   static PAGE_SIZE = 5;
 
@@ -36,6 +40,10 @@ class Component extends React.Component<PropsFromConnect, {}> {
   static getSessionsHistoryInPending(currentTable?: Table) {
     return currentTable ? currentTable.isSessionsHistoryInPending : false;
   }
+
+  state = {
+    currentPage: 0
+  };
 
   requestToClose() {
     this.props.dispatch( modalSessionsHistoryChanged(false) );
@@ -79,15 +87,22 @@ class Component extends React.Component<PropsFromConnect, {}> {
     }
   }
 
+  onPageChangeHandler = (data: any) => {
+    this.setState({
+      currentPage: data.selected
+    });
+  };
+
   render() {
     const {allTableSessions, currentTable} = this.props;
 
     if (currentTable) {
+      const currentPage = this.state.currentPage;
       const historyPending = Component.getSessionsHistoryInPending(currentTable);
       const modalClass = Component.modalClasses[currentTable.tableType] || '';
       const caption = currentTable.name;
       const sessions = Component.getTableSessions(allTableSessions, currentTable);
-      const sessionsPage = Component.getSessionsPage(sessions, 0);
+      const sessionsPage = Component.getSessionsPage(sessions, currentPage);
       const numOfPages = Math.ceil( Object.keys(sessions).length / Component.PAGE_SIZE );
 
       return (
@@ -116,7 +131,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
             pageCount={numOfPages}
             pageRangeDisplayed={2}
             marginPagesDisplayed={0}
-            initialPage={0}
+            initialPage={currentPage}
             previousLabel="previous"
             nextLabel="next"
             breakLabel={<span>...</span>}
@@ -130,6 +145,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
             breakClassName="paginator__button paginator__button_role_break"
             activeClassName="paginator-active"
             disabledClassName="paginator-disabled"
+            onPageChange={this.onPageChangeHandler}
           />
 
         </Modal>
