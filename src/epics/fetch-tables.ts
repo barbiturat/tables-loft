@@ -15,6 +15,7 @@ import tableSessionsChanged from '../action-creators/table-sessions-changed';
 import tablesChanged from '../action-creators/tables-changed';
 import {Tables} from '../interfaces/store-models';
 import {API_URL} from '../constants/index';
+import globalErrorHappened from '../action-creators/global-error-happened';
 
 type ResponseOk = AjaxResponseTyped<ResponseTablesPayload>;
 type ResponseOkDefined = AjaxResponseDefined<ResponseTablesPayload>;
@@ -57,6 +58,8 @@ const fetchTables = ((action$) => {
               } else {
                 const errorMessage = getErrorMessageFromResponse(ajaxData as ResponseError);
                 const tablesPendingStop = pendingTables(false);
+
+                // globalErrorHappened
 
                 return Observable.of<any>(
                   tablesPendingStop,
