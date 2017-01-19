@@ -74,7 +74,13 @@ export const getErrorMessageFromResponse = (ajaxData?: AjaxErrorTyped<ResponseFa
 };
 
 export const isAjaxResponseDefined = < TResponseDefined extends AjaxResponseDefined<Defined> >
-  (ajaxResponse: any): ajaxResponse is TResponseDefined => {
-  return ajaxResponse!.response !== null && ajaxResponse!.status === STATUS_OK;
+  (ajaxResponse: AjaxResponse | AjaxError): ajaxResponse is TResponseDefined => {
+  const responseField = (ajaxResponse as any)!.response;
+
+  return responseField !== undefined && responseField !== null && ajaxResponse!.status === STATUS_OK;
+};
+
+export const isAjaxError = (ajaxResponse: AjaxResponse | AjaxError): ajaxResponse is AjaxError => {
+  return ajaxResponse.status !== STATUS_OK;
 };
 
