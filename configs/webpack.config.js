@@ -3,9 +3,9 @@ const path = require('path');
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const API_KEY = process.env.API_KEY || '';
-const API_HOST = process.env.API_HOST || '';
-const API_PORT = process.env.API_PORT || '';
+const API_KEY = process.env.API_KEY;
+const API_HOST = process.env.API_HOST;
+const API_PORT = process.env.API_PORT;
 const ROLLBAR_TOKEN = process.env.ROLLBAR_TOKEN || '';
 const isProd = process.argv.includes('-p');
 const nodeEnv = isProd ? 'production' : 'development';
@@ -15,6 +15,10 @@ const outputPath = pathFromRoot('./public/resources');
 function pathFromRoot(url = '') {
   return path.resolve(__dirname, '..', url);
 }
+
+if (!API_KEY) throw('The "API_KEY" env variable must be set');
+if (!API_HOST) throw('The "API_HOST" env variable must be set');
+if (!API_PORT) throw('The "API_PORT" env variable must be set');
 
 const plugins = [
   new webpack.optimize.CommonsChunkPlugin({
