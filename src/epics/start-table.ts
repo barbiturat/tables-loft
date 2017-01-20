@@ -1,22 +1,22 @@
 import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
 import {Store} from 'redux';
-import {merge, clone} from 'ramda';
+import {merge, clone, pipe} from 'ramda';
 
 import {REQUESTING_TABLE_START} from '../constants/action-names';
-import {post, getErrorMessageFromResponse, isAjaxResponseDefined} from '../helpers/requests';
+import {post, isAjaxResponseDefined, getMessageFromAjaxErrorStatus} from '../helpers/requests';
 import {ResponseFailedPayload, ResponseStartTablePayload} from '../interfaces/api-responses';
 import {AjaxResponseTyped, AjaxErrorTyped, AjaxResponseDefined} from '../interfaces/index';
 import {urlStartTable} from '../constants/urls';
-import {SimpleAction} from '../interfaces/actions';
-import requestingTableStartFailed from '../action-creators/requesting-table-start-failed';
+import {SimpleAction, ActionWithPayload} from '../interfaces/actions';
 import {ActionType} from '../action-creators/requesting-table-start';
 import pendingRequestTableStatusChange from '../action-creators/pending-request-table-status-change';
-import {StoreStructure, Tables} from '../interfaces/store-models';
+import {StoreStructure, Tables, Error} from '../interfaces/store-models';
 import tablesChanged from '../action-creators/tables-changed';
 import tableSessionsChanged from '../action-creators/table-sessions-changed';
 import {tableSessionToFront} from '../helpers/api-data-converters/index';
 import {API_URL} from '../constants/index';
+import globalErrorHappened from '../action-creators/global-error-happened';
 
 type ResponseOk = AjaxResponseTyped<ResponseStartTablePayload>;
 type ResponseOkDefined = AjaxResponseDefined<ResponseStartTablePayload>;
@@ -59,11 +59,16 @@ const startTable = ((action$, store: Store<StoreStructure>) => {
                   tablesChangedAction
                 );
               } else {
-                const errorMessage = getErrorMessageFromResponse(ajaxData as ResponseError);
                 const pendingStopAction = pendingRequestTableStatusChange(false, tableId);
 
+                const fetchFailedAction = pipe< number, string, string, ActionWithPayload<Error[]> >(
+                  (status: number) => getMessageFromAjaxErrorStatus(status),
+                  (errorFromStatus: string) => `Table start error: ${errorFromStatus}`,
+                  globalErrorHappened
+                )(ajaxData.status);
+
                 return Observable.of<any>(
-                  requestingTableStartFailed(errorMessage),
+                  fetchFailedAction,
                   pendingStopAction
                 );
               }

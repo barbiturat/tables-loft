@@ -19,7 +19,7 @@ import {tableSessionsToFront} from '../helpers/api-data-converters/index';
 import tableSessionsChanged from '../action-creators/table-sessions-changed';
 import {ActionType} from '../action-creators/fetching-table-sessions-history';
 import {RequestSessionHistoryPayload} from '../interfaces/api-requests';
-import {StoreStructure, Tables, TableSessions, Table} from '../interfaces/store-models';
+import {StoreStructure, Tables, TableSessions, Table, Error} from '../interfaces/store-models';
 import tablesChanged from '../action-creators/tables-changed';
 import {API_URL} from '../constants/index';
 import {TableSession} from '../interfaces/backend-models';
@@ -105,12 +105,11 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
                   tablesChanged
                 )(store.getState().app.tablesData.tables);
 
-                const errorMessage = pipe<number, string, string>(
+                const fetchFailedAction = pipe< number, string, string, ActionWithPayload<Error[]> >(
                   (status: number) => getMessageFromAjaxErrorStatus(status),
-                  (errorFromStatus: string) => `Fetching table sessions error: ${errorFromStatus}`
+                  (errorFromStatus: string) => `Fetching table sessions error: ${errorFromStatus}`,
+                  globalErrorHappened
                 )(ajaxData.status);
-
-                const fetchFailedAction = globalErrorHappened(errorMessage);
 
                 return Observable.of<any>(
                   setTablesWithoutPendingAction,

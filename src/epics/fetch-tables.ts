@@ -8,12 +8,12 @@ import {ResponseTablesPayload} from '../interfaces/api-responses';
 import {AjaxResponseTyped, AjaxResponseDefined} from '../interfaces/index';
 import pendingTables from '../action-creators/pending-tables';
 import {urlTables} from '../constants/urls';
-import {SimpleAction} from '../interfaces/actions';
+import {SimpleAction, ActionWithPayload} from '../interfaces/actions';
 import {tablesToFront, tableSessionsToFront} from '../helpers/api-data-converters/index';
 import {TableSession, Table as TableBackend} from '../interfaces/backend-models';
 import tableSessionsChanged from '../action-creators/table-sessions-changed';
 import tablesChanged from '../action-creators/tables-changed';
-import {Tables} from '../interfaces/store-models';
+import {Tables, Error} from '../interfaces/store-models';
 import {API_URL} from '../constants/index';
 import globalErrorHappened from '../action-creators/global-error-happened';
 
@@ -55,13 +55,13 @@ const fetchTables = ((action$) => {
                   tablesPendingStop
                 );
               } else {
-                const errorMessage = pipe<number, string, string>(
+                const fetchFailedAction = pipe<number, string, string, ActionWithPayload<Error[]>>(
                   (status: number) => getMessageFromAjaxErrorStatus(status),
-                  (errorFromStatus: string) => `Fetching tables error: ${errorFromStatus}`
+                  (errorFromStatus: string) => `Fetching tables error: ${errorFromStatus}`,
+                  globalErrorHappened
                 )(ajaxData.status);
 
                 const tablesPendingStopAction = pendingTables(false);
-                const fetchFailedAction = globalErrorHappened(errorMessage);
 
                 return Observable.of<any>(
                   tablesPendingStopAction,
