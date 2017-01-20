@@ -90,13 +90,14 @@ class Component extends React.Component<PropsFromConnect, State> {
     });
   };
 
-  getPaginator(numOfPages: number, initialPage: number, isInPending: boolean) {
+  getPaginator(numOfPages: number, currentPageNum: number, isInPending: boolean) {
     return numOfPages && !isInPending ? (
         <ReactPaginate
           pageCount={numOfPages}
           pageRangeDisplayed={2}
           marginPagesDisplayed={0}
-          initialPage={initialPage}
+          initialPage={0}
+          forcePage={currentPageNum}
           previousLabel="previous"
           nextLabel="next"
           breakLabel={<span>...</span>}
