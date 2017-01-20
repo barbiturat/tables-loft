@@ -4,7 +4,10 @@ import {Store} from 'redux';
 import {pipe, clone, merge, keys, map, concat, uniq} from 'ramda';
 
 import {FETCHING_TABLE_SESSIONS_HISTORY} from '../constants/action-names';
-import {get, getErrorMessageFromResponse, isAjaxResponseDefined} from '../helpers/requests';
+import {
+  get, isAjaxResponseDefined,
+  getMessageFromAjaxErrorStatus
+} from '../helpers/requests';
 import {
   ResponseFailedPayload,
   ResponseSessionsHistoryPayload
@@ -14,13 +17,13 @@ import {urlSessionHistory} from '../constants/urls';
 import {SimpleAction, ActionWithPayload} from '../interfaces/actions';
 import {tableSessionsToFront} from '../helpers/api-data-converters/index';
 import tableSessionsChanged from '../action-creators/table-sessions-changed';
-import fetchingTableSessionsHistoryFailed from '../action-creators/fetching-table-sessions-history-failed';
 import {ActionType} from '../action-creators/fetching-table-sessions-history';
 import {RequestSessionHistoryPayload} from '../interfaces/api-requests';
 import {StoreStructure, Tables, TableSessions, Table} from '../interfaces/store-models';
 import tablesChanged from '../action-creators/tables-changed';
 import {API_URL} from '../constants/index';
 import {TableSession} from '../interfaces/backend-models';
+import globalErrorHappened from '../action-creators/global-error-happened';
 
 type ResponseOk = AjaxResponseTyped<ResponseSessionsHistoryPayload>;
 type ResponseOkDefined = AjaxResponseDefined<ResponseSessionsHistoryPayload>;
@@ -96,14 +99,19 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
 
                 return Observable.from(actions);
               } else {
-                const errorMessage = getErrorMessageFromResponse(ajaxData as ResponseError);
                 const tablesClone = clone( store.getState().app.tablesData.tables );
                 const tablesWithUnsetPending = getTablesWithSetHistoryPending(tablesClone, tableId, false);
                 const setTablesWithoutPendingAction = tablesChanged(tablesWithUnsetPending);
+                const errorMessage = pipe<number, string, string>(
+                  (status: number) => getMessageFromAjaxErrorStatus(status),
+                  (errorFromStatus: string) => `Fetching table sessions error: ${errorFromStatus}`
+                )(ajaxData.status);
+
+                const fetchFailedAction = globalErrorHappened(errorMessage);
 
                 return Observable.of<any>(
                   setTablesWithoutPendingAction,
-                  fetchingTableSessionsHistoryFailed(errorMessage)
+                  fetchFailedAction
                 );
               }
             })

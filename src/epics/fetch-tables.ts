@@ -61,11 +61,11 @@ const fetchTables = ((action$) => {
                 )(ajaxData.status);
 
                 const tablesPendingStopAction = pendingTables(false);
-                const fetchErrorAction = globalErrorHappened(errorMessage);
+                const fetchFailedAction = globalErrorHappened(errorMessage);
 
                 return Observable.of<any>(
                   tablesPendingStopAction,
-                  fetchErrorAction
+                  fetchFailedAction
                 );
               }
             })
