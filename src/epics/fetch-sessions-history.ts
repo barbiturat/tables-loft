@@ -91,7 +91,7 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
                       isSessionsHistoryInPending: false,
                       sessionsHistory: newSessionIds
                     }),
-                    (changedTables: Tables) => tablesChanged(changedTables)
+                    tablesChanged
                   )(convertedResponseSessions);
 
                   actions.push(setTablesAction);
@@ -99,9 +99,12 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
 
                 return Observable.from(actions);
               } else {
-                const tablesClone = clone( store.getState().app.tablesData.tables );
-                const tablesWithUnsetPending = getTablesWithSetHistoryPending(tablesClone, tableId, false);
-                const setTablesWithoutPendingAction = tablesChanged(tablesWithUnsetPending);
+                const setTablesWithoutPendingAction = pipe<Tables, Tables, Tables, ActionWithPayload<Tables> >(
+                  clone,
+                  (tablesClone) => getTablesWithSetHistoryPending(tablesClone, tableId, false),
+                  tablesChanged
+                )(store.getState().app.tablesData.tables);
+
                 const errorMessage = pipe<number, string, string>(
                   (status: number) => getMessageFromAjaxErrorStatus(status),
                   (errorFromStatus: string) => `Fetching table sessions error: ${errorFromStatus}`
