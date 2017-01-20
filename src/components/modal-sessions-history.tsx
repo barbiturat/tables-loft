@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import MouseEvent = React.MouseEvent;
 import * as Modal from 'react-modal';
 import * as ReactPaginate from 'react-paginate';
-import {compose, keys, chunk, nth, pick} from 'lodash/fp';
+import {pick, splitEvery, nth, pipe, keys} from 'ramda';
 
 import {StoreStructure, Table, TableSession, Tables, TableSessions} from '../interfaces/store-models';
 import {PropsExtendedByConnect} from '../interfaces/component';
@@ -73,10 +73,10 @@ class Component extends React.Component<PropsFromConnect, State> {
   };
 
   static getSessionsPage(sessions: TableSessions, pageIdx: number): TableSessions {
-    const idsPage = compose(
-      nth(pageIdx),
-      chunk(Component.PAGE_SIZE),
-      keys
+    const idsPage = pipe<TableSessions, string[], string[][], string[]>(
+      keys,
+      splitEvery(Component.PAGE_SIZE),
+      nth(pageIdx)
     )(sessions);
 
     if (idsPage) {

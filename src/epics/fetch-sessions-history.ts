@@ -1,7 +1,7 @@
 import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
 import {Store} from 'redux';
-import {clone, assign, uniq, chain} from 'lodash';
+import {pipe, clone, merge, keys, map, concat, uniq} from 'ramda';
 
 import {FETCHING_TABLE_SESSIONS_HISTORY} from '../constants/action-names';
 import {get, getErrorMessageFromResponse, isAjaxResponseDefined} from '../helpers/requests';
@@ -30,7 +30,7 @@ const replaceTable = (tables: Tables, tableId: number, newTableData: Partial<Tab
   const currentTable = tables[tableId];
 
   if (currentTable) {
-    const newTable = assign({}, currentTable, newTableData);
+    const newTable = merge(currentTable, newTableData);
     tables[newTable.id] = newTable;
   }
 
@@ -51,12 +51,12 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
         tableId
       };
 
-      const setTablesWithPending$ = chain(store.getState().app.tablesData.tables)
-        .clone()
-        .thru((currentTablesClone: Tables) => getTablesWithSetHistoryPending(currentTablesClone, tableId, true) )
-        .thru((tablesWithSetPending: Tables) => tablesChanged(tablesWithSetPending))
-        .thru((tablesPendingAction: ActionWithPayload<Tables>) => Observable.of(tablesPendingAction) )
-        .value();
+      const setTablesWithPending$ = pipe< Tables, Tables, Tables, ActionWithPayload<Tables>, Observable<ActionWithPayload<Tables>> >(
+        clone,
+        (currentTablesClone: Tables) => getTablesWithSetHistoryPending(currentTablesClone, tableId, true),
+        (tablesWithSetPending: Tables) => tablesChanged(tablesWithSetPending),
+        (tablesPendingAction: ActionWithPayload<Tables>) => Observable.of(tablesPendingAction)
+      )(store.getState().app.tablesData.tables);
 
       const historyRequest$ = Observable.of(null)
         .mergeMap(() =>
@@ -64,32 +64,32 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
             .mergeMap((ajaxData: ResponseOk | ResponseError) => {
               if ( isAjaxResponseDefined<ResponseOkDefined>(ajaxData) ) {
                 const appData = store.getState().app;
-                const tablesClone = clone( appData.tablesData.tables );
+                const tablesClone = clone(appData.tablesData.tables);
                 const currentTable = tablesClone[tableId];
 
-                const convertedResponseSessions: TableSessions = chain(ajaxData.response.sessions)
-                  .thru((respSessions: TableSession[]) => tableSessionsToFront(respSessions))
-                  .value();
+                const convertedResponseSessions = pipe<TableSession[], TableSessions>(
+                  (respSessions: TableSession[]) => tableSessionsToFront(respSessions)
+                )(ajaxData.response.sessions);
 
-                const setSessionsAction = chain(convertedResponseSessions)
-                  .defaults(appData.tableSessionsData.tableSessions, {})
-                  .thru((newSessionsAll: TableSessions) => tableSessionsChanged(newSessionsAll))
-                  .value();
+                const setSessionsAction = pipe<TableSessions, TableSessions, ActionWithPayload<TableSessions> >(
+                  merge(appData.tableSessionsData.tableSessions),
+                  (newSessionsAll: TableSessions) => tableSessionsChanged(newSessionsAll)
+                )(convertedResponseSessions);
 
                 const actions: SimpleAction[] = [setSessionsAction];
 
                 if (currentTable) {
-                  const setTablesAction = chain(convertedResponseSessions)
-                    .keys()
-                    .map((key: string) => Number(key))
-                    .concat(currentTable.sessionsHistory)
-                    .uniq()
-                    .thru((newSessionIds: number[]) => replaceTable(tablesClone, tableId, {
+                  const setTablesAction = pipe< TableSessions, string[], number[], number[], number[], Tables, ActionWithPayload<Tables> >(
+                    keys,
+                    map((key: string) => Number(key)),
+                    concat(currentTable.sessionsHistory),
+                    uniq,
+                    (newSessionIds: number[]) => replaceTable(tablesClone, tableId, {
                       isSessionsHistoryInPending: false,
                       sessionsHistory: newSessionIds
-                    }))
-                    .thru((changedTables: Tables) => tablesChanged(changedTables))
-                    .value();
+                    }),
+                    (changedTables: Tables) => tablesChanged(changedTables)
+                  )(convertedResponseSessions);
 
                   actions.push(setTablesAction);
                 }
