@@ -1,6 +1,6 @@
 import {Observable, AjaxResponse, AjaxError} from 'rxjs';
 import * as queryString from 'query-string';
-import {pipe} from 'ramda';
+import {pipe, merge} from 'ramda';
 
 import {AjaxErrorTyped, AjaxResponseDefined, Defined} from '../interfaces/index';
 import {ResponseFailedPayload} from '../interfaces/api-responses';
@@ -21,7 +21,12 @@ const handleError = (ajaxErrorData: AjaxError): Observable<AjaxError> => {
 };
 
 const getExtendedHeaders = (headers = {}): Object => {
-  return headers;
+  const token = process.env.API_KEY || '';
+  const dataToAdd = token ? {
+      Authorization: `Token token=${token}`
+    } : {};
+
+  return merge(dataToAdd, headers);
 };
 
 /*

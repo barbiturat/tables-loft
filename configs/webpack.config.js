@@ -3,6 +3,7 @@ const path = require('path');
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const API_KEY = process.env.API_KEY || '';
 const API_HOST = process.env.API_HOST || '';
 const API_PORT = process.env.API_PORT || '';
 const ROLLBAR_TOKEN = process.env.ROLLBAR_TOKEN || '';
@@ -21,6 +22,7 @@ const plugins = [
   }),
   new webpack.DefinePlugin({
     'process.env': {
+      API_KEY: JSON.stringify(API_KEY),
       API_HOST: JSON.stringify(API_HOST),
       API_PORT: JSON.stringify(API_PORT),
       ROLLBAR_TOKEN: JSON.stringify(ROLLBAR_TOKEN),
