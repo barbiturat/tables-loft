@@ -1,12 +1,14 @@
-import {Observable} from 'rxjs';
+/// <reference path="../custom-typings/lodash-fp.d.ts" />
+
+import {Observable, AjaxError} from 'rxjs';
 import {Epic} from 'redux-observable';
+import {compose, thru} from 'lodash/fp';
 
 import {FETCHING_TABLES} from '../constants/action-names';
-import {get, getErrorMessageFromResponse, isAjaxResponseDefined} from '../helpers/requests';
-import {ResponseTablesPayload, ResponseFailedPayload} from '../interfaces/api-responses';
-import {AjaxResponseTyped, AjaxErrorTyped, AjaxResponseDefined} from '../interfaces/index';
+import {get, isAjaxResponseDefined, getMessageFromAjaxErrorStatus} from '../helpers/requests';
+import {ResponseTablesPayload} from '../interfaces/api-responses';
+import {AjaxResponseTyped, AjaxResponseDefined} from '../interfaces/index';
 import pendingTables from '../action-creators/pending-tables';
-import fetchingTablesFailed from '../action-creators/fetching-tables-failed';
 import {urlTables} from '../constants/urls';
 import {SimpleAction} from '../interfaces/actions';
 import {tablesToFront, tableSessionsToFront} from '../helpers/api-data-converters/index';
@@ -19,7 +21,6 @@ import globalErrorHappened from '../action-creators/global-error-happened';
 
 type ResponseOk = AjaxResponseTyped<ResponseTablesPayload>;
 type ResponseOkDefined = AjaxResponseDefined<ResponseTablesPayload>;
-type ResponseError = AjaxErrorTyped<ResponseFailedPayload>;
 
 const getTableSessionsFromTables = (tables: TableBackend[]) => {
   return tables.reduce((memo: TableSession[], table) => {
@@ -39,7 +40,7 @@ const fetchTables = ((action$) => {
       const tablesRequest$ = Observable.of(null)
         .mergeMap(() =>
           get(`${API_URL}${urlTables}`)
-            .mergeMap((ajaxData: ResponseOk | ResponseError) => {
+            .mergeMap((ajaxData: ResponseOk | AjaxError) => {
               if ( isAjaxResponseDefined<ResponseOkDefined>(ajaxData) ) {
                 const tables = ajaxData.response.tables;
                 const tableSessions = getTableSessionsFromTables(tables);
@@ -56,14 +57,17 @@ const fetchTables = ((action$) => {
                   tablesPendingStop
                 );
               } else {
-                const errorMessage = getErrorMessageFromResponse(ajaxData as ResponseError);
-                const tablesPendingStop = pendingTables(false);
+                const errorMessage = compose(
+                  thru((errorFromStatus: string) => `Fetching tables error: ${errorFromStatus}`),
+                  thru((status: number) => getMessageFromAjaxErrorStatus(status))
+                )(ajaxData.status);
 
-                // globalErrorHappened
+                const tablesPendingStopAction = pendingTables(false);
+                const fetchErrorAction = globalErrorHappened(errorMessage);
 
                 return Observable.of<any>(
-                  tablesPendingStop,
-                  fetchingTablesFailed(errorMessage)
+                  tablesPendingStopAction,
+                  fetchErrorAction
                 );
               }
             })

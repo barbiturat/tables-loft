@@ -3,7 +3,11 @@ import * as queryString from 'query-string';
 
 import {AjaxErrorTyped, AjaxResponseDefined, Defined} from '../interfaces/index';
 import {ResponseFailedPayload} from '../interfaces/api-responses';
-import {STATUS_OK} from '../constants/used-http-status-codes';
+import {
+  STATUS_OK, STATUS_BAD_REQUEST, STATUS_UNAUTHORIZED,
+  STATUS_FORBIDDEN, STATUS_NOT_FOUND, STATUS_REQUEST_TIMEOUT, STATUS_UNPROCESSABLE_ENTITY, STATUS_INTERNAL_SERVER_ERROR,
+  STATUS_SERVICE_UNAVAILABLE
+} from '../constants/used-http-status-codes';
 
 const handleError = (ajaxErrorData: AjaxError): Observable<AjaxError> => {
   /*if (ajaxErrorData.status === 401) {
@@ -80,7 +84,21 @@ export const isAjaxResponseDefined = < TResponseDefined extends AjaxResponseDefi
   return responseField !== undefined && responseField !== null && ajaxResponse!.status === STATUS_OK;
 };
 
-export const isAjaxError = (ajaxResponse: AjaxResponse | AjaxError): ajaxResponse is AjaxError => {
-  return ajaxResponse.status !== STATUS_OK;
+export const isAjaxError = (ajaxData: any): ajaxData is AjaxError => {
+  return ajaxData.status !== STATUS_OK;
 };
 
+const ajaxStatusMessages = {
+  [STATUS_BAD_REQUEST]: 'Bad request',
+  [STATUS_UNAUTHORIZED]: 'Unauthorized',
+  [STATUS_FORBIDDEN]: 'Forbidden',
+  [STATUS_NOT_FOUND]: 'Not found',
+  [STATUS_REQUEST_TIMEOUT]: 'Request timeout',
+  [STATUS_UNPROCESSABLE_ENTITY]: 'Unprocessable entity',
+  [STATUS_INTERNAL_SERVER_ERROR]: 'Internal server error',
+  [STATUS_SERVICE_UNAVAILABLE]: 'Service unavailable'
+};
+
+export const getMessageFromAjaxErrorStatus = (status: number): string => {
+  return ajaxStatusMessages[status] || 'Some strange error';
+};

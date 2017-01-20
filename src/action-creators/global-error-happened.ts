@@ -5,7 +5,12 @@ import {Error} from '../interfaces/store-models';
 
 export type ActionType = ActionWithPayload<Error[]>;
 
-const globalErrorHappened = (error: Error): ActionType => {
+const globalErrorHappened = (message: string): ActionType => {
+  const error: Error = {
+    message,
+    date: Date.now()
+  };
+
   return createActionWithPayload(GLOBAL_ERROR_HAPPENED, error);
 };
 
