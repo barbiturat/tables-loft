@@ -1,5 +1,6 @@
 import {Observable, AjaxResponse, AjaxError} from 'rxjs';
 import * as queryString from 'query-string';
+import {pipe} from 'ramda';
 
 import {AjaxErrorTyped, AjaxResponseDefined, Defined} from '../interfaces/index';
 import {ResponseFailedPayload} from '../interfaces/api-responses';
@@ -8,6 +9,9 @@ import {
   STATUS_FORBIDDEN, STATUS_NOT_FOUND, STATUS_REQUEST_TIMEOUT, STATUS_UNPROCESSABLE_ENTITY, STATUS_INTERNAL_SERVER_ERROR,
   STATUS_SERVICE_UNAVAILABLE
 } from '../constants/used-http-status-codes';
+import {ActionWithPayload} from '../interfaces/actions';
+import globalErrorHappened from '../action-creators/global-error-happened';
+import {Error} from '../interfaces/store-models';
 
 const handleError = (ajaxErrorData: AjaxError): Observable<AjaxError> => {
   /*if (ajaxErrorData.status === 401) {
@@ -101,4 +105,12 @@ const ajaxStatusMessages = {
 
 export const getMessageFromAjaxErrorStatus = (status: number): string => {
   return ajaxStatusMessages[status] || 'Some strange error';
+};
+
+export const getRequestFailedAction = (ajaxErrorStatus: number, messagePrefix: string) => {
+  return pipe< number, string, string, ActionWithPayload<Error[]> >(
+    (status: number) => getMessageFromAjaxErrorStatus(status),
+    (errorFromStatus: string) => `${messagePrefix}: ${errorFromStatus}`,
+    globalErrorHappened
+  )(ajaxErrorStatus);
 };

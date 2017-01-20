@@ -1,22 +1,21 @@
 import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
 import {Store} from 'redux';
-import {merge, clone, pipe} from 'ramda';
+import {merge, clone} from 'ramda';
 
 import {REQUESTING_TABLE_STOP} from '../constants/action-names';
-import {post, isAjaxResponseDefined, getMessageFromAjaxErrorStatus} from '../helpers/requests';
+import {post, isAjaxResponseDefined, getRequestFailedAction} from '../helpers/requests';
 import {ResponseFailedPayload, ResponseStopTablePayload} from '../interfaces/api-responses';
 import {AjaxResponseTyped, AjaxErrorTyped, AjaxResponseDefined} from '../interfaces/index';
 import {urlStopTable} from '../constants/urls';
-import {SimpleAction, ActionWithPayload} from '../interfaces/actions';
+import {SimpleAction} from '../interfaces/actions';
 import {ActionType} from '../action-creators/requesting-table-start';
 import pendingRequestTableStatusChange from '../action-creators/pending-request-table-status-change';
-import {StoreStructure, Tables, Error} from '../interfaces/store-models';
+import {StoreStructure, Tables} from '../interfaces/store-models';
 import tablesChanged from '../action-creators/tables-changed';
 import tableSessionsChanged from '../action-creators/table-sessions-changed';
 import {tableSessionToFront} from '../helpers/api-data-converters/index';
 import {API_URL} from '../constants/index';
-import globalErrorHappened from '../action-creators/global-error-happened';
 
 type ResponseOk = AjaxResponseTyped<ResponseStopTablePayload>;
 type ResponseOkDefined = AjaxResponseDefined<ResponseStopTablePayload>;
@@ -59,12 +58,7 @@ const stopTable = ((action$, store: Store<StoreStructure>) => {
                 );
               } else {
                 const pendingStopAction = pendingRequestTableStatusChange(false, tableId);
-
-                const fetchFailedAction = pipe< number, string, string, ActionWithPayload<Error[]> >(
-                  (status: number) => getMessageFromAjaxErrorStatus(status),
-                  (errorFromStatus: string) => `Table stop error: ${errorFromStatus}`,
-                  globalErrorHappened
-                )(ajaxData.status);
+                const fetchFailedAction = getRequestFailedAction(ajaxData.status, 'Table stop error');
 
                 return Observable.of<any>(
                   pendingStopAction,

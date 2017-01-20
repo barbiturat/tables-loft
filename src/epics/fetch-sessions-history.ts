@@ -6,7 +6,7 @@ import {pipe, clone, merge, keys, map, concat, uniq} from 'ramda';
 import {FETCHING_TABLE_SESSIONS_HISTORY} from '../constants/action-names';
 import {
   get, isAjaxResponseDefined,
-  getMessageFromAjaxErrorStatus
+  getRequestFailedAction
 } from '../helpers/requests';
 import {
   ResponseFailedPayload,
@@ -19,11 +19,10 @@ import {tableSessionsToFront} from '../helpers/api-data-converters/index';
 import tableSessionsChanged from '../action-creators/table-sessions-changed';
 import {ActionType} from '../action-creators/fetching-table-sessions-history';
 import {RequestSessionHistoryPayload} from '../interfaces/api-requests';
-import {StoreStructure, Tables, TableSessions, Table, Error} from '../interfaces/store-models';
+import {StoreStructure, Tables, TableSessions, Table} from '../interfaces/store-models';
 import tablesChanged from '../action-creators/tables-changed';
 import {API_URL} from '../constants/index';
 import {TableSession} from '../interfaces/backend-models';
-import globalErrorHappened from '../action-creators/global-error-happened';
 
 type ResponseOk = AjaxResponseTyped<ResponseSessionsHistoryPayload>;
 type ResponseOkDefined = AjaxResponseDefined<ResponseSessionsHistoryPayload>;
@@ -105,11 +104,7 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
                   tablesChanged
                 )(store.getState().app.tablesData.tables);
 
-                const fetchFailedAction = pipe< number, string, string, ActionWithPayload<Error[]> >(
-                  (status: number) => getMessageFromAjaxErrorStatus(status),
-                  (errorFromStatus: string) => `Fetching table sessions error: ${errorFromStatus}`,
-                  globalErrorHappened
-                )(ajaxData.status);
+                const fetchFailedAction = getRequestFailedAction(ajaxData.status, 'Fetching table sessions error');
 
                 return Observable.of<any>(
                   setTablesWithoutPendingAction,

@@ -1,21 +1,19 @@
 import {Observable, AjaxError} from 'rxjs';
 import {Epic} from 'redux-observable';
-import {pipe} from 'ramda';
 
 import {FETCHING_TABLES} from '../constants/action-names';
-import {get, isAjaxResponseDefined, getMessageFromAjaxErrorStatus} from '../helpers/requests';
+import {get, isAjaxResponseDefined, getRequestFailedAction} from '../helpers/requests';
 import {ResponseTablesPayload} from '../interfaces/api-responses';
 import {AjaxResponseTyped, AjaxResponseDefined} from '../interfaces/index';
 import pendingTables from '../action-creators/pending-tables';
 import {urlTables} from '../constants/urls';
-import {SimpleAction, ActionWithPayload} from '../interfaces/actions';
+import {SimpleAction} from '../interfaces/actions';
 import {tablesToFront, tableSessionsToFront} from '../helpers/api-data-converters/index';
 import {TableSession, Table as TableBackend} from '../interfaces/backend-models';
 import tableSessionsChanged from '../action-creators/table-sessions-changed';
 import tablesChanged from '../action-creators/tables-changed';
-import {Tables, Error} from '../interfaces/store-models';
+import {Tables} from '../interfaces/store-models';
 import {API_URL} from '../constants/index';
-import globalErrorHappened from '../action-creators/global-error-happened';
 
 type ResponseOk = AjaxResponseTyped<ResponseTablesPayload>;
 type ResponseOkDefined = AjaxResponseDefined<ResponseTablesPayload>;
@@ -55,11 +53,7 @@ const fetchTables = ((action$) => {
                   tablesPendingStop
                 );
               } else {
-                const fetchFailedAction = pipe<number, string, string, ActionWithPayload<Error[]>>(
-                  (status: number) => getMessageFromAjaxErrorStatus(status),
-                  (errorFromStatus: string) => `Fetching tables error: ${errorFromStatus}`,
-                  globalErrorHappened
-                )(ajaxData.status);
+                const fetchFailedAction = getRequestFailedAction(ajaxData.status, 'Fetching tables error');
 
                 const tablesPendingStopAction = pendingTables(false);
 

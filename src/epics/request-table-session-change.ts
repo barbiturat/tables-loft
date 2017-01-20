@@ -1,10 +1,10 @@
 import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
 import {Store} from 'redux';
-import {merge, clone, pipe} from 'ramda';
+import {merge, clone} from 'ramda';
 
 import {REQUESTING_TABLE_SESSION_CHANGE} from '../constants/action-names';
-import {request, getMessageFromAjaxErrorStatus} from '../helpers/requests';
+import {request, getRequestFailedAction} from '../helpers/requests';
 import {
   ResponseFailedPayload,
   ResponseUpdateTableSessionPayload
@@ -12,13 +12,12 @@ import {
 import {AjaxResponseTyped, AjaxErrorTyped, Partial} from '../interfaces/index';
 import {STATUS_OK} from '../constants/used-http-status-codes';
 import {urlUpdateTableSession} from '../constants/urls';
-import {SimpleAction, ActionWithPayload} from '../interfaces/actions';
+import {SimpleAction} from '../interfaces/actions';
 import tableSessionsChanged from '../action-creators/table-sessions-changed';
 import {RequestUpdateTableSessionPayload} from '../interfaces/api-requests';
-import {StoreStructure, TableSession, TableSessions, Error} from '../interfaces/store-models';
+import {StoreStructure, TableSession, TableSessions} from '../interfaces/store-models';
 import {ActionType} from '../action-creators/requesting-table-session-change';
 import {API_URL} from '../constants/index';
-import globalErrorHappened from '../action-creators/global-error-happened';
 
 type ResponseOk = AjaxResponseTyped<ResponseUpdateTableSessionPayload>;
 type ResponseError = AjaxErrorTyped<ResponseFailedPayload>;
@@ -67,11 +66,7 @@ const requestTableSessionChange = ((action$, store: Store<StoreStructure>) => {
                   setSessionsAction
                 );
               } else {
-                const fetchFailedAction = pipe< number, string, string, ActionWithPayload<Error[]> >(
-                  (status: number) => getMessageFromAjaxErrorStatus(status),
-                  (errorFromStatus: string) => `Table session change error: ${errorFromStatus}`,
-                  globalErrorHappened
-                )(ajaxData.status);
+                const fetchFailedAction = getRequestFailedAction(ajaxData.status, 'Table session change error');
 
                 return Observable.of<any>(
                   fetchFailedAction
