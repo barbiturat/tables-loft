@@ -1,9 +1,11 @@
+/// <reference path="../custom-typings/lodash-fp.d.ts" />
+
 import * as React from 'react';
 import {connect} from 'react-redux';
 import MouseEvent = React.MouseEvent;
 import * as Modal from 'react-modal';
 import * as ReactPaginate from 'react-paginate';
-import {chain, pick} from 'lodash';
+import {compose, keys, chunk, nth, pick} from 'lodash/fp';
 
 import {StoreStructure, Table, TableSession, Tables, TableSessions} from '../interfaces/store-models';
 import {PropsExtendedByConnect} from '../interfaces/component';
@@ -71,17 +73,14 @@ class Component extends React.Component<PropsFromConnect, State> {
   };
 
   static getSessionsPage(sessions: TableSessions, pageIdx: number): TableSessions {
-    const idsPage = chain(sessions)
-      .keys()
-      .chunk(Component.PAGE_SIZE)
-      .thru((pages: string[][]) => pages[pageIdx])
-      .value();
+    const idsPage = compose(
+      nth(pageIdx),
+      chunk(Component.PAGE_SIZE),
+      keys
+    )(sessions);
 
     if (idsPage) {
-      return chain(idsPage)
-        .map((id: string) => Number(id))
-        .thru((ids: number[]) => pick(sessions, ids))
-        .value() as TableSessions;
+      return pick(idsPage)(sessions) as TableSessions;
     } else {
       return {} as TableSessions;
     }
