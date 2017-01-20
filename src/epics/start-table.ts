@@ -1,7 +1,7 @@
 import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
 import {Store} from 'redux';
-import {clone, assign} from 'lodash';
+import {merge, clone} from 'ramda';
 
 import {REQUESTING_TABLE_START} from '../constants/action-names';
 import {post, getErrorMessageFromResponse, isAjaxResponseDefined} from '../helpers/requests';
@@ -39,7 +39,7 @@ const startTable = ((action$, store: Store<StoreStructure>) => {
                 const currSessions = clone( appData.tableSessionsData.tableSessions );
                 const session = ajaxData.response.session;
                 const convertedSession = tableSessionToFront(session);
-                const newSessions = assign({}, currSessions, {
+                const newSessions = merge(currSessions, {
                   [convertedSession.id]: convertedSession
                 });
                 const pendingStopAction = pendingRequestTableStatusChange(false, tableId);

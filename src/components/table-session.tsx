@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import * as moment from 'moment';
 import MouseEvent = React.MouseEvent;
 import KeyboardEvent = React.KeyboardEvent;
-import {assign} from 'lodash';
+import {merge} from 'ramda';
 
 import {StoreStructure, TableSession as TableSessionType, AdminToken, TableSessions} from '../interfaces/store-models';
 import {PropsExtendedByConnect} from '../interfaces/component';
@@ -37,13 +37,13 @@ class Component extends React.Component<PropsFromConnect, State> {
   }
 
   setEditingMode(turnOn: boolean) {
-    this.setState(assign({}, this.state, {
+    this.setState(merge(this.state, {
       isInEditing: turnOn
     }));
   }
 
   onSessionInfoClick = (event: MouseEvent<HTMLDivElement>) => {
-    this.setState(assign({}, this.state, {
+    this.setState(merge(this.state, {
       isFormatOfMinutes: !this.state.isFormatOfMinutes
     }));
   };

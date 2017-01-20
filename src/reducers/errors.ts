@@ -1,4 +1,4 @@
-import {clone} from 'lodash';
+import {clone} from 'ramda';
 
 import {GLOBAL_ERROR_HAPPENED} from '../constants/action-names';
 import {Error} from '../interfaces/store-models';

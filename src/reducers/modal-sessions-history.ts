@@ -1,4 +1,4 @@
-import {clone} from 'lodash';
+import {clone} from 'ramda';
 
 import {ActionWithPayload} from '../interfaces/actions';
 import {MODAL_SESSIONS_HISTORY_CHANGED} from '../constants/action-names';

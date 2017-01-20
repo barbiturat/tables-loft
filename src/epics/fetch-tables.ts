@@ -1,8 +1,6 @@
-/// <reference path="../custom-typings/lodash-fp.d.ts" />
-
 import {Observable, AjaxError} from 'rxjs';
 import {Epic} from 'redux-observable';
-import {compose, thru} from 'lodash/fp';
+import {pipe} from 'ramda';
 
 import {FETCHING_TABLES} from '../constants/action-names';
 import {get, isAjaxResponseDefined, getMessageFromAjaxErrorStatus} from '../helpers/requests';
@@ -57,9 +55,9 @@ const fetchTables = ((action$) => {
                   tablesPendingStop
                 );
               } else {
-                const errorMessage = compose(
-                  thru((errorFromStatus: string) => `Fetching tables error: ${errorFromStatus}`),
-                  thru((status: number) => getMessageFromAjaxErrorStatus(status))
+                const errorMessage = pipe<number, string, string>(
+                  (status: number) => getMessageFromAjaxErrorStatus(status),
+                  (errorFromStatus: string) => `Fetching tables error: ${errorFromStatus}`
                 )(ajaxData.status);
 
                 const tablesPendingStopAction = pendingTables(false);

@@ -1,4 +1,4 @@
-import {clone} from 'lodash';
+import {clone} from 'ramda';
 
 import {TABLE_SESSIONS_CHANGED} from '../constants/action-names';
 import {TableSessions} from '../interfaces/store-models';

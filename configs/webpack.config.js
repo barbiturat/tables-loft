@@ -41,7 +41,7 @@ module.exports = {
     bundle: './index.tsx',
     vendor: [
       'classnames',
-      'lodash',
+      'ramda',
       'moment',
       'react',
       'react-dom',

@@ -1,4 +1,4 @@
-import {clone} from 'lodash';
+import {clone} from 'ramda';
 
 import {TABLES_CHANGED} from '../constants/action-names';
 import {Tables} from '../interfaces/store-models';

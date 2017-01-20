@@ -1,7 +1,7 @@
 import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
 import {Store} from 'redux';
-import {assign, clone} from 'lodash';
+import {merge, clone} from 'ramda';
 
 import {REQUESTING_TABLE_SESSION_CHANGE} from '../constants/action-names';
 import {request} from '../helpers/requests';
@@ -26,7 +26,7 @@ const setNewParamsToSession = (sessions: TableSessions, sessionId: number, param
   const session = sessions[sessionId];
 
   if (session) {
-    assign(session, params);
+    merge(session, params);
   }
 
   return sessions;
