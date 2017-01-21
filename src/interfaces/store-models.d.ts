@@ -36,3 +36,8 @@ export interface ModalSessionsHistory {
   isOpened: boolean;
   tableId?: number;
 }
+
+export interface Error {
+  message: string;
+  date: number;
+}

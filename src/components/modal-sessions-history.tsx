@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import MouseEvent = React.MouseEvent;
 import * as Modal from 'react-modal';
 import * as ReactPaginate from 'react-paginate';
+import {pick, splitEvery, nth, pipe, keys} from 'ramda';
 
 import {StoreStructure, Table, TableSession, Tables, TableSessions} from '../interfaces/store-models';
 import {PropsExtendedByConnect} from '../interfaces/component';
@@ -19,9 +20,15 @@ interface MappedProps {
   allTableSessions: TableSessions;
 }
 
+interface State {
+  currentPageNum: number;
+}
+
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
-class Component extends React.Component<PropsFromConnect, {}> {
+class Component extends React.Component<PropsFromConnect, State> {
+
+  static PAGE_SIZE = 5;
 
   static modalClasses = {
     pool: 'modal_table_pool',
@@ -30,10 +37,13 @@ class Component extends React.Component<PropsFromConnect, {}> {
     generic: 'modal_table_default'
   };
 
-
   static getSessionsHistoryInPending(currentTable?: Table) {
     return currentTable ? currentTable.isSessionsHistoryInPending : false;
   }
+
+  state = {
+    currentPageNum: 0
+  };
 
   requestToClose() {
     this.props.dispatch( modalSessionsHistoryChanged(false) );
@@ -60,14 +70,64 @@ class Component extends React.Component<PropsFromConnect, {}> {
     }, {} as TableSessions);
   };
 
+  static getSessionsPage(sessions: TableSessions, pageIdx: number): TableSessions {
+    const idsPage = pipe<TableSessions, string[], string[][], string[]>(
+      keys,
+      splitEvery(Component.PAGE_SIZE),
+      nth(pageIdx)
+    )(sessions);
+
+    if (idsPage) {
+      return pick(idsPage)(sessions) as TableSessions;
+    } else {
+      return {} as TableSessions;
+    }
+  }
+
+  onPageChangeHandler = (data: any) => {
+    this.setState({
+      currentPageNum: data.selected
+    });
+  };
+
+  getPaginator(numOfPages: number, currentPageNum: number, isInPending: boolean) {
+    return numOfPages && !isInPending ? (
+        <ReactPaginate
+          pageCount={numOfPages}
+          pageRangeDisplayed={2}
+          marginPagesDisplayed={0}
+          initialPage={0}
+          forcePage={currentPageNum}
+          previousLabel="previous"
+          nextLabel="next"
+          breakLabel={<span>...</span>}
+          containerClassName="paginator"
+          pageClassName="paginator__button paginator__button_role_page"
+          pageLinkClassName="paginator__button-link"
+          previousClassName="paginator__button paginator__button_role_prev"
+          previousLinkClassName="paginator__button-link"
+          nextClassName="paginator__button paginator__button_role_next"
+          nextLinkClassName="paginator__button-link"
+          breakClassName="paginator__button paginator__button_role_break"
+          activeClassName="paginator-active"
+          disabledClassName="paginator-disabled"
+          onPageChange={this.onPageChangeHandler}
+        />
+      ) : null;
+  }
+
   render() {
     const {allTableSessions, currentTable} = this.props;
 
     if (currentTable) {
+      const currentPageNum = this.state.currentPageNum;
       const historyPending = Component.getSessionsHistoryInPending(currentTable);
-      const sessions = Component.getTableSessions(allTableSessions, currentTable);
       const modalClass = Component.modalClasses[currentTable.tableType] || '';
       const caption = currentTable.name;
+      const sessions = Component.getTableSessions(allTableSessions, currentTable);
+      const sessionsPage = Component.getSessionsPage(sessions, currentPageNum);
+      const numOfPages = Math.ceil( Object.keys(sessions).length / Component.PAGE_SIZE );
+      const firstIdx = currentPageNum * Component.PAGE_SIZE;
 
       return (
         <Modal
@@ -88,26 +148,11 @@ class Component extends React.Component<PropsFromConnect, {}> {
 
           <SessionsHistory
             isInPending={historyPending}
-            tableSessions={sessions}
+            tableSessions={sessionsPage}
+            firstIdx={firstIdx}
           />
 
-          <ReactPaginate
-            pageCount={15}
-            pageRangeDisplayed={3}
-            marginPagesDisplayed={1}
-            initialPage={7}
-            previousLabel="previous"
-            nextLabel="next"
-            breakLabel={<a href="">...</a>}
-            breakClassName="break-me"
-            containerClassName="paginator"
-            pageClassName="paginator__button paginator__button_role_page"
-            previousClassName="paginator__button paginator__button_role_prev"
-            nextClassName="paginator__button paginator__button_role_next"
-            activeClassName="active"
-            disabledClassName="disabled"
-          />
-
+          {this.getPaginator(numOfPages, currentPageNum, historyPending)}
         </Modal>
       );
     } else {

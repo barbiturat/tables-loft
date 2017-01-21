@@ -1,10 +1,10 @@
 import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
-import {MiddlewareAPI} from 'redux';
-import {assign, clone} from 'lodash';
+import {Store} from 'redux';
+import {merge, clone} from 'ramda';
 
 import {REQUESTING_TABLE_SESSION_CHANGE} from '../constants/action-names';
-import {request} from '../helpers/requests';
+import {request, getRequestFailedAction} from '../helpers/requests';
 import {
   ResponseFailedPayload,
   ResponseUpdateTableSessionPayload
@@ -17,6 +17,7 @@ import tableSessionsChanged from '../action-creators/table-sessions-changed';
 import {RequestUpdateTableSessionPayload} from '../interfaces/api-requests';
 import {StoreStructure, TableSession, TableSessions} from '../interfaces/store-models';
 import {ActionType} from '../action-creators/requesting-table-session-change';
+import {API_URL} from '../constants/index';
 
 type ResponseOk = AjaxResponseTyped<ResponseUpdateTableSessionPayload>;
 type ResponseError = AjaxErrorTyped<ResponseFailedPayload>;
@@ -25,14 +26,14 @@ const setNewParamsToSession = (sessions: TableSessions, sessionId: number, param
   const session = sessions[sessionId];
 
   if (session) {
-    assign(session, params);
+    merge(session, params);
   }
 
   return sessions;
 };
 
 
-const requestTableSessionChange = ((action$, store: MiddlewareAPI<StoreStructure>) => {
+const requestTableSessionChange = ((action$, store: Store<StoreStructure>) => {
   return action$.ofType(REQUESTING_TABLE_SESSION_CHANGE)
     .switchMap((action: ActionType) => {
       const {sessionId, durationSeconds, adminToken} = action.payload;
@@ -46,7 +47,7 @@ const requestTableSessionChange = ((action$, store: MiddlewareAPI<StoreStructure
         isInPending: true
       });
       const setSessionsWithPending$ = Observable.of( tableSessionsChanged(newSessions) );
-      const url = urlUpdateTableSession.replace(':session_id', String(sessionId));
+      const url = `${API_URL}${urlUpdateTableSession}`.replace(':session_id', String(sessionId));
 
       const request$ = Observable.of(null)
         .mergeMap(() =>
@@ -65,10 +66,10 @@ const requestTableSessionChange = ((action$, store: MiddlewareAPI<StoreStructure
                   setSessionsAction
                 );
               } else {
+                const fetchFailedAction = getRequestFailedAction(ajaxData.status, 'Table session change error');
+
                 return Observable.of<any>(
-                  {
-                    type: 'error'
-                  }
+                  fetchFailedAction
                 );
               }
             })

@@ -13,19 +13,32 @@ import updateTableSession from './endpoints/update-table-session';
 // tslint:disable-next-line:no-require-imports
 const packageJson = require('../../../package.json');
 
-const server = express();
+const app = express();
 const port = packageJson.appSettings.apiServerPort;
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
-login(server, urlencodedParser);
-logout(server, urlencodedParser);
-getAdminToken(server, urlencodedParser);
-sessionHistory(server, urlencodedParser);
-startTable(server, urlencodedParser);
-stopTable(server, urlencodedParser);
-tables(server, urlencodedParser);
-updateTableSession(server, urlencodedParser);
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, HEAD, OPTIONS, PUT, DELETE, PATCH');
+  next();
+});
 
-server.listen(port, function () {
+login(app, urlencodedParser);
+logout(app, urlencodedParser);
+getAdminToken(app, urlencodedParser);
+sessionHistory(app, urlencodedParser);
+startTable(app, urlencodedParser);
+stopTable(app, urlencodedParser);
+tables(app, urlencodedParser);
+updateTableSession(app, urlencodedParser);
+
+/*
+app.all('*', function(req, res){
+  console.log('req.url', req.url);
+});
+*/
+
+app.listen(port, function () {
   console.log(`JSON Server is running on port ${port}`);
 });

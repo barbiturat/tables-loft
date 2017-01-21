@@ -1,13 +1,12 @@
 import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
-import {MiddlewareAPI} from 'redux';
-import {assign, clone} from 'lodash';
+import {Store} from 'redux';
+import {merge, clone} from 'ramda';
 
 import {REQUESTING_TABLE_STOP} from '../constants/action-names';
-import {post, getErrorMessageFromResponse} from '../helpers/requests';
+import {post, isAjaxResponseDefined, getRequestFailedAction} from '../helpers/requests';
 import {ResponseFailedPayload, ResponseStopTablePayload} from '../interfaces/api-responses';
-import {AjaxResponseTyped, AjaxErrorTyped} from '../interfaces/index';
-import {STATUS_OK} from '../constants/used-http-status-codes';
+import {AjaxResponseTyped, AjaxErrorTyped, AjaxResponseDefined} from '../interfaces/index';
 import {urlStopTable} from '../constants/urls';
 import {SimpleAction} from '../interfaces/actions';
 import {ActionType} from '../action-creators/requesting-table-start';
@@ -16,28 +15,29 @@ import {StoreStructure, Tables} from '../interfaces/store-models';
 import tablesChanged from '../action-creators/tables-changed';
 import tableSessionsChanged from '../action-creators/table-sessions-changed';
 import {tableSessionToFront} from '../helpers/api-data-converters/index';
-import requestingTableStopFailed from '../action-creators/requesting-table-stop-failed';
+import {API_URL} from '../constants/index';
 
 type ResponseOk = AjaxResponseTyped<ResponseStopTablePayload>;
+type ResponseOkDefined = AjaxResponseDefined<ResponseStopTablePayload>;
 type ResponseError = AjaxErrorTyped<ResponseFailedPayload>;
 
-const stopTable = ((action$, store: MiddlewareAPI<StoreStructure>) => {
+const stopTable = ((action$, store: Store<StoreStructure>) => {
   return action$.ofType(REQUESTING_TABLE_STOP)
     .switchMap((action: ActionType) => {
       const tableId = action.payload;
       const pendingStart$ = Observable.of(pendingRequestTableStatusChange(true, tableId));
-      const url = urlStopTable.replace(':table_id', String(tableId));
+      const url = `${API_URL}${urlStopTable}`.replace(':table_id', String(tableId));
       const request$ = Observable.of(null)
         .mergeMap(() =>
           post(url)
             .mergeMap((ajaxData: ResponseOk | ResponseError) => {
-              if (ajaxData.status === STATUS_OK) {
+              if ( isAjaxResponseDefined<ResponseOkDefined>(ajaxData) ) {
                 const appData = store.getState().app;
                 const newTables: Tables = clone( appData.tablesData.tables );
                 const currSessions = clone( appData.tableSessionsData.tableSessions );
-                const session = (ajaxData as ResponseOk).response.session;
+                const session = ajaxData.response.session;
                 const convertedSession = tableSessionToFront(session);
-                const newSessions = assign({
+                const newSessions = merge({
                   [convertedSession.id]: convertedSession
                 }, currSessions);
                 const pendingStopAction = pendingRequestTableStatusChange(false, tableId);
@@ -57,10 +57,12 @@ const stopTable = ((action$, store: MiddlewareAPI<StoreStructure>) => {
                   tablesChangedAction
                 );
               } else {
-                const errorMessage = getErrorMessageFromResponse(ajaxData as ResponseError);
+                const pendingStopAction = pendingRequestTableStatusChange(false, tableId);
+                const fetchFailedAction = getRequestFailedAction(ajaxData.status, 'Table stop error');
 
                 return Observable.of<any>(
-                  requestingTableStopFailed(errorMessage)
+                  pendingStopAction,
+                  fetchFailedAction
                 );
               }
             })

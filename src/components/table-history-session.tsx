@@ -8,6 +8,7 @@ import {PropsExtendedByConnect} from '../interfaces/component';
 
 interface Props {
   session: TableSessionType;
+  idx: number;
 }
 
 interface State {
@@ -51,7 +52,7 @@ class Component extends React.Component<PropsFromConnect, State> {
   }
 
   render() {
-    const session = this.props.session;
+    const {session, idx} = this.props;
 
     if (session) {
       const {durationSeconds, startsAt, adminEdited} = session;
@@ -60,17 +61,18 @@ class Component extends React.Component<PropsFromConnect, State> {
           seconds: durationSeconds
         })
         .format('hh:mm');
-      const adminEditedClassName = adminEdited ? 'table__session-length_admin-edited' : '';
       const durationString = Component.getDurationString(durationSeconds, this.state.isFormatOfMinutes);
+      const adminEditedSign = adminEdited ? '*' : '';
+      const fullDurationString = `${durationString}${adminEditedSign}`;
 
       return (
         <div
             className="sessions-list__tr"
             onClick={this.onSessionInfoClick}
         >
-          <div className="sessions-list__td sessions-list__td_role_index">1</div>
+          <div className="sessions-list__td sessions-list__td_role_index">{idx}</div>
           <div className="sessions-list__td sessions-list__td_role_time">{finishTime}</div>
-          <div className="sessions-list__td sessions-list__td_role_duration">{durationString}</div>
+          <div className="sessions-list__td sessions-list__td_role_duration">{fullDurationString}</div>
         </div>
       );
     } else {

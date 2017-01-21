@@ -10,3 +10,7 @@ export const createActionWithPayload = (type: string, payload: any) => ({
   type,
   payload
 });
+
+export const anyTypeGuard = <T>(dataToCheck: any, condition: (data: any) => boolean): dataToCheck is T => {
+  return condition(dataToCheck);
+};

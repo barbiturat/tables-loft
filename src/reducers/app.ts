@@ -7,6 +7,7 @@ import tableSessionsData, {Structure as TableSessionsDataStructure} from './tabl
 import utcMilliseconds, {Structure as UtcMillisecondsDataStructure} from './utc-milliseconds';
 import adminToken, {Structure as AdminTokenStructure} from './admin-token';
 import modals, {Structure as ModalsStructure} from './modals';
+import globalErrors, {Structure as GlobalErrorsStructure} from './errors';
 
 export interface Structure {
   adminToken: AdminTokenStructure;
@@ -15,6 +16,7 @@ export interface Structure {
   userInfo: UserInfoStructure;
   tablesData: TablesDataStructure;
   tableSessionsData: TableSessionsDataStructure;
+  globalErrors: GlobalErrorsStructure;
 }
 
 const reducers: ReducersOfType<Structure> = {
@@ -23,7 +25,8 @@ const reducers: ReducersOfType<Structure> = {
   utcMilliseconds,
   userInfo,
   tablesData,
-  tableSessionsData
+  tableSessionsData,
+  globalErrors
 };
 
 const app = combineReducers<Structure>(reducers);
