@@ -42,12 +42,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
   };
 
   static isTableActive(currentSession?: TableSessionType): boolean {
-    if (currentSession) {
-      const tableStatus = Component.getTableStatus(currentSession.startsAt, currentSession.durationSeconds);
-      return tableStatus === 'active';
-    } else {
-      return false;
-    }
+    return !!currentSession;
   };
 
   getCurrentSession() {
