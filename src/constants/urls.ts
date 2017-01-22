@@ -1,4 +1,4 @@
-export const urlGetAdminToken = `/api_tokens.json`;
+export const urlGetAdminToken = `/admin_tokens.json`;
 export const urlLogin = `/login`;
 export const urlLogout = `/logout`;
 export const urlSessionHistory = `/table_sessions/history.json`;
