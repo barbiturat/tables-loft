@@ -11,7 +11,7 @@ import {
 } from '../constants/used-http-status-codes';
 import {ActionWithPayload} from '../interfaces/actions';
 import globalErrorHappened from '../action-creators/global-error-happened';
-import {Error} from '../interfaces/store-models';
+import {GlobalError} from '../interfaces/store-models';
 
 const handleError = (ajaxErrorData: AjaxError): Observable<AjaxError> => {
   /*if (ajaxErrorData.status === 401) {
@@ -113,7 +113,7 @@ export const getMessageFromAjaxErrorStatus = (status: number): string => {
 };
 
 export const getRequestFailedAction = (ajaxErrorStatus: number, messagePrefix: string) => {
-  return pipe< number, string, string, ActionWithPayload<Error[]> >(
+  return pipe< number, string, string, ActionWithPayload<GlobalError[]> >(
     (status: number) => getMessageFromAjaxErrorStatus(status),
     (errorFromStatus: string) => `${messagePrefix}: ${errorFromStatus}`,
     globalErrorHappened

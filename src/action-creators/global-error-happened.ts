@@ -1,12 +1,12 @@
 import {GLOBAL_ERROR_HAPPENED} from '../constants/action-names';
 import {createActionWithPayload} from '../helpers/index';
 import {ActionWithPayload} from '../interfaces/actions';
-import {Error} from '../interfaces/store-models';
+import {GlobalError} from '../interfaces/store-models';
 
-export type ActionType = ActionWithPayload<Error[]>;
+export type ActionType = ActionWithPayload<GlobalError[]>;
 
 const globalErrorHappened = (message: string): ActionType => {
-  const error: Error = {
+  const error: GlobalError = {
     message,
     date: Date.now()
   };
