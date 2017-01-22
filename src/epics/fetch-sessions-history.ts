@@ -49,9 +49,7 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
   return action$.ofType(FETCHING_TABLE_SESSIONS_HISTORY)
     .switchMap((action: ActionType) => {
       const tableId = action.payload;
-      const dataToSend: RequestSessionHistoryPayload = {
-        tableId
-      };
+      const dataToSend: RequestSessionHistoryPayload = {};
       const url = `${API_URL}${urlSessionHistory}`.replace(':table_id', String(tableId));
 
       const setTablesWithPending$ = pipe< Tables, Tables, Tables, ActionWithPayload<Tables>, Observable<ActionWithPayload<Tables>> >(
