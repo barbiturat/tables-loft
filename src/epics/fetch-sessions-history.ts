@@ -16,7 +16,7 @@ import {AjaxResponseTyped, AjaxErrorTyped, AjaxResponseDefined} from '../interfa
 import {urlSessionHistory} from '../constants/urls';
 import {SimpleAction, ActionWithPayload} from '../interfaces/actions';
 import {tableSessionsToFront} from '../helpers/api-data-converters/index';
-import tableSessionsChanged from '../action-creators/table-sessions-changed';
+import changingTableSessions from '../action-creators/changing-table-sessions';
 import {ActionType} from '../action-creators/fetching-table-sessions-history';
 import {RequestSessionHistoryPayload} from '../interfaces/api-requests';
 import {StoreStructure, Tables, TableSessions, Table} from '../interfaces/store-models';
@@ -74,7 +74,7 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
 
                 const setSessionsAction = pipe<TableSessions, TableSessions, ActionWithPayload<TableSessions> >(
                   merge(appData.tableSessionsData.tableSessions),
-                  (newSessionsAll: TableSessions) => tableSessionsChanged(newSessionsAll)
+                  (newSessionsAll: TableSessions) => changingTableSessions(newSessionsAll)
                 )(convertedResponseSessions);
 
                 const actions: SimpleAction[] = [setSessionsAction];

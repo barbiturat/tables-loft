@@ -13,7 +13,7 @@ import {AjaxResponseTyped, AjaxErrorTyped, Partial} from '../interfaces/index';
 import {STATUS_OK} from '../constants/used-http-status-codes';
 import {urlUpdateTableSession} from '../constants/urls';
 import {SimpleAction} from '../interfaces/actions';
-import tableSessionsChanged from '../action-creators/table-sessions-changed';
+import changingTableSessions from '../action-creators/changing-table-sessions';
 import {RequestUpdateTableSessionPayload} from '../interfaces/api-requests';
 import {StoreStructure, TableSession, TableSessions} from '../interfaces/store-models';
 import {ActionType} from '../action-creators/requesting-table-session-change';
@@ -46,7 +46,7 @@ const requestTableSessionChange = ((action$, store: Store<StoreStructure>) => {
       const newSessions = setNewParamsToSession(currSessionsClone, sessionId, {
         isInPending: true
       });
-      const setSessionsWithPending$ = Observable.of( tableSessionsChanged(newSessions) );
+      const setSessionsWithPending$ = Observable.of( changingTableSessions(newSessions) );
       const url = `${API_URL}${urlUpdateTableSession}`.replace(':session_id', String(sessionId));
 
       const request$ = Observable.of(null)
@@ -60,7 +60,7 @@ const requestTableSessionChange = ((action$, store: Store<StoreStructure>) => {
                   durationSeconds,
                   adminEdited: true
                 });
-                const setSessionsAction = tableSessionsChanged(editedSessions);
+                const setSessionsAction = changingTableSessions(editedSessions);
 
                 return Observable.of<any>(
                   setSessionsAction

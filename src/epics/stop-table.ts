@@ -13,7 +13,7 @@ import {ActionType} from '../action-creators/requesting-table-start';
 import pendingRequestTableStatusChange from '../action-creators/pending-request-table-status-change';
 import {StoreStructure, Tables} from '../interfaces/store-models';
 import changingTables from '../action-creators/changing-tables';
-import tableSessionsChanged from '../action-creators/table-sessions-changed';
+import changingTableSessions from '../action-creators/changing-table-sessions';
 import {tableSessionToFront} from '../helpers/api-data-converters/index';
 import {API_URL} from '../constants/index';
 
@@ -41,7 +41,7 @@ const stopTable = ((action$, store: Store<StoreStructure>) => {
                   [convertedSession.id]: convertedSession
                 }, currSessions);
                 const pendingStopAction = pendingRequestTableStatusChange(false, tableId);
-                const tableSessionsChangedAction = tableSessionsChanged(newSessions);
+                const tableSessionsChangedAction = changingTableSessions(newSessions);
 
                 const changedTable = newTables[tableId];
 
