@@ -9,6 +9,7 @@ import requestAdminToken from './request-admin-token';
 import fetchSessionsHistory from './fetch-sessions-history';
 import requestTableSessionChange from './request-table-session-change';
 import changeTableFields from './change-table-fields';
+import unsetGlobalError from './unsetGlobalError';
 
 export default combineEpics(
   formValidation,
@@ -19,5 +20,6 @@ export default combineEpics(
   updateUtcMilliseconds,
   stopTable,
   requestTableSessionChange,
-  changeTableFields
+  changeTableFields,
+  unsetGlobalError,
 );

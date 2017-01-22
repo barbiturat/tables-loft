@@ -9,6 +9,7 @@ import {StoreStructure} from '../interfaces/store-models';
 import changingUtcMilliseconds from '../action-creators/changing-utc-milliseconds';
 import ModalAdminLogin from './modal-admin-login';
 import ModalSessionsHistory from './modal-sessions-history';
+import GlobalErrors from './global-errors';
 
 type PropsFromConnect = PropsExtendedByConnect<AnyDict, AnyDict>;
 
@@ -38,6 +39,7 @@ class App extends React.Component<PropsFromConnect, AnyDict> {
 
         <ModalAdminLogin/>
         <ModalSessionsHistory/>
+        <GlobalErrors/>
       </div>
     );
   }

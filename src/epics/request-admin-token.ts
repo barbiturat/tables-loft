@@ -31,6 +31,7 @@ const requestAdminToken = ((action$) => {
             .mergeMap((ajaxData: ResponseOk | ResponseError) => {
               if ( isAjaxResponseDefined<ResponseOkDefined>(ajaxData) ) {
                 const adminToken = ajaxData.response.adminToken;
+
                 const setSubmittedAction = actions.setSubmitted(formModelPath, true);
                 const setAdminTokenAction = adminTokenUpdated(adminToken);
                 const closeAdminModalAction = modalAdminLoginOpened(false);
