@@ -18,7 +18,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           status: 'enabled',
           currentSession: {
             id: 10,
-            starts_at: moment().utc().subtract({
+            startsAt: moment().utc().subtract({
               hours: 1,
               minutes: 24,
             }).toISOString(),
@@ -27,7 +27,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           },
           lastSession: {
             id: 11,
-            starts_at: moment().utc().subtract({
+            startsAt: moment().utc().subtract({
               hours: 4,
               minutes: 11,
             }).toISOString(),
@@ -42,7 +42,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           status: 'enabled',
           currentSession: {
             id: 12,
-            starts_at: moment().utc().subtract({
+            startsAt: moment().utc().subtract({
               hours: 2,
               minutes: 33,
             }).toISOString(),
@@ -52,7 +52,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           ,
           lastSession: {
             id: 13,
-            starts_at: moment().utc().subtract({
+            startsAt: moment().utc().subtract({
               hours: 7,
               minutes: 11,
             }).toISOString(),
@@ -67,7 +67,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           status: 'disabled',
           currentSession: {
             id: 14,
-            starts_at: moment().utc().subtract({
+            startsAt: moment().utc().subtract({
               hours: 3,
               minutes: 56,
             }).toISOString(),
@@ -91,7 +91,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           status: 'enabled',
           currentSession: {
             id: 166,
-            starts_at: moment().utc().subtract({
+            startsAt: moment().utc().subtract({
               hours: 0,
               minutes: 2,
             }).toISOString(),
@@ -100,7 +100,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           },
           lastSession: {
             id: 17,
-            starts_at: moment().utc().subtract({
+            startsAt: moment().utc().subtract({
               hours: 3,
               minutes: 4,
             }).toISOString(),
@@ -115,7 +115,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           status: 'disabled',
           currentSession: {
             id: 18,
-            starts_at: moment().utc().subtract({
+            startsAt: moment().utc().subtract({
               hours: 1,
               minutes: 38,
             }).toISOString(),
@@ -133,7 +133,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           status: 'enabled',
           currentSession: {
             id: 19,
-            starts_at: moment().utc().subtract({
+            startsAt: moment().utc().subtract({
               hours: 2,
               minutes: 18,
             }).toISOString(),
@@ -142,7 +142,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           },
           lastSession: {
             id: 20,
-            starts_at: moment().utc().subtract({
+            startsAt: moment().utc().subtract({
               hours: 2,
               minutes: 44,
             }).toISOString(),
@@ -157,7 +157,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           status: 'enabled',
           currentSession: {
             id: 21,
-            starts_at: moment().utc().subtract({
+            startsAt: moment().utc().subtract({
               hours: 3,
               minutes: 45,
             }).toISOString(),
@@ -173,7 +173,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           status: 'disabled',
           currentSession: {
             id: 22,
-            starts_at: moment().utc().subtract({
+            startsAt: moment().utc().subtract({
               hours: 4,
               minutes: 48,
             }).toISOString(),
@@ -191,7 +191,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           status: 'enabled',
           currentSession: {
             id: 23,
-            starts_at: moment().utc().subtract({
+            startsAt: moment().utc().subtract({
               hours: 5,
               minutes: 7,
             }).toISOString(),
@@ -200,7 +200,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           },
           lastSession: {
             id: 24,
-            starts_at: moment().utc().subtract({
+            startsAt: moment().utc().subtract({
               hours: 4,
               minutes: 53,
             }).toISOString(),
@@ -215,7 +215,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           status: 'enabled',
           currentSession: {
             id: 244,
-            starts_at: moment().utc().subtract({
+            startsAt: moment().utc().subtract({
               hours: 9,
               minutes: 55,
             }).toISOString(),
@@ -224,7 +224,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           },
           lastSession: {
             id: 25,
-            starts_at: moment().utc().subtract({
+            startsAt: moment().utc().subtract({
               hours: 4,
               minutes: 33,
             }).toISOString(),
@@ -239,7 +239,7 @@ const tables = (server: Application, bodyParser: RequestHandler) => {
           status: 'disabled',
           currentSession: {
             id: 26,
-            starts_at: moment().utc().subtract({
+            startsAt: moment().utc().subtract({
               hours: 6,
               minutes: 21,
             }).toISOString(),

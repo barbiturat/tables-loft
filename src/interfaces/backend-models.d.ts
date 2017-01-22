@@ -3,7 +3,7 @@ export type TableStatus = 'enabled' | 'disabled';
 
 export interface TableSession {
   id: number;
-  starts_at: string;
+  startsAt: string;
   durationSeconds: number;
   adminEdited: boolean;
 }

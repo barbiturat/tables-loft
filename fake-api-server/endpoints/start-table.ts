@@ -17,7 +17,7 @@ const startTable = (server: Application, bodyParser: RequestHandler) => {
     const response: ResponseStartTablePayload = {
       session: {
         id: Math.round( Math.random() * 1000000 ),
-        starts_at: moment().utc().toISOString(),
+        startsAt: moment().utc().toISOString(),
         durationSeconds: moment.duration(1, 'hours').asSeconds(),
         adminEdited: false
       }
