@@ -31,6 +31,7 @@ const requestAdminToken = ((action$) => {
             .mergeMap((ajaxData: ResponseOk | ResponseError) => {
               if ( isAjaxResponseDefined<ResponseOkDefined>(ajaxData) ) {
                 const accessToken = ajaxData.response.accessToken;
+                console.log('accessToken', accessToken);
 
                 const setSubmittedAction = actions.setSubmitted(formModelPath, true);
                 const setAdminTokenAction = adminTokenUpdated(accessToken);
