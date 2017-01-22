@@ -49,7 +49,7 @@ export const tableSessionToFront = (tableSession: TableSessionBackend): TableSes
   return {
     id: tableSession.id,
     startsAt: startsAtMs,
-    durationSeconds: tableSession.durationSeconds,
+    durationSeconds: tableSession.durationSeconds || 0,
     adminEdited: tableSession.adminEdited,
     isInPending: false
   };

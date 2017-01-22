@@ -4,7 +4,7 @@ export type TableStatus = 'enabled' | 'disabled';
 export interface TableSession {
   id: number;
   startsAt: string;
-  durationSeconds: number;
+  durationSeconds: number | null;
   adminEdited: boolean;
 }
 
