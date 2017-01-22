@@ -13,7 +13,7 @@ interface Params {
 }
 
 const sessionHistory = (server: Application, bodyParser: RequestHandler) => {
-  server.get(urlSessionHistory, bodyParser, sendWithTimeout(500, (req: CustomRequest<RequestSessionHistoryPayload, Params>, res) => {
+  server.get(urlSessionHistory, bodyParser, sendWithTimeout(500, (req: CustomRequest<RequestSessionHistoryPayload, Params, any>, res) => {
 
     const response: ResponseSessionsHistoryPayload = {
       sessions: [

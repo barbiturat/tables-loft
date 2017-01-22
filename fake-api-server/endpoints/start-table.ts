@@ -12,7 +12,7 @@ interface Params {
 }
 
 const startTable = (server: Application, bodyParser: RequestHandler) => {
-  server.post(urlStartTable, bodyParser, sendWithTimeout(500, (req: CustomRequest<any, Params>, res) => {
+  server.post(urlStartTable, bodyParser, sendWithTimeout(500, (req: CustomRequest<any, Params, any>, res) => {
 
     const response: ResponseStartTablePayload = {
       session: {

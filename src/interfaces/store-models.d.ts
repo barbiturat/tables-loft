@@ -37,7 +37,7 @@ export interface ModalSessionsHistory {
   tableId?: number;
 }
 
-export interface Error {
+export interface GlobalError {
   message: string;
   date: number;
 }

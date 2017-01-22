@@ -16,11 +16,11 @@ import {AjaxResponseTyped, AjaxErrorTyped, AjaxResponseDefined} from '../interfa
 import {urlSessionHistory} from '../constants/urls';
 import {SimpleAction, ActionWithPayload} from '../interfaces/actions';
 import {tableSessionsToFront} from '../helpers/api-data-converters/index';
-import tableSessionsChanged from '../action-creators/table-sessions-changed';
+import changingTableSessions from '../action-creators/changing-table-sessions';
 import {ActionType} from '../action-creators/fetching-table-sessions-history';
 import {RequestSessionHistoryPayload} from '../interfaces/api-requests';
 import {StoreStructure, Tables, TableSessions, Table} from '../interfaces/store-models';
-import tablesChanged from '../action-creators/tables-changed';
+import changingTables from '../action-creators/changing-tables';
 import {API_URL} from '../constants/index';
 import {TableSession} from '../interfaces/backend-models';
 
@@ -55,13 +55,13 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
       const setTablesWithPending$ = pipe< Tables, Tables, Tables, ActionWithPayload<Tables>, Observable<ActionWithPayload<Tables>> >(
         clone,
         (currentTablesClone: Tables) => getTablesWithSetHistoryPending(currentTablesClone, tableId, true),
-        (tablesWithSetPending: Tables) => tablesChanged(tablesWithSetPending),
+        (tablesWithSetPending: Tables) => changingTables(tablesWithSetPending),
         (tablesPendingAction: ActionWithPayload<Tables>) => Observable.of(tablesPendingAction)
       )(store.getState().app.tablesData.tables);
 
       const historyRequest$ = Observable.of(null)
         .mergeMap(() =>
-          get(url, dataToSend)
+          get<RequestSessionHistoryPayload>(url, dataToSend)
             .mergeMap((ajaxData: ResponseOk | ResponseError) => {
               if ( isAjaxResponseDefined<ResponseOkDefined>(ajaxData) ) {
                 const appData = store.getState().app;
@@ -74,7 +74,7 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
 
                 const setSessionsAction = pipe<TableSessions, TableSessions, ActionWithPayload<TableSessions> >(
                   merge(appData.tableSessionsData.tableSessions),
-                  (newSessionsAll: TableSessions) => tableSessionsChanged(newSessionsAll)
+                  (newSessionsAll: TableSessions) => changingTableSessions(newSessionsAll)
                 )(convertedResponseSessions);
 
                 const actions: SimpleAction[] = [setSessionsAction];
@@ -89,7 +89,7 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
                       isSessionsHistoryInPending: false,
                       sessionsHistory: newSessionIds
                     }),
-                    tablesChanged
+                    changingTables
                   )(convertedResponseSessions);
 
                   actions.push(setTablesAction);
@@ -100,7 +100,7 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
                 const setTablesWithoutPendingAction = pipe<Tables, Tables, Tables, ActionWithPayload<Tables> >(
                   clone,
                   (tablesClone) => getTablesWithSetHistoryPending(tablesClone, tableId, false),
-                  tablesChanged
+                  changingTables
                 )(store.getState().app.tablesData.tables);
 
                 const fetchFailedAction = getRequestFailedAction(ajaxData.status, 'Fetching table sessions error');

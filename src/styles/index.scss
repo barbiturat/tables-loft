@@ -1,4 +1,4 @@
-@import 'normalize-scss/sass/_normalize.scss';
+@import '../../node_modules/normalize-scss/sass/_normalize.scss';
 @import 'settings';
 @import 'mixins';
 
@@ -10,6 +10,7 @@
 @import 'form';
 @import 'sessions-list';
 @import 'paginator';
+@import 'global-errors';
 
 @include normalize();
 
@@ -33,6 +34,7 @@ body {
 
 #root {
   display: inline-flex;
+  position: relative;
   width: $max-page-width;
   min-height: 100%;
   align-items: stretch;

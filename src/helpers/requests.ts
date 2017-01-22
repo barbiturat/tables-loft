@@ -11,7 +11,7 @@ import {
 } from '../constants/used-http-status-codes';
 import {ActionWithPayload} from '../interfaces/actions';
 import globalErrorHappened from '../action-creators/global-error-happened';
-import {Error} from '../interfaces/store-models';
+import {GlobalError} from '../interfaces/store-models';
 
 const handleError = (ajaxErrorData: AjaxError): Observable<AjaxError> => {
   /*if (ajaxErrorData.status === 401) {
@@ -41,7 +41,10 @@ const prolongSession = (ajaxData: AjaxResponse) => {
 };
 */
 
-export const get = (url: string, dataToSend = {}, headers = {}): Observable<AjaxResponse | AjaxError> => {
+export function get(url: string): Observable<AjaxResponse | AjaxError>;
+export function get<TData>(url: string, dataToSend?: TData): Observable<AjaxResponse | AjaxError>;
+export function get<TData, THeaders extends {}>(url: string, dataToSend?: TData, headers: THeaders = {} as THeaders):
+    Observable<AjaxResponse | AjaxError> {
   const serializedData = queryString.stringify(dataToSend);
   const extendedHeaders = getExtendedHeaders(headers);
   const newUrl = `${url}?${serializedData}`;
@@ -51,7 +54,7 @@ export const get = (url: string, dataToSend = {}, headers = {}): Observable<Ajax
     .catch((ajaxErrorData: AjaxError) => {
       return handleError(ajaxErrorData);
     });
-};
+}
 
 export const post = (url: string, body?: any, headers = {}): Observable<AjaxResponse | AjaxError> => {
   const extendedHeaders = getExtendedHeaders(headers);
@@ -113,7 +116,7 @@ export const getMessageFromAjaxErrorStatus = (status: number): string => {
 };
 
 export const getRequestFailedAction = (ajaxErrorStatus: number, messagePrefix: string) => {
-  return pipe< number, string, string, ActionWithPayload<Error[]> >(
+  return pipe< number, string, string, ActionWithPayload<GlobalError> >(
     (status: number) => getMessageFromAjaxErrorStatus(status),
     (errorFromStatus: string) => `${messagePrefix}: ${errorFromStatus}`,
     globalErrorHappened

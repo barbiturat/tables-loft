@@ -10,8 +10,8 @@ import {urlTables} from '../constants/urls';
 import {SimpleAction} from '../interfaces/actions';
 import {tablesToFront, tableSessionsToFront} from '../helpers/api-data-converters/index';
 import {TableSession, Table as TableBackend} from '../interfaces/backend-models';
-import tableSessionsChanged from '../action-creators/table-sessions-changed';
-import tablesChanged from '../action-creators/tables-changed';
+import changingTableSessions from '../action-creators/changing-table-sessions';
+import changingTables from '../action-creators/changing-tables';
 import {Tables} from '../interfaces/store-models';
 import {API_URL} from '../constants/index';
 
@@ -43,8 +43,8 @@ const fetchTables = ((action$) => {
                 const convertedTables: Tables = tablesToFront(tables);
                 const convertedTableSessions = tableSessionsToFront(tableSessions);
 
-                const setTables = tablesChanged(convertedTables);
-                const setTableSessions = tableSessionsChanged(convertedTableSessions);
+                const setTables = changingTables(convertedTables);
+                const setTableSessions = changingTableSessions(convertedTableSessions);
                 const tablesPendingStop = pendingTables(false);
 
                 return Observable.of<any>(
