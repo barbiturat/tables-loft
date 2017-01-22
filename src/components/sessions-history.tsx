@@ -42,9 +42,8 @@ export default class SessionsHistory extends React.Component<Props, {}> {
         <div className="sessions-list">
 
           <div className="sessions-list__header">
-            <div className="sessions-list__th sessions-list__th_role_index">Session</div>
-            <div className="sessions-list__th sessions-list__th_role_time">Time</div>
-            <div className="sessions-list__th sessions-list__th_role_duration">Playing Time</div>
+            <div className="sessions-list__th sessions-list__th_role_time">Start Time</div>
+            <div className="sessions-list__th sessions-list__th_role_duration">Duration</div>
           </div>
 
           {SessionsHistory.getRenderedSessions(sessions, firstIdx)}

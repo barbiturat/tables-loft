@@ -70,7 +70,6 @@ class Component extends React.Component<PropsFromConnect, State> {
             className="sessions-list__tr"
             onClick={this.onSessionInfoClick}
         >
-          <div className="sessions-list__td sessions-list__td_role_index">{idx}</div>
           <div className="sessions-list__td sessions-list__td_role_time">{finishTime}</div>
           <div className="sessions-list__td sessions-list__td_role_duration">{fullDurationString}</div>
         </div>

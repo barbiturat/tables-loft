@@ -143,7 +143,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           />
           <div className="modal__header">
             <h3 className="modal__header-caption">{caption}</h3>
-            <h4 className="modal__header-sub-caption">History Today</h4>
+            <h4 className="modal__header-sub-caption">Today's Sessions</h4>
           </div>
 
           <SessionsHistory
