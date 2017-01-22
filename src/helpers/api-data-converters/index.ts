@@ -56,7 +56,6 @@ export const tableSessionToFront = (tableSession: TableSessionBackend): TableSes
 };
 
 export const tableSessionsToFront = (tableSessions: TableSessionBackend[]): TableSessions => {
-  console.log('tableSessions', tableSessions);
   return tableSessions.reduce((memo: TableSessions, tableSession) => {
     const convertedTableSession = tableSessionToFront(tableSession);
 

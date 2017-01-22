@@ -6,7 +6,6 @@ export type Structure = AdminToken;
 
 const adminToken = (state: Structure = null, action: ActionWithPayload<Structure>): Structure => {
   if (action.type === ADMIN_TOKEN_UPDATED) {
-    console.log('action reducer', action);
     return action.payload;
   } else if (action.type === ADMIN_TOKEN_REMOVED) {
     return null;
