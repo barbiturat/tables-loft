@@ -3,8 +3,8 @@ export type TableStatus = 'enabled' | 'disabled';
 
 export interface TableSession {
   id: number;
-  starts_at: string;
-  durationSeconds: number;
+  startsAt: string;
+  durationSeconds: number | null;
   adminEdited: boolean;
 }
 
@@ -13,8 +13,8 @@ export interface Table {
   id: number;
   tableType: TableType;
   status: TableStatus;
-  currentSession?: TableSession;
-  lastSession?: TableSession;
+  currentSession: TableSession | null;
+  lastSession: TableSession | null;
 }
 
 export interface LoginErrors {

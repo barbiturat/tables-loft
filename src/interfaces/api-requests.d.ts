@@ -4,7 +4,6 @@ export interface RequestLoginPayload {
 }
 
 export interface RequestSessionHistoryPayload {
-  tableId: number;
 }
 
 export interface RequestGetAdminTokenPayload {
