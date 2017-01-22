@@ -1,6 +1,6 @@
 const versionPrefix = '/v1';
 
-export const urlGetAdminToken = `${versionPrefix}/api_tokens.json`;
+export const urlGetAdminToken = `${versionPrefix}/admin_tokens.json`;
 export const urlLogin = `${versionPrefix}/login`;
 export const urlLogout = `${versionPrefix}/logout`;
 export const urlSessionHistory = `${versionPrefix}/tables/:table_id/table_sessions/history.json`;
