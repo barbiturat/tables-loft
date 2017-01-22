@@ -3,7 +3,7 @@ import {createActionWithPayload} from '../helpers/index';
 import {ActionWithPayload} from '../interfaces/actions';
 import {GlobalError} from '../interfaces/store-models';
 
-export type ActionType = ActionWithPayload<GlobalError[]>;
+export type ActionType = ActionWithPayload<GlobalError>;
 
 const globalErrorHappened = (message: string): ActionType => {
   const error: GlobalError = {

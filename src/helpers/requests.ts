@@ -116,7 +116,7 @@ export const getMessageFromAjaxErrorStatus = (status: number): string => {
 };
 
 export const getRequestFailedAction = (ajaxErrorStatus: number, messagePrefix: string) => {
-  return pipe< number, string, string, ActionWithPayload<GlobalError[]> >(
+  return pipe< number, string, string, ActionWithPayload<GlobalError> >(
     (status: number) => getMessageFromAjaxErrorStatus(status),
     (errorFromStatus: string) => `${messagePrefix}: ${errorFromStatus}`,
     globalErrorHappened
