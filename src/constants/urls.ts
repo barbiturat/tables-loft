@@ -1,8 +1,10 @@
-export const urlGetAdminToken = `/admin_tokens.json`;
-export const urlLogin = `/login`;
-export const urlLogout = `/logout`;
-export const urlSessionHistory = `/table_sessions/history.json`;
-export const urlStartTable = `/tables/:table_id/start.json`;
-export const urlStopTable = `/tables/:table_id/stop.json`;
-export const urlTables = `/tables.json`;
-export const urlUpdateTableSession = `/table_sessions/:session_id.json`;
+const versionPrefix = '/v1';
+
+export const urlGetAdminToken = `${versionPrefix}/api_tokens.json`;
+export const urlLogin = `${versionPrefix}/login`;
+export const urlLogout = `${versionPrefix}/logout`;
+export const urlSessionHistory = `${versionPrefix}/table_sessions/history.json`;
+export const urlStartTable = `${versionPrefix}/tables/:table_id/start.json`;
+export const urlStopTable = `${versionPrefix}/tables/:table_id/stop.json`;
+export const urlTables = `${versionPrefix}/tables.json`;
+export const urlUpdateTableSession = `${versionPrefix}/table_sessions/:session_id.json`;
