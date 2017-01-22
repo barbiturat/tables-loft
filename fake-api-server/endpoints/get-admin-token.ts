@@ -10,7 +10,7 @@ const getAdminToken = (server: Application, bodyParser: RequestHandler) => {
   server.post(urlGetAdminToken, bodyParser, sendWithTimeout(500, (req: CustomRequest<RequestGetAdminTokenPayload, any>, res) => {
 
     const response: ResponseGetAdminTokenPayload = {
-      accessToken: 'someToken'
+      adminToken: 'someToken'
     };
 
     res

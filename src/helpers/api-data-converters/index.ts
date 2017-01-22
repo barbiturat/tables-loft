@@ -44,7 +44,6 @@ export const tablesToFront = (tables: BackendTable[]): Tables => {
 };
 
 export const tableSessionToFront = (tableSession: TableSessionBackend): TableSessionFrontend => {
-  console.log('tableSession', tableSession);
   const startsAtMs = moment(tableSession.starts_at, moment.ISO_8601).valueOf();
 
   return {

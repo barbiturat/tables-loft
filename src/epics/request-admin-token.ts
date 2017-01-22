@@ -30,11 +30,9 @@ const requestAdminToken = ((action$) => {
           post(`${API_URL}${urlGetAdminToken}`, dataToSend)
             .mergeMap((ajaxData: ResponseOk | ResponseError) => {
               if ( isAjaxResponseDefined<ResponseOkDefined>(ajaxData) ) {
-                const accessToken = ajaxData.response.accessToken;
-                console.log('accessToken', accessToken);
-
+                const adminToken = ajaxData.response.adminToken;
                 const setSubmittedAction = actions.setSubmitted(formModelPath, true);
-                const setAdminTokenAction = adminTokenUpdated(accessToken);
+                const setAdminTokenAction = adminTokenUpdated(adminToken);
                 const closeAdminModalAction = modalAdminLoginOpened(false);
 
                 return Observable.of<any>(

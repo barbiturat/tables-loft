@@ -33,7 +33,7 @@ export interface ResponseStopTablePayload {
 }
 
 export interface ResponseGetAdminTokenPayload {
-  accessToken: string;
+  adminToken: string;
 }
 
 export interface ResponseUpdateTableSessionPayload {}
