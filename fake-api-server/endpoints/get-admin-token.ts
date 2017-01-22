@@ -1,13 +1,13 @@
 import sendWithTimeout from '../helpers/send-with-timeout';
 import {Application, RequestHandler} from 'express-serve-static-core';
-import {STATUS_OK, STATUS_FORBIDDEN} from '../../src/constants/used-http-status-codes';
+import {STATUS_OK} from '../../src/constants/used-http-status-codes';
 import {CustomRequest} from '../interfaces/index';
 import {RequestGetAdminTokenPayload} from '../../src/interfaces/api-requests';
-import {ResponseGetAdminTokenPayload, ResponseGetAdminTokenFailedPayload} from '../../src/interfaces/api-responses';
+import {ResponseGetAdminTokenPayload} from '../../src/interfaces/api-responses';
 import {urlGetAdminToken} from '../../src/constants/urls';
 
 const getAdminToken = (server: Application, bodyParser: RequestHandler) => {
-  server.post(urlGetAdminToken, bodyParser, sendWithTimeout(500, (req: CustomRequest<RequestGetAdminTokenPayload, any>, res) => {
+  server.post(urlGetAdminToken, bodyParser, sendWithTimeout(500, (req: CustomRequest<RequestGetAdminTokenPayload, any, any>, res) => {
 
     const response: ResponseGetAdminTokenPayload = {
       adminToken: 'someToken'

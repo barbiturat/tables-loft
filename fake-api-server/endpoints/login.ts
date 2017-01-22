@@ -12,7 +12,7 @@ const testUserEmail = 'test@test.ru';
 const testUserPassword = 'test';
 
 const login = (server: Application, bodyParser: RequestHandler) => {
-  server.post(urlLogin, bodyParser, sendWithTimeout(500, (req: CustomRequest<RequestLoginPayload, any>, res) => {
+  server.post(urlLogin, bodyParser, sendWithTimeout(500, (req: CustomRequest<RequestLoginPayload, any, any>, res) => {
     const {email, password} = req.body;
 
     if (email === testUserEmail && password === testUserPassword) {
