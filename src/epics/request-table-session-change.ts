@@ -1,7 +1,7 @@
 import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
 import {Store} from 'redux';
-import {merge, clone} from 'ramda';
+import {pipe, when, merge, clone, prop, objOf, flip} from 'ramda';
 
 import {REQUESTING_TABLE_SESSION_CHANGE} from '../constants/action-names';
 import {request, getRequestFailedAction} from '../helpers/requests';
@@ -23,15 +23,19 @@ type ResponseOk = AjaxResponseTyped<ResponseUpdateTableSessionPayload>;
 type ResponseError = AjaxErrorTyped<ResponseFailedPayload>;
 
 const setNewParamsToSession = (sessions: TableSessions, sessionId: number, params: Partial<TableSession>) => {
-  const session = sessions[sessionId];
+  const sId = String(sessionId);
 
-  if (session) {
-    merge(session, params);
-  }
-
-  return sessions;
+  return pipe(
+    when(prop(sId),
+      pipe(
+        prop(sId), // session
+        flip(merge)(params), // update session
+        objOf(sId), // {sId: session}
+        merge(sessions) // updated sessions
+      )
+    )
+  )(sessions);
 };
-
 
 const requestTableSessionChange = ((action$, store: Store<StoreStructure>) => {
   return action$.ofType(REQUESTING_TABLE_SESSION_CHANGE)
@@ -60,10 +64,10 @@ const requestTableSessionChange = ((action$, store: Store<StoreStructure>) => {
                   durationSeconds,
                   adminEdited: true
                 });
-                const setSessionsAction = changingTableSessions(editedSessions);
+                const changingTableSessionsAction = changingTableSessions(editedSessions);
 
                 return Observable.of<any>(
-                  setSessionsAction
+                  changingTableSessionsAction
                 );
               } else {
                 const fetchFailedAction = getRequestFailedAction(ajaxData.status, 'Table session change error');
