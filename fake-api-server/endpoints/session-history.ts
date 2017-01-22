@@ -8,8 +8,12 @@ import {RequestSessionHistoryPayload} from '../../src/interfaces/api-requests';
 import {ResponseSessionsHistoryPayload} from '../../src/interfaces/api-responses';
 import {urlSessionHistory} from '../../src/constants/urls';
 
+interface Params {
+  table_id: any;
+}
+
 const sessionHistory = (server: Application, bodyParser: RequestHandler) => {
-  server.get(urlSessionHistory, bodyParser, sendWithTimeout(500, (req: CustomRequest<RequestSessionHistoryPayload, any>, res) => {
+  server.get(urlSessionHistory, bodyParser, sendWithTimeout(500, (req: CustomRequest<RequestSessionHistoryPayload, Params>, res) => {
 
     const response: ResponseSessionsHistoryPayload = {
       sessions: [

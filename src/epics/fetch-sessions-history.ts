@@ -52,6 +52,7 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
       const dataToSend: RequestSessionHistoryPayload = {
         tableId
       };
+      const url = `${API_URL}${urlSessionHistory}`.replace(':table_id', String(tableId));
 
       const setTablesWithPending$ = pipe< Tables, Tables, Tables, ActionWithPayload<Tables>, Observable<ActionWithPayload<Tables>> >(
         clone,
@@ -62,7 +63,7 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
 
       const historyRequest$ = Observable.of(null)
         .mergeMap(() =>
-          get(`${API_URL}${urlSessionHistory}`, dataToSend)
+          get(url, dataToSend)
             .mergeMap((ajaxData: ResponseOk | ResponseError) => {
               if ( isAjaxResponseDefined<ResponseOkDefined>(ajaxData) ) {
                 const appData = store.getState().app;
