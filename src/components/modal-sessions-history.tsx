@@ -125,9 +125,11 @@ class Component extends React.Component<PropsFromConnect, State> {
       const modalClass = Component.modalClasses[currentTable.tableType] || '';
       const caption = currentTable.name;
       const sessions = Component.getTableSessions(allTableSessions, currentTable);
+      const sessionCount = Object.keys(sessions).length;
       const sessionsPage = Component.getSessionsPage(sessions, currentPageNum);
-      const numOfPages = Math.ceil( Object.keys(sessions).length / Component.PAGE_SIZE );
+      const numOfPages = Math.ceil( sessionCount / Component.PAGE_SIZE );
       const firstIdx = currentPageNum * Component.PAGE_SIZE;
+      const showPaginator = sessionCount > Component.PAGE_SIZE;
 
       return (
         <Modal
@@ -143,7 +145,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           />
           <div className="modal__header">
             <h3 className="modal__header-caption">{caption}</h3>
-            <h4 className="modal__header-sub-caption">History Today</h4>
+            <h4 className="modal__header-sub-caption">Today's Sessions</h4>
           </div>
 
           <SessionsHistory
@@ -152,7 +154,7 @@ class Component extends React.Component<PropsFromConnect, State> {
             firstIdx={firstIdx}
           />
 
-          {this.getPaginator(numOfPages, currentPageNum, historyPending)}
+          { showPaginator && this.getPaginator(numOfPages, currentPageNum, historyPending) }
         </Modal>
       );
     } else {
