@@ -12,7 +12,7 @@ import {SimpleAction} from '../interfaces/actions';
 import {ActionType} from '../action-creators/requesting-table-start';
 import pendingRequestTableStatusChange from '../action-creators/pending-request-table-status-change';
 import {StoreStructure, Tables} from '../interfaces/store-models';
-import tablesChanged from '../action-creators/tables-changed';
+import changingTables from '../action-creators/changing-tables';
 import tableSessionsChanged from '../action-creators/table-sessions-changed';
 import {tableSessionToFront} from '../helpers/api-data-converters/index';
 import {API_URL} from '../constants/index';
@@ -50,7 +50,7 @@ const startTable = ((action$, store: Store<StoreStructure>) => {
                   changedTable.currentSessionId = convertedSession.id;
                 }
 
-                const tablesChangedAction = tablesChanged(newTables);
+                const tablesChangedAction = changingTables(newTables);
 
                 return Observable.of<any>(
                   pendingStopAction,

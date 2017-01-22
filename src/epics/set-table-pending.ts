@@ -5,7 +5,7 @@ import {PENDING_REQUEST_TABLE_STATUS_CHANGED} from '../constants/action-names';
 import {SimpleAction} from '../interfaces/actions';
 import {ActionType} from '../action-creators/pending-request-table-status-change';
 import {StoreStructure} from '../interfaces/store-models';
-import tablesChanged from '../action-creators/tables-changed';
+import changingTables from '../action-creators/changing-tables';
 
 const setTablePending = ((action$, store: Store<StoreStructure>) => {
   return action$.ofType(PENDING_REQUEST_TABLE_STATUS_CHANGED)
@@ -18,7 +18,7 @@ const setTablePending = ((action$, store: Store<StoreStructure>) => {
         changedTable.isInPending = isInPending;
       }
 
-      return tablesChanged(currentTables);
+      return changingTables(currentTables);
     });
 }) as Epic<SimpleAction>;
 
