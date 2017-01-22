@@ -20,17 +20,24 @@ const tableToFront = (table: BackendTable): FrontendTable => {
     sessionsHistory.push(currentSessionIdNum);
   }
 
-  return {
+  const result: FrontendTable = {
     name: table.name,
     id: table.id,
     tableType: table.tableType,
-    currentSessionId,
-    lastSessionId,
     isInPending: false,
     isDisabled: table.status === 'disabled',
     isSessionsHistoryInPending: false,
     sessionsHistory
   };
+
+  if (currentSessionId !== null) {
+    result.currentSessionId = currentSessionId;
+  }
+  if (lastSessionId !== null) {
+    result.lastSessionId = lastSessionId;
+  }
+
+  return result;
 };
 
 export const tablesToFront = (tables: BackendTable[]): Tables => {
