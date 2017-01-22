@@ -41,7 +41,10 @@ const prolongSession = (ajaxData: AjaxResponse) => {
 };
 */
 
-export const get = (url: string, dataToSend = {}, headers = {}): Observable<AjaxResponse | AjaxError> => {
+export function get(url: string): Observable<AjaxResponse | AjaxError>;
+export function get<TData>(url: string, dataToSend?: TData): Observable<AjaxResponse | AjaxError>;
+export function get<TData, THeaders extends {}>(url: string, dataToSend?: TData, headers: THeaders = {} as THeaders):
+    Observable<AjaxResponse | AjaxError> {
   const serializedData = queryString.stringify(dataToSend);
   const extendedHeaders = getExtendedHeaders(headers);
   const newUrl = `${url}?${serializedData}`;
@@ -51,7 +54,7 @@ export const get = (url: string, dataToSend = {}, headers = {}): Observable<Ajax
     .catch((ajaxErrorData: AjaxError) => {
       return handleError(ajaxErrorData);
     });
-};
+}
 
 export const post = (url: string, body?: any, headers = {}): Observable<AjaxResponse | AjaxError> => {
   const extendedHeaders = getExtendedHeaders(headers);

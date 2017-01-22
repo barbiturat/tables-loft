@@ -61,7 +61,7 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
 
       const historyRequest$ = Observable.of(null)
         .mergeMap(() =>
-          get(url, dataToSend)
+          get<RequestSessionHistoryPayload>(url, dataToSend)
             .mergeMap((ajaxData: ResponseOk | ResponseError) => {
               if ( isAjaxResponseDefined<ResponseOkDefined>(ajaxData) ) {
                 const appData = store.getState().app;
