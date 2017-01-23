@@ -8,17 +8,8 @@ import * as moment from 'moment';
 const tableToFront = (table: BackendTable): FrontendTable => {
   const currentSessionId = table.currentSession ? table.currentSession.id : null;
   const lastSessionId = table.lastSession ? table.lastSession.id : null;
-  const sessionsHistory: number[] = [];
-  const lastSessionIdNum = Number(lastSessionId);
-  const currentSessionIdNum = Number(currentSessionId);
-
-  if (!isNaN(lastSessionIdNum)) {
-    sessionsHistory.push(lastSessionIdNum);
-  }
-
-  if (!isNaN(currentSessionIdNum)) {
-    sessionsHistory.push(currentSessionIdNum);
-  }
+  const sessionsHistory: number[] = [currentSessionId, lastSessionId]
+    .filter((session) => typeof session === 'number') as number[];
 
   return {
     name: table.name,
