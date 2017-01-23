@@ -91,7 +91,7 @@ class Component extends React.Component<PropsFromConnect, State> {
   };
 
   getPaginator(numOfPages: number, currentPageNum: number, isInPending: boolean) {
-    return numOfPages && !isInPending ? (
+    return numOfPages > 1 && !isInPending ? (
         <ReactPaginate
           pageCount={numOfPages}
           pageRangeDisplayed={2}
@@ -129,7 +129,6 @@ class Component extends React.Component<PropsFromConnect, State> {
       const sessionsPage = Component.getSessionsPage(sessions, currentPageNum);
       const numOfPages = Math.ceil( sessionCount / Component.PAGE_SIZE );
       const firstIdx = currentPageNum * Component.PAGE_SIZE;
-      const showPaginator = sessionCount > Component.PAGE_SIZE;
 
       return (
         <Modal
@@ -154,7 +153,7 @@ class Component extends React.Component<PropsFromConnect, State> {
             firstIdx={firstIdx}
           />
 
-          { showPaginator && this.getPaginator(numOfPages, currentPageNum, historyPending) }
+          { this.getPaginator(numOfPages, currentPageNum, historyPending) }
         </Modal>
       );
     } else {
