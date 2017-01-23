@@ -31,15 +31,20 @@ const requestAdminToken = ((action$) => {
             .mergeMap((ajaxData: ResponseOk | ResponseError) => {
               if ( isAjaxResponseDefined<ResponseOkDefined>(ajaxData) ) {
                 const adminToken = ajaxData.response.adminToken;
+                const passwordFieldModelPath = 'formsData.managerLoginForm.password';
 
                 const setSubmittedAction = actions.setSubmitted(formModelPath, true);
                 const setAdminTokenAction = adminTokenUpdated(adminToken);
                 const closeAdminModalAction = modalAdminLoginOpened(false);
+                const clearPasswordInputAction = actions.change(passwordFieldModelPath, '');
+                const resetPasswordInputAction = actions.setInitial(passwordFieldModelPath);
 
                 return Observable.of<any>(
                   setSubmittedAction,
                   closeAdminModalAction,
-                  setAdminTokenAction
+                  setAdminTokenAction,
+                  clearPasswordInputAction,
+                  resetPasswordInputAction
                 );
               } else {
                 const ajaxErrorData = (ajaxData as ResponseError);

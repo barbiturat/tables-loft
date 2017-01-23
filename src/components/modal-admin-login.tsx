@@ -2,7 +2,7 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import MouseEvent = React.MouseEvent;
 import * as Modal from 'react-modal';
-import {Control, Form, Errors} from 'react-redux-form';
+import {Control, Form, Errors, actions} from 'react-redux-form';
 
 import {StoreStructure} from '../interfaces/store-models';
 import {PropsExtendedByConnect} from '../interfaces/component';
@@ -31,7 +31,13 @@ const {validators: {password: passwordChecks}} = managerLoginForm;
 class Component extends React.Component<PropsFromConnect, {}> {
   requestToClose() {
     this.props.dispatch( modalAdminLoginOpened(false) );
+    this.resetPasswordInput();
   };
+
+  resetPasswordInput() {
+    this.props.dispatch( actions.change('formsData.managerLoginForm.password', '') );
+    this.props.dispatch( actions.setInitial('formsData.managerLoginForm.password') );
+  }
 
   onCloseClick = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
