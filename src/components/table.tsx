@@ -17,7 +17,7 @@ import modalSessionsHistoryChanged from '../action-creators/modal-sessions-histo
 
 export type TableStatus = 'ready' | 'active';
 
-interface Props {
+export interface Props {
   id: number;
   type?: TableType;
   currentSessionId?: number;
