@@ -6,8 +6,8 @@ import {
 import * as moment from 'moment';
 
 const tableToFront = (table: BackendTable): FrontendTable => {
-  const currentSessionId = table.currentSession && table.currentSession.id;
-  const lastSessionId = table.lastSession && table.lastSession.id;
+  const currentSessionId = table.currentSession ? table.currentSession.id : null;
+  const lastSessionId = table.lastSession ? table.lastSession.id : null;
   const sessionsHistory: number[] = [];
   const lastSessionIdNum = Number(lastSessionId);
   const currentSessionIdNum = Number(currentSessionId);
