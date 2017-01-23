@@ -44,7 +44,7 @@ const stopTable = ((action$, store: Store<StoreStructure>) => {
                 )(appData.tableSessionsData.tableSessions);
 
                 const changingTableAction = changingTableFields({
-                  currentSessionId: convertedSession.id,
+                  currentSessionId: null,
                   isInPending: false
                 }, tableId);
 

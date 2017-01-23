@@ -54,23 +54,6 @@ class Component extends React.Component<PropsFromConnect, {}> {
     return;
   }
 
-  static getTableStatus(startsAt?: number, durationSeconds?: number): TableStatus {
-    if (!startsAt || !durationSeconds) {
-      return 'ready';
-    }
-
-    const now = moment.utc().valueOf();
-    const sessionFinishTime = moment.utc(startsAt)
-      .add({
-        seconds: durationSeconds
-      })
-      .valueOf();
-    const isNotFinished = sessionFinishTime - now >= 0;
-
-    return isNotFinished ? 'active' : 'ready';
-  };
-
-
   static startsAtSelector(currentSession?: TableSessionType) {
     return currentSession && currentSession.startsAt;
   };
