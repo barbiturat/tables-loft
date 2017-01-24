@@ -250,6 +250,7 @@ $shuffle-table-border-radius: 50px;
         .table_state_in-pending & {
           background-image: url(../../public/img/wait-white.svg);
           background-size: 40px 40px;
+          cursor: default;
         }
       }
     }
