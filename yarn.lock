@@ -51,12 +51,6 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-modal@^1.6.0":
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/@types/react-modal/-/react-modal-1.6.0.tgz#32ea8b379af4645af598064709b363262b6cc887"
-  dependencies:
-    "@types/react" "*"
-
 "@types/react-redux@^4.4.35":
   version "4.4.35"
   resolved "https://registry.yarnpkg.com/@types/react-redux/-/react-redux-4.4.35.tgz#126c21a11956d03673257ccd179e43993fc8ad77"

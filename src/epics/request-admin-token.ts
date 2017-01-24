@@ -16,6 +16,7 @@ import adminTokenUpdated from '../action-creators/admin-token-updated';
 import modalAdminLoginOpened from '../action-creators/modal-admin-login-opened';
 import {API_URL} from '../constants/index';
 import {validateResponse} from '../helpers/dynamic-type-validators/index';
+import pendingBlockingRequest from '../action-creators/pending-blocking-request';
 
 type ResponseOk = AjaxResponseTyped<ResponseGetAdminTokenPayload>;
 type ResponseOkDefined = AjaxResponseDefined<ResponseGetAdminTokenPayload>;
@@ -36,10 +37,13 @@ const requestAdminToken = ((action$) => {
       const dataToSend: RequestGetAdminTokenPayload = action.payload.formData;
 
       const formPendingTurnOn$ = Observable.of(actions.setPending(formModelPath, true));
+      const blockingPendingTurnOn$ = Observable.of( pendingBlockingRequest(true) );
       const tokenRequest$ = Observable.of(null)
         .mergeMap(() =>
           post(`${API_URL}${urlGetAdminToken}`, dataToSend)
             .mergeMap((ajaxData: ResponseOk | ResponseError) => {
+              const blockingPendingTurnOffAction = pendingBlockingRequest(false);
+
               if ( isAjaxResponseDefined<ResponseOkDefined>(ajaxData) ) {
                 assertResponse(ajaxData);
 
@@ -53,6 +57,7 @@ const requestAdminToken = ((action$) => {
                 const resetPasswordInputAction = actions.setInitial(passwordFieldModelPath);
 
                 return Observable.of<any>(
+                  blockingPendingTurnOffAction,
                   setSubmittedAction,
                   closeAdminModalAction,
                   setAdminTokenAction,
@@ -71,7 +76,8 @@ const requestAdminToken = ((action$) => {
                   }
                 });
 
-                return Observable.of(
+                return Observable.of<any>(
+                  blockingPendingTurnOffAction,
                   setFormSubmitFailedAction,
                   setFieldsValidityAction
                 );
@@ -80,6 +86,7 @@ const requestAdminToken = ((action$) => {
         );
 
       return Observable.concat(
+        blockingPendingTurnOn$,
         formPendingTurnOn$,
         tokenRequest$
       );

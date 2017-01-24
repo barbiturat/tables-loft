@@ -56,10 +56,11 @@ class App extends React.Component<PropsFromConnect, State> {
       >
         {this.props.children}
 
+        <ScreenBlocker/>
+
         <ModalAdminLogin/>
         <ModalSessionsHistory/>
         <GlobalErrors/>
-        {/*<ScreenBlocker/>*/}
       </div>
     );
   }

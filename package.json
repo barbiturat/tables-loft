@@ -47,7 +47,6 @@
     "@types/ramda": "^0.0.3",
     "@types/react": "^0.14.54",
     "@types/react-dom": "^0.14.19",
-    "@types/react-modal": "^1.6.0",
     "@types/react-redux": "^4.4.35",
     "@types/react-router": "^2.0.41",
     "@types/redux-router": "^1.0.35",
