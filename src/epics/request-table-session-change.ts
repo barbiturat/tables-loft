@@ -20,6 +20,7 @@ import {StoreStructure, TableSession, TableSessions} from '../interfaces/store-m
 import {ActionType} from '../action-creators/requesting-table-session-change';
 import {API_URL} from '../constants/index';
 import {validateResponse} from '../helpers/dynamic-type-validators/index';
+import pendingBlockingRequest from '../action-creators/pending-blocking-request';
 
 type ResponseOk = AjaxResponseTyped<ResponseUpdateTableSessionPayload>;
 type ResponseOkDefined = AjaxResponseDefined<ResponseUpdateTableSessionPayload>;
@@ -60,6 +61,7 @@ const requestTableSessionChange = ((action$, store: Store<StoreStructure>) => {
       const newSessions = setNewParamsToSession(currSessionsClone, sessionId, {
         isInPending: true
       });
+      const blockingPendingTurnOn$ = Observable.of( pendingBlockingRequest(true) );
       const setSessionsWithPending$ = Observable.of( changingTableSessions(newSessions) );
       const url = `${API_URL}${urlUpdateTableSession}`.replace(':session_id', String(sessionId));
 
@@ -67,7 +69,8 @@ const requestTableSessionChange = ((action$, store: Store<StoreStructure>) => {
         .mergeMap(() =>
           request('PATCH', url, dataToSend)
             .mergeMap((ajaxData: ResponseOk | ResponseError) => {
-              // if (ajaxData.status === STATUS_OK) {
+              const blockingPendingTurnOffAction = pendingBlockingRequest(false);
+
               if ( isAjaxResponseDefined<ResponseOkDefined>(ajaxData) ) {
                 assertResponse(ajaxData);
 
@@ -80,12 +83,14 @@ const requestTableSessionChange = ((action$, store: Store<StoreStructure>) => {
                 const changingTableSessionsAction = changingTableSessions(editedSessions);
 
                 return Observable.of<any>(
+                  blockingPendingTurnOffAction,
                   changingTableSessionsAction
                 );
               } else {
                 const fetchFailedAction = getRequestFailedAction(ajaxData.status, 'Table session change error');
 
                 return Observable.of<any>(
+                  blockingPendingTurnOffAction,
                   fetchFailedAction
                 );
               }
@@ -93,6 +98,7 @@ const requestTableSessionChange = ((action$, store: Store<StoreStructure>) => {
         );
 
       return Observable.concat(
+        blockingPendingTurnOn$,
         setSessionsWithPending$,
         request$
       );
