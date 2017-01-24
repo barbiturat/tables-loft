@@ -7,7 +7,7 @@ import tableSessionsData, {Structure as TableSessionsDataStructure} from './tabl
 import utcMilliseconds, {Structure as UtcMillisecondsDataStructure} from './utc-milliseconds';
 import adminToken, {Structure as AdminTokenStructure} from './admin-token';
 import modals, {Structure as ModalsStructure} from './modals';
-import globalErrors, {Structure as GlobalErrorsStructure} from './errors';
+import globalErrors, {Structure as GlobalErrorsStructure} from './global-errors';
 
 export interface Structure {
   adminToken: AdminTokenStructure;

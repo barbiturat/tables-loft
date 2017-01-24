@@ -9,7 +9,7 @@ import requestAdminToken from './request-admin-token';
 import fetchSessionsHistory from './fetch-sessions-history';
 import requestTableSessionChange from './request-table-session-change';
 import changeTableFields from './change-table-fields';
-import unsetGlobalError from './unsetGlobalError';
+import unsetGlobalError from './unset-global-error';
 
 export default combineEpics(
   formValidation,
