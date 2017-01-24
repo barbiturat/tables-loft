@@ -1,6 +1,8 @@
 import {Observable, AjaxError} from 'rxjs';
 import {Epic} from 'redux-observable';
 import {pipe} from 'ramda';
+// tslint:disable-next-line:no-require-imports
+const t = require('tcomb-validation');
 
 import {FETCHING_TABLES} from '../constants/action-names';
 import {get, isAjaxResponseDefined, getRequestFailedAction} from '../helpers/requests';
@@ -15,6 +17,8 @@ import changingTableSessions from '../action-creators/changing-table-sessions';
 import changingTables from '../action-creators/changing-tables';
 import {Tables, TableSessions} from '../interfaces/store-models';
 import {API_URL} from '../constants/index';
+import {validateResponse} from '../helpers/dynamic-type-validators/index';
+import {tTable} from '../helpers/dynamic-type-validators/types';
 
 type ResponseOk = AjaxResponseTyped<ResponseTablesPayload>;
 type ResponseOkDefined = AjaxResponseDefined<ResponseTablesPayload>;
@@ -39,6 +43,13 @@ const fetchTables = ((action$) => {
           get(`${API_URL}${urlTables}`)
             .mergeMap((ajaxData: ResponseOk | AjaxError) => {
               if ( isAjaxResponseDefined<ResponseOkDefined>(ajaxData) ) {
+
+                const tResponse = <ResponseTablesPayload>t.interface({
+                  tables: t.list(tTable)
+                });
+
+                validateResponse(tResponse, ajaxData);
+
                 const tables = ajaxData.response.tables;
 
                 const setTableSessions = pipe< TableBackend[], TableSession[], TableSessions, ActionWithPayload<TableSessions> >(
