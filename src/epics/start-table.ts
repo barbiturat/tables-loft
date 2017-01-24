@@ -2,6 +2,8 @@ import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
 import {Store} from 'redux';
 import {pipe, merge, clone} from 'ramda';
+// tslint:disable-next-line:no-require-imports
+const t = require('tcomb-validation');
 
 import {REQUESTING_TABLE_START} from '../constants/action-names';
 import {post, isAjaxResponseDefined, getRequestFailedAction} from '../helpers/requests';
@@ -15,10 +17,20 @@ import changingTableSessions from '../action-creators/changing-table-sessions';
 import {tableSessionToFront} from '../helpers/api-data-converters/index';
 import {API_URL} from '../constants/index';
 import changingTableFields from '../action-creators/changing-table-fields';
+import {tTableSession} from '../helpers/dynamic-type-validators/types';
+import {validateResponse} from '../helpers/dynamic-type-validators/index';
 
 type ResponseOk = AjaxResponseTyped<ResponseStartTablePayload>;
 type ResponseOkDefined = AjaxResponseDefined<ResponseStartTablePayload>;
 type ResponseError = AjaxErrorTyped<ResponseFailedPayload>;
+
+const assertResponse = (ajaxData: ResponseOk) => {
+  const tResponse = <ResponseStartTablePayload>t.interface({
+    session: tTableSession
+  });
+
+  validateResponse(tResponse, ajaxData);
+};
 
 const startTable = ((action$, store: Store<StoreStructure>) => {
   return action$.ofType(REQUESTING_TABLE_START)
@@ -33,6 +45,8 @@ const startTable = ((action$, store: Store<StoreStructure>) => {
           post(url)
             .mergeMap((ajaxData: ResponseOk | ResponseError) => {
               if ( isAjaxResponseDefined<ResponseOkDefined>(ajaxData) ) {
+                assertResponse(ajaxData);
+
                 const appData = store.getState().app;
                 const convertedSession = tableSessionToFront( ajaxData.response.session );
                 const tableSessionsChangedAction = pipe< TableSessions, TableSessions, TableSessions, ActionWithPayload<TableSessions> >(

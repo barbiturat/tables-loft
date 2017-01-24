@@ -17,7 +17,7 @@ const stopTable = (server: Application, bodyParser: RequestHandler) => {
 
     const response: ResponseStopTablePayload = {
       session: {
-        id: req.params.table_id,
+        id: Number(req.params.table_id),
         startsAt: moment().utc().subtract(pastTime).toISOString(),
         durationSeconds: moment.duration(pastTime).asSeconds(),
         adminEdited: false

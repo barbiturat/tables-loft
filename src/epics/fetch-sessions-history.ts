@@ -2,6 +2,8 @@ import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
 import {Store} from 'redux';
 import {pipe, clone, merge, keys, map, concat, uniq} from 'ramda';
+// tslint:disable-next-line:no-require-imports
+const t = require('tcomb-validation');
 
 import {FETCHING_TABLE_SESSIONS_HISTORY} from '../constants/action-names';
 import {
@@ -23,6 +25,8 @@ import {StoreStructure, Tables, TableSessions, Table} from '../interfaces/store-
 import changingTables from '../action-creators/changing-tables';
 import {API_URL} from '../constants/index';
 import {TableSession} from '../interfaces/backend-models';
+import {validateResponse} from '../helpers/dynamic-type-validators/index';
+import {tTableSession} from '../helpers/dynamic-type-validators/types';
 
 type ResponseOk = AjaxResponseTyped<ResponseSessionsHistoryPayload>;
 type ResponseOkDefined = AjaxResponseDefined<ResponseSessionsHistoryPayload>;
@@ -45,6 +49,14 @@ const getTablesWithSetHistoryPending = (tables: Tables, tableId: number, isInPen
   });
 };
 
+const assertResponse = (ajaxData: ResponseOk) => {
+  const tResponse = <ResponseSessionsHistoryPayload>t.interface({
+    sessions: t.list(tTableSession)
+  });
+
+  validateResponse(tResponse, ajaxData);
+};
+
 const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
   return action$.ofType(FETCHING_TABLE_SESSIONS_HISTORY)
     .switchMap((action: ActionType) => {
@@ -64,6 +76,8 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
           get<RequestSessionHistoryPayload>(url, dataToSend)
             .mergeMap((ajaxData: ResponseOk | ResponseError) => {
               if ( isAjaxResponseDefined<ResponseOkDefined>(ajaxData) ) {
+                assertResponse(ajaxData);
+
                 const appData = store.getState().app;
                 const tablesClone = clone(appData.tablesData.tables);
                 const currentTable = tablesClone[tableId];
