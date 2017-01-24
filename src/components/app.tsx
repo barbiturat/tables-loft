@@ -11,6 +11,7 @@ import changingUtcMilliseconds from '../action-creators/changing-utc-millisecond
 import ModalAdminLogin from './modal-admin-login';
 import ModalSessionsHistory from './modal-sessions-history';
 import GlobalErrors from './global-errors';
+import ScreenBlocker from './screen-blocker';
 
 type PropsFromConnect = PropsExtendedByConnect<AnyDict, AnyDict>;
 
@@ -46,6 +47,7 @@ class App extends React.Component<PropsFromConnect, State> {
   }
 
   render() {
+    console.log('ScreenBlocker');
     return (
       /* data-styles is used just to load styles */
       <div
@@ -57,6 +59,7 @@ class App extends React.Component<PropsFromConnect, State> {
         <ModalAdminLogin/>
         <ModalSessionsHistory/>
         <GlobalErrors/>
+        {/*<ScreenBlocker/>*/}
       </div>
     );
   }
