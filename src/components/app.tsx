@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
+import {Observable} from 'rxjs';
 
 import {AnyDict} from '../interfaces/index';
 import * as styles from '../styles/index.scss';
@@ -13,19 +14,35 @@ import GlobalErrors from './global-errors';
 
 type PropsFromConnect = PropsExtendedByConnect<AnyDict, AnyDict>;
 
-class App extends React.Component<PropsFromConnect, AnyDict> {
-  utcMilliseconds: number;
+interface State {
+  isMounted: boolean;
+}
+
+class App extends React.Component<PropsFromConnect, State> {
+  state = {
+    isMounted: false
+  };
 
   componentWillMount() {
-    this.props.dispatch(fetchingTables);
+    this.setState({
+      isMounted: true
+    });
 
-    this.utcMilliseconds = window.setInterval(() => {
-      this.props.dispatch(changingUtcMilliseconds);
-    }, 1000);
+    this.setGlobalTimer();
+
+    this.props.dispatch(fetchingTables);
   }
 
   componentWillUnmount() {
-    window.clearInterval(this.utcMilliseconds);
+    this.setState({
+      isMounted: false
+    });
+  }
+
+  setGlobalTimer() {
+    Observable.interval(1000)
+      .takeWhile(() => this.state.isMounted)
+      .subscribe(() => this.props.dispatch(changingUtcMilliseconds));
   }
 
   render() {
