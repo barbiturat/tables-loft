@@ -34,6 +34,14 @@ const getTableSessionsFromTables = (tables: TableBackend[]) => {
   }, []);
 };
 
+const assertResponse = (ajaxData: ResponseOk) => {
+  const tResponse = <ResponseTablesPayload>t.interface({
+    tables: t.list(tTable)
+  });
+
+  validateResponse(tResponse, ajaxData);
+};
+
 const fetchTables = ((action$) => {
   return action$.ofType(FETCHING_TABLES)
     .switchMap(() => {
@@ -43,12 +51,7 @@ const fetchTables = ((action$) => {
           get(`${API_URL}${urlTables}`)
             .mergeMap((ajaxData: ResponseOk | AjaxError) => {
               if ( isAjaxResponseDefined<ResponseOkDefined>(ajaxData) ) {
-
-                const tResponse = <ResponseTablesPayload>t.interface({
-                  tables: t.list(tTable)
-                });
-
-                validateResponse(tResponse, ajaxData);
+                assertResponse(ajaxData);
 
                 const tables = ajaxData.response.tables;
 

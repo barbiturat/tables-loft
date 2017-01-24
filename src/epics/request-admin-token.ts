@@ -1,6 +1,8 @@
 import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
 import {actions} from 'react-redux-form';
+// tslint:disable-next-line:no-require-imports
+const t = require('tcomb-validation');
 
 import {REQUESTING_ADMIN_TOKEN} from '../constants/action-names';
 import {post, isAjaxResponseDefined} from '../helpers/requests';
@@ -13,10 +15,19 @@ import {SimpleAction, FormSubmitAction} from '../interfaces/actions';
 import adminTokenUpdated from '../action-creators/admin-token-updated';
 import modalAdminLoginOpened from '../action-creators/modal-admin-login-opened';
 import {API_URL} from '../constants/index';
+import {validateResponse} from '../helpers/dynamic-type-validators/index';
 
 type ResponseOk = AjaxResponseTyped<ResponseGetAdminTokenPayload>;
 type ResponseOkDefined = AjaxResponseDefined<ResponseGetAdminTokenPayload>;
 type ResponseError = AjaxErrorTyped<ResponseGetAdminTokenFailedPayload>;
+
+const assertResponse = (ajaxData: ResponseOk) => {
+  const tResponse = <ResponseGetAdminTokenPayload>t.interface({
+    adminToken: t.String
+  });
+
+  validateResponse(tResponse, ajaxData);
+};
 
 const requestAdminToken = ((action$) => {
   return action$.ofType(REQUESTING_ADMIN_TOKEN)
@@ -30,6 +41,8 @@ const requestAdminToken = ((action$) => {
           post(`${API_URL}${urlGetAdminToken}`, dataToSend)
             .mergeMap((ajaxData: ResponseOk | ResponseError) => {
               if ( isAjaxResponseDefined<ResponseOkDefined>(ajaxData) ) {
+                assertResponse(ajaxData);
+
                 const adminToken = ajaxData.response.adminToken;
                 const passwordFieldModelPath = 'formsData.managerLoginForm.password';
 
