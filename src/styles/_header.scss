@@ -44,7 +44,7 @@
     width: $hamburger-btn-width;
     height: $hamburger-btn-height;
     background-color: #12cc3d;
-    @include border-radius($global-border-radius);
+    border-radius: $global-border-radius;
 
     &-content {
       $hamburger-btn-padding-x: 8px;
@@ -58,7 +58,7 @@
       position: absolute;
       width: $hamburger-btn-line-width;
       height: $hamburger-btn-line-height;
-      @include border-radius($hamburger-btn-line-height);
+      border-radius: $hamburger-btn-line-height;
       background-color: $white;
 
       &:before {
@@ -69,7 +69,7 @@
         top: ($hamburger-btn-content-height / 2) - ($hamburger-btn-line-height / 2);
         width: $hamburger-btn-line-width;
         height: $hamburger-btn-line-height;
-        @include border-radius($hamburger-btn-line-height);
+        border-radius: $hamburger-btn-line-height;
         background-color: $white;
       }
 
@@ -81,7 +81,7 @@
         top: $hamburger-btn-content-height - $hamburger-btn-line-height;
         width: $hamburger-btn-line-width;
         height: $hamburger-btn-line-height;
-        @include border-radius($hamburger-btn-line-height);
+        border-radius: $hamburger-btn-line-height;
         background-color: $white;
       }
     }

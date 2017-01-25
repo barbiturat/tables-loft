@@ -15,7 +15,7 @@ $table-columns-padding: $table-side-padding / 2;
     width: 40px;
     height: 40px;
     background: url(../../public/img/wait-dark.svg) center center no-repeat;
-    @include background-size(auto 100%);
+    background-size: auto 100%;
   }
 
   &__header {
@@ -59,7 +59,7 @@ $table-columns-padding: $table-side-padding / 2;
       &_time {
         padding-left: $table-columns-padding + 22px;
         background: url(../../public/img/icons/clock-black.svg) $table-columns-padding center no-repeat;
-        @include background-size(auto 13px);
+        background-size: auto 13px;
       }
       &_duration {
         padding-right: $table-side-padding;

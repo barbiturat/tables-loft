@@ -16,13 +16,13 @@ $shuffle-table-border-radius: 50px;
   display: inline-block;
   width: $table-width;
   height: $table-height;
-  @include box-sizing(border-box);
+  box-sizing: border-box;
 
   &_type {
     &_pool {
       background: #3e8fc4 url(../../public/img/pool-table-borders.svg) 0 0 no-repeat;
       background-size: auto 100%;
-      @include border-radius(22px);
+      border-radius: 22px;
 
       &.table_status_active {
         background: #d74045 url(../../public/img/pool-table-borders_active.svg) 0 0 no-repeat;
@@ -54,9 +54,7 @@ $shuffle-table-border-radius: 50px;
 
       background-color: #383435;
       border: $shuffle-table-border-width solid #c69836;
-      @include border-radius($shuffle-table-border-radius);
-      -webkit-box-shadow: inset 6px 5px 0 rgba(0, 0, 0, 0.3), 6px 5px 0 rgba(0, 0, 0, 0.3);
-      -moz-box-shadow: inset 6px 5px 0 rgba(0, 0, 0, 0.3), 6px 5px 0 rgba(0, 0, 0, 0.3);
+      border-radius: $shuffle-table-border-radius;
       box-shadow: inset 6px 5px 0 rgba(0, 0, 0, 0.3), 6px 5px 0 rgba(0, 0, 0, 0.3);
 
       &:before {
@@ -68,12 +66,10 @@ $shuffle-table-border-radius: 50px;
         height: 170px;
         left: ($inner-width / 2) - ($element-width / 2);
         top: 64px;
-        @include box-sizing(border-box);
+        box-sizing: border-box;
         background: #c69836 url(../../public/img/shuffle-board-background-field.svg) center center no-repeat;
         background-size: 100% auto;
         border: 7px solid $white;
-        -webkit-box-shadow: 6px 5px 0 rgba(0, 0, 0, 0.3);
-        -moz-box-shadow: 6px 5px 0 rgba(0, 0, 0, 0.3);
         box-shadow: 6px 5px 0 rgba(0, 0, 0, 0.3);
       }
 
@@ -161,7 +157,7 @@ $shuffle-table-border-radius: 50px;
   &__session-length {
     display: inline-block;
     cursor: pointer;
-    @include user-select();
+    user-select: none;
 
     &_admin-edited {
       &:after {
@@ -218,10 +214,10 @@ $shuffle-table-border-radius: 50px;
         top: 103px;
         width: 78px;
         height: 78px;
-        @include box-sizing(border-box);
+        box-sizing: border-box;
         border: 6px solid $white;
         background: no-repeat center center;
-        @include border-radius(50%);
+        border-radius: 50%;
 
         .table_type_pool & {
           left: 60px;
@@ -283,7 +279,7 @@ $shuffle-table-border-radius: 50px;
         width: $table-width;
         height: $table-height;
         padding-top: 195px;
-        @include box-sizing(border-box);
+        box-sizing: border-box;
         text-align: center;
         color: $white;
         font-size: 14px;
@@ -291,14 +287,15 @@ $shuffle-table-border-radius: 50px;
         font-weight: 600;
         border: 11px solid $white;
         background-color: rgba(20, 20, 20, 0.9);
-        @include border-radius(20px);
+        border-radius: 20px;
 
         &:after {
           content: '';
           display: block;
           position: absolute;
           top: 88px;
-          @include translate-center-x();
+          left: 50%;
+          transform: translateX(-50%);
           width: 90px;
           height: 90px;
           background: url(../../public/img/icons/lock-white.svg) center center no-repeat;
@@ -308,25 +305,26 @@ $shuffle-table-border-radius: 50px;
         .table_type_tennis & {
           top: -$tennis-table-border-width;
           left: -$tennis-table-border-width;
-          @include border-radius(0);
+          border-radius: 0;
         }
 
         .table_type_default & {
           top: -$default-table-border-width;
           left: -$default-table-border-width;
-          @include border-radius(0);
+          border-radius: 0;
         }
 
         .table_type_shuffle & {
           top: -$shuffle-table-border-width;
           left: -$shuffle-table-border-width;
-          @include border-radius($shuffle-table-border-radius);
+          border-radius: $shuffle-table-border-radius;
         }
       }
       &_table-type {
         position: absolute;
         top: 45px;
-        @include translate-center-x();
+        left: 50%;
+        transform: translateX(-50%);
         padding: 0 12px 0 32px;
         line-height: 35px;
         white-space: normal;
@@ -334,11 +332,21 @@ $shuffle-table-border-radius: 50px;
         font-size: 13px;
         text-transform: uppercase;
         font-weight: 600;
-        @include border-radius($global-border-radius);
+        border-radius: $global-border-radius;
         background-color: rgba(0, 0, 0, 0.7);
         background-blend-mode: multiply;
 
         &:after {
+          content: '';
+          display: block;
+          position: absolute;
+          width: 16px;
+          height: 16px;
+          left: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+          z-index: 1;
+          background: 0 center no-repeat;
           background-size: auto 100%;
         }
 
@@ -372,19 +380,6 @@ $shuffle-table-border-radius: 50px;
             background: url(../../public/img/icons/table-default-yellow.svg) 0 center no-repeat;
           }
         }
-
-        &:after {
-          content: '';
-          display: block;
-          position: absolute;
-          width: 16px;
-          height: 16px;
-          left: 10px;
-          @include translate-center-y();
-          z-index: 1;
-          background: 0 center no-repeat;
-          background-size: auto 100%;
-        }
       }
       &_availability, &_counter {
         position: absolute;
@@ -394,7 +389,7 @@ $shuffle-table-border-radius: 50px;
         color: $white;
         font-size: 33px;
         font-weight: 600;
-        @include user-select();
+        user-select: none;
 
         .table_type_pool & {
           left: 155px;

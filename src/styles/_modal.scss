@@ -7,15 +7,15 @@
   @include normalize-block();
 
   position: absolute;
-  @include pos-center();
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   min-width: 550px;
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: $white;
-  @include border-radius($border-radius);
-  @include border-top-left-radius( $border-radius+ 2 );
-  @include border-top-right-radius( $border-radius+ 2 );
+  border-radius: $border-radius+ 2 $border-radius+ 2 $border-radius $border-radius;
   outline: none;
 
   &_role {
@@ -50,10 +50,10 @@
     height: 60px;
     right: -22px;
     top: -22px;
-    @include border-radius(50%);
+    border-radius: 50%;
     background: $white url(../../public/img/icons/close-yellow.svg) center center no-repeat;
-    @include background-size(20px auto);
-    @include box-shadow(5px 5px 40px rgba(0, 0, 0, 0.3));
+    background-size: 20px auto;
+    box-shadow: 5px 5px 40px rgba(0, 0, 0, 0.3);
   }
   
   &__header {
@@ -67,8 +67,8 @@
     text-transform: uppercase;
     color: #fff;
     background-color: #cca711;
-    @include border-top-left-radius( $border-radius );
-    @include border-top-right-radius( $border-radius );
+    border-top-left-radius: $border-radius;
+    border-top-right-radius: $border-radius;
 
     .modal_role_login-manager {
       background-color: #cca711;
@@ -85,7 +85,7 @@
     font-size: 22px;
     font-weight: 600;
     background: url(../../public/img/icons/table-default-white.svg) left center no-repeat;
-    @include background-size(20px auto);
+    background-size: 20px auto;
 
     .modal_table_shuffle & {
       background-image: url(../../public/img/icons/table-shuffle-board-white.svg);

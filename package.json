@@ -34,6 +34,9 @@
   "author": "",
   "license": "ISC",
   "homepage": "https://bitbucket.org/gdekefir/boilerplate_1#readme",
+  "browserslist": [
+    "> 1%"
+  ],
   "appSettings": {
     "assetsServerPort": 5000,
     "apiServerPort": 8081
@@ -51,6 +54,7 @@
     "@types/react-router": "^2.0.41",
     "@types/redux-router": "^1.0.35",
     "@types/validator": "^5.7.35",
+    "autoprefixer": "^6.7.0",
     "chai": "^3.5.0",
     "chai-enzyme": "^0.6.1",
     "classnames": "^2.2.5",
@@ -70,6 +74,7 @@
     "node-sass": "^4.3.0",
     "normalize-scss": "^6.0.0",
     "phantomjs-prebuilt": "^2.1.14",
+    "postcss-loader": "^1.2.2",
     "query-string": "^4.3.1",
     "ramda": "^0.23.0",
     "react": "^15.4.1",

@@ -16,7 +16,7 @@
     color: $dark-gray;
     border: 2px solid $dark-gray;
     cursor: pointer;
-    @include user-select();
+    user-select: none;
 
     &:hover{
       background-color: $extra-light-gray;
@@ -41,7 +41,7 @@
       &_prev {
         padding-left: 14px;
         background: url(../../public/img/arrow-left-dark-gray.svg) 7px center no-repeat;
-        @include background-size(auto 14px);
+        background-size: auto 14px;
 
         &.paginator-disabled {
           background-image: url(../../public/img/arrow-left-light-gray.svg);
@@ -50,7 +50,7 @@
       &_next {
         padding-right: 14px;
         background: url(../../public/img/arrow-right-dark-gray.svg) calc(100% - 7px) center no-repeat;
-        @include background-size(auto 14px);
+        background-size: auto 14px;
 
         &.paginator-disabled {
           background-image: url(../../public/img/arrow-right-light-gray.svg);
