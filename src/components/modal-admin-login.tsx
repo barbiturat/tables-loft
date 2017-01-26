@@ -88,8 +88,9 @@ class Component extends React.Component<PropsFromConnect, {}> {
           <label className="form-label form-label_type_big form-label_role_password modal_adjust_form-label">
             <Control
               type="password"
-              className="input input_type_big"
+              className="input input_type_big input_role_manager-password"
               autoComplete="false"
+              autoFocus={true}
               model=".password"
               validators={{
                   [passwordChecks.isFilled]: isFilled,

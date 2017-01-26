@@ -5,11 +5,10 @@ import {RequestUpdateTableSessionPayload} from '../interfaces/api-requests';
 
 export type ActionType = ActionWithPayload<RequestUpdateTableSessionPayload>;
 
-const requestingTableSessionChange = (sessionId: number, durationSeconds: number, adminToken: string): ActionType =>
+const requestingTableSessionChange = (sessionId: number, durationSeconds: number): ActionType =>
   createActionWithPayload(REQUESTING_TABLE_SESSION_CHANGE, {
     sessionId,
-    durationSeconds,
-    adminToken
+    durationSeconds
   });
 
 export default requestingTableSessionChange;

@@ -1,5 +1,4 @@
 import {Dispatch} from 'redux';
-import {RouteComponentProps} from 'react-router';
 
 import {SimpleAction} from './actions';
 

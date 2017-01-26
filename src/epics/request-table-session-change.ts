@@ -51,13 +51,20 @@ const setNewParamsToSession = (sessions: TableSessions, sessionId: number, param
 const requestTableSessionChange = ((action$, store: Store<StoreStructure>) => {
   return action$.ofType(REQUESTING_TABLE_SESSION_CHANGE)
     .switchMap((action: ActionType) => {
-      const {sessionId, durationSeconds, adminToken} = action.payload;
+      const storeData = store.getState();
+      const adminToken = storeData.app.adminToken;
+
+      if (!adminToken) {
+        return Observable.of(null);
+      }
+
+      const {sessionId, durationSeconds} = action.payload;
       const dataToSend: RequestUpdateTableSessionPayload = {
         sessionId,
         durationSeconds,
         adminToken
       };
-      const currSessionsClone = clone( store.getState().app.tableSessionsData.tableSessions );
+      const currSessionsClone = clone( storeData.app.tableSessionsData.tableSessions );
       const newSessions = setNewParamsToSession(currSessionsClone, sessionId, {
         isInPending: true
       });

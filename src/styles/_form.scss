@@ -48,4 +48,12 @@
       }
     }
   }
+
+  &_role {
+    &_manager-password {
+      &:focus {
+        outline: none;
+      }
+    }
+  }
 }

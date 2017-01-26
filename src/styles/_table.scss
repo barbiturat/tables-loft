@@ -168,12 +168,24 @@ $shuffle-table-border-radius: 50px;
     }
   }
 
-  &__session-length-edit-label-span {
+  &__session-length-edit-form {
+    display: flex;
+  }
+
+  &__session-length-edit-label {
+    display: flex;
+
+    & + & {
+      margin-left: 20px;
+    }
+  }
+
+  &__session-length-edit-label-text {
     padding-right: 4px;
   }
 
   &__session-length-edit-input {
-    width: 70px;
+    width: 40px;
   }
 
   &__btn-view-sessions {
