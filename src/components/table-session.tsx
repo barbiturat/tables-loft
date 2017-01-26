@@ -58,9 +58,9 @@ class Component extends React.Component<PropsFromConnect, State> {
     const duration = moment.duration({seconds: durationSeconds});
 
     return {
-      hours: Math.floor( duration.hours() ),
+      hours: Math.floor( duration.asHours() ),
       minutes: Math.floor( duration.minutes() ),
-      minutesTotal: Math.floor( duration.minutes() )
+      minutesTotal: Math.floor( duration.asMinutes() )
     };
   }
 
