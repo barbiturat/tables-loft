@@ -1,3 +1,10 @@
+export interface ValidationError {
+  message: string;
+  actual: any;
+  expected: Function;
+  path: (string | number)[];
+}
+
 declare module 'tcomb-validation' {
 
   type Predicate<T> = (x: T) => boolean;
@@ -265,13 +272,6 @@ declare module 'tcomb-validation' {
     path: (string | number)[];
     context: any;
     strict: boolean;
-  }
-
-  interface ValidationError {
-    message: string;
-    actual: any;
-    expected: Function;
-    path: (string | number)[];
   }
 
   interface ValidationResult<TValue> {
