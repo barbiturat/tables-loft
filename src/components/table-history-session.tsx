@@ -2,9 +2,17 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import * as moment from 'moment';
 import MouseEvent = React.MouseEvent;
+import {merge} from 'ramda';
 
 import {StoreStructure, TableSession as TableSessionType} from '../interfaces/store-models';
 import {PropsExtendedByConnect} from '../interfaces/component';
+import SessionEditBlock from './session-edit-block';
+
+interface SessionDurationData {
+  hours: number;
+  minutes: number;
+  minutesTotal: number;
+}
 
 interface Props {
   session: TableSessionType;
@@ -13,9 +21,12 @@ interface Props {
 
 interface State {
   isFormatOfMinutes: boolean;
+  isInEditing: boolean;
 }
 
-interface MappedProps {}
+interface MappedProps {
+  inAdminMode: boolean;
+}
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
@@ -25,53 +36,120 @@ class Component extends React.Component<PropsFromConnect, State> {
     super(props);
 
     this.state = {
-      isFormatOfMinutes: false
+      isFormatOfMinutes: false,
+      isInEditing: false
     };
   }
 
+  componentWillReceiveProps(nextProps: PropsFromConnect) {
+    if (!nextProps.inAdminMode) {
+      this.setEditingMode(false);
+    }
+  }
+
   onSessionInfoClick = (event: MouseEvent<HTMLDivElement>) => {
-    this.setState({
+    this.setState(merge(this.state, {
       isFormatOfMinutes: !this.state.isFormatOfMinutes
-    });
+    }));
   };
 
-  static getDurationString(durationSeconds: number, isFormatOfMinutes: boolean): string {
+  static getSessionDurationData(durationSeconds: number): SessionDurationData {
     const duration = moment.duration({seconds: durationSeconds});
 
-    if (isFormatOfMinutes) {
-      const minutes = Math.floor( duration.asMinutes() );
+    return {
+      hours: Math.floor( duration.asHours() ),
+      minutes: Math.floor( duration.minutes() ),
+      minutesTotal: Math.floor( duration.asMinutes() )
+    };
+  }
 
-      return `${minutes}m`;
+  setEditingMode(turnOn: boolean) {
+    this.setState(merge(this.state, {
+      isInEditing: turnOn
+    }));
+  }
+
+  onEditButtonClick = (event: MouseEvent<HTMLDivElement>) => {
+    this.setEditingMode(true);
+  };
+
+  onEditComplete = () => {
+    this.setEditingMode(false);
+  };
+
+  static getDurationString(hours: number, minutes: number, minutesTotal: number, isFormatOfMinutes: boolean): string {
+    if (isFormatOfMinutes) {
+      return `${minutesTotal}m`;
     } else {
       return moment.utc({
-        hours: duration.hours(),
-        minutes: duration.minutes()
+        hours,
+        minutes
       })
         .format('H[h] mm[m]');
     }
   }
 
+  drawEditButton(toDraw: boolean) {
+    return toDraw ? (
+        <div
+          className="sessions-list__edit-button"
+          onClick={this.onEditButtonClick}
+        />
+      ) : null;
+  }
+
+  drawDuration(session: TableSessionType) {
+    const {adminEdited, isInPending, durationSeconds, id} = session;
+    const durationData = Component.getSessionDurationData(durationSeconds);
+    const {hours, minutes, minutesTotal} = durationData;
+
+    if (this.state.isInEditing) {
+      return (
+        <SessionEditBlock
+          durationSeconds={durationSeconds}
+          sessionId={id}
+          onEditComplete={this.onEditComplete}
+        />
+      );
+    } else {
+      const adminEditedClassName = adminEdited ? 'table__session-length_admin-edited' : '';
+      const durationString = isInPending ?
+        'wait...' : Component.getDurationString(hours, minutes, minutesTotal, this.state.isFormatOfMinutes);
+
+      return (
+        <span
+          className={`table__session-length ${adminEditedClassName}`}
+          onClick={this.onSessionInfoClick}
+        >
+          {durationString}
+        </span>
+      );
+    }
+  };
+
   render() {
-    const {session, idx} = this.props;
+    const {session} = this.props;
 
     if (session) {
-      const {durationSeconds, startsAt, adminEdited} = session;
+      const {durationSeconds, startsAt} = session;
       const finishTime = moment.utc(startsAt)
         .add({
           seconds: durationSeconds
         })
         .format('hh:mm');
-      const durationString = Component.getDurationString(durationSeconds, this.state.isFormatOfMinutes);
-      const adminEditedSign = adminEdited ? '*' : '';
-      const fullDurationString = `${durationString}${adminEditedSign}`;
 
       return (
-        <div
-            className="sessions-list__tr"
-            onClick={this.onSessionInfoClick}
-        >
+        <div className="sessions-list__tr">
           <div className="sessions-list__td sessions-list__td_role_time">{finishTime}</div>
-          <div className="sessions-list__td sessions-list__td_role_duration">{fullDurationString}</div>
+          <div className="sessions-list__td sessions-list__td_role_duration">
+            <div
+              className="sessions-list__text"
+              onClick={this.onSessionInfoClick}
+            >
+              {this.drawDuration(this.props.session)}
+            </div>
+            {this.drawEditButton(this.props.inAdminMode && !this.state.isInEditing)}
+          </div>
         </div>
       );
     } else {
@@ -86,7 +164,9 @@ class Component extends React.Component<PropsFromConnect, State> {
 
 const TableHistorySession = connect<any, any, Props>(
   (state: StoreStructure, ownProps: Props): MappedProps => {
-    return {};
+    return {
+      inAdminMode: !!state.app.adminToken,
+    };
   }
 )(Component);
 

@@ -63,7 +63,25 @@ $table-columns-padding: $table-side-padding / 2;
       }
       &_duration {
         padding-right: $table-side-padding;
+        white-space: nowrap;
       }
     }
+  }
+
+  &__text {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  &__edit-button {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-left: 3px;
+    margin-top: -3px;
+    vertical-align: middle;
+    background: url(../../public/img/icons/pencil-dark-gray.svg) center center no-repeat;
+    background-size: 13px auto;
+    cursor: pointer;
   }
 }
