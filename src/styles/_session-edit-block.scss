@@ -1,0 +1,27 @@
+@import 'settings';
+@import 'mixins';
+
+.session-edit-block {
+  &__form {
+    display: flex;
+  }
+
+  &__label {
+    display: flex;
+
+    & + & {
+      margin-left: 20px;
+    }
+  }
+
+  &__text {
+    padding-right: 4px;
+  }
+
+  &__input-container {
+  }
+
+  &__input {
+    width: 40px;
+  }
+}

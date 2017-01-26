@@ -168,26 +168,6 @@ $shuffle-table-border-radius: 50px;
     }
   }
 
-  &__session-length-edit-form {
-    display: flex;
-  }
-
-  &__session-length-edit-label {
-    display: flex;
-
-    & + & {
-      margin-left: 20px;
-    }
-  }
-
-  &__session-length-edit-label-text {
-    padding-right: 4px;
-  }
-
-  &__session-length-edit-input {
-    width: 40px;
-  }
-
   &__btn-view-sessions {
     position: absolute;
     top: 253px;

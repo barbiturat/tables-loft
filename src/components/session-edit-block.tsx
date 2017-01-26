@@ -126,14 +126,14 @@ class Component extends React.Component<PropsFromConnect, State> {
     const min: string = String(this.state.minutes);
 
     return (
-      <form className="table__session-length-edit-form">
+      <form className="session-edit-block__form">
 
-        <label className="table__session-length-edit-label">
-          <span className="table__session-length-edit-label-text">hr:</span>
-          <span className="table__session-length-edit-input-container">
+        <label className="session-edit-block__label">
+          <span className="session-edit-block__text">hr:</span>
+          <span className="session-edit-block__input-container">
             <input
               name="hours"
-              className="table__session-length-edit-input"
+              className="session-edit-block__input"
               defaultValue={hr}
               onChange={this.onInputChange}
               onKeyDown={this.onInputKeyDown}
@@ -141,12 +141,12 @@ class Component extends React.Component<PropsFromConnect, State> {
           </span>
         </label>
 
-        <label className="table__session-length-edit-label">
-          <span className="table__session-length-edit-label-text">min:</span>
-          <span className="table__session-length-edit-input-container">
+        <label className="session-edit-block__label">
+          <span className="session-edit-block__text">min:</span>
+          <span className="session-edit-block__input-container">
             <input
               name="minutes"
-              className="table__session-length-edit-input"
+              className="session-edit-block__input"
               defaultValue={min}
               onChange={this.onInputChange}
               onKeyDown={this.onInputKeyDown}
