@@ -32,6 +32,12 @@
       @include button-hover-behavior($color);
       text-decoration: none;
     }
+    &_ok {
+      background-color: green;
+    }
+    &_cancel {
+      background-color: red;
+    }
   }
 
   &_type {

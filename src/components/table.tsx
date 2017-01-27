@@ -2,7 +2,7 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import * as moment from 'moment';
 import MouseEvent = React.MouseEvent;
-import { createSelector, Selector } from 'reselect';
+import {merge} from 'ramda';
 
 import TableSession from './table-session';
 import {TableType} from '../interfaces/backend-models';
@@ -14,8 +14,12 @@ import {PropsExtendedByConnect} from '../interfaces/component';
 import TableTimer from './table-timer';
 import fetchingTableSessionsHistory from '../action-creators/fetching-table-sessions-history';
 import modalSessionsHistoryChanged from '../action-creators/modal-sessions-history-changed';
+import ModalPrompt from './modal-prompt';
 
-export type TableStatus = 'ready' | 'active';
+interface State {
+  isPromptOpen: boolean;
+  promptMessage: string;
+}
 
 export interface Props {
   id: number;
@@ -33,7 +37,12 @@ interface MappedProps {
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
-class Component extends React.Component<PropsFromConnect, {}> {
+class Component extends React.Component<PropsFromConnect, State> {
+  state = {
+    isPromptOpen: false,
+    promptMessage: ''
+  };
+
   static defaultProps = {
     type: 'generic',
     name: 'No Name',
@@ -78,9 +87,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
     }
   };
 
-  onChangeStatusClick = (event: MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
-
+  onPromptOk = () => {
     const {id, isDisabled} = this.props;
 
     if (isDisabled) {
@@ -91,6 +98,24 @@ class Component extends React.Component<PropsFromConnect, {}> {
     const action = actionCreator(id);
 
     store.dispatch(action);
+  };
+
+  onPromptClose = () => {
+    this.setState(merge(this.state, {
+      isPromptOpen: false
+    }));
+  };
+
+  onChangeStatusClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+
+    const toStart = Component.isTableActive( this.getCurrentSession() );
+    const promptMessage = `${toStart ? 'Start' : 'Stop'} table "${this.props.name}"`;
+
+    this.setState(merge(this.state, {
+      isPromptOpen: true,
+      promptMessage
+    }));
   };
 
   onViewMoreClick = (event: MouseEvent<HTMLAnchorElement>) => {
@@ -136,6 +161,13 @@ class Component extends React.Component<PropsFromConnect, {}> {
         >
           View More
         </a>
+
+        <ModalPrompt
+          isOpen={this.state.isPromptOpen}
+          onClickOk={this.onPromptOk}
+          onClose={this.onPromptClose}
+          message={this.state.promptMessage}
+        />
       </div>
     );
   }
