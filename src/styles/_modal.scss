@@ -26,6 +26,11 @@
       min-width: 550px;
       padding-bottom: 40px;
     }
+    &_prompt {
+      min-width: 450px;
+      padding: 20px;
+      background-color: #f3e3c1;
+    }
   }
 
   &_adjust {
@@ -115,6 +120,11 @@
     font-weight: 500;
     margin: 0 0 50px;
     color: $medium-gray;
+
+    .modal_role_prompt & {
+      margin-bottom: 30px;
+      color: $dark-gray;
+    }
   }
 
   &__form {
