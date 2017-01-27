@@ -48,6 +48,7 @@ const stopTable = ((action$, store: Store<StoreStructure>) => {
                 assertResponse(ajaxData);
 
                 const appData = store.getState().app;
+                const currTable = appData.tablesData.tables[tableId];
                 const convertedSession = tableSessionToFront( ajaxData.response.session );
                 const tableSessionsChangedAction = pipe< TableSessions, TableSessions, TableSessions, ActionWithPayload<TableSessions> >(
                   clone,
@@ -57,15 +58,19 @@ const stopTable = ((action$, store: Store<StoreStructure>) => {
                   changingTableSessions
                 )(appData.tableSessionsData.tableSessions);
 
-                const changingTableAction = changingTableFields({
-                  currentSessionId: null,
-                  isInPending: false
-                }, tableId);
+                const actions: SimpleAction[] = [tableSessionsChangedAction];
 
-                return Observable.of<any>(
-                  tableSessionsChangedAction,
-                  changingTableAction
-                );
+                if (currTable) {
+                  const changingTableAction = changingTableFields({
+                    currentSessionId: null,
+                    lastSessionId: currTable.currentSessionId,
+                    isInPending: false
+                  }, tableId);
+
+                  actions.push(changingTableAction);
+                }
+
+                return Observable.from(actions);
               } else {
                 const pendingStopAction = changingTableFields({
                   isInPending: false
