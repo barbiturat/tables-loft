@@ -14,7 +14,7 @@ import updateTableSession from './endpoints/update-table-session';
 const packageJson = require('../../../package.json');
 
 const app = express();
-const port = packageJson.appSettings.apiServerPort;
+const port = packageJson.appSettings.API_PORT;
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 app.use(function(req, res, next) {

@@ -8,8 +8,8 @@
   },
   "scripts": {
     "clean": "rimraf public/resources",
-    "build:dev": "API_KEY=1111111 API_HOST=http://localhost API_PORT=8081 webpack --config ./configs/webpack.config.js",
-    "build:dev:watch": "API_KEY=1111111 API_HOST=http://localhost API_PORT=8081 webpack --watch --config ./configs/webpack.config.js",
+    "build:dev": "webpack --config ./configs/webpack.config.js",
+    "build:dev:watch": "webpack --watch --config ./configs/webpack.config.js",
     "build:prod": "webpack -p --bail --config configs/webpack.config.js",
     "build-dev": "npm run clean && npm run build:dev",
     "build-dev-watch": "npm run clean && npm run build:dev:watch",
@@ -17,7 +17,7 @@
     "build-server": "rimraf js-server/out && tsc --project ./js-server/tsconfig.json",
     "build-fake-api-server": "rimraf fake-api-server/out && tsc --project ./fake-api-server/tsconfig.json",
     "run-fake-api-server": "node ./fake-api-server/out/fake-api-server",
-    "build-and-run-server": "npm run build-server && BASIC_AUTH_USERNAME=name BASIC_AUTH_PASSWORD=password node ./js-server/out/js-server",
+    "build-and-run-server": "npm run build-server && node ./js-server/out/js-server",
     "build-and-run-fake-api-server": "npm run build-fake-api-server && npm run run-fake-api-server",
     "start-dev": "npm run clean && npm run build:dev:watch & npm run build-and-run-server",
     "run-server": "node ./js-server/out/js-server",
@@ -38,8 +38,12 @@
     "> 1%"
   ],
   "appSettings": {
-    "assetsServerPort": 5000,
-    "apiServerPort": 8081
+    "API_KEY": 1111111,
+    "API_HOST": "http://localhost",
+    "API_PORT": 8081,
+    "ASSETS_PORT": 5000,
+    "BASIC_AUTH_USERNAME": "name",
+    "BASIC_AUTH_PASSWORD": "password"
   },
   "dependencies": {
     "@types/body-parser": "^0.0.33",

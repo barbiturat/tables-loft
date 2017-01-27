@@ -2,12 +2,16 @@ const webpack = require('webpack');
 const path = require('path');
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const appSettings = require('../package.json').appSettings;
+const envVars = process.env;
 
-const API_KEY = process.env.API_KEY;
-const API_HOST = process.env.API_HOST;
-const API_PORT = process.env.API_PORT;
-const ROLLBAR_TOKEN = process.env.ROLLBAR_TOKEN || '';
 const isProd = process.argv.includes('-p');
+
+const API_KEY = isProd ? envVars.API_KEY : appSettings.API_KEY || envVars.API_KEY;
+const API_HOST = isProd ? envVars.API_HOST : appSettings.API_HOST || envVars.API_HOST;
+const API_PORT = isProd ? envVars.API_PORT : appSettings.API_PORT || envVars.API_PORT;
+const ROLLBAR_TOKEN = envVars.ROLLBAR_TOKEN || '';
+
 const nodeEnv = isProd ? 'production' : 'development';
 const sourcePath = pathFromRoot('./src');
 const outputPath = pathFromRoot('./public/resources');
