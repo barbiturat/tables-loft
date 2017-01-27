@@ -22,6 +22,14 @@
       background-color: $extra-light-gray;
     }
 
+    &:focus {
+      outline: 0;
+    }
+
+    &:active {
+      outline: 0;
+    }
+
     &.paginator-active {
       background-color: $dark-gray;
       color: $white;
