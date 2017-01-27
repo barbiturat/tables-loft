@@ -1,32 +1,27 @@
 import * as React from 'react';
 
-import {TableSessions} from '../interfaces/store-models';
+import {TableSessions, TableSession} from '../interfaces/store-models';
 import TableHistorySession from './table-history-session';
 
 interface Props {
-  tableSessions?: TableSessions;
+  tableSessions?: TableSession[];
   isInPending: boolean;
   firstIdx: number;
 }
 
 export default class SessionsHistory extends React.Component<Props, {}> {
-  static getRenderedSessions(tableSessions: TableSessions = {}, firstIdx: number) {
-    return Object.keys(tableSessions).map((key, idx) => {
-      const keyNum = Number(key);
-      const session = tableSessions[keyNum];
-
-      return (
-        <TableHistorySession
-          key={idx}
-          session={session}
-          idx={idx + firstIdx + 1}
-        />
-      );
-    });
+  static getRenderedSessions(tableSessions: TableSession[] = [], firstIdx: number) {
+    return tableSessions.map((session, idx) =>
+      <TableHistorySession
+        key={idx}
+        session={session}
+        idx={idx + firstIdx + 1}
+      />
+    );
 
   }
 
-  static getTableSessions (sessions: TableSessions = {}, isInPending: boolean, firstIdx: number) {
+  static getTableSessions (sessions: TableSession[] = [], isInPending: boolean, firstIdx: number) {
     if (isInPending) {
       return (
         <div className="sessions-list__wait"/>

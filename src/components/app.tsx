@@ -47,7 +47,6 @@ class App extends React.Component<PropsFromConnect, State> {
   }
 
   render() {
-    console.log('ScreenBlocker');
     return (
       /* data-styles is used just to load styles */
       <div

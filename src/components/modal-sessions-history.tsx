@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import MouseEvent = React.MouseEvent;
 import * as Modal from 'react-modal';
 import * as ReactPaginate from 'react-paginate';
-import {pick, splitEvery, nth, pipe, keys} from 'ramda';
+import {pipe, pick, splitEvery, nth, keys, map, flip, sortBy, prop, values} from 'ramda';
 
 import {StoreStructure, Table, TableSession, Tables, TableSessions} from '../interfaces/store-models';
 import {PropsExtendedByConnect} from '../interfaces/component';
@@ -58,30 +58,20 @@ class Component extends React.Component<PropsFromConnect, State> {
     this.requestToClose();
   };
 
-  static getTableSessions(allSessions: TableSessions, table: Table): TableSessions {
-    return table.sessionsHistory.reduce((memo: TableSession[], id) => {
-      const session = allSessions[id];
-
-      if (session) {
-        memo[session.id] = session;
-      }
-
-      return memo;
-    }, {} as TableSessions);
+  static getTableSessions(allSessions: TableSessions, table: Table): TableSession[] {
+    return pipe<number[], string[], TableSessions, TableSession[], TableSession[]>(
+      map(String),
+      flip(pick)(allSessions),
+      values,
+      sortBy(prop('startsAt'))
+    )(table.sessionsHistory);
   };
 
-  static getSessionsPage(sessions: TableSessions, pageIdx: number): TableSessions {
-    const idsPage = pipe<TableSessions, string[], string[][], string[]>(
-      keys,
+  static getSessionsPage(sessions: TableSession[], pageIdx: number): TableSession[] {
+    return pipe<TableSession[], TableSession[][], TableSession[]>(
       splitEvery(Component.PAGE_SIZE),
       nth(pageIdx)
     )(sessions);
-
-    if (idsPage) {
-      return pick(idsPage)(sessions) as TableSessions;
-    } else {
-      return {} as TableSessions;
-    }
   }
 
   onPageChangeHandler = (data: any) => {
@@ -125,7 +115,7 @@ class Component extends React.Component<PropsFromConnect, State> {
       const modalClass = Component.modalClasses[currentTable.tableType] || '';
       const caption = currentTable.name;
       const sessions = Component.getTableSessions(allTableSessions, currentTable);
-      const sessionCount = Object.keys(sessions).length;
+      const sessionCount = sessions.length;
       const sessionsPage = Component.getSessionsPage(sessions, currentPageNum);
       const numOfPages = Math.ceil( sessionCount / Component.PAGE_SIZE );
       const firstIdx = currentPageNum * Component.PAGE_SIZE;
