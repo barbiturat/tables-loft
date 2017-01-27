@@ -58,19 +58,16 @@ const stopTable = ((action$, store: Store<StoreStructure>) => {
                   changingTableSessions
                 )(appData.tableSessionsData.tableSessions);
 
-                const actions: SimpleAction[] = [tableSessionsChangedAction];
-
-                if (currTable) {
-                  const changingTableAction = changingTableFields({
+                const changingTableAction = currTable ? changingTableFields({
                     currentSessionId: null,
                     lastSessionId: currTable.currentSessionId,
                     isInPending: false
-                  }, tableId);
+                  }, tableId) : null;
 
-                  actions.push(changingTableAction);
-                }
-
-                return Observable.from(actions);
+                return Observable.of<any>(
+                  tableSessionsChangedAction,
+                  changingTableAction
+                );
               } else {
                 const pendingStopAction = changingTableFields({
                   isInPending: false
