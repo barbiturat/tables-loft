@@ -12,6 +12,7 @@ import {RequestLoginPayload} from '../interfaces/api-requests';
 import {urlLogin} from '../constants/urls';
 import {SimpleAction, FormSubmitAction} from '../interfaces/actions';
 import {API_URL} from '../constants/index';
+import {StoreStructure} from '../interfaces/store-models';
 
 const requestLogin = ((action$) => {
   return action$.ofType(REQUESTING_LOGIN)
@@ -64,6 +65,6 @@ const requestLogin = ((action$) => {
         loginRequest$
       );
     });
-}) as Epic<SimpleAction>;
+}) as Epic<SimpleAction, StoreStructure>;
 
 export default requestLogin;

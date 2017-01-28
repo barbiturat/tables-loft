@@ -17,6 +17,7 @@ import modalAdminLoginOpened from '../action-creators/modal-admin-login-opened';
 import {API_URL} from '../constants/index';
 import {validateResponse} from '../helpers/dynamic-type-validators/index';
 import pendingBlockingRequest from '../action-creators/pending-blocking-request';
+import {StoreStructure} from '../interfaces/store-models';
 
 type ResponseOk = AjaxResponseTyped<ResponseGetAdminTokenPayload>;
 type ResponseOkDefined = AjaxResponseDefined<ResponseGetAdminTokenPayload>;
@@ -91,6 +92,6 @@ const requestAdminToken = ((action$) => {
         tokenRequest$
       );
     });
-}) as Epic<SimpleAction>;
+}) as Epic<SimpleAction, StoreStructure>;
 
 export default requestAdminToken;

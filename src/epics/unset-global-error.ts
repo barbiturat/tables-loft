@@ -15,6 +15,6 @@ const unsetGlobalError = ((action$, store: Store<StoreStructure>) => {
 
       return globalErrorExpired(timestamp);
     });
-}) as Epic<SimpleAction>;
+}) as Epic<SimpleAction, StoreStructure>;
 
 export default unsetGlobalError;

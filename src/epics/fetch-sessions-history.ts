@@ -132,6 +132,6 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
         historyRequest$
       );
     });
-}) as Epic<SimpleAction>;
+}) as Epic<SimpleAction, StoreStructure>;
 
 export default fetchSessionsHistory;

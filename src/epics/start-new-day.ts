@@ -19,6 +19,6 @@ const startNewDay = ((action$, store: Store<StoreStructure>) => {
       }),
       changingTables
     )(store.getState().app.tablesData.tables));
-}) as Epic<SimpleAction>;
+}) as Epic<SimpleAction, StoreStructure>;
 
 export default startNewDay;

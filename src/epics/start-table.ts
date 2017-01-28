@@ -85,6 +85,6 @@ const startTable = ((action$, store: Store<StoreStructure>) => {
         request$
       );
     });
-}) as Epic<SimpleAction>;
+}) as Epic<SimpleAction, StoreStructure>;
 
 export default startTable;

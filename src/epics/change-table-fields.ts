@@ -29,6 +29,6 @@ const changeTableFields = ((action$, store: Store<StoreStructure>) => {
       )(store.getState().app.tablesData.tables);
 
     });
-}) as Epic<SimpleAction>;
+}) as Epic<SimpleAction, StoreStructure>;
 
 export default changeTableFields;

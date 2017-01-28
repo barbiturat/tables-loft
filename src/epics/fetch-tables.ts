@@ -15,7 +15,7 @@ import {tablesToFront, tableSessionsToFront} from '../helpers/api-data-converter
 import {TableSession, Table as TableBackend} from '../interfaces/backend-models';
 import changingTableSessions from '../action-creators/changing-table-sessions';
 import changingTables from '../action-creators/changing-tables';
-import {Tables, TableSessions} from '../interfaces/store-models';
+import {Tables, TableSessions, StoreStructure} from '../interfaces/store-models';
 import {API_URL} from '../constants/index';
 import {validateResponse} from '../helpers/dynamic-type-validators/index';
 import {tTable} from '../helpers/dynamic-type-validators/types';
@@ -90,6 +90,6 @@ const fetchTables = ((action$) => {
         tablesRequest$
       );
     });
-}) as Epic<SimpleAction>;
+}) as Epic<SimpleAction, StoreStructure>;
 
 export default fetchTables;

@@ -30,6 +30,6 @@ const updateUtcMilliseconds = ((action$, store: Store<StoreStructure>) => {
         newDayBegunAction
       );
     });
-}) as Epic<SimpleAction>;
+}) as Epic<SimpleAction, StoreStructure>;
 
 export default updateUtcMilliseconds;
