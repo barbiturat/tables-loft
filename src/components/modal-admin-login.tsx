@@ -6,7 +6,6 @@ import {Control, Form, Errors, actions} from 'react-redux-form';
 
 import {StoreStructure} from '../interfaces/store-models';
 import {PropsExtendedByConnect} from '../interfaces/component';
-import modalAdminLoginOpened from '../action-creators/modal-admin-login-opened';
 import {managerLoginForm} from '../constants/form-fields';
 import {ManagerLoginForm} from '../reducers/forms';
 import {isRequiredField} from '../constants/messages';
@@ -16,10 +15,11 @@ import {StringDict} from '../interfaces/index';
 import requestingManagerLogin from '../action-creators/requesting-admin-token';
 
 interface Props {
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 interface MappedProps {
-  isOpen: boolean;
   managerLoginForm: ManagerLoginForm;
   pending: boolean;
 }
@@ -30,8 +30,8 @@ const {validators: {password: passwordChecks}} = managerLoginForm;
 
 class Component extends React.Component<PropsFromConnect, {}> {
   requestToClose() {
-    this.props.dispatch( modalAdminLoginOpened(false) );
     this.resetPasswordInput();
+    this.props.onClose();
   };
 
   resetPasswordInput() {
@@ -125,7 +125,6 @@ class Component extends React.Component<PropsFromConnect, {}> {
 const ModalAdminLogin = connect<any, any, Props>(
   (state: StoreStructure, ownProps: Props): MappedProps => {
     return {
-      isOpen: state.app.modals.adminLogin,
       managerLoginForm: state.formsData.forms.managerLoginForm,
       pending: state.formsData.forms.managerLoginForm.$form.pending
     };

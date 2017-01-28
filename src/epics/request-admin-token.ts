@@ -13,7 +13,6 @@ import {RequestGetAdminTokenPayload} from '../interfaces/api-requests';
 import {urlGetAdminToken} from '../constants/urls';
 import {SimpleAction, FormSubmitAction} from '../interfaces/actions';
 import adminTokenUpdated from '../action-creators/admin-token-updated';
-import modalAdminLoginOpened from '../action-creators/modal-admin-login-opened';
 import {API_URL} from '../constants/index';
 import {validateResponse} from '../helpers/dynamic-type-validators/index';
 import pendingBlockingRequest from '../action-creators/pending-blocking-request';
@@ -53,14 +52,12 @@ const requestAdminToken = ((action$) => {
 
                 const setSubmittedAction = actions.setSubmitted(formModelPath, true);
                 const setAdminTokenAction = adminTokenUpdated(adminToken);
-                const closeAdminModalAction = modalAdminLoginOpened(false);
                 const clearPasswordInputAction = actions.change(passwordFieldModelPath, '');
                 const resetPasswordInputAction = actions.setInitial(passwordFieldModelPath);
 
                 return Observable.of<any>(
                   blockingPendingTurnOffAction,
                   setSubmittedAction,
-                  closeAdminModalAction,
                   setAdminTokenAction,
                   clearPasswordInputAction,
                   resetPasswordInputAction

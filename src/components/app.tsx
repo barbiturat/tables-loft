@@ -63,7 +63,6 @@ class App extends React.Component<PropsFromConnect, State> {
 
         <ScreenBlocker/>
 
-        <ModalAdminLogin/>
         <ModalSessionsHistory/>
         <GlobalErrors/>
       </div>

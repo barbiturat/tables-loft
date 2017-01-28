@@ -1,11 +1,15 @@
 import * as React from 'react';
 
 import MouseEvent = React.MouseEvent;
-import modalAdminLoginOpened from '../action-creators/modal-admin-login-opened';
 import {connect} from 'react-redux';
 import {StoreStructure} from '../interfaces/store-models';
 import {PropsExtendedByConnect} from '../interfaces/component';
 import adminTokenRemoved from '../action-creators/admin-token-removed';
+import ModalAdminLogin from './modal-admin-login';
+
+interface State {
+  isAdminModalOpen: boolean;
+}
 
 interface Props {
 }
@@ -16,13 +20,33 @@ interface MappedProps {
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
-class Component extends React.Component<PropsFromConnect, {}> {
+class Component extends React.Component<PropsFromConnect, State> {
+  state = {
+    isAdminModalOpen: false
+  };
+
+  componentWillReceiveProps(newProps: PropsFromConnect) {
+    if (newProps.isAdminTokenSet !== this.props.isAdminTokenSet && !newProps.isAdminTokenSet) {
+      this.setState({
+        isAdminModalOpen: false
+      })
+    }
+  }
+
   onBtnManagerClick = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
 
-    this.props.dispatch( modalAdminLoginOpened(true) );
+    this.setState({
+      isAdminModalOpen: true
+    });
 
     event.currentTarget.blur();
+  };
+
+  onModalClose = () => {
+    this.setState({
+      isAdminModalOpen: false
+    })
   };
 
   onBtnLogOutClick = (event: MouseEvent<HTMLAnchorElement>) => {
@@ -60,6 +84,11 @@ class Component extends React.Component<PropsFromConnect, {}> {
         <div className="header__section header__section_role_utils">
           { this.drawManagerButton(this.props.isAdminTokenSet) }
         </div>
+
+        <ModalAdminLogin
+          isOpen={this.state.isAdminModalOpen}
+          onClose={this.onModalClose}
+        />
       </div>
     );
   }
