@@ -32,7 +32,6 @@ class Component extends React.Component<PropsFromConnect, State> {
   };
 
   componentWillReceiveProps(nextProps: PropsFromConnect) {
-    console.log('nextProps', nextProps);
     const newIsOpen = nextProps.isOpen;
 
     if (newIsOpen !== this.props.isOpen) {

@@ -109,8 +109,8 @@ class Component extends React.Component<PropsFromConnect, State> {
   onChangeStatusClick = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
 
-    const toStart = Component.isTableActive( this.getCurrentSession() );
-    const promptMessage = `${toStart ? 'Start' : 'Stop'} table "${this.props.name}"`;
+    const toStop = Component.isTableActive( this.getCurrentSession() );
+    const promptMessage = `${toStop ? 'Stop' : 'Start'} table "${this.props.name}"`;
 
     this.setState(merge(this.state, {
       isPromptOpen: true,
