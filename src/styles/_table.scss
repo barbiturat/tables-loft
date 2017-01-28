@@ -199,6 +199,8 @@ $shuffle-table-border-radius: 50px;
   }
 
   &__button {
+    outline: 0;
+
     &_role {
       &_change-availability {
         position: absolute;
