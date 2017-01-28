@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import * as moment from 'moment';
 import MouseEvent = React.MouseEvent;
@@ -32,8 +33,12 @@ type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
 class Component extends React.Component<PropsFromConnect, State> {
 
+  editSessionButtonId: string;
+
   constructor(props: Props) {
     super(props);
+
+    this.editSessionButtonId = 'editSessionButton' + Math.floor( Math.random() * 10000000 );
 
     this.state = {
       isFormatOfMinutes: false,
@@ -46,6 +51,28 @@ class Component extends React.Component<PropsFromConnect, State> {
       this.setEditingMode(false);
     }
   }
+
+  componentWillMount() {
+    window.addEventListener('click', this.handleClick, false);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('click', this.handleClick, false);
+  }
+
+  handleClick = (event: any) => {
+    const clickedEl = event.target;
+    const isClickedOutside = !ReactDOM.findDOMNode(this).contains(clickedEl) &&
+      !clickedEl.classList.contains(this.editSessionButtonId);
+
+    if (isClickedOutside) {
+      this.onClickOutside();
+    }
+  };
+
+  onClickOutside = () => {
+    this.setEditingMode(false);
+  };
 
   onSessionInfoClick = (event: MouseEvent<HTMLDivElement>) => {
     this.setState(merge(this.state, {
@@ -92,7 +119,7 @@ class Component extends React.Component<PropsFromConnect, State> {
   drawEditButton(toDraw: boolean) {
     return toDraw ? (
         <div
-          className="sessions-list__edit-button"
+          className={`sessions-list__edit-button ${this.editSessionButtonId}`}
           onClick={this.onEditButtonClick}
         />
       ) : null;

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import * as moment from 'moment';
 import MouseEvent = React.MouseEvent;
@@ -33,8 +34,12 @@ interface SessionDurationData {
 
 class Component extends React.Component<PropsFromConnect, State> {
 
+  editSessionButtonId: string;
+
   constructor(props: Props) {
     super(props);
+
+    this.editSessionButtonId = 'editSessionButton' + Math.floor( Math.random() * 10000000 );
 
     this.state = {
       isFormatOfMinutes: false,
@@ -47,6 +52,28 @@ class Component extends React.Component<PropsFromConnect, State> {
       this.setEditingMode(false);
     }
   }
+
+  componentWillMount() {
+    window.addEventListener('click', this.handleClick, false);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('click', this.handleClick, false);
+  }
+
+  handleClick = (event: any) => {
+    const clickedEl = event.target;
+    const isClickedOutside = !ReactDOM.findDOMNode(this).contains(clickedEl) &&
+      !clickedEl.classList.contains(this.editSessionButtonId);
+
+    if (isClickedOutside) {
+      this.onClickOutside();
+    }
+  };
+
+  onClickOutside = () => {
+    this.setEditingMode(false);
+  };
 
   setEditingMode(turnOn: boolean) {
     this.setState(merge(this.state, {
@@ -89,7 +116,7 @@ class Component extends React.Component<PropsFromConnect, State> {
   drawEditIcon(toDraw: boolean) {
     return toDraw ? (
       <div
-        className="table__session-edit"
+        className={`table__session-edit ${this.editSessionButtonId}`}
         onClick={this.onEditButtonClick}
       />
     ) : null;
@@ -142,7 +169,9 @@ class Component extends React.Component<PropsFromConnect, State> {
         .format('hh:mm');
 
       return (
-        <div className="table__session-info table__session-info_state_editing">
+        <div
+            className="table__session-info table__session-info_state_editing"
+        >
           <span className="table__session-name">Last Session</span>
           <span className="table__session-finish-time">{finishTime}</span>
           {this.drawDuration(session)}
@@ -151,7 +180,9 @@ class Component extends React.Component<PropsFromConnect, State> {
       );
     } else {
       return (
-        <div className="table__session-info">
+        <div
+            className="table__session-info"
+        >
           <div className="table__label table__label_role_no-session">No Sessions Today</div>
         </div>
       );
