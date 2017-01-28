@@ -10,8 +10,10 @@ import fetchSessionsHistory from './fetch-sessions-history';
 import requestTableSessionChange from './request-table-session-change';
 import changeTableFields from './change-table-fields';
 import unsetGlobalError from './unset-global-error';
+import startNewDay from './start-new-day';
 
 export default combineEpics(
+  startNewDay,
   formValidation,
   requestAdminToken,
   fetchTables,
