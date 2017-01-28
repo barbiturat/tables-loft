@@ -11,6 +11,7 @@
   font-size: 16px;
   font-weight: 600;
   text-transform: uppercase;
+  text-decoration: none;
   line-height: 46px;
   white-space: nowrap;
   color: $white;
@@ -33,10 +34,16 @@
       text-decoration: none;
     }
     &_ok {
-      background-color: #4d8a35;
+      $color: #4d8a35;
+
+      background-color: $color;
+      @include button-hover-behavior($color);
     }
     &_cancel {
+      $color: #d74045;
+
       background-color: #d74045;
+      @include button-hover-behavior($color);
     }
   }
 
