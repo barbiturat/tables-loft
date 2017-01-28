@@ -36,7 +36,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   editSessionButtonId: string;
 
-  constructor(props: Props) {
+  constructor(props: PropsFromConnect) {
     super(props);
 
     this.editSessionButtonId = 'editSessionButton' + Math.floor( Math.random() * 10000000 );

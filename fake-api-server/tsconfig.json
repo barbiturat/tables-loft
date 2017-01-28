@@ -4,6 +4,7 @@
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "strictNullChecks": true,
+    "skipLibCheck": true,
     "moduleResolution": "node",
     "module": "commonjs",
     "target": "es6",

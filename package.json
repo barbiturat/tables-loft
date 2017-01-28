@@ -52,7 +52,7 @@
     "@types/history": "2.0.41",
     "@types/query-string": "^3.0.31",
     "@types/ramda": "^0.0.3",
-    "@types/react": "^0.14.54",
+    "@types/react": "^15.0.4",
     "@types/react-dom": "^0.14.19",
     "@types/react-redux": "^4.4.35",
     "@types/react-router": "^2.0.41",

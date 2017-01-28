@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {Control, Form, Errors} from 'react-redux-form';
 import * as isEmail from 'validator/lib/isEmail';
 
-import {AnyDict, StringDict} from '../interfaces';
+import {StringDict} from '../interfaces';
 import {isNotEmpty as isFilled} from '../helpers';
 import {renderErrorComponent, renderErrorsBlock} from '../helpers/renderers';
 import {isRequiredField} from '../constants/messages';
@@ -13,15 +13,18 @@ import requestingLogin from '../action-creators/requesting-login';
 import {loginForm} from '../constants/form-fields';
 import {StoreStructure} from '../interfaces/store-models';
 
+interface Props {
+}
+
 interface MappedProps {
   loginForm: LoginForm;
 }
 
-type PropsFromConnect = PropsExtendedByConnect<AnyDict, MappedProps>;
+type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
 const {validators: {email: emailChecks, password: passwordChecks}} = loginForm;
 
-class PageLogin extends React.Component<PropsFromConnect, AnyDict> {
+class PageLogin extends React.Component<PropsFromConnect, {}> {
   static getWaitMessage(isPending: boolean) {
     return isPending ? (
         <div className="form-message form-message_type_wait">Wait...</div>
@@ -98,7 +101,7 @@ class PageLogin extends React.Component<PropsFromConnect, AnyDict> {
   }
 }
 
-const mapStateToProps = (state: StoreStructure, ownProps?: AnyDict): MappedProps => {
+const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
   return {
     loginForm: state.formsData.forms.loginForm
   };

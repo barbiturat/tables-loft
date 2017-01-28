@@ -26,7 +26,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   durationActivityStringSelector: Selector<PropsFromConnect, string>;
 
-  constructor(props: Props) {
+  constructor(props: PropsFromConnect) {
     super(props);
 
     this.state = {

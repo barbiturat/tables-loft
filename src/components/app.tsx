@@ -13,7 +13,13 @@ import ModalSessionsHistory from './modal-sessions-history';
 import GlobalErrors from './global-errors';
 import ScreenBlocker from './screen-blocker';
 
-type PropsFromConnect = PropsExtendedByConnect<AnyDict, AnyDict>;
+interface Props {
+}
+
+interface MappedProps {
+}
+
+type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
 interface State {
   isMounted: boolean;
@@ -65,7 +71,7 @@ class App extends React.Component<PropsFromConnect, State> {
   }
 }
 
-const mapStateToProps = (state: StoreStructure, ownProps?: AnyDict): {} => {
+const mapStateToProps = (state: StoreStructure, ownProps?: AnyDict): MappedProps => {
   return {};
 };
 

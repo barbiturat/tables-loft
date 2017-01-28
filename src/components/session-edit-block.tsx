@@ -10,6 +10,7 @@ import {PropsExtendedByConnect} from '../interfaces/component';
 import requestingTableSessionChange from '../action-creators/requesting-table-session-change';
 import EventHandler = React.EventHandler;
 import FocusEvent = React.FocusEvent;
+import ChangeEvent = React.ChangeEvent;
 
 interface SessionDurationData {
   hours: number;
@@ -34,7 +35,7 @@ type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
 class Component extends React.Component<PropsFromConnect, State> {
 
-  constructor(props: Props) {
+  constructor(props: PropsFromConnect) {
     super(props);
 
     const durationData = Component.getSessionDurationData(props.durationSeconds);
@@ -57,7 +58,7 @@ class Component extends React.Component<PropsFromConnect, State> {
     }
   }
 
-  onInputChange = (event: KeyboardEvent<HTMLInputElement>) => {
+  onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const input = event.currentTarget;
 
     if (input.name === 'hours') {
