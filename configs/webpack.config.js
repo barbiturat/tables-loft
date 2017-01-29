@@ -3,7 +3,7 @@ const path = require('path');
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const RollbarSourceMapPlugin = require('rollbar-sourcemap-webpack-plugin');
-import cp from 'child_process';
+const cp = require('child_process');
 
 const envVarStubs = require('../package.json').appSettings.envVarStubs;
 
