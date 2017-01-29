@@ -3,7 +3,7 @@ const path = require('path');
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const RollbarSourceMapPlugin = require('rollbar-sourcemap-webpack-plugin');
-const cp = require('child_process');
+const git = require('git-rev-sync');
 
 const envVarStubs = require('../package.json').appSettings.envVarStubs;
 
@@ -18,17 +18,7 @@ const ROLLBAR_TOKEN = isProd ? envVars.ROLLBAR_TOKEN : envVarStubs.ROLLBAR_TOKEN
 const nodeEnv = isProd ? 'production' : 'development';
 const sourcePath = pathFromRoot('./src');
 const outputPath = pathFromRoot('./public');
-
-let version;
-try {
-  version = cp.execSync('git rev-parse HEAD', {
-    cwd: __dirname,
-    encoding: 'utf8'
-  });
-} catch (err) {
-  console.log('Error getting revision', err);
-  process.exit(1);
-}
+const version = git.long();
 
 function pathFromRoot(url = '') {
   return path.resolve(__dirname, '..', url);
