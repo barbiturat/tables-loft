@@ -51,11 +51,14 @@ module.exports = {
     bundle: './index.tsx',
     vendor: [
       'classnames',
-      'ramda',
       'moment',
+      'query-string',
+      'ramda',
       'react',
+      'react-addons-create-fragment',
       'react-dom',
       'react-modal',
+      'react-paginate',
       'react-redux',
       'react-redux-form',
       'react-router',
@@ -64,6 +67,8 @@ module.exports = {
       'redux-router',
       'reselect',
       'rxjs',
+      'tcomb-validation',
+      'tslib',
       'validator'
     ]
   },

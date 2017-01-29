@@ -3,6 +3,7 @@
     "baseUrl": "..",
     "noEmitOnError": true,
     "noImplicitAny": true,
+    "importHelpers": true,
     "noImplicitReturns": true,
     "strictNullChecks": true,
     "skipLibCheck": true,
