@@ -2,7 +2,7 @@ const webpack = require('webpack');
 const path = require('path');
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const RollbarSourceMapPlugin = require('rollbar-sourcemap-webpack-plugin');
+// const RollbarSourceMapPlugin = require('rollbar-sourcemap-webpack-plugin');
 
 const envVarStubs = require('../package.json').appSettings.envVarStubs;
 
@@ -42,12 +42,12 @@ const plugins = [
   new HtmlWebpackPlugin({
     filename: pathFromRoot('./public/index.html'),
     template: `${sourcePath}/index.ejs`
-  }),
+  })/*,
   new RollbarSourceMapPlugin({
     accessToken: ROLLBAR_TOKEN,
     version: Math.random(),
     publicPath: outputPath
-  })
+  })*/
 ];
 
 module.exports = {
