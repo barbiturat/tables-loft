@@ -15,13 +15,13 @@ import {StringDict} from '../interfaces/index';
 import requestingManagerLogin from '../action-creators/requesting-admin-token';
 
 interface Props {
-  isOpen: boolean;
-  onClose: () => void;
+  readonly isOpen: boolean;
+  readonly onClose: () => void;
 }
 
 interface MappedProps {
-  managerLoginForm: ManagerLoginForm;
-  pending: boolean;
+  readonly managerLoginForm: ManagerLoginForm;
+  readonly pending: boolean;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;

@@ -1,4 +1,5 @@
 {
+    "rulesDirectory": "./node_modules/tslint-immutable/rules",
     "rules": {
         "class-name": true,
         "comment-format": [
@@ -34,6 +35,7 @@
             "jsx-double"
         ],
         "radix": true,
+        "readonly-interface": true,
         "semicolon": [true, "always", "ignore-bound-class-methods"],
         "triple-equals": [
             true,

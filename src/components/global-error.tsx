@@ -3,17 +3,17 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import MouseEvent = React.MouseEvent;
 
-import {StoreStructure, GlobalError as GlobalErrorType} from '../interfaces/store-models';
+import {StoreStructure} from '../interfaces/store-models';
 import {PropsExtendedByConnect} from '../interfaces/component';
 // tslint:disable-next-line:no-require-imports
 const errorDisplayDuration = require('../../package.json').appSettings.errorDisplayDuration;
 
 interface State {
-  isMounted: boolean;
+  readonly isMounted: boolean;
 }
 
 interface Props {
-  message: string;
+  readonly message: string;
 }
 
 interface MappedProps {
@@ -48,7 +48,7 @@ class Component extends React.Component<PropsFromConnect, State> {
   }
 
   updateErrorContainer = () => {
-    this.errorContainer.classList.add('global-errors-disappear')
+    this.errorContainer.classList.add('global-errors-disappear');
   };
 
   render() {

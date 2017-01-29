@@ -9,23 +9,23 @@ import {PropsExtendedByConnect} from '../interfaces/component';
 import SessionEditBlock from './session-edit-block';
 
 interface SessionDurationData {
-  hours: number;
-  minutes: number;
-  minutesTotal: number;
+  readonly hours: number;
+  readonly minutes: number;
+  readonly minutesTotal: number;
 }
 
 interface Props {
-  session: TableSessionType;
-  idx: number;
+  readonly session: TableSessionType;
+  readonly idx: number;
 }
 
 interface State {
-  isFormatOfMinutes: boolean;
-  isInEditing: boolean;
+  readonly isFormatOfMinutes: boolean;
+  readonly isInEditing: boolean;
 }
 
 interface MappedProps {
-  inAdminMode: boolean;
+  readonly inAdminMode: boolean;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;

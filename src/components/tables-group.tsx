@@ -5,7 +5,7 @@ import Table, {Props as TableProps} from './table';
 import {Tables} from '../interfaces/store-models';
 
 interface Props {
-  tables: Tables;
+  readonly tables: Tables;
 }
 
 export default class TablesGroup extends React.Component<Props, AnyDict> {
@@ -18,15 +18,10 @@ export default class TablesGroup extends React.Component<Props, AnyDict> {
         name,
         type: tableType,
         isInPending,
-        isDisabled
+        isDisabled,
+        currentSessionId: typeof currentSessionId === 'number' ? currentSessionId : undefined,
+        lastSessionId: typeof lastSessionId === 'number' ? lastSessionId : undefined
       };
-
-      if (typeof currentSessionId === 'number') {
-        params.currentSessionId = currentSessionId;
-      }
-      if (typeof lastSessionId === 'number') {
-        params.lastSessionId = lastSessionId;
-      }
 
       return (
         <Table key={idx} {...params}/>

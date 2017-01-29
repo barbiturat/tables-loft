@@ -5193,6 +5193,19 @@ tslib@^1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.5.0.tgz#3bb50f871e5fdf9a4555a9ff237b730860048fea"
 
+tslint-immutable@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/tslint-immutable/-/tslint-immutable-2.1.0.tgz#097b1785fe7e3f6795b08382f951677092a9559f"
+
+tslint-loader@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/tslint-loader/-/tslint-loader-3.3.0.tgz#6e6a50fc82e85ff3d1cb53e23dd24ae9e47d91ea"
+  dependencies:
+    loader-utils "^0.2.7"
+    mkdirp "^0.5.1"
+    object-assign "^4.0.1"
+    rimraf "^2.4.4"
+
 tslint@^4.4.2:
   version "4.4.2"
   resolved "https://registry.yarnpkg.com/tslint/-/tslint-4.4.2.tgz#b14cb79ae039c72471ab4c2627226b940dda19c6"

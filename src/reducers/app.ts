@@ -11,14 +11,14 @@ import globalErrors, {Structure as GlobalErrorsStructure} from './global-errors'
 import isBlockingRequestPending, {Structure as BlockingRequestPendingStructure} from './is-blocking-request-pending';
 
 export interface Structure {
-  adminToken: AdminTokenStructure;
-  isBlockingRequestPending: BlockingRequestPendingStructure;
-  modals: ModalsStructure;
-  utcMilliseconds: UtcMillisecondsDataStructure;
-  userInfo: UserInfoStructure;
-  tablesData: TablesDataStructure;
-  tableSessionsData: TableSessionsDataStructure;
-  globalErrors: GlobalErrorsStructure;
+  readonly adminToken: AdminTokenStructure;
+  readonly isBlockingRequestPending: BlockingRequestPendingStructure;
+  readonly modals: ModalsStructure;
+  readonly utcMilliseconds: UtcMillisecondsDataStructure;
+  readonly userInfo: UserInfoStructure;
+  readonly tablesData: TablesDataStructure;
+  readonly tableSessionsData: TableSessionsDataStructure;
+  readonly globalErrors: GlobalErrorsStructure;
 }
 
 const reducers: ReducersOfType<Structure> = {

@@ -7,9 +7,9 @@ import Header from './header';
 import TablesGroup from './tables-group';
 
 interface MappedProps {
-  tables: Tables;
-  areTablesInPending: boolean;
-  tableSessions: TableSessions;
+  readonly tables: Tables;
+  readonly areTablesInPending: boolean;
+  readonly tableSessions: TableSessions;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<any, MappedProps>;

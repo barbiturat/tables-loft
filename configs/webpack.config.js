@@ -88,6 +88,15 @@ module.exports = {
   module: {
     rules: [
       {
+        enforce: 'pre',
+        test: /\.tsx?$/,
+        loader: 'tslint-loader',
+        exclude: /node_modules/,
+        options: {
+          failOnHint: true
+        }
+      },
+      {
         test: /\.tsx?$/,
         exclude: /node_modules/,
         loader: 'ts-loader',

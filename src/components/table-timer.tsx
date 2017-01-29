@@ -8,16 +8,16 @@ import {StoreStructure} from '../interfaces/store-models';
 import {PropsExtendedByConnect} from '../interfaces/component';
 
 interface Props {
-  isActive: boolean;
-  startsAt?: number;
+  readonly isActive: boolean;
+  readonly startsAt?: number;
 }
 
 interface State {
-  isFormatOfMinutes: boolean;
+  readonly isFormatOfMinutes: boolean;
 }
 
 interface MappedProps {
-  utcMilliseconds: number;
+  readonly utcMilliseconds: number;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;

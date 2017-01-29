@@ -14,14 +14,14 @@ interface Props {
 }
 
 interface MappedProps {
-  isOpen: boolean;
-  tables: Tables;
-  currentTable?: Table;
-  allTableSessions: TableSessions;
+  readonly isOpen: boolean;
+  readonly tables: Tables;
+  readonly currentTable?: Table;
+  readonly allTableSessions: TableSessions;
 }
 
 interface State {
-  currentPageNum: number;
+  readonly currentPageNum: number;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;

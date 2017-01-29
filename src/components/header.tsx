@@ -8,14 +8,14 @@ import adminTokenRemoved from '../action-creators/admin-token-removed';
 import ModalAdminLogin from './modal-admin-login';
 
 interface State {
-  isAdminModalOpen: boolean;
+  readonly isAdminModalOpen: boolean;
 }
 
 interface Props {
 }
 
 interface MappedProps {
-  isAdminTokenSet: boolean;
+  readonly isAdminTokenSet: boolean;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
@@ -29,7 +29,7 @@ class Component extends React.Component<PropsFromConnect, State> {
     if (newProps.isAdminTokenSet !== this.props.isAdminTokenSet && !newProps.isAdminTokenSet) {
       this.setState({
         isAdminModalOpen: false
-      })
+      });
     }
   }
 
@@ -46,7 +46,7 @@ class Component extends React.Component<PropsFromConnect, State> {
   onModalClose = () => {
     this.setState({
       isAdminModalOpen: false
-    })
+    });
   };
 
   onBtnLogOutClick = (event: MouseEvent<HTMLAnchorElement>) => {

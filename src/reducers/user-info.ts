@@ -4,7 +4,7 @@ import email, {Structure as EmailStructure} from './email';
 import {ReducersOfType} from '../interfaces/index';
 
 export interface Structure {
-  email: EmailStructure;
+  readonly email: EmailStructure;
 }
 
 const reducers: ReducersOfType<Structure> = {

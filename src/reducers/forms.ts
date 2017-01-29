@@ -5,8 +5,8 @@ type FieldsOfType<FieldsSet, FieldsType> = {
 };
 
 interface FormStateWithValue<TValue> extends FormState {
-  initialValue: TValue;
-  value: TValue;
+  readonly initialValue: TValue;
+  readonly value: TValue;
 }
 
 type FormStructure<FormFields> = FieldsOfType<FormFields, FieldState> & {
@@ -14,17 +14,17 @@ type FormStructure<FormFields> = FieldsOfType<FormFields, FieldState> & {
 };
 
 interface LoginFormFields {
-  email: any;
-  password?: any;
+  readonly email: any;
+  readonly password?: any;
 }
 
 interface ManagerLoginFormFields {
-  password?: any;
+  readonly password?: any;
 }
 
 interface FormModels {
-  loginForm: FieldsOfType<LoginFormFields, string>;
-  managerLoginForm: FieldsOfType<ManagerLoginFormFields, string>;
+  readonly loginForm: FieldsOfType<LoginFormFields, string>;
+  readonly managerLoginForm: FieldsOfType<ManagerLoginFormFields, string>;
 }
 
 const formsData = combineForms({
@@ -40,7 +40,7 @@ export type LoginForm = FormStructure<LoginFormFields>;
 export type ManagerLoginForm = FormStructure<ManagerLoginFormFields>;
 
 export interface Structure extends FormModels {
-  forms: {
+  readonly forms: {
     loginForm: LoginForm;
     managerLoginForm: ManagerLoginForm;
     $form: FormStateWithValue<FormModels>;

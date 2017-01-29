@@ -4,9 +4,9 @@ import {TableSessions, TableSession} from '../interfaces/store-models';
 import TableHistorySession from './table-history-session';
 
 interface Props {
-  tableSessions?: TableSession[];
-  isInPending: boolean;
-  firstIdx: number;
+  readonly tableSessions?: TableSession[];
+  readonly isInPending: boolean;
+  readonly firstIdx: number;
 }
 
 export default class SessionsHistory extends React.Component<Props, {}> {

@@ -17,7 +17,7 @@ interface Props {
 }
 
 interface MappedProps {
-  loginForm: LoginForm;
+  readonly loginForm: LoginForm;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;

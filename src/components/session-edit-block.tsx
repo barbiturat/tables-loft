@@ -12,19 +12,19 @@ import FocusEvent = React.FocusEvent;
 import ChangeEvent = React.ChangeEvent;
 
 interface SessionDurationData {
-  hours: number;
-  minutes: number;
+  readonly hours: number;
+  readonly minutes: number;
 }
 
 interface Props {
-  durationSeconds: number;
-  sessionId: number;
-  onEditComplete: () => void;
+  readonly durationSeconds: number;
+  readonly sessionId: number;
+  readonly onEditComplete: () => void;
 }
 
 interface State {
-  hours: number;
-  minutes: number;
+  readonly hours: number;
+  readonly minutes: number;
 }
 
 interface MappedProps {
@@ -53,7 +53,7 @@ class Component extends React.Component<PropsFromConnect, State> {
       this.setState({
         hours,
         minutes
-      })
+      });
     }
   }
 

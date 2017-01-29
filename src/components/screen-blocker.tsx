@@ -12,7 +12,7 @@ interface Props {
 }
 
 interface MappedProps {
-  toBlock: boolean;
+  readonly toBlock: boolean;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;

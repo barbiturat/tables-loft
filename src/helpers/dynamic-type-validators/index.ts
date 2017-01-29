@@ -21,7 +21,7 @@ export const validateResponse = (format: InputFormat, ajaxData: AjaxResponse) =>
       (errUrl) => `Invalid response format from ${url}`,
       globalErrorHappened,
       (globalErrorAction) => {
-        store.dispatch(globalErrorAction)
+        store.dispatch(globalErrorAction);
       }
     )(url);
 
@@ -31,7 +31,7 @@ export const validateResponse = (format: InputFormat, ajaxData: AjaxResponse) =>
         return `URL: ${url}    Path: ${path}    Message: ${firstError.message}`;
       },
       TypeError,
-      (error) => { throw(error) }
+      (error) => { throw(error); }
     )( validationRes.firstError() as ValidationError );
 
   }

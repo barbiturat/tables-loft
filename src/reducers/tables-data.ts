@@ -5,8 +5,8 @@ import tables, {Structure as TablesStructure} from './tables';
 import isInPending, {Structure as IsInPendingStructure} from './tables-pending';
 
 export interface Structure {
-  tables: TablesStructure;
-  isInPending: IsInPendingStructure;
+  readonly tables: TablesStructure;
+  readonly isInPending: IsInPendingStructure;
 }
 
 const reducers: ReducersOfType<Structure> = {

@@ -5,25 +5,22 @@ import * as Modal from 'react-modal';
 
 import {StoreStructure} from '../interfaces/store-models';
 import {PropsExtendedByConnect} from '../interfaces/component';
-import {managerLoginForm} from '../constants/form-fields';
 
 interface State {
-  isOpen: boolean;
+  readonly isOpen: boolean;
 }
 
 interface Props {
-  isOpen: boolean;
-  message: string;
-  onClickOk: () => void;
-  onClose: () => void;
+  readonly isOpen: boolean;
+  readonly message: string;
+  readonly onClickOk: () => void;
+  readonly onClose: () => void;
 }
 
 interface MappedProps {
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
-
-const {validators: {password: passwordChecks}} = managerLoginForm;
 
 class Component extends React.Component<PropsFromConnect, State> {
 
@@ -37,7 +34,7 @@ class Component extends React.Component<PropsFromConnect, State> {
     if (newIsOpen !== this.props.isOpen) {
       this.setState({
         isOpen: newIsOpen
-      })
+      });
     }
   }
 

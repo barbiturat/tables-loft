@@ -21,7 +21,7 @@ interface MappedProps {
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
 interface State {
-  isMounted: boolean;
+  readonly isMounted: boolean;
 }
 
 class App extends React.Component<PropsFromConnect, State> {

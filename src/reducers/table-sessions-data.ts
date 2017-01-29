@@ -5,8 +5,8 @@ import isInPending, {Structure as IsInPendingStructure} from './tables-sessions-
 import tableSessions, {Structure as TableSessionsStructure} from './table-sessions';
 
 export interface Structure {
-  tableSessions: TableSessionsStructure;
-  isInPending: IsInPendingStructure;
+  readonly tableSessions: TableSessionsStructure;
+  readonly isInPending: IsInPendingStructure;
 }
 
 const reducers: ReducersOfType<Structure> = {

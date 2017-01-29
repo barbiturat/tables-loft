@@ -10,25 +10,25 @@ import {PropsExtendedByConnect} from '../interfaces/component';
 import SessionEditBlock from './session-edit-block';
 
 interface Props {
-  sessionId?: number;
+  readonly sessionId?: number;
 }
 
 interface State {
-  isFormatOfMinutes: boolean;
-  isInEditing: boolean;
+  readonly isFormatOfMinutes: boolean;
+  readonly isInEditing: boolean;
 }
 
 interface MappedProps {
-  inAdminMode: boolean;
-  session: TableSessionType | null;
+  readonly inAdminMode: boolean;
+  readonly session: TableSessionType | null;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
 interface SessionDurationData {
-  hours: number;
-  minutes: number;
-  minutesTotal: number;
+  readonly hours: number;
+  readonly minutes: number;
+  readonly minutesTotal: number;
 }
 
 class Component extends React.Component<PropsFromConnect, State> {

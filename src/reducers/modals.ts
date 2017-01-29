@@ -4,7 +4,7 @@ import {ReducersOfType} from '../interfaces/index';
 import modalSessionsHistory, {Structure as ModalSessionsHistoryStructure} from './modal-sessions-history';
 
 export interface Structure {
-  modalSessionsHistory: ModalSessionsHistoryStructure;
+  readonly modalSessionsHistory: ModalSessionsHistoryStructure;
 }
 
 const reducers: ReducersOfType<Structure> = {

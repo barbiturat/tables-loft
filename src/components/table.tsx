@@ -16,22 +16,22 @@ import modalSessionsHistoryChanged from '../action-creators/modal-sessions-histo
 import ModalPrompt from './modal-prompt';
 
 interface State {
-  isPromptOpen: boolean;
-  promptMessage: string;
+  readonly isPromptOpen: boolean;
+  readonly promptMessage: string;
 }
 
 export interface Props {
-  id: number;
-  type?: TableType;
-  currentSessionId?: number;
-  lastSessionId?: number;
-  name?: string;
-  isInPending?: boolean;
-  isDisabled?: boolean;
+  readonly id: number;
+  readonly type?: TableType;
+  readonly currentSessionId?: number;
+  readonly lastSessionId?: number;
+  readonly name?: string;
+  readonly isInPending?: boolean;
+  readonly isDisabled?: boolean;
 }
 
 interface MappedProps {
-  sessions: TableSessions;
+  readonly sessions: TableSessions;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;

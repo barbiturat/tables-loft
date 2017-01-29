@@ -10,7 +10,7 @@ interface Props {
 }
 
 interface MappedProps {
-  errors: GlobalErrorType[];
+  readonly errors: GlobalErrorType[];
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
