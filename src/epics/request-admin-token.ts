@@ -17,6 +17,7 @@ import {API_URL} from '../constants/index';
 import {validateResponse} from '../helpers/dynamic-type-validators/index';
 import pendingBlockingRequest from '../action-creators/pending-blocking-request';
 import {StoreStructure} from '../interfaces/store-models';
+import {STATUS_UNPROCESSABLE_ENTITY} from '../constants/used-http-status-codes';
 
 type ResponseOk = AjaxResponseTyped<ResponseGetAdminTokenPayload>;
 type ResponseOkDefined = AjaxResponseDefined<ResponseGetAdminTokenPayload>;
@@ -63,14 +64,11 @@ const requestAdminToken = ((action$) => {
                   resetPasswordInputAction
                 );
               } else {
-                const ajaxErrorData = (ajaxData as ResponseError);
                 const setFormSubmitFailedAction = actions.setSubmitFailed(formModelPath);
-                const errors = ajaxErrorData.xhr.response && ajaxErrorData.xhr.response.errors ?
-                  ajaxErrorData.xhr.response.errors : null;
-
+                const passwordIsWrong = ajaxData.status === STATUS_UNPROCESSABLE_ENTITY;
                 const setFieldsValidityAction = actions.setFieldsValidity(formModelPath, {
-                  password: errors && errors.password || {
-                    isCorrect: false
+                  password: {
+                    isCorrect: !passwordIsWrong
                   }
                 });
 

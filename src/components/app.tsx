@@ -8,7 +8,6 @@ import fetchingTables from '../action-creators/fetching-tables';
 import {PropsExtendedByConnect} from '../interfaces/component';
 import {StoreStructure} from '../interfaces/store-models';
 import changingUtcMilliseconds from '../action-creators/changing-utc-milliseconds';
-import ModalAdminLogin from './modal-admin-login';
 import ModalSessionsHistory from './modal-sessions-history';
 import GlobalErrors from './global-errors';
 import ScreenBlocker from './screen-blocker';

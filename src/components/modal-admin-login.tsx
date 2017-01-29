@@ -97,19 +97,18 @@ class Component extends React.Component<PropsFromConnect, {}> {
                   [passwordChecks.isCorrect]: (() => true)
                 }}
             />
+          </label>
 
-            <Errors
-              model=".password"
-              messages={{
+          <Errors
+            model=".password"
+            messages={{
                 isFilled: isRequiredField,
                 isCorrect: 'Password is wrong'
               }}
-              show={{touched: true, focus: false}}
-              wrapper={renderErrorsBlock}
-              component={renderErrorComponent}
-            />
-
-          </label>
+            show={{touched: true}}
+            wrapper={renderErrorsBlock}
+            component={renderErrorComponent}
+          />
 
           <div className="modal__buttons-group">
             <input type="submit" value="Login" className="button button_type_modal-big"/>
