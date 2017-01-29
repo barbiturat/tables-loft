@@ -2,7 +2,8 @@ const webpack = require('webpack');
 const path = require('path');
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const RollbarSourceMapPlugin = require('rollbar-sourcemap-webpack-plugin')
+const RollbarSourceMapPlugin = require('rollbar-sourcemap-webpack-plugin');
+import cp from 'child_process';
 
 const envVarStubs = require('../package.json').appSettings.envVarStubs;
 
@@ -18,6 +19,17 @@ console.log('ROLLBAR_TOKEN', ROLLBAR_TOKEN);
 const nodeEnv = isProd ? 'production' : 'development';
 const sourcePath = pathFromRoot('./src');
 const outputPath = pathFromRoot('./public');
+
+let version;
+try {
+  version = cp.execSync('git rev-parse HEAD', {
+    cwd: __dirname,
+    encoding: 'utf8'
+  });
+} catch (err) {
+  console.log('Error getting revision', err);
+  process.exit(1);
+}
 
 function pathFromRoot(url = '') {
   return path.resolve(__dirname, '..', url);
@@ -46,7 +58,7 @@ const plugins = [
   }),
   new RollbarSourceMapPlugin({
     accessToken: ROLLBAR_TOKEN,
-    version: 'version_string_here',
+    version,
     publicPath: outputPath
   })
 ];
