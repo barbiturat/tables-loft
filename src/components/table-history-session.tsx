@@ -3,7 +3,6 @@ import * as ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import * as moment from 'moment';
 import MouseEvent = React.MouseEvent;
-import {merge} from 'ramda';
 
 import {StoreStructure, TableSession as TableSessionType} from '../interfaces/store-models';
 import {PropsExtendedByConnect} from '../interfaces/component';
@@ -75,9 +74,11 @@ class Component extends React.Component<PropsFromConnect, State> {
   };
 
   onSessionInfoClick = (event: MouseEvent<HTMLDivElement>) => {
-    this.setState(merge(this.state, {
-      isFormatOfMinutes: !this.state.isFormatOfMinutes
-    }));
+    this.setState({
+      ...this.state, ...{
+        isFormatOfMinutes: !this.state.isFormatOfMinutes
+      }
+    });
   };
 
   static getSessionDurationData(durationSeconds: number): SessionDurationData {
@@ -91,9 +92,11 @@ class Component extends React.Component<PropsFromConnect, State> {
   }
 
   setEditingMode(turnOn: boolean) {
-    this.setState(merge(this.state, {
-      isInEditing: turnOn
-    }));
+    this.setState({
+      ...this.state, ...{
+        isInEditing: turnOn
+      }
+    });
   }
 
   onEditButtonClick = (event: MouseEvent<HTMLDivElement>) => {

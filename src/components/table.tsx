@@ -2,7 +2,6 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import * as moment from 'moment';
 import MouseEvent = React.MouseEvent;
-import {merge} from 'ramda';
 
 import TableSession from './table-session';
 import {TableType} from '../interfaces/backend-models';
@@ -101,9 +100,11 @@ class Component extends React.Component<PropsFromConnect, State> {
   };
 
   onPromptClose = () => {
-    this.setState(merge(this.state, {
-      isPromptOpen: false
-    }));
+    this.setState({
+      ...this.state, ...{
+        isPromptOpen: false
+      }
+    });
   };
 
   onChangeStatusClick = (event: MouseEvent<HTMLAnchorElement>) => {
@@ -112,10 +113,12 @@ class Component extends React.Component<PropsFromConnect, State> {
     const toStop = Component.isTableActive( this.getCurrentSession() );
     const promptMessage = `${toStop ? 'Stop' : 'Start'} table "${this.props.name}"`;
 
-    this.setState(merge(this.state, {
-      isPromptOpen: true,
-      promptMessage
-    }));
+    this.setState({
+      ...this.state, ...{
+        isPromptOpen: true,
+        promptMessage
+      }
+    });
   };
 
   onViewMoreClick = (event: MouseEvent<HTMLAnchorElement>) => {

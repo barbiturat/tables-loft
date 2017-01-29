@@ -36,7 +36,7 @@ const replaceTable = (tables: Tables, tableId: number, newTableData: Partial<Tab
   const currentTable = tables[tableId];
 
   if (currentTable) {
-    const newTable = merge(currentTable, newTableData);
+    const newTable = {...currentTable, ...newTableData};
     tables[newTable.id] = newTable;
   }
 

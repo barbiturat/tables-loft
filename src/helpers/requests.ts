@@ -1,6 +1,6 @@
 import {Observable, AjaxResponse, AjaxError} from 'rxjs';
 import * as queryString from 'query-string';
-import {pipe, merge} from 'ramda';
+import {pipe} from 'ramda';
 
 import {AjaxErrorTyped, AjaxResponseDefined, Defined} from '../interfaces/index';
 import {ResponseFailedPayload} from '../interfaces/api-responses';
@@ -26,7 +26,7 @@ const getExtendedHeaders = (headers = {}): Object => {
       Authorization: `Token token=${token}`
     } : {};
 
-  return merge(dataToAdd, headers);
+  return {...dataToAdd, ...headers};
 };
 
 /*

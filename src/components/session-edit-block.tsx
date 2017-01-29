@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 import MouseEvent = React.MouseEvent;
 import KeyboardEvent = React.KeyboardEvent;
 import * as moment from 'moment';
-import {merge} from 'ramda';
 
 import {StoreStructure} from '../interfaces/store-models';
 import {PropsExtendedByConnect} from '../interfaces/component';
@@ -102,15 +101,19 @@ class Component extends React.Component<PropsFromConnect, State> {
   };
 
   setEditingHours(hours: number) {
-    this.setState(merge(this.state, {
-      hours: hours
-    }));
+    this.setState({
+      ...this.state, ...{
+        hours: hours
+      }
+    });
   }
 
   setEditingMinutes(minutes: number) {
-    this.setState(merge(this.state, {
-      minutes: minutes
-    }));
+    this.setState({
+      ...this.state, ...{
+        minutes: minutes
+      }
+    });
   }
 
   static getSessionDurationData(durationSeconds: number): SessionDurationData {
