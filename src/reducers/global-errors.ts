@@ -1,5 +1,3 @@
-import {clone} from 'ramda';
-
 import {GLOBAL_ERROR_HAPPENED, GLOBAL_ERROR_EXPIRED} from '../constants/action-names';
 import {GlobalError} from '../interfaces/store-models';
 import {ActionWithPayload} from '../interfaces/actions';
@@ -14,11 +12,9 @@ const isActionWithGlobalError = (action: ActionWithGlobalError | ActionWithPaylo
 
 const globalErrors = (state: Structure = [], action: ActionWithGlobalError | ActionWithPayload<number>): Structure => {
   if ( action.type === GLOBAL_ERROR_HAPPENED && isActionWithGlobalError(action) ) {
-    return clone(state)
-      .concat([action.payload]);
+    return state.concat([action.payload]);
   } else if (action.type === GLOBAL_ERROR_EXPIRED && !isActionWithGlobalError(action)) {
-    return clone(state)
-      .filter((error) => error.date !== action.payload);
+    return state.filter((error) => error.date !== action.payload);
   } else {
     return state;
   }

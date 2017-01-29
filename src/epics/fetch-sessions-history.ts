@@ -79,7 +79,7 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
                 assertResponse(ajaxData);
 
                 const appData = store.getState().app;
-                const tablesClone = clone(appData.tablesData.tables);
+                const tablesClone = {...appData.tablesData.tables};
                 const currentTable = tablesClone[tableId];
 
                 const convertedResponseSessions = pipe<TableSession[], TableSessions>(

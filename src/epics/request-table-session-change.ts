@@ -64,7 +64,7 @@ const requestTableSessionChange = ((action$, store: Store<StoreStructure>) => {
         durationSeconds,
         adminToken
       };
-      const currSessionsClone = clone( storeData.app.tableSessionsData.tableSessions );
+      const currSessionsClone = {...storeData.app.tableSessionsData.tableSessions};
       const newSessions = setNewParamsToSession(currSessionsClone, sessionId, {
         isInPending: true
       });
@@ -81,7 +81,7 @@ const requestTableSessionChange = ((action$, store: Store<StoreStructure>) => {
               if ( isAjaxResponseDefined<ResponseOkDefined>(ajaxData) ) {
                 assertResponse(ajaxData);
 
-                const sessionsClone: TableSessions = clone( store.getState().app.tableSessionsData.tableSessions );
+                const sessionsClone: TableSessions = {...store.getState().app.tableSessionsData.tableSessions};
                 const editedSessions = setNewParamsToSession(sessionsClone, sessionId, {
                   isInPending: false,
                   durationSeconds,
