@@ -134,6 +134,14 @@
     align-self: stretch;
   }
 
+  &__form-errors {
+    position: relative;
+    top: -42px;
+  }
+  &__form-error {
+    color: map-get($app-palette, alert);
+  }
+
   &__buttons-group {
     display: flex;
     justify-content: center;

@@ -2,7 +2,7 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import MouseEvent = React.MouseEvent;
 import * as Modal from 'react-modal';
-import {Control, Form, Errors, actions} from 'react-redux-form';
+import {Control, Form, Errors, actions, ErrorsProps, WrapperProps, CustomComponentProps} from 'react-redux-form';
 
 import {StoreStructure} from '../interfaces/store-models';
 import {PropsExtendedByConnect} from '../interfaces/component';
@@ -60,6 +60,12 @@ class Component extends React.Component<PropsFromConnect, {}> {
       ) : null;
   };
 
+  static renderErrorsBlock: React.StatelessComponent<ErrorsProps & WrapperProps> =
+    (props) => <div className="modal__form-errors">{props.children}</div>;
+
+  static renderErrorComponent: React.StatelessComponent<ErrorsProps & CustomComponentProps> =
+    (props) => <div className="modal__form-error">{props.children}</div>;
+
   render() {
     return (
       <Modal
@@ -106,8 +112,8 @@ class Component extends React.Component<PropsFromConnect, {}> {
                 isCorrect: 'Password is wrong'
               }}
             show={{touched: true}}
-            wrapper={renderErrorsBlock}
-            component={renderErrorComponent}
+            wrapper={Component.renderErrorsBlock}
+            component={Component.renderErrorComponent}
           />
 
           <div className="modal__buttons-group">
