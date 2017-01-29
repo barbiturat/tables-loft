@@ -13,6 +13,7 @@ const API_KEY = isProd ? envVars.API_KEY : envVarStubs.API_KEY || envVars.API_KE
 const API_HOST = isProd ? envVars.API_HOST : envVarStubs.API_HOST || envVars.API_HOST;
 const API_PORT = isProd ? envVars.API_PORT : envVarStubs.API_PORT || envVars.API_PORT;
 const ROLLBAR_TOKEN = isProd ? envVars.ROLLBAR_TOKEN : envVarStubs.ROLLBAR_TOKEN || envVars.ROLLBAR_TOKEN;
+console.log('ROLLBAR_TOKEN', ROLLBAR_TOKEN);
 
 const nodeEnv = isProd ? 'production' : 'development';
 const sourcePath = pathFromRoot('./src');
