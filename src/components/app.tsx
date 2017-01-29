@@ -29,7 +29,7 @@ class App extends React.Component<PropsFromConnect, State> {
     isMounted: false
   };
 
-  componentWillMount() {
+  componentDidMount() {
     this.setState({
       isMounted: true
     });

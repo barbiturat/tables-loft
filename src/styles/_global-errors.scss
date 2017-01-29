@@ -1,6 +1,15 @@
 @import 'settings';
 @import 'mixins';
 
+@keyframes messageDisappear {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 .global-errors {
   @include normalize-block();
 
@@ -11,6 +20,11 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+
+  &-disappear {
+    animation: messageDisappear 1s 1;
+    animation-fill-mode: forwards;
+  }
 
   &__error-window {
     margin-bottom: 10px;

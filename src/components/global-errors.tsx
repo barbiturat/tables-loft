@@ -2,27 +2,27 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import MouseEvent = React.MouseEvent;
 
-import {StoreStructure, GlobalError} from '../interfaces/store-models';
+import {StoreStructure, GlobalError as GlobalErrorType} from '../interfaces/store-models';
 import {PropsExtendedByConnect} from '../interfaces/component';
+import GlobalError from './global-error';
 
 interface Props {
 }
 
 interface MappedProps {
-  errors: GlobalError[];
+  errors: GlobalErrorType[];
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
 class Component extends React.Component<PropsFromConnect, {}> {
-  static drawErrors(errors: GlobalError[]) {
-    return errors.map((error, idx) => {
-      return (
-        <div key={idx} className="global-errors__error-window">
-          <span className="global-errors__error-message">{error.message}</span>
-        </div>
-      );
-    });
+  static drawErrors(errors: GlobalErrorType[]) {
+    return errors.map((error) => (
+      <GlobalError
+        key={error.date}
+        message={error.message}
+      />
+    ));
   }
 
   render() {
