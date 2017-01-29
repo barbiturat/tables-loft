@@ -8,12 +8,12 @@ const auth: any = require('http-auth');
 const packageJson = require('../../../package.json');
 
 const envVars = process.env;
-const appSettings = packageJson.appSettings;
+const envVarStubs = packageJson.appSettings.envVarStubs;
 const publicPath = pathFromRoot('public');
 const app = express();
-const port = envVars.PORT || appSettings.ASSETS_PORT;
-const authUserName = envVars.BASIC_AUTH_USERNAME || appSettings.BASIC_AUTH_USERNAME;
-const authUserPassword = envVars.BASIC_AUTH_PASSWORD || appSettings.BASIC_AUTH_PASSWORD;
+const port = envVars.PORT || envVarStubs.ASSETS_PORT;
+const authUserName = envVars.BASIC_AUTH_USERNAME || envVarStubs.BASIC_AUTH_USERNAME;
+const authUserPassword = envVars.BASIC_AUTH_PASSWORD || envVarStubs.BASIC_AUTH_PASSWORD;
 
 if (!port) throw('The "PORT" env variable must be set');
 if (!authUserName) throw('The "BASIC_AUTH_USERNAME" env variable must be set');

@@ -38,12 +38,15 @@
     "> 1%"
   ],
   "appSettings": {
-    "API_KEY": 1111111,
-    "API_HOST": "http://localhost",
-    "API_PORT": 8081,
-    "ASSETS_PORT": 5000,
-    "BASIC_AUTH_USERNAME": "name",
-    "BASIC_AUTH_PASSWORD": "password"
+    "envVarStubs": {
+      "API_KEY": 1111111,
+      "API_HOST": "http://localhost",
+      "API_PORT": 8081,
+      "ASSETS_PORT": 5000,
+      "BASIC_AUTH_USERNAME": "name",
+      "BASIC_AUTH_PASSWORD": "password"
+    },
+    "errorDisplayDuration": 5
   },
   "dependencies": {
     "@types/body-parser": "^0.0.33",

@@ -2,14 +2,14 @@ const webpack = require('webpack');
 const path = require('path');
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const appSettings = require('../package.json').appSettings;
+const envVarStubs = require('../package.json').appSettings.envVarStubs;
 const envVars = process.env;
 
 const isProd = process.argv.includes('-p');
 
-const API_KEY = isProd ? envVars.API_KEY : appSettings.API_KEY || envVars.API_KEY;
-const API_HOST = isProd ? envVars.API_HOST : appSettings.API_HOST || envVars.API_HOST;
-const API_PORT = isProd ? envVars.API_PORT : appSettings.API_PORT || envVars.API_PORT;
+const API_KEY = isProd ? envVars.API_KEY : envVarStubs.API_KEY || envVars.API_KEY;
+const API_HOST = isProd ? envVars.API_HOST : envVarStubs.API_HOST || envVars.API_HOST;
+const API_PORT = isProd ? envVars.API_PORT : envVarStubs.API_PORT || envVars.API_PORT;
 const ROLLBAR_TOKEN = envVars.ROLLBAR_TOKEN || '';
 
 const nodeEnv = isProd ? 'production' : 'development';
