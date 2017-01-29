@@ -5,25 +5,25 @@ import {IndexedDict} from './index';
 export type TableType = TableTypeBackend;
 
 export interface Table {
-  name: string;
-  id: number;
-  tableType: TableType;
-  currentSessionId: number | null;
-  lastSessionId: number | null;
-  isInPending: boolean;
-  isDisabled: boolean;
-  isSessionsHistoryInPending: boolean;
-  sessionsHistory: number[];
+  readonly name: string;
+  readonly id: number;
+  readonly tableType: TableType;
+  readonly currentSessionId: number | null;
+  readonly lastSessionId: number | null;
+  readonly isInPending: boolean;
+  readonly isDisabled: boolean;
+  readonly isSessionsHistoryInPending: boolean;
+  readonly sessionsHistory: number[];
 }
 
 export type Tables = IndexedDict<Table>;
 
 export interface TableSession {
-  id: number;
-  startsAt: number;
-  durationSeconds: number;
-  adminEdited: boolean;
-  isInPending: boolean;
+  readonly id: number;
+  readonly startsAt: number;
+  readonly durationSeconds: number;
+  readonly adminEdited: boolean;
+  readonly isInPending: boolean;
 }
 
 export type TableSessions = IndexedDict<TableSession>;
@@ -33,11 +33,11 @@ export type StoreStructure = ReducersStructure;
 export type AdminToken = string | null;
 
 export interface ModalSessionsHistory {
-  isOpened: boolean;
-  tableId?: number;
+  readonly isOpened: boolean;
+  readonly tableId?: number;
 }
 
 export interface GlobalError {
-  message: string;
-  date: number;
+  readonly message: string;
+  readonly date: number;
 }

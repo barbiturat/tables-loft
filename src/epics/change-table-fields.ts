@@ -1,12 +1,13 @@
 import {Store} from 'redux';
 import {Epic} from 'redux-observable';
-import {pipe, objOf, when, prop, merge, clone, flip} from 'ramda';
+import {pipe, objOf, ifElse, prop, merge, clone, flip} from 'ramda';
 
 import {CHANGING_TABLE_FIELDS} from '../constants/action-names';
 import {SimpleAction, ActionWithPayload} from '../interfaces/actions';
 import {ActionType} from '../action-creators/changing-table-fields';
-import {StoreStructure, Tables} from '../interfaces/store-models';
+import {StoreStructure, Tables, Table} from '../interfaces/store-models';
 import changingTables from '../action-creators/changing-tables';
+import nothingDone from '../action-creators/nothing-done';
 
 const changeTableFields = ((action$, store: Store<StoreStructure>) => {
   return action$.ofType(CHANGING_TABLE_FIELDS)
@@ -14,18 +15,19 @@ const changeTableFields = ((action$, store: Store<StoreStructure>) => {
       const {tableId, changedFields} = action.payload;
       const tblId = String(tableId);
 
-      return pipe< Tables, Tables, Tables, ActionWithPayload<Tables> >(
-        clone,
-        when( prop(tblId),
+      return pipe< Tables, SimpleAction | undefined >(
+        ifElse( prop(tblId),
           (tables: Tables) =>
-            pipe(
+            pipe< Tables, Tables, Table, Table, Tables, Tables, ActionWithPayload<Tables> >(
+              clone,
               prop(tblId), // table
               flip(merge)(changedFields), // merge with new props
               objOf(tblId), // {tblId: table}
-              merge(tables) // updated tables
-            )(tables)
-        ),
-        changingTables // action
+              merge(tables), // updated tables
+              changingTables // action
+            )(tables),
+          (tables: Tables) => nothingDone
+        )
       )(store.getState().app.tablesData.tables);
 
     });

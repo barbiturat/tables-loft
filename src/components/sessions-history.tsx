@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import {TableSessions, TableSession} from '../interfaces/store-models';
+import {TableSession} from '../interfaces/store-models';
 import TableHistorySession from './table-history-session';
 
 interface Props {
