@@ -46,8 +46,7 @@ const plugins = [
   new RollbarSourceMapPlugin({
     accessToken: ROLLBAR_TOKEN,
     version: 'version_string_here',
-    publicPath: outputPath,
-    includeChunks: ['bundle', 'vendor', 'img', 'fonts', 'manifest']
+    publicPath: outputPath
   })
 ];
 
