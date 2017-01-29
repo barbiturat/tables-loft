@@ -7,7 +7,7 @@
     "node": "6.9.4"
   },
   "scripts": {
-    "clean": "rimraf public/resources",
+    "clean": "rimraf public",
     "build:dev": "webpack --config ./configs/webpack.config.js",
     "build:dev:watch": "webpack --watch --config ./configs/webpack.config.js",
     "build:prod": "webpack -p --bail --config configs/webpack.config.js",

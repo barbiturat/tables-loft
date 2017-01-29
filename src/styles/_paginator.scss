@@ -48,20 +48,20 @@
     &_role {
       &_prev {
         padding-left: 14px;
-        background: url(../../public/img/arrow-left-dark-gray.svg) 7px center no-repeat;
+        background: url(../../resources/img/arrow-left-dark-gray.svg) 7px center no-repeat;
         background-size: auto 14px;
 
         &.paginator-disabled {
-          background-image: url(../../public/img/arrow-left-light-gray.svg);
+          background-image: url(../../resources/img/arrow-left-light-gray.svg);
         }
       }
       &_next {
         padding-right: 14px;
-        background: url(../../public/img/arrow-right-dark-gray.svg) calc(100% - 7px) center no-repeat;
+        background: url(../../resources/img/arrow-right-dark-gray.svg) calc(100% - 7px) center no-repeat;
         background-size: auto 14px;
 
         &.paginator-disabled {
-          background-image: url(../../public/img/arrow-right-light-gray.svg);
+          background-image: url(../../resources/img/arrow-right-light-gray.svg);
         }
       }
       &_break {

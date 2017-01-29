@@ -14,7 +14,7 @@ const ROLLBAR_TOKEN = envVars.ROLLBAR_TOKEN || '';
 
 const nodeEnv = isProd ? 'production' : 'development';
 const sourcePath = pathFromRoot('./src');
-const outputPath = pathFromRoot('./public/resources');
+const outputPath = pathFromRoot('./public');
 
 function pathFromRoot(url = '') {
   return path.resolve(__dirname, '..', url);
@@ -49,8 +49,8 @@ module.exports = {
   entry: {
     rollbar: './external-tools/rollbar-snippet.js',
     bundle: './index.tsx',
-    img: '../public/img/index.js',
-    fonts: '../public/fonts/index.js',
+    img: '../resources/img/index.js',
+    fonts: '../resources/fonts/index.js',
     vendor: [
       'classnames',
       'moment',
@@ -89,10 +89,43 @@ module.exports = {
         }
       },
       {
-        test: /\.(png|woff|woff2|eot|ttf|otf|svg)$/,
+        test: /\.svg$/,
         loader: 'url-loader',
         options: {
-          limit: 50000
+          mimetype: 'image/svg+xml',
+          limit: 30000
+        }
+      },
+      {
+        test: /\.png$/,
+        loader: 'url-loader',
+        options: {
+          mimetype: 'image/png',
+          limit: 30000
+        }
+      },
+      {
+        test: /\.(woff|woff2)$/,
+        loader: 'url-loader',
+        options: {
+          mimetype: 'application/font-woff',
+          limit: 30000
+        }
+      },
+      {
+        test: /\.eot$/,
+        loader: 'url-loader',
+        options: {
+          mimetype: 'application/vnd.ms-fontobject',
+          limit: 30000
+        }
+      },
+      {
+        test: /\.(ttf|otf)$/,
+        loader: 'url-loader',
+        options: {
+          mimetype: 'application/octet-stream',
+          limit: 30000
         }
       },
       {

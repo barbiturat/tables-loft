@@ -20,17 +20,17 @@ $shuffle-table-border-radius: 50px;
 
   &_type {
     &_pool {
-      background: #3e8fc4 url(../../public/img/pool-table-borders.svg) 0 0 no-repeat;
+      background: #3e8fc4 url(../../resources/img/pool-table-borders.svg) 0 0 no-repeat;
       background-size: auto 100%;
       border-radius: 22px;
 
       &.table_status_active {
-        background: #d74045 url(../../public/img/pool-table-borders_active.svg) 0 0 no-repeat;
+        background: #d74045 url(../../resources/img/pool-table-borders_active.svg) 0 0 no-repeat;
       }
     }
 
     &_tennis {
-      background: #3fc360 url(../../public/img/tennis-line.svg) center center no-repeat;
+      background: #3fc360 url(../../resources/img/tennis-line.svg) center center no-repeat;
       background-size: 100% 100%;
       border: $tennis-table-border-width solid $white;
       &:before {
@@ -39,7 +39,7 @@ $shuffle-table-border-radius: 50px;
         margin-top: -$tennis-table-border-width;
         width: $table-width;
         height: $table-height;
-        background: url(../../public/img/tennis-net.svg) center center no-repeat;
+        background: url(../../resources/img/tennis-net.svg) center center no-repeat;
         background-size: 100% 100%;
         opacity: 0.2;
       }
@@ -67,7 +67,7 @@ $shuffle-table-border-radius: 50px;
         left: ($inner-width / 2) - ($element-width / 2);
         top: 64px;
         box-sizing: border-box;
-        background: #c69836 url(../../public/img/shuffle-board-background-field.svg) center center no-repeat;
+        background: #c69836 url(../../resources/img/shuffle-board-background-field.svg) center center no-repeat;
         background-size: 100% auto;
         border: 7px solid $white;
         box-shadow: 6px 5px 0 rgba(0, 0, 0, 0.3);
@@ -140,7 +140,7 @@ $shuffle-table-border-radius: 50px;
   &__session-finish-time {
     display: inline-block;
     padding-left: 20px;
-    background: url(../../public/img/icons/clock-white.svg) 0 center no-repeat;
+    background: url(../../resources/img/icons/clock-white.svg) 0 center no-repeat;
     background-size: 13px auto;
   }
 
@@ -149,7 +149,7 @@ $shuffle-table-border-radius: 50px;
     width: 20px;
     height: 20px;
     margin-left: -60px;
-    background: url(../../public/img/icons/pencil-white.svg) center center no-repeat;
+    background: url(../../resources/img/icons/pencil-white.svg) center center no-repeat;
     background-size: 13px auto;
     cursor: pointer;
   }
@@ -178,7 +178,7 @@ $shuffle-table-border-radius: 50px;
     &:hover {
       color: $white;
       &:after {
-        background-image: url(../../public/img/icons/arrow-simple-white.svg);
+        background-image: url(../../resources/img/icons/arrow-simple-white.svg);
       }
     }
 
@@ -188,7 +188,7 @@ $shuffle-table-border-radius: 50px;
       width: 8px;
       height: 7px;
       margin-left: 3px;
-      background: url(../../public/img/icons/arrow-simple-yellow.svg) 0 center no-repeat;
+      background: url(../../resources/img/icons/arrow-simple-yellow.svg) 0 center no-repeat;
       background-size: auto 100%;
     }
 
@@ -226,19 +226,19 @@ $shuffle-table-border-radius: 50px;
         .table_status_ready &, .table_status_disabled & {
           $bg-color: #69df3b;
           background-color: $bg-color;
-          background-image: url(../../public/img/icons/timer-white.svg);
+          background-image: url(../../resources/img/icons/timer-white.svg);
           background-size: auto 45px;
           @include button-hover-behavior($bg-color, 7);
         }
         .table_status_active & {
           $bg-color: #c12c30;
           background-color: $bg-color;
-          background-image: url(../../public/img/icons/stop-white.svg);
+          background-image: url(../../resources/img/icons/stop-white.svg);
           background-size: 22px 22px;
           @include button-hover-behavior($bg-color, 7);
         }
         .table_state_in-pending & {
-          background-image: url(../../public/img/wait-white.svg);
+          background-image: url(../../resources/img/wait-white.svg);
           background-size: 40px 40px;
           cursor: default;
         }
@@ -257,7 +257,7 @@ $shuffle-table-border-radius: 50px;
         padding-left: 20px;
         font-size: 14px;
         font-weight: 500;
-        background: url(../../public/img/icons/clock-white.svg) 0 center no-repeat;
+        background: url(../../resources/img/icons/clock-white.svg) 0 center no-repeat;
         background-size: 13px auto;
 
         .table_type_shuffle & {
@@ -292,7 +292,7 @@ $shuffle-table-border-radius: 50px;
           transform: translateX(-50%);
           width: 90px;
           height: 90px;
-          background: url(../../public/img/icons/lock-white.svg) center center no-repeat;
+          background: url(../../resources/img/icons/lock-white.svg) center center no-repeat;
           background-size: auto 100%;
         }
 
@@ -347,13 +347,13 @@ $shuffle-table-border-radius: 50px;
         .table_type_pool & {
           top: 50px;
           &:after {
-            background-image: url(../../public/img/icons/table-pool-yellow.svg);
+            background-image: url(../../resources/img/icons/table-pool-yellow.svg);
           }
         }
 
         .table_type_tennis & {
           &:after {
-            background-image: url(../../public/img/icons/table-tennis-yellow.svg);
+            background-image: url(../../resources/img/icons/table-tennis-yellow.svg);
           }
         }
 
@@ -362,7 +362,7 @@ $shuffle-table-border-radius: 50px;
           &:after {
             width: 14px;
             height: 14px;
-            background-image: url(../../public/img/icons/table-shuffle-board-yellow.svg);
+            background-image: url(../../resources/img/icons/table-shuffle-board-yellow.svg);
           }
         }
 
@@ -371,7 +371,7 @@ $shuffle-table-border-radius: 50px;
           &:after {
             top: 47%;
             left: 12px;
-            background: url(../../public/img/icons/table-default-yellow.svg) 0 center no-repeat;
+            background: url(../../resources/img/icons/table-default-yellow.svg) 0 center no-repeat;
           }
         }
       }

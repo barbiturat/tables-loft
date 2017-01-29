@@ -14,7 +14,7 @@ $table-columns-padding: $table-side-padding / 2;
   &__wait {
     width: 40px;
     height: 40px;
-    background: url(../../public/img/wait-dark.svg) center center no-repeat;
+    background: url(../../resources/img/wait-dark.svg) center center no-repeat;
     background-size: auto 100%;
   }
 
@@ -58,7 +58,7 @@ $table-columns-padding: $table-side-padding / 2;
       }
       &_time {
         padding-left: $table-columns-padding + 22px;
-        background: url(../../public/img/icons/clock-black.svg) $table-columns-padding center no-repeat;
+        background: url(../../resources/img/icons/clock-black.svg) $table-columns-padding center no-repeat;
         background-size: auto 13px;
       }
       &_duration {
@@ -80,7 +80,7 @@ $table-columns-padding: $table-side-padding / 2;
     margin-left: 3px;
     margin-top: -3px;
     vertical-align: middle;
-    background: url(../../public/img/icons/pencil-dark-gray.svg) center center no-repeat;
+    background: url(../../resources/img/icons/pencil-dark-gray.svg) center center no-repeat;
     background-size: 13px auto;
     cursor: pointer;
   }
