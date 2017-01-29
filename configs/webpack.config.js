@@ -2,6 +2,8 @@ const webpack = require('webpack');
 const path = require('path');
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const RollbarSourceMapPlugin = require('rollbar-sourcemap-webpack-plugin')
+
 const envVarStubs = require('../package.json').appSettings.envVarStubs;
 
 const envVars = process.env;
@@ -10,7 +12,7 @@ const isProd = process.argv.includes('-p');
 const API_KEY = isProd ? envVars.API_KEY : envVarStubs.API_KEY || envVars.API_KEY;
 const API_HOST = isProd ? envVars.API_HOST : envVarStubs.API_HOST || envVars.API_HOST;
 const API_PORT = isProd ? envVars.API_PORT : envVarStubs.API_PORT || envVars.API_PORT;
-const ROLLBAR_TOKEN = envVars.ROLLBAR_TOKEN || '';
+const ROLLBAR_TOKEN = isProd ? envVars.ROLLBAR_TOKEN : envVarStubs.ROLLBAR_TOKEN || envVars.ROLLBAR_TOKEN;
 
 const nodeEnv = isProd ? 'production' : 'development';
 const sourcePath = pathFromRoot('./src');
@@ -40,6 +42,12 @@ const plugins = [
   new HtmlWebpackPlugin({
     filename: pathFromRoot('./public/index.html'),
     template: `${sourcePath}/index.ejs`
+  }),
+  new RollbarSourceMapPlugin({
+    accessToken: ROLLBAR_TOKEN,
+    version: 'version_string_here',
+    publicPath: outputPath,
+    includeChunks: ['bundle', 'vendor', 'img', 'fonts', 'manifest']
   })
 ];
 

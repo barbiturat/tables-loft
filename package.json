@@ -43,6 +43,7 @@
       "API_HOST": "http://localhost",
       "API_PORT": 8081,
       "ASSETS_PORT": 5000,
+      "ROLLBAR_TOKEN": "some token",
       "BASIC_AUTH_USERNAME": "name",
       "BASIC_AUTH_PASSWORD": "password"
     },
@@ -101,6 +102,7 @@
     "remap-istanbul": "^0.7.0",
     "reselect": "^2.5.4",
     "rimraf": "^2.5.4",
+    "rollbar-sourcemap-webpack-plugin": "^1.7.0",
     "rxjs": "^5.0.3",
     "sass-loader": "^4.0.2",
     "sinon": "^1.17.6",

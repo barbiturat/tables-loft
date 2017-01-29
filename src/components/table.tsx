@@ -109,8 +109,9 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   onChangeStatusClick = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
+    throw('test rollbar sourcemaps support');
 
-    const toStop = Component.isTableActive( this.getCurrentSession() );
+    /*const toStop = Component.isTableActive( this.getCurrentSession() );
     const promptMessage = `${toStop ? 'Stop' : 'Start'} table "${this.props.name}"`;
 
     this.setState({
@@ -118,7 +119,7 @@ class Component extends React.Component<PropsFromConnect, State> {
         isPromptOpen: true,
         promptMessage
       }
-    });
+    });*/
   };
 
   onViewMoreClick = (event: MouseEvent<HTMLAnchorElement>) => {
