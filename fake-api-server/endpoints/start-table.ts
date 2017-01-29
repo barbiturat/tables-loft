@@ -24,7 +24,7 @@ const startTable = (server: Application, bodyParser: RequestHandler) => {
     };
 
     res
-      .status(400)
+      .status(STATUS_OK)
       .send(response);
 
   }));

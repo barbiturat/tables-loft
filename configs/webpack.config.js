@@ -3,8 +3,8 @@ const path = require('path');
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const envVarStubs = require('../package.json').appSettings.envVarStubs;
-const envVars = process.env;
 
+const envVars = process.env;
 const isProd = process.argv.includes('-p');
 
 const API_KEY = isProd ? envVars.API_KEY : envVarStubs.API_KEY || envVars.API_KEY;
@@ -26,7 +26,7 @@ if (!API_PORT) throw('The "API_PORT" env variable must be set');
 
 const plugins = [
   new webpack.optimize.CommonsChunkPlugin({
-    names: ['vendor', 'manifest']
+    names: ['vendor', 'img', 'fonts', 'manifest']
   }),
   new webpack.DefinePlugin({
     'process.env': {
@@ -49,6 +49,8 @@ module.exports = {
   entry: {
     rollbar: './external-tools/rollbar-snippet.js',
     bundle: './index.tsx',
+    img: '../public/img/index.js',
+    fonts: '../public/fonts/index.js',
     vendor: [
       'classnames',
       'moment',
@@ -90,7 +92,7 @@ module.exports = {
         test: /\.(png|woff|woff2|eot|ttf|otf|svg)$/,
         loader: 'url-loader',
         options: {
-          limit: 100000
+          limit: 50000
         }
       },
       {
