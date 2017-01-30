@@ -13,6 +13,7 @@
         ],
         "no-conditional-assignment": true,
         "no-duplicate-variable": true,
+        "no-label": true,
         "no-eval": true,
         "no-inferrable-types": true,
         "no-internal-module": true,
@@ -36,6 +37,8 @@
         ],
         "radix": true,
         "readonly-interface": true,
+        "readonly-indexer": true,
+        "readonly-array": true,
         "semicolon": [true, "always", "ignore-bound-class-methods"],
         "triple-equals": [
             true,
