@@ -1,6 +1,6 @@
 import {FETCHING_TABLE_SESSIONS_HISTORY} from '../constants/action-names';
-import {createActionWithPayload} from '../helpers/index';
 import {ActionWithPayload} from '../interfaces/actions';
+import {createActionWithPayload} from '../helpers/actions';
 
 type PayloadType = number;
 

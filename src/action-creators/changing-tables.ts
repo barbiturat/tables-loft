@@ -1,7 +1,7 @@
 import {CHANGING_TABLES} from '../constants/action-names';
-import {createActionWithPayload} from '../helpers/index';
 import {ActionWithPayload} from '../interfaces/actions';
 import {Tables} from '../interfaces/store-models';
+import {createActionWithPayload} from '../helpers/actions';
 
 export type ActionType = ActionWithPayload<Tables>;
 

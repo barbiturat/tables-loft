@@ -1,7 +1,7 @@
 import {ADMIN_TOKEN_UPDATED} from '../constants/action-names';
-import {createActionWithPayload} from '../helpers/index';
 import {ActionWithPayload} from '../interfaces/actions';
 import {AdminToken} from '../interfaces/store-models';
+import {createActionWithPayload} from '../helpers/actions';
 
 type PayloadType = AdminToken;
 

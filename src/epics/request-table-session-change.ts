@@ -1,7 +1,7 @@
 import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
 import {Store} from 'redux';
-import {pipe, when, merge, prop, objOf, flip} from 'ramda';
+import {pipe, when, merge, prop, objOf, flip, clone, ifElse} from 'ramda';
 // tslint:disable-next-line:no-require-imports
 const t = require('tcomb-validation');
 
@@ -13,7 +13,7 @@ import {
 } from '../interfaces/api-responses';
 import {AjaxResponseTyped, AjaxErrorTyped, Partial, AjaxResponseDefined} from '../interfaces/index';
 import {urlUpdateTableSession} from '../constants/urls';
-import {SimpleAction} from '../interfaces/actions';
+import {SimpleAction, ActionWithPayload} from '../interfaces/actions';
 import changingTableSessions from '../action-creators/changing-table-sessions';
 import {RequestUpdateTableSessionPayload} from '../interfaces/api-requests';
 import {StoreStructure, TableSession, TableSessions} from '../interfaces/store-models';
@@ -34,43 +34,46 @@ const assertResponse = (ajaxData: ResponseOk) => {
 };
 
 const setNewParamsToSession = (sessions: TableSessions, sessionId: number, params: Partial<TableSession>) => {
-  const sId = String(sessionId);
-
   return pipe(
-    when(prop(sId),
+    when(Boolean, // if session exists
       pipe(
-        prop(sId), // session
         flip(merge)(params), // update session
-        objOf(sId), // {sId: session}
+        objOf(String(sessionId)), // {sId: session}
         merge(sessions) // updated sessions
       )
     )
-  )(sessions);
+  )(sessions[sessionId]);
 };
 
 const requestTableSessionChange = ((action$, store: Store<StoreStructure>) => {
   return action$.ofType(REQUESTING_TABLE_SESSION_CHANGE)
     .switchMap((action: ActionType) => {
-      const storeData = store.getState();
-      const adminToken = storeData.app.adminToken;
+      const appData = store.getState().app;
+      const adminToken = appData.adminToken;
 
       if (!adminToken) {
         return Observable.of(null);
       }
 
       const {sessionId, durationSeconds} = action.payload;
+
+      const setSessionsWithPending$ = pipe<TableSessions, TableSessions, TableSessions, ActionWithPayload<TableSessions>, Observable< ActionWithPayload<TableSessions> > >(
+        clone,
+        (currSessionsClone) => setNewParamsToSession(currSessionsClone, sessionId, {
+          isInPending: true
+        }),
+        changingTableSessions,
+        Observable.of
+      )(appData.tableSessionsData.tableSessions);
+
+      const blockingPendingTurnOn$ = Observable.of( pendingBlockingRequest(true) );
+
+      const url = `${API_URL}${urlUpdateTableSession}`.replace(':session_id', String(sessionId));
       const dataToSend: RequestUpdateTableSessionPayload = {
         sessionId,
         durationSeconds,
         adminToken
       };
-      const currSessionsClone = {...storeData.app.tableSessionsData.tableSessions};
-      const newSessions = setNewParamsToSession(currSessionsClone, sessionId, {
-        isInPending: true
-      });
-      const blockingPendingTurnOn$ = Observable.of( pendingBlockingRequest(true) );
-      const setSessionsWithPending$ = Observable.of( changingTableSessions(newSessions) );
-      const url = `${API_URL}${urlUpdateTableSession}`.replace(':session_id', String(sessionId));
 
       const request$ = Observable.of(null)
         .mergeMap(() =>

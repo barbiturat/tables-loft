@@ -1,10 +1,10 @@
-import {Table as BackendTable, TableSession as TableSessionBackend} from '../../interfaces/backend-models';
+import {Table as BackendTable, TableSession as TableSessionBackend} from '../interfaces/backend-models';
 import {
   Table as FrontendTable, TableSession as TableSessionFrontend, Tables,
   TableSessions
-} from '../../interfaces/store-models';
+} from '../interfaces/store-models';
 import * as moment from 'moment';
-import {PartialIndexedDict} from '../../interfaces/index';
+import {PartialIndexedDict} from '../interfaces/index';
 
 const tableToFront = (table: BackendTable): FrontendTable => {
   const currentSessionId = table.currentSession ? table.currentSession.id : null;

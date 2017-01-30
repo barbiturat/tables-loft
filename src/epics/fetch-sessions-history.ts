@@ -17,7 +17,7 @@ import {
 import {AjaxResponseTyped, AjaxErrorTyped, AjaxResponseDefined} from '../interfaces/index';
 import {urlSessionHistory} from '../constants/urls';
 import {SimpleAction, ActionWithPayload} from '../interfaces/actions';
-import {tableSessionsToFront} from '../helpers/api-data-converters/index';
+import {tableSessionsToFront} from '../helpers/api-data-converters';
 import changingTableSessions from '../action-creators/changing-table-sessions';
 import {ActionType} from '../action-creators/fetching-table-sessions-history';
 import {RequestSessionHistoryPayload} from '../interfaces/api-requests';

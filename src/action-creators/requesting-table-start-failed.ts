@@ -1,5 +1,5 @@
 import {REQUESTING_TABLE_START_FAILED} from '../constants/action-names';
-import {createActionWithPayload} from '../helpers/index';
+import {createActionWithPayload} from '../helpers/actions';
 import {ActionWithPayload} from '../interfaces/actions';
 
 type PayloadType = string;

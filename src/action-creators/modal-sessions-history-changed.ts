@@ -1,5 +1,5 @@
 import {MODAL_SESSIONS_HISTORY_CHANGED} from '../constants/action-names';
-import {createActionWithPayload} from '../helpers/index';
+import {createActionWithPayload} from '../helpers/actions';
 import {ActionWithPayload} from '../interfaces/actions';
 import {ModalSessionsHistory} from '../interfaces/store-models';
 

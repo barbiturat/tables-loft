@@ -11,7 +11,7 @@ import {AjaxResponseTyped, AjaxResponseDefined} from '../interfaces/index';
 import pendingTables from '../action-creators/pending-tables';
 import {urlTables} from '../constants/urls';
 import {SimpleAction, ActionWithPayload} from '../interfaces/actions';
-import {tablesToFront, tableSessionsToFront} from '../helpers/api-data-converters/index';
+import {tablesToFront, tableSessionsToFront} from '../helpers/api-data-converters';
 import {TableSession, Table as TableBackend} from '../interfaces/backend-models';
 import changingTableSessions from '../action-creators/changing-table-sessions';
 import changingTables from '../action-creators/changing-tables';

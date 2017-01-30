@@ -14,7 +14,7 @@ import {SimpleAction, ActionWithPayload} from '../interfaces/actions';
 import {ActionType} from '../action-creators/requesting-table-start';
 import {StoreStructure, TableSessions} from '../interfaces/store-models';
 import changingTableSessions from '../action-creators/changing-table-sessions';
-import {tableSessionToFront} from '../helpers/api-data-converters/index';
+import {tableSessionToFront} from '../helpers/api-data-converters';
 import {API_URL} from '../constants/index';
 import changingTableFields from '../action-creators/changing-table-fields';
 import {tTableSession} from '../helpers/dynamic-type-validators/types';

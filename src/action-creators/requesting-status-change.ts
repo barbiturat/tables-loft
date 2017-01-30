@@ -1,5 +1,5 @@
 import {REQUESTING_STATUS_CHANGE} from '../constants/action-names';
-import {createActionWithPayload} from '../helpers/index';
+import {createActionWithPayload} from '../helpers/actions';
 import {ActionWithPayload} from '../interfaces/actions';
 import {TableStatus} from '../interfaces/backend-models';
 

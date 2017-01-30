@@ -1,6 +1,6 @@
 import {GLOBAL_ERROR_EXPIRED} from '../constants/action-names';
-import {createActionWithPayload} from '../helpers/index';
 import {ActionWithPayload} from '../interfaces/actions';
+import {createActionWithPayload} from '../helpers/actions';
 
 export type ActionType = ActionWithPayload<number>;
 

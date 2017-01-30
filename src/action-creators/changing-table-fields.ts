@@ -1,7 +1,7 @@
 import {CHANGING_TABLE_FIELDS} from '../constants/action-names';
-import {createActionWithPayload} from '../helpers/index';
 import {ActionWithPayload} from '../interfaces/actions';
 import {Table} from '../interfaces/store-models';
+import {createActionWithPayload} from '../helpers/actions';
 
 type ChangedFields = Partial<Table>;
 
