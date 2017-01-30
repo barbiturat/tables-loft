@@ -10,7 +10,6 @@ import {managerLoginForm} from '../constants/form-fields';
 import {ManagerLoginForm} from '../reducers/forms';
 import {isRequiredField} from '../constants/messages';
 import {isNotEmpty as isFilled} from '../helpers';
-import {renderErrorsBlock, renderErrorComponent} from '../helpers/renderers';
 import {StringDict} from '../interfaces/index';
 import requestingManagerLogin from '../action-creators/requesting-admin-token';
 

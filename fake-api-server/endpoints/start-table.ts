@@ -8,7 +8,7 @@ import {urlStartTable} from '../../src/constants/urls';
 import {CustomRequest} from '../interfaces/index';
 
 interface Params {
-  table_id: any;
+  readonly table_id: any;
 }
 
 const startTable = (server: Application, bodyParser: RequestHandler) => {

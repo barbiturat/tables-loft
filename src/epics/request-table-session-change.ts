@@ -1,7 +1,7 @@
 import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
 import {Store} from 'redux';
-import {pipe, when, merge, clone, prop, objOf, flip} from 'ramda';
+import {pipe, when, merge, prop, objOf, flip} from 'ramda';
 // tslint:disable-next-line:no-require-imports
 const t = require('tcomb-validation');
 

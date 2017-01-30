@@ -9,7 +9,7 @@ import {ResponseSessionsHistoryPayload} from '../../src/interfaces/api-responses
 import {urlSessionHistory} from '../../src/constants/urls';
 
 interface Params {
-  table_id: any;
+  readonly table_id: any;
 }
 
 const sessionHistory = (server: Application, bodyParser: RequestHandler) => {

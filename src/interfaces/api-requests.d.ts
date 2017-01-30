@@ -1,18 +1,18 @@
 export interface RequestLoginPayload {
-  email?: string;
-  password?: string;
+  readonly email?: string;
+  readonly password?: string;
 }
 
 export interface RequestSessionHistoryPayload {
 }
 
 export interface RequestGetAdminTokenPayload {
-  password: string;
+  readonly password: string;
 }
 
 export interface RequestUpdateTableSessionPayload {
-  sessionId: number;
-  durationSeconds: number;
-  adminToken: string;
+  readonly sessionId: number;
+  readonly durationSeconds: number;
+  readonly adminToken: string;
 }
 

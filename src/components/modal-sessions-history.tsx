@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import MouseEvent = React.MouseEvent;
 import * as Modal from 'react-modal';
 import * as ReactPaginate from 'react-paginate';
-import {pipe, pick, splitEvery, nth, keys, map, flip, sortBy, prop, values} from 'ramda';
+import {pipe, pick, splitEvery, nth, map, flip, sortBy, prop, values} from 'ramda';
 
 import {StoreStructure, Table, TableSession, Tables, TableSessions} from '../interfaces/store-models';
 import {PropsExtendedByConnect} from '../interfaces/component';
@@ -134,7 +134,9 @@ class Component extends React.Component<PropsFromConnect, State> {
           />
           <div className="modal__header">
             <h3 className="modal__header-caption">{caption}</h3>
-            <h4 className="modal__header-sub-caption">Today's Sessions</h4>
+            <h4 className="modal__header-sub-caption">
+              Today's Sessions
+            </h4>
           </div>
 
           <SessionsHistory

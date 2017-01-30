@@ -4,6 +4,7 @@ import {
   TableSessions
 } from '../../interfaces/store-models';
 import * as moment from 'moment';
+import {PartialIndexedDict} from '../../interfaces/index';
 
 const tableToFront = (table: BackendTable): FrontendTable => {
   const currentSessionId = table.currentSession ? table.currentSession.id : null;
@@ -25,13 +26,13 @@ const tableToFront = (table: BackendTable): FrontendTable => {
 };
 
 export const tablesToFront = (tables: BackendTable[]): Tables => {
-  return tables.reduce((memo: Tables, table) => {
+  return tables.reduce((memo, table) => {
     const convertedTable = tableToFront(table);
 
     memo[convertedTable.id] = convertedTable;
 
     return memo;
-  }, {} as Tables);
+  }, {} as PartialIndexedDict<FrontendTable>);
 };
 
 export const tableSessionToFront = (tableSession: TableSessionBackend): TableSessionFrontend => {
@@ -47,11 +48,11 @@ export const tableSessionToFront = (tableSession: TableSessionBackend): TableSes
 };
 
 export const tableSessionsToFront = (tableSessions: TableSessionBackend[]): TableSessions => {
-  return tableSessions.reduce((memo: TableSessions, tableSession) => {
+  return tableSessions.reduce((memo, tableSession) => {
     const convertedTableSession = tableSessionToFront(tableSession);
 
     memo[convertedTableSession.id] = convertedTableSession;
 
     return memo;
-  }, {} as TableSessions);
+  }, {} as PartialIndexedDict<TableSessionFrontend>);
 };

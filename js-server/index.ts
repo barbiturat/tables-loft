@@ -15,9 +15,9 @@ const port = envVars.PORT || envVarStubs.ASSETS_PORT;
 const authUserName = envVars.BASIC_AUTH_USERNAME || envVarStubs.BASIC_AUTH_USERNAME;
 const authUserPassword = envVars.BASIC_AUTH_PASSWORD || envVarStubs.BASIC_AUTH_PASSWORD;
 
-if (!port) throw('The "PORT" env variable must be set');
-if (!authUserName) throw('The "BASIC_AUTH_USERNAME" env variable must be set');
-if (!authUserPassword) throw('The "BASIC_AUTH_PASSWORD" env variable must be set');
+if (!port) {throw('The "PORT" env variable must be set'); }
+if (!authUserName) {throw('The "BASIC_AUTH_USERNAME" env variable must be set'); }
+if (!authUserPassword) {throw('The "BASIC_AUTH_PASSWORD" env variable must be set'); }
 
 function pathFromRoot(url = '') {
   return path.resolve(__dirname, '../../..', url);

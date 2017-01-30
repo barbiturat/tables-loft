@@ -2,11 +2,15 @@ import {AjaxResponse, AjaxError} from 'rxjs';
 import {Reducer} from 'redux';
 
 export interface IndexedDict<T> {
-  [name: number]: T;
+  readonly [name: number]: T;
 }
 
+export type PartialIndexedDict<T> = {
+  [name: number]: T;
+};
+
 export interface Dict<T> {
-  [name: string]: T;
+  readonly [name: string]: T;
 }
 
 export interface AnyDict extends Dict<any> {
@@ -20,7 +24,7 @@ export interface ObjDict extends Dict<AnyDict> {
 
 type BasicType = boolean | number | string;
 
-type Defined = BasicType | AnyDict;
+export type Defined = BasicType | AnyDict;
 
 export type Partial<Fields> = {
   [Field in keyof Fields]?: Fields[Field];
@@ -39,14 +43,14 @@ interface CustomXHR<TResponse> extends XMLHttpRequest {
 }
 
 interface AjaxResponseTyped<TResponse> extends AjaxResponse {
-  status: 200;
-  response: TResponse | null;
+  readonly status: 200;
+  readonly response: TResponse | null;
 }
 
-interface AjaxResponseDefined<TResponse> extends AjaxResponseTyped<TResponse> {
-  response: TResponse;
+export interface AjaxResponseDefined<TResponse> extends AjaxResponseTyped<TResponse> {
+  readonly response: TResponse;
 }
 
-interface AjaxErrorTyped<TResponse> extends AjaxError {
-  xhr: CustomXHR<TResponse>;
+export interface AjaxErrorTyped<TResponse> extends AjaxError {
+  readonly xhr: CustomXHR<TResponse>;
 }

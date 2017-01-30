@@ -81,14 +81,6 @@ export const request = (method: string, url: string, body?: any, headers = {}): 
     });
 };
 
-export const getErrorMessageFromResponse = (ajaxData?: AjaxErrorTyped<ResponseFailedPayload>) => {
-  const defaultErrorMessage = 'Error!';
-
-  return ajaxData && ajaxData.xhr && ajaxData.xhr.response && ajaxData.xhr.response.error ?
-    ajaxData.xhr.response.error :
-    defaultErrorMessage;
-};
-
 export const isAjaxResponseDefined = < TResponseDefined extends AjaxResponseDefined<Defined> >
   (ajaxResponse: AjaxResponse | AjaxError): ajaxResponse is TResponseDefined => {
   const responseField = (ajaxResponse as any)!.response;
