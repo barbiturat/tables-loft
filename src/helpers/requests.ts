@@ -2,8 +2,7 @@ import {Observable, AjaxResponse, AjaxError} from 'rxjs';
 import * as queryString from 'query-string';
 import {pipe} from 'ramda';
 
-import {AjaxErrorTyped, AjaxResponseDefined, Defined} from '../interfaces/index';
-import {ResponseFailedPayload} from '../interfaces/api-responses';
+import {AjaxResponseDefined, Defined} from '../interfaces/index';
 import {
   STATUS_OK, STATUS_BAD_REQUEST, STATUS_UNAUTHORIZED,
   STATUS_FORBIDDEN, STATUS_NOT_FOUND, STATUS_REQUEST_TIMEOUT, STATUS_UNPROCESSABLE_ENTITY, STATUS_INTERNAL_SERVER_ERROR,
