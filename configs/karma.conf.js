@@ -16,10 +16,9 @@ module.exports = function (config) {
       dir: 'coverage',
       reporters: [
         {
-          type: 'json',
+          type: 'html',
           dir: './coverage',
-          subdir: '.',
-          file: 'coverage-raw.json'
+          subdir: '.'
         }
       ]
     },
