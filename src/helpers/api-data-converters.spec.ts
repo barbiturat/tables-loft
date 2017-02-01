@@ -37,7 +37,7 @@ describe('tablesToFront: ', () => {
     expect(tablesToFront).to.exist;
   });
 
-  it(`should emit result object with keys, based on the source tables ids`, () => {
+  it(`returns object with keys, based on the source tables ids`, () => {
     const backendTableTemplate = getBackendTableTemplate();
 
     const firstBackendTable = {...backendTableTemplate, ...{id: 1}};
@@ -52,7 +52,7 @@ describe('tablesToFront: ', () => {
     expect(resultKeys).to.be.deep.equal(['1', '5', '55']);
   });
 
-  it(`should not emit result tables with duplicate ids`, () => {
+  it(`should not emit result tables with duplicated ids`, () => {
     const backendTableTemplate = getBackendTableTemplate();
     const firstBackendTable = {...backendTableTemplate, ...{id: 1}};
     const secondBackendTable = {...backendTableTemplate, ...{id: 5}};
@@ -64,7 +64,7 @@ describe('tablesToFront: ', () => {
     expect(resultTables).to.have.all.keys('1', '5');
   });
 
-  it(`should emit result tables with same number of keys, as source tables array`, () => {
+  it(`returns object with same number of keys, as in the source array`, () => {
     const backendTableTemplate = getBackendTableTemplate();
     const firstBackendTable = {...backendTableTemplate, ...{id: 1}};
     const secondBackendTable = {...backendTableTemplate, ...{id: 5}};
@@ -76,7 +76,7 @@ describe('tablesToFront: ', () => {
     expect( Object.keys(resultTables) ).to.have.lengthOf(sourceTables.length);
   });
 
-  it(`should emit result tables with currentSessionId === null if corresponding source tables's currentSession === null`, () => {
+  it(`returns result tables with currentSessionId === null if corresponding source tables's currentSession === null`, () => {
     const backendTableTemplate = getBackendTableTemplate();
     const backendSessionTemplate = getBackendSessionTemplate();
 
@@ -95,7 +95,7 @@ describe('tablesToFront: ', () => {
     expect(currentSessionIds).to.be.deep.equal([backendSessionTemplate.id, null, backendSessionTemplate.id]);
   });
 
-  it(`should emit result tables with lastSessionId === null if corresponding source tables's lastSession === null`, () => {
+  it(`returns result tables with lastSessionId === null if corresponding source tables's lastSession === null`, () => {
     const backendSessionTemplate = getBackendSessionTemplate();
     const backendTableTemplate = getBackendTableTemplate();
 
@@ -114,7 +114,7 @@ describe('tablesToFront: ', () => {
     expect(currentSessionIds).to.be.deep.equal([backendSessionTemplate.id, null, backendSessionTemplate.id]);
   });
 
-  it(`should emit result tables with sessionsHistory that contains only ids of currentSession and lastSession`, () => {
+  it(`returns result tables with sessionsHistory that contains only ids of currentSession and lastSession`, () => {
     const backendSessionTemplate = getBackendSessionTemplate();
     const backendTableTemplate = getBackendTableTemplate();
 
@@ -149,7 +149,7 @@ describe('tableSessionToFront: ', () => {
     expect(tableSessionToFront).to.exist;
   });
 
-  it(`generates object with "id" which equals to source's "id"`, () => {
+  it(`returns object with "id" which equals to source's "id"`, () => {
     const backendSessionTemplate = getBackendSessionTemplate();
     const sourceSession = {...backendSessionTemplate, ...{id: 7}};
     const resultSession = tableSessionToFront(sourceSession);
@@ -158,7 +158,7 @@ describe('tableSessionToFront: ', () => {
     expect(resultSession.id).to.be.equal(sourceSession.id);
   });
 
-  it(`generates object with "adminEdited" which equals to source's "adminEdited"`, () => {
+  it(`returns object with "adminEdited" which equals to source's "adminEdited"`, () => {
     const backendSessionTemplate = getBackendSessionTemplate();
     const sourceSession: BackendTableSession = {...backendSessionTemplate, ...{adminEdited: true}};
     const resultSession = tableSessionToFront(sourceSession);
@@ -167,7 +167,7 @@ describe('tableSessionToFront: ', () => {
     expect(resultSession.adminEdited).to.be.equal(sourceSession.adminEdited);
   });
 
-  it(`generates object with "isInPending" === false`, () => {
+  it(`returns object with "isInPending" === false`, () => {
     const backendSessionTemplate = getBackendSessionTemplate();
     const sourceSession = {...backendSessionTemplate};
     const resultSession = tableSessionToFront(sourceSession);
@@ -176,7 +176,7 @@ describe('tableSessionToFront: ', () => {
     expect(resultSession.isInPending).to.be.equal(false);
   });
 
-  it(`generates object with "durationSeconds" === 0 if there is no "durationSeconds" in the source object`, () => {
+  it(`returns object with "durationSeconds" === 0 if there is no "durationSeconds" in the source object`, () => {
     const backendSessionTemplate = getBackendSessionTemplate();
     const sourceSession = {...backendSessionTemplate, ...{durationSeconds: null}};
     const resultSession = tableSessionToFront(sourceSession);
@@ -185,7 +185,7 @@ describe('tableSessionToFront: ', () => {
     expect(resultSession.durationSeconds).to.be.equal(0);
   });
 
-  it(`generates object with "durationSeconds" which equals to source's "durationSeconds" if it is not null`, () => {
+  it(`returns object with "durationSeconds" which equals to source's "durationSeconds" if it is not null`, () => {
     const backendSessionTemplate = getBackendSessionTemplate();
     const sourceSession: BackendTableSession = {...backendSessionTemplate, ...{durationSeconds: 33}};
     const resultSession = tableSessionToFront(sourceSession);
@@ -194,7 +194,7 @@ describe('tableSessionToFront: ', () => {
     expect(resultSession.durationSeconds).to.be.equal(sourceSession.durationSeconds);
   });
 
-  it(`generates object with "startsAt" which equals to number of milliseconds that encoded in the "startsAt" of a source object`, () => {
+  it(`returns object with "startsAt" which equals to number of milliseconds that encoded in the "startsAt" of a source object`, () => {
     const backendSessionTemplate = getBackendSessionTemplate();
     const startsAt = moment().utc().subtract().toISOString();
     const startsAtMs = moment(startsAt, moment.ISO_8601).valueOf();
@@ -212,7 +212,7 @@ describe('tableSessionsToFront: ', () => {
     expect(tableSessionsToFront).to.exist;
   });
 
-  it(`generates object with keys from unique ids of the the source array's sessions`, () => {
+  it(`returns object with keys from unique ids of the the source array's sessions`, () => {
     const backendSessionTemplate = getBackendSessionTemplate();
     const backendSession1 = {...backendSessionTemplate, ...{id: 12}};
     const backendSession2 = {...backendSessionTemplate, ...{id: 33}};
@@ -226,7 +226,7 @@ describe('tableSessionsToFront: ', () => {
 
   // создает словарь, значениями которого являются TableSessionFrontend
 
-  it(`generates object with values of "TableSessionFrontend" type`, () => {
+  it(`returns object with values of "TableSessionFrontend" type`, () => {
     const backendSessionTemplate = getBackendSessionTemplate();
     const backendSession1 = {...backendSessionTemplate, ...{id: 12}};
     const backendSession2 = {...backendSessionTemplate, ...{id: 33}};
