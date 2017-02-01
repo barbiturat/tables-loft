@@ -44,6 +44,7 @@
       "API_PORT": 8081,
       "ASSETS_PORT": 5000,
       "ROLLBAR_TOKEN": "some token",
+      "ROLLBAR_SERVER_TOKEN": "some server token",
       "BASIC_AUTH_USERNAME": "name",
       "BASIC_AUTH_PASSWORD": "password"
     },
