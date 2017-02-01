@@ -1,13 +1,11 @@
-import { should as _should } from 'chai';
+import { expect } from 'chai';
 
 import {createSimpleAction, createActionWithPayload} from './actions';
 import {SimpleAction} from '../interfaces/actions';
 
-const should = _should();
-
 describe('createSimpleAction: ', () => {
   it('should be defined', () => {
-    should.exist(createSimpleAction);
+    expect(createSimpleAction).to.exist;
   });
 
   it('returns proper action', () => {
@@ -22,7 +20,7 @@ describe('createSimpleAction: ', () => {
 
 describe('createSimpleAction: ', () => {
   it('should be defined', () => {
-    should.exist(createActionWithPayload);
+    expect(createActionWithPayload).to.exist;
   });
 
   it('returns proper action', () => {

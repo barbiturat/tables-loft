@@ -5,11 +5,13 @@ module.exports = function (config) {
     basePath: '..',
     frameworks: ['mocha', 'chai', 'sinon'],
     files: [
-      './src/**/*.spec.ts'
+      './src/**/*.spec.ts',
+      './src/**/*.spec.tsx'
     ],
     exclude: [],
     preprocessors: {
-      './src/**/*.spec.ts': ['webpack']
+      './src/**/*.spec.ts': ['webpack'],
+      './src/**/*.spec.tsx': ['webpack']
     },
     // optionally, configure the reporter
     coverageReporter: {
