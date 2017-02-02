@@ -1,7 +1,7 @@
 import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
 import {Store} from 'redux';
-import {pipe, merge, clone, defaultTo, ifElse} from 'ramda';
+import {pipe, merge, clone, ifElse} from 'ramda';
 // tslint:disable-next-line:no-require-imports
 const t = require('tcomb-validation');
 
@@ -20,7 +20,6 @@ import changingTableFields, {ActionType as ChangingTableFieldsAction} from '../a
 import {tTableSession} from '../helpers/dynamic-type-validators/types';
 import {validateResponse} from '../helpers/dynamic-type-validators/index';
 import {TableSession} from '../interfaces/backend-models';
-import nothingDone from '../action-creators/nothing-done';
 
 type ResponseOk = AjaxResponseTyped<ResponseStopTablePayload>;
 type ResponseOkDefined = AjaxResponseDefined<ResponseStopTablePayload>;
@@ -63,21 +62,24 @@ const stopTable = ((action$, store: Store<StoreStructure>) => {
                   changingTableSessions
                 )(tableSessionsData.tableSessions);
 
-                const changingTableAction = pipe<(Table | undefined), (ChangingTableFieldsAction | SimpleAction)>(
+                const changingTableAction = pipe<(Table | undefined), (ChangingTableFieldsAction | null)>(
                   ifElse(Boolean,
                     (currTable) => changingTableFields({
                       currentSessionId: null,
                       lastSessionId: currTable.currentSessionId,
                       isInPending: false
                     }, tableId),
-                    () => nothingDone
+                    null
                   )
                 )(tablesData.tables[tableId]);
 
-                return Observable.of<SimpleAction>(
-                  tableSessionsChangedAction,
-                  changingTableAction
-                );
+                const actions: SimpleAction[] = [tableSessionsChangedAction];
+
+                if (changingTableAction) {
+                  actions.push(changingTableAction);
+                }
+
+                return Observable.from<SimpleAction>(actions);
               } else {
                 const pendingStopAction = changingTableFields({
                   isInPending: false

@@ -8,7 +8,6 @@ import utcMillisecondsUpdated from '../action-creators/utc-milliseconds-updated'
 import {StoreStructure} from '../interfaces/store-models';
 import newDayBegun from '../action-creators/new-day-begun';
 import {SimpleAction} from '../interfaces/actions';
-import nothingDone from '../action-creators/nothing-done';
 
 const DAY_BEGIN_HOURS = 8;
 
@@ -23,12 +22,15 @@ const updateUtcMilliseconds = ((action$, store: Store<StoreStructure>) => {
       const isNewDayBegun = lastHours < DAY_BEGIN_HOURS && newHours > DAY_BEGIN_HOURS;
 
       const utcMillisecondsUpdatedAction = utcMillisecondsUpdated(newTime.valueOf());
-      const newDayBegunAction = isNewDayBegun ? newDayBegun : nothingDone;
+      const newDayBegunAction = isNewDayBegun ? newDayBegun : null;
 
-      return Observable.of<SimpleAction>(
-        utcMillisecondsUpdatedAction,
-        newDayBegunAction
-      );
+      const actions: SimpleAction[] = [utcMillisecondsUpdatedAction];
+
+      if (newDayBegunAction) {
+        actions.push(newDayBegunAction);
+      }
+
+      return Observable.from<SimpleAction>(actions);
     });
 }) as Epic<SimpleAction, StoreStructure>;
 
