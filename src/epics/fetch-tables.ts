@@ -68,7 +68,7 @@ const fetchTables = ((action$) => {
 
                 const tablesPendingStop = pendingTables(false);
 
-                return Observable.of<any>(
+                return Observable.of<SimpleAction>(
                   setTables,
                   setTableSessions,
                   tablesPendingStop
@@ -77,7 +77,7 @@ const fetchTables = ((action$) => {
                 const fetchFailedAction = getRequestFailedAction(ajaxData.status, 'Fetching tables error');
                 const tablesPendingStopAction = pendingTables(false);
 
-                return Observable.of<any>(
+                return Observable.of<SimpleAction>(
                   tablesPendingStopAction,
                   fetchFailedAction
                 );

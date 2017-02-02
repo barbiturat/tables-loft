@@ -25,7 +25,7 @@ const updateUtcMilliseconds = ((action$, store: Store<StoreStructure>) => {
       const utcMillisecondsUpdatedAction = utcMillisecondsUpdated(newTime.valueOf());
       const newDayBegunAction = isNewDayBegun ? newDayBegun : nothingDone;
 
-      return Observable.of<any>(
+      return Observable.of<SimpleAction>(
         utcMillisecondsUpdatedAction,
         newDayBegunAction
       );

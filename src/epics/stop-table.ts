@@ -20,6 +20,7 @@ import changingTableFields, {ActionType as ChangingTableFieldsAction} from '../a
 import {tTableSession} from '../helpers/dynamic-type-validators/types';
 import {validateResponse} from '../helpers/dynamic-type-validators/index';
 import {TableSession} from '../interfaces/backend-models';
+import nothingDone from '../action-creators/nothing-done';
 
 type ResponseOk = AjaxResponseTyped<ResponseStopTablePayload>;
 type ResponseOkDefined = AjaxResponseDefined<ResponseStopTablePayload>;
@@ -53,8 +54,8 @@ const stopTable = ((action$, store: Store<StoreStructure>) => {
                 const tableSessionsChangedAction = pipe< TableSessions, TableSessions, TableSessions, ActionWithPayload<TableSessions> >(
                   clone,
                   (sessions) => pipe<TableSession, TableSessionFrontend, IndexedDict<TableSessionFrontend>, TableSessions >(
-                    tableSessionToFront,
-                    (convertedSession) => ({
+                    tableSessionToFront, // converted table session
+                    (convertedSession) => ({ // creates new table session record for tableSessions
                       [convertedSession.id]: convertedSession
                     }),
                     merge(sessions)
@@ -62,18 +63,18 @@ const stopTable = ((action$, store: Store<StoreStructure>) => {
                   changingTableSessions
                 )(tableSessionsData.tableSessions);
 
-                const changingTableAction = pipe<(Table | undefined), (ChangingTableFieldsAction | null)>(
+                const changingTableAction = pipe<(Table | undefined), (ChangingTableFieldsAction | SimpleAction)>(
                   ifElse(Boolean,
                     (currTable) => changingTableFields({
                       currentSessionId: null,
                       lastSessionId: currTable.currentSessionId,
                       isInPending: false
                     }, tableId),
-                    () => null
+                    () => nothingDone
                   )
                 )(tablesData.tables[tableId]);
 
-                return Observable.of<any>(
+                return Observable.of<SimpleAction>(
                   tableSessionsChangedAction,
                   changingTableAction
                 );
@@ -83,7 +84,7 @@ const stopTable = ((action$, store: Store<StoreStructure>) => {
                 }, tableId);
                 const fetchFailedAction = getRequestFailedAction(ajaxData.status, 'Table stop error');
 
-                return Observable.of<any>(
+                return Observable.of<SimpleAction>(
                   pendingStopAction,
                   fetchFailedAction
                 );

@@ -119,7 +119,7 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
 
                 const fetchFailedAction = getRequestFailedAction(ajaxData.status, 'Fetching table sessions error');
 
-                return Observable.of<any>(
+                return Observable.of<SimpleAction>(
                   setTablesWithoutPendingAction,
                   fetchFailedAction
                 );

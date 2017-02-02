@@ -31,7 +31,7 @@ const requestLogin = ((action$) => {
                   pathname: '/'
                 });
 
-                return Observable.of<any>(
+                return Observable.of<SimpleAction>(
                   setSubmittedAction,
                   redirectToIndexAction
                 );

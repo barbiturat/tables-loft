@@ -10,14 +10,14 @@ const stopTable = (server: Application, bodyParser: RequestHandler) => {
   server.post(urlStopTable, bodyParser, sendWithTimeout(500, (req, res) => {
 
     const pastTime = {
-      hours: 1,
-      minutes: 24,
-      seconds: 37,
+      hours: 0,
+      minutes: 15,
+      seconds: 0,
     };
 
     const response: ResponseStopTablePayload = {
       session: {
-        id: Number(req.params.table_id),
+        id: 10,
         startsAt: moment().utc().subtract(pastTime).toISOString(),
         durationSeconds: moment.duration(pastTime).asSeconds(),
         adminEdited: false

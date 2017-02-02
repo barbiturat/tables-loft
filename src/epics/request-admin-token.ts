@@ -56,7 +56,7 @@ const requestAdminToken = ((action$) => {
                 const clearPasswordInputAction = actions.change(passwordFieldModelPath, '');
                 const resetPasswordInputAction = actions.setInitial(passwordFieldModelPath);
 
-                return Observable.of<any>(
+                return Observable.of<SimpleAction>(
                   blockingPendingTurnOffAction,
                   setSubmittedAction,
                   setAdminTokenAction,
@@ -72,7 +72,7 @@ const requestAdminToken = ((action$) => {
                   }
                 });
 
-                return Observable.of<any>(
+                return Observable.of<SimpleAction>(
                   blockingPendingTurnOffAction,
                   setFormSubmitFailedAction,
                   setFieldsValidityAction

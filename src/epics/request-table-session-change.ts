@@ -92,14 +92,14 @@ const requestTableSessionChange = ((action$, store: Store<StoreStructure>) => {
                 });
                 const changingTableSessionsAction = changingTableSessions(editedSessions);
 
-                return Observable.of<any>(
+                return Observable.of<SimpleAction>(
                   blockingPendingTurnOffAction,
                   changingTableSessionsAction
                 );
               } else {
                 const fetchFailedAction = getRequestFailedAction(ajaxData.status, 'Table session change error');
 
-                return Observable.of<any>(
+                return Observable.of<SimpleAction>(
                   blockingPendingTurnOffAction,
                   fetchFailedAction
                 );

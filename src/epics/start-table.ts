@@ -62,7 +62,7 @@ const startTable = ((action$, store: Store<StoreStructure>) => {
                   isInPending: false
                 }, tableId);
 
-                return Observable.of<any>(
+                return Observable.of<SimpleAction>(
                   tableSessionsChangedAction,
                   changingTableAction
                 );
@@ -72,7 +72,7 @@ const startTable = ((action$, store: Store<StoreStructure>) => {
                   isInPending: false
                 }, tableId);
 
-                return Observable.of<any>(
+                return Observable.of<SimpleAction>(
                   fetchFailedAction,
                   pendingStopAction
                 );
