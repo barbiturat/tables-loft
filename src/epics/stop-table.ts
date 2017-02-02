@@ -1,24 +1,25 @@
 import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
 import {Store} from 'redux';
-import {pipe, merge, clone} from 'ramda';
+import {pipe, merge, clone, defaultTo, ifElse} from 'ramda';
 // tslint:disable-next-line:no-require-imports
 const t = require('tcomb-validation');
 
 import {REQUESTING_TABLE_STOP} from '../constants/action-names';
 import {post, isAjaxResponseDefined, getRequestFailedAction} from '../helpers/requests';
 import {ResponseFailedPayload, ResponseStopTablePayload} from '../interfaces/api-responses';
-import {AjaxResponseTyped, AjaxErrorTyped, AjaxResponseDefined} from '../interfaces/index';
+import {AjaxResponseTyped, AjaxErrorTyped, AjaxResponseDefined, IndexedDict} from '../interfaces/index';
 import {urlStopTable} from '../constants/urls';
 import {SimpleAction, ActionWithPayload} from '../interfaces/actions';
 import {ActionType} from '../action-creators/requesting-table-start';
-import {StoreStructure, TableSessions} from '../interfaces/store-models';
+import {StoreStructure, TableSessions, TableSession as TableSessionFrontend, Table} from '../interfaces/store-models';
 import changingTableSessions from '../action-creators/changing-table-sessions';
 import {tableSessionToFront} from '../helpers/api-data-converters';
 import {API_URL} from '../constants/index';
-import changingTableFields from '../action-creators/changing-table-fields';
+import changingTableFields, {ActionType as ChangingTableFieldsAction} from '../action-creators/changing-table-fields';
 import {tTableSession} from '../helpers/dynamic-type-validators/types';
 import {validateResponse} from '../helpers/dynamic-type-validators/index';
+import {TableSession} from '../interfaces/backend-models';
 
 type ResponseOk = AjaxResponseTyped<ResponseStopTablePayload>;
 type ResponseOkDefined = AjaxResponseDefined<ResponseStopTablePayload>;
@@ -47,22 +48,30 @@ const stopTable = ((action$, store: Store<StoreStructure>) => {
               if ( isAjaxResponseDefined<ResponseOkDefined>(ajaxData) ) {
                 assertResponse(ajaxData);
 
-                const appData = store.getState().app;
-                const currTable = appData.tablesData.tables[tableId];
-                const convertedSession = tableSessionToFront( ajaxData.response.session );
+                const {tableSessionsData, tablesData} = store.getState().app;
+
                 const tableSessionsChangedAction = pipe< TableSessions, TableSessions, TableSessions, ActionWithPayload<TableSessions> >(
                   clone,
-                  merge({
-                    [convertedSession.id]: convertedSession
-                  }),
+                  (sessions) => pipe<TableSession, TableSessionFrontend, IndexedDict<TableSessionFrontend>, TableSessions >(
+                    tableSessionToFront,
+                    (convertedSession) => ({
+                      [convertedSession.id]: convertedSession
+                    }),
+                    merge(sessions)
+                  )(ajaxData.response.session),
                   changingTableSessions
-                )(appData.tableSessionsData.tableSessions);
+                )(tableSessionsData.tableSessions);
 
-                const changingTableAction = currTable ? changingTableFields({
-                    currentSessionId: null,
-                    lastSessionId: currTable.currentSessionId,
-                    isInPending: false
-                  }, tableId) : null;
+                const changingTableAction = pipe<(Table | undefined), (ChangingTableFieldsAction | null)>(
+                  ifElse(Boolean,
+                    (currTable) => changingTableFields({
+                      currentSessionId: null,
+                      lastSessionId: currTable.currentSessionId,
+                      isInPending: false
+                    }, tableId),
+                    () => null
+                  )
+                )(tablesData.tables[tableId]);
 
                 return Observable.of<any>(
                   tableSessionsChangedAction,
