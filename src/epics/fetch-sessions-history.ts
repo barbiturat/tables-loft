@@ -91,10 +91,8 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
                   (newSessionsAll: TableSessions) => changingTableSessions(newSessionsAll)
                 )(convertedResponseSessions);
 
-                const actions: SimpleAction[] = [setSessionsAction];
-
-                if (currentTable) {
-                  const setTablesAction = pipe< TableSessions, string[], number[], number[], number[], Tables, ActionWithPayload<Tables> >(
+                const setTablesAction = currentTable ?
+                  pipe< TableSessions, string[], number[], number[], number[], Tables, ActionWithPayload<Tables> >(
                     keys,
                     map((key: string) => Number(key)),
                     concat(currentTable.sessionsHistory),
@@ -104,10 +102,11 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
                       sessionsHistory: newSessionIds
                     }),
                     changingTables
-                  )(convertedResponseSessions);
+                  )(convertedResponseSessions) :
+                  null;
 
-                  actions.push(setTablesAction);
-                }
+                const actions: SimpleAction[] = <SimpleAction[]>[setSessionsAction, setTablesAction]
+                  .filter(Boolean);
 
                 return Observable.from(actions);
               } else {

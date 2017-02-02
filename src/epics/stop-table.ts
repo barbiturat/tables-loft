@@ -33,6 +33,29 @@ const assertResponse = (ajaxData: ResponseOk) => {
   validateResponse(tResponse, ajaxData);
 };
 
+const createTableSessionsChangedAction = (storeTableSessions: TableSessions, responseSession: TableSession) =>
+  pipe< TableSessions, TableSessions, TableSessions, ActionWithPayload<TableSessions> >(
+    clone,
+    (sessions) => pipe<TableSession, TableSessionFrontend, IndexedDict<TableSessionFrontend>, TableSessions >(
+      tableSessionToFront, // converted table session
+      (convertedSession) => ({ [convertedSession.id]: convertedSession }), // creates new table session record
+      merge(sessions)
+    )(responseSession),
+    changingTableSessions
+  )(storeTableSessions);
+
+const createChangingTableAction = (storeTable: Table, tableId: number, responseSessionId: number) =>
+  pipe<(Table | undefined), (ChangingTableFieldsAction | null)>(
+    ifElse(Boolean,
+      (currTable) => changingTableFields({
+        currentSessionId: null,
+        lastSessionId: responseSessionId,
+        isInPending: false
+      }, tableId),
+      () => null
+    )
+  )(storeTable);
+
 const stopTable = ((action$, store: Store<StoreStructure>) => {
   return action$.ofType(REQUESTING_TABLE_STOP)
     .switchMap((action: ActionType) => {
@@ -50,34 +73,11 @@ const stopTable = ((action$, store: Store<StoreStructure>) => {
 
                 const {tableSessionsData, tablesData} = store.getState().app;
 
-                const tableSessionsChangedAction = pipe< TableSessions, TableSessions, TableSessions, ActionWithPayload<TableSessions> >(
-                  clone,
-                  (sessions) => pipe<TableSession, TableSessionFrontend, IndexedDict<TableSessionFrontend>, TableSessions >(
-                    tableSessionToFront, // converted table session
-                    (convertedSession) => ({ // creates new table session record for tableSessions
-                      [convertedSession.id]: convertedSession
-                    }),
-                    merge(sessions)
-                  )(ajaxData.response.session),
-                  changingTableSessions
-                )(tableSessionsData.tableSessions);
+                const tableSessionsChangedAction = createTableSessionsChangedAction(tableSessionsData.tableSessions, ajaxData.response.session);
+                const changingTableAction = createChangingTableAction(tablesData.tables[tableId], tableId, ajaxData.response.session.id);
 
-                const changingTableAction = pipe<(Table | undefined), (ChangingTableFieldsAction | null)>(
-                  ifElse(Boolean,
-                    (currTable) => changingTableFields({
-                      currentSessionId: null,
-                      lastSessionId: currTable.currentSessionId,
-                      isInPending: false
-                    }, tableId),
-                    () => null
-                  )
-                )(tablesData.tables[tableId]);
-
-                const actions: SimpleAction[] = [tableSessionsChangedAction];
-
-                if (changingTableAction) {
-                  actions.push(changingTableAction);
-                }
+                const actions: SimpleAction[] = <SimpleAction[]>[tableSessionsChangedAction, changingTableAction]
+                  .filter(Boolean);
 
                 return Observable.from<SimpleAction>(actions);
               } else {

@@ -24,11 +24,8 @@ const updateUtcMilliseconds = ((action$, store: Store<StoreStructure>) => {
       const utcMillisecondsUpdatedAction = utcMillisecondsUpdated(newTime.valueOf());
       const newDayBegunAction = isNewDayBegun ? newDayBegun : null;
 
-      const actions: SimpleAction[] = [utcMillisecondsUpdatedAction];
-
-      if (newDayBegunAction) {
-        actions.push(newDayBegunAction);
-      }
+      const actions: SimpleAction[] = <SimpleAction[]>[utcMillisecondsUpdatedAction, newDayBegunAction]
+        .filter(Boolean);
 
       return Observable.from<SimpleAction>(actions);
     });
