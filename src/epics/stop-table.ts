@@ -72,9 +72,10 @@ const stopTable = ((action$, store: Store<StoreStructure>) => {
                 assertResponse(ajaxData);
 
                 const {tableSessionsData, tablesData} = store.getState().app;
+                const responseSession = ajaxData.response.session;
 
-                const tableSessionsChangedAction = createTableSessionsChangedAction(tableSessionsData.tableSessions, ajaxData.response.session);
-                const changingTableAction = createChangingTableAction(tablesData.tables[tableId], tableId, ajaxData.response.session.id);
+                const tableSessionsChangedAction = createTableSessionsChangedAction(tableSessionsData.tableSessions, responseSession);
+                const changingTableAction = createChangingTableAction(tablesData.tables[tableId], tableId, responseSession.id);
 
                 const actions: SimpleAction[] = <SimpleAction[]>[tableSessionsChangedAction, changingTableAction]
                   .filter(Boolean);

@@ -78,23 +78,23 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
               if ( isAjaxResponseDefined<ResponseOkDefined>(ajaxData) ) {
                 assertResponse(ajaxData);
 
-                const appData = store.getState().app;
-                const tablesClone = {...appData.tablesData.tables};
-                const currentTable = tablesClone[tableId];
+                const {tableSessionsData, tablesData} = store.getState().app;
 
                 const convertedResponseSessions = pipe<TableSession[], TableSessions>(
                   (respSessions: TableSession[]) => tableSessionsToFront(respSessions)
                 )(ajaxData.response.sessions);
 
                 const setSessionsAction = pipe<TableSessions, TableSessions, ActionWithPayload<TableSessions> >(
-                  merge(appData.tableSessionsData.tableSessions),
+                  merge(tableSessionsData.tableSessions),
                   (newSessionsAll: TableSessions) => changingTableSessions(newSessionsAll)
                 )(convertedResponseSessions);
 
+                const tablesClone = {...tablesData.tables};
+                const currentTable = tablesClone[tableId];
                 const setTablesAction = currentTable ?
                   pipe< TableSessions, string[], number[], number[], number[], Tables, ActionWithPayload<Tables> >(
                     keys,
-                    map((key: string) => Number(key)),
+                    map(Number),
                     concat(currentTable.sessionsHistory),
                     uniq,
                     (newSessionIds: number[]) => replaceTable(tablesClone, tableId, {
