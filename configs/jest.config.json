@@ -10,5 +10,8 @@
     "ts",
     "tsx",
     "js"
-  ]
+  ],
+  "collectCoverage": true,
+  "collectCoverageFrom": ["src/**/*.(ts|tsx)", "!**/node_modules/**", "!**/*.d.(ts|tsx)"],
+  "coverageDirectory": "<rootDir>/coverage"
 }

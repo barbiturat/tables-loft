@@ -23,7 +23,7 @@
     "run-server": "node ./js-server/out/js-server",
     "start": "node ./js-server/out/js-server",
     "start-locally": "npm run build-dev & npm run build-and-run-fake-api-server & npm run build-and-run-server",
-    "test": "jest --no-cache --config=./configs/jestt.config.json",
+    "test": "jest --no-cache --config=./configs/jest.config.json",
     "postinstall": "typings install && npm rebuild node-sass && npm run build-prod && npm run build-server"
   },
   "repository": {
