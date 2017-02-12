@@ -38,6 +38,9 @@
       "__TS_CONFIG__": "<rootDir>/configs/tsconfig.json"
     },
     "testRegex": "\\.spec\\.(ts|tsx|js)$",
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
     "moduleFileExtensions": [
       "ts",
       "tsx",
@@ -106,6 +109,7 @@
     "sass-loader": "^4.0.2",
     "style-loader": "^0.13.1",
     "tcomb-validation": "^3.3.0",
+    "ts-jest": "^18.0.3",
     "ts-loader": "^2.0.0",
     "tslib": "^1.5.0",
     "tslint": "^4.4.2",
