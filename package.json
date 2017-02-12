@@ -23,7 +23,7 @@
     "run-server": "node ./js-server/out/js-server",
     "start": "node ./js-server/out/js-server",
     "start-locally": "npm run build-dev & npm run build-and-run-fake-api-server & npm run build-and-run-server",
-    "test": "jest --no-cache",
+    "test": "jest --no-cache --config=./configs/jestt.config.json",
     "postinstall": "typings install && npm rebuild node-sass && npm run build-prod && npm run build-server"
   },
   "repository": {
@@ -33,20 +33,6 @@
   "author": "",
   "license": "ISC",
   "homepage": "https://bitbucket.org/gdekefir/boilerplate_1#readme",
-  "jest": {
-    "globals": {
-      "__TS_CONFIG__": "<rootDir>/configs/tsconfig.json"
-    },
-    "testRegex": "\\.spec\\.(ts|tsx|js)$",
-    "transform": {
-      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
-    },
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js"
-    ]
-  },
   "browserslist": [
     "> 1%"
   ],
