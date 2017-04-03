@@ -14,6 +14,7 @@
 
 ## Changing app's settings ##
 All necessary settings are placed in the `appSettings/envVarStubs` section of the package.json
+
+
 * API server's port: `API_PORT`
 * Assets server's port: `ASSETS_PORT`
-
