@@ -13,18 +13,15 @@ export interface Dict<T> {
   readonly [name: string]: T;
 }
 
-export interface AnyDict extends Dict<any> {
-}
-export interface StringDict extends Dict<string> {
-}
-export interface BoolDict extends Dict<boolean> {
-}
-export interface ObjDict extends Dict<AnyDict> {
-}
+export interface StringDict extends Dict<string> {}
+export interface BoolDict extends Dict<boolean> {}
+export interface ObjDict extends Dict<{}> {}
+export interface ArrDict<T> extends Dict< T[] > {}
+export interface AnyDict extends Dict<any> {}
 
 type BasicType = boolean | number | string;
 
-export type Defined = BasicType | AnyDict;
+export type Defined = BasicType | {};
 
 export type Partial<Fields> = {
   [Field in keyof Fields]?: Fields[Field];
