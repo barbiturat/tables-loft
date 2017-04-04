@@ -1,5 +1,4 @@
 import * as express from 'express';
-import * as bodyParser from 'body-parser';
 
 import login from './endpoints/login';
 import logout from './endpoints/logout';
@@ -15,7 +14,6 @@ const packageJson = require('../../../package.json');
 
 const app = express();
 const port = packageJson.appSettings.envVarStubs.API_PORT;
-const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
@@ -24,14 +22,14 @@ app.use(function(req, res, next) {
   next();
 });
 
-login(app, urlencodedParser);
-logout(app, urlencodedParser);
+login(app);
+logout(app);
 getAdminToken(app);
-sessionHistory(app, urlencodedParser);
-startTable(app, urlencodedParser);
-stopTable(app, urlencodedParser);
-tables(app, urlencodedParser);
-updateTableSession(app, urlencodedParser);
+sessionHistory(app);
+startTable(app);
+stopTable(app);
+tables(app);
+updateTableSession(app);
 
 /*
 app.all('*', function(req, res){

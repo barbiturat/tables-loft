@@ -2,12 +2,15 @@ import sendWithTimeout from '../helpers/send-with-timeout';
 import {Application, RequestHandler} from 'express-serve-static-core';
 import {STATUS_OK} from '../../src/constants/used-http-status-codes';
 import * as moment from 'moment';
+import * as bodyParser from 'body-parser';
 
 import {urlTables} from '../../src/constants/urls';
 import {ResponseTablesPayload} from '../../src/interfaces/api-responses';
 
-const tables = (server: Application, bodyParser: RequestHandler) => {
-  server.get(urlTables, bodyParser, sendWithTimeout(1000, (req, res) => {
+const tables = (server: Application) => {
+  server
+    .use(bodyParser.urlencoded({ extended: false }))
+    .get(urlTables, sendWithTimeout(1000, (req, res) => {
 
     const response: ResponseTablesPayload = {
       tables: [

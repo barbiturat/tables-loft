@@ -2,6 +2,7 @@ import sendWithTimeout from '../helpers/send-with-timeout';
 import {Application, RequestHandler} from 'express-serve-static-core';
 import {STATUS_OK} from '../../src/constants/used-http-status-codes';
 import * as moment from 'moment';
+import * as bodyParser from 'body-parser';
 
 import {CustomRequest} from '../interfaces/index';
 import {RequestSessionHistoryPayload} from '../../src/interfaces/api-requests';
@@ -12,8 +13,10 @@ interface Params {
   readonly table_id: any;
 }
 
-const sessionHistory = (server: Application, bodyParser: RequestHandler) => {
-  server.get(urlSessionHistory, bodyParser, sendWithTimeout(500, (req: CustomRequest<RequestSessionHistoryPayload, Params, any>, res) => {
+const sessionHistory = (server: Application) => {
+  server
+    .use(bodyParser.urlencoded({ extended: false }))
+    .get(urlSessionHistory, sendWithTimeout(500, (req: CustomRequest<RequestSessionHistoryPayload, Params, any>, res) => {
 
     const response: ResponseSessionsHistoryPayload = {
       sessions: [

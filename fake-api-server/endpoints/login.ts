@@ -1,5 +1,7 @@
+import * as bodyParser from 'body-parser';
+
 import sendWithTimeout from '../helpers/send-with-timeout';
-import {Application, RequestHandler} from 'express-serve-static-core';
+import {Application} from 'express-serve-static-core';
 import {CustomRequest} from '../interfaces/index';
 import {STATUS_OK, STATUS_FORBIDDEN} from '../../src/constants/used-http-status-codes';
 import {SESSION_COOKIE_NAME, responseDefaultOk} from '../constants/index';
@@ -11,8 +13,10 @@ import {LoginErrors} from '../../src/interfaces/backend-models';
 const testUserEmail = 'test@test.ru';
 const testUserPassword = 'test';
 
-const login = (server: Application, bodyParser: RequestHandler) => {
-  server.post(urlLogin, bodyParser, sendWithTimeout(500, (req: CustomRequest<RequestLoginPayload, any, any>, res) => {
+const login = (server: Application) => {
+  server
+    .use(bodyParser.urlencoded({ extended: false }))
+    .post(urlLogin, sendWithTimeout(500, (req: CustomRequest<RequestLoginPayload, any, any>, res) => {
     const {email, password} = req.body;
 
     if (email === testUserEmail && password === testUserPassword) {

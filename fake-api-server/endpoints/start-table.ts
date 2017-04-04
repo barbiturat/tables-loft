@@ -1,3 +1,5 @@
+import * as bodyParser from 'body-parser';
+
 import sendWithTimeout from '../helpers/send-with-timeout';
 import {Application, RequestHandler} from 'express-serve-static-core';
 import {STATUS_OK} from '../../src/constants/used-http-status-codes';
@@ -11,8 +13,10 @@ interface Params {
   readonly table_id: any;
 }
 
-const startTable = (server: Application, bodyParser: RequestHandler) => {
-  server.post(urlStartTable, bodyParser, sendWithTimeout(500, (req: CustomRequest<any, Params, any>, res) => {
+const startTable = (server: Application) => {
+  server
+    .use(bodyParser.urlencoded({ extended: false }))
+    .post(urlStartTable, sendWithTimeout(500, (req: CustomRequest<any, Params, any>, res) => {
 
     const response: ResponseStartTablePayload = {
       session: {
