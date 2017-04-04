@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": "..",
+    "allowJs": true,
     "noEmitOnError": true,
     "noImplicitAny": true,
     "importHelpers": true,
@@ -22,5 +23,9 @@
   },
   "files": [
     "../src/index.tsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
   ]
 }
