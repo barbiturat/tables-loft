@@ -26,7 +26,7 @@ app.use(function(req, res, next) {
 
 login(app, urlencodedParser);
 logout(app, urlencodedParser);
-getAdminToken(app, urlencodedParser);
+getAdminToken(app);
 sessionHistory(app, urlencodedParser);
 startTable(app, urlencodedParser);
 stopTable(app, urlencodedParser);
