@@ -48,8 +48,14 @@ interface ErrorsComponentMessages {
 interface FormValidators {
     [key: string]: Validators;
 }
+interface FormValidatorsFn {
+    (val: any): FormValidationErrors
+}
 interface ValidationErrors {
     [key: string]: any;
+}
+interface FormValidationErrors {
+    [key: string]: ValidationErrors
 }
 /**
  * Internal interface
@@ -94,6 +100,7 @@ interface MapPropsProps {
   fieldValue: FieldState;
   modelValue: any;
   viewValue: any;
+  className: string;
 }
 
 type MapPropsFunc = (props: MapPropsProps) => any;
@@ -194,8 +201,23 @@ export interface ControlProps<T> extends React.HTMLProps<T> {
     /**
      * Calls the callback provided to the getRef prop with the node instance. Similar to ref.
      */
-    getRef?: () => void;
+    getRef?: (node: T) => void;
+    /**
+     * Indicates that the model's fieldValue should be passed in
+     * to event handlers as the second prop.
+     */
+    withField?: boolean;
+
+    onChange?: (...args : any[]) => void;
+    /**
+     * Signifies that the field state (validation, etc.) should not persist when the component is unmounted. Default: false
+     */
+    persist?: boolean;
+
+    [name: string]: any;
 }
+
+
 
 export class Control<T> extends React.Component<ControlProps<T>, {}> {
     static input: React.ComponentClass<ControlProps<HTMLInputElement>>;
@@ -270,7 +292,7 @@ interface BaseFormProps {
      * * Specifying validators on the form is usually sufficient - you don't need to put validators on the <Field> for most use cases.
      * * If you need validators to run on submit, this is the place to put them.
      */
-    validators?: Validators | FormValidators;
+    validators?: Validators | FormValidators | FormValidatorsFn;
 
     /**
      * An object representing the error validators for the fields inside the form, where:
@@ -308,6 +330,14 @@ interface BaseFormProps {
      * @param formModelData The form's model data
      */
     onSubmit?: (formModelData: any) => void;
+    /**
+     * The handler function called when the form fails to submit. This happens when:
+     * * attempting to submit an invalid form
+     * * submitting a valid form that later becomes invalid (due to async server/API validation, etc.)
+     *
+     * The callback function provided to onSubmitFailed will be called with one argument: the entire formState for the form's model.
+     */
+    onSubmitFailed?: (formState: any) => void;
     /**
      * The handler function that is called with the form state whenever the form state is updated.
      *
@@ -369,6 +399,30 @@ interface LocalFormProps extends BaseFormProps {
 }
 export class LocalForm extends React.Component<LocalFormProps, void> { }
 
+interface BaseFieldsetProps {
+    /**
+     * CSS Class Name(s)
+     */
+    className?: string;
+    /**
+     * The component that the <Fieldset> should be rendered to (default: "div").
+     *
+     * * For React Native, the View component is used to render the fieldset, if you import { Fieldset } from 'react-redux-form/native'.
+     */
+    component?: React.ComponentClass<any> | string;
+}
+export interface FieldsetProps extends BaseFieldsetProps {
+    /**
+     * The string or tracker representing the model value of the entire form in the store.
+	 *
+	 * You can also use partial models for <Control>, <Field>, and <Errors> components inside of <Fieldset> - they will be resolved to the fieldset's model.
+	 *
+	 * In addition, you can use a partial model for <Fieldset> itself - it will resolve to the parent <Fieldset> (yes, you can nest fieldsets) or <Form> models.
+     */
+    model: string | ModelGetterFn;
+}
+export class Fieldset extends React.Component<FieldsetProps, {}> { }
+
 export interface ErrorsProps {
     /**
      * The string representing the store model value
@@ -404,7 +458,7 @@ export interface ErrorsProps {
      * * Use show as a boolean if you want to calculate when an error should be shown based on external factors, such as form state.
      * @see https://lodash.com/docs#iteratee
      */
-    show?: FieldState | FieldStatePredicate | boolean | string;
+    show?: Partial<FieldState> | FieldStatePredicate | boolean | string;
     /**
      * The `wrapper` component, which is the component that wraps all errors, can be configured using this prop. Default: "div".
      *
@@ -448,59 +502,61 @@ interface _FieldState {
     /**
      * @default true
      */
-    blur?: boolean;
+    blur: boolean;
     /**
      * @default false
      */
-    dirty?: boolean;
+    dirty: boolean;
     /**
      * @default false
      */
-    focus?: boolean;
+    focus: boolean;
     /**
      * @default any
      */
-    initialValue?: any;
+    initialValue: any;
     /**
      * @default false
      */
-    pending?: boolean;
+    pending: boolean;
     /**
      * @default true
      */
-    pristine?: boolean;
+    pristine: boolean;
     /**
      * @default false
      */
-    retouched?: boolean;
+    retouched: boolean;
     /**
      * @default false
      */
-    submitted?: boolean;
+    submitted: boolean;
+    submitFailed: boolean;
     /**
      * @default false
      */
-    touched?: boolean;
+    touched: boolean;
     /**
      * @default true
      */
-    untouched?: boolean;
+    untouched: boolean;
     /**
      * @default true
      */
-    valid?: boolean;
+    valid: boolean;
     /**
      * @default false
      */
-    validating?: boolean;
+    validating: boolean;
     /**
      * @default null
      */
-    viewValue?: boolean;
+    viewValue: boolean;
     /**
      * @default {}
      */
-    validity?: any;
+    validity: any;
+    value: any;
 }
 
 export interface FieldState extends _FieldState {
@@ -508,7 +564,7 @@ export interface FieldState extends _FieldState {
      * Error object containing (key) validator name -> (value) boolean if is error (meaning INVALID is true)
      * @default {}
      */
-    errors?: any;
+    errors: any;
 }
 
 
