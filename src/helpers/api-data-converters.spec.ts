@@ -1,9 +1,12 @@
 import {pipe, keys, values, pluck, intersection} from 'ramda';
 import * as moment from 'moment';
+import * as jsc from 'jsverify';
 
 import {tablesToFront, tableSessionsToFront, tableSessionToFront} from './api-data-converters';
 import {Table as BackendTable, TableSession as BackendTableSession} from '../interfaces/backend-models';
 import {Table as FrontendTable, TableSession as FrontendTableSession} from '../interfaces/store-models';
+// tslint:disable-next-line:no-require-imports
+require('./jasmineHelpers2');
 
 const getBackendSessionTemplate = (): BackendTableSession => ({
   id: 12,
@@ -32,8 +35,16 @@ const getBackendTableTemplate = (): BackendTable => ({
 });
 
 describe('tablesToFront: ', () => {
+  jsc.property('qqq', jsc.integer(5, 20), b => b < 21);
+
   test('should be defined', () => {
     expect(tablesToFront).toBeDefined();
+
+    // const property = jsc.forall('integer', function (n) {
+    //   return n < 22;
+    // });
+    //
+    // jsc.assert(property);
   });
 
   test(`returns object with keys, based on the source tables ids`, () => {
