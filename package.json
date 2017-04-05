@@ -46,7 +46,7 @@
       "BASIC_AUTH_USERNAME": "name",
       "BASIC_AUTH_PASSWORD": "password"
     },
-    "errorDisplayDuration": 5
+    "ERROR_DISPLAY_DURATION": 5
   },
   "dependencies": {
     "autoprefixer": "^6.7.0",

@@ -6,7 +6,7 @@ import MouseEvent = React.MouseEvent;
 import {StoreStructure} from '../interfaces/store-models';
 import {PropsExtendedByConnect} from '../interfaces/component';
 // tslint:disable-next-line:no-require-imports
-const errorDisplayDuration = require('../../package.json').appSettings.errorDisplayDuration;
+const ERROR_DISPLAY_DURATION = require('../../package.json').appSettings.ERROR_DISPLAY_DURATION;
 
 interface State {
   readonly isMounted: boolean;
@@ -21,7 +21,7 @@ interface MappedProps {
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
-const timeToDisappear = (errorDisplayDuration - 1) * 1000;
+const timeToDisappear = (ERROR_DISPLAY_DURATION - 1) * 1000;
 
 class Component extends React.Component<PropsFromConnect, State> {
   errorContainer: HTMLDivElement;
