@@ -6,7 +6,7 @@ import {tablesToFront, tableSessionsToFront, tableSessionToFront} from './api-da
 import {Table as BackendTable, TableSession as BackendTableSession} from '../interfaces/backend-models';
 import {Table as FrontendTable, TableSession as FrontendTableSession} from '../interfaces/store-models';
 // tslint:disable-next-line:no-require-imports
-require('./jasmineHelpers2');
+require('./jasmineHelpers2'); // https://github.com/jsverify/jsverify#usage-with-jasmine
 
 const getBackendSessionTemplate = (): BackendTableSession => ({
   id: 12,

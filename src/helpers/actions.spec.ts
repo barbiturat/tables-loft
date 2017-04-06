@@ -1,38 +1,31 @@
+import * as jsc from 'jsverify';
+import {equals} from 'ramda';
+
 import {createSimpleAction, createActionWithPayload} from './actions';
 import {SimpleAction} from '../interfaces/actions';
+// tslint:disable-next-line:no-require-imports
+require('./jasmineHelpers2'); // https://github.com/jsverify/jsverify#usage-with-jasmine
 
 describe('createSimpleAction', () => {
-  test('it should be defined', () => {
-    expect(createSimpleAction).toBeDefined();
-  });
-
-  test('returns proper action', () => {
-    const actionType = 'TEST_TYPE';
+  jsc.property('returns proper action', jsc.nestring, actionType => {
     const action: SimpleAction = createSimpleAction(actionType);
 
-    expect(action).toEqual({
+    return equals(action)({
       type: actionType
     });
   });
 });
 
 describe('createSimpleAction', () => {
-  test('should be defined', () => {
-    expect(createActionWithPayload).toBeDefined();
-  });
-
-  test('returns proper action', () => {
-    const actionType = 'TEST_TYPE';
-    const payload = {
-      someData: 100
-    };
+  jsc.property('returns proper action', jsc.nestring, jsc.dict(jsc.integer), (actionType, payload) => {
     const action: SimpleAction = createActionWithPayload(actionType, payload);
 
-    expect(action).toEqual({
+    return equals<any>(action)({
       type: actionType,
       payload
     });
   });
+
 });
 
 
