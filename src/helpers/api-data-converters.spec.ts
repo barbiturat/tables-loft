@@ -35,7 +35,7 @@ const getBackendTableTemplate = (): BackendTable => ({
 });
 
 describe('tablesToFront: ', () => {
-  jsc.property('qqq', jsc.integer(5, 20), b => b < 21);
+  jsc.property('test of jsverify', jsc.integer(5, 20), b => b < 21);
 
   test('should be defined', () => {
     expect(tablesToFront).toBeDefined();
