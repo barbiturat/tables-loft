@@ -23,7 +23,7 @@
     "run-server": "node ./js-server/out/js-server",
     "start": "node ./js-server/out/js-server",
     "start-locally": "npm run build-dev & npm run build-and-run-fake-api-server & npm run build-and-run-server",
-    "test": "jest --no-cache --config=./configs/jest.config.json"
+    "test": "jest --config=./configs/jest.config.json"
   },
   "repository": {
     "type": "git",
@@ -89,7 +89,7 @@
     "file-loader": "^0.10.0",
     "html-webpack-plugin": "^2.26.0",
     "http-auth": "^3.1.1",
-    "jest": "^18.1.0",
+    "jest": "^19.0.2",
     "jsverify": "^0.8.2",
     "node-sass": "^4.3.0",
     "normalize-scss": "^6.0.0",
