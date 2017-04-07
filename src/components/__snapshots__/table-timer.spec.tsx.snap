@@ -5,6 +5,6 @@ exports[`TableTimer renders correctly 1`] = `
   className="table__label table__label_role_counter"
   onClick={[Function]}
 >
-  Wrong Parameters!
+  0h 00m 00s
 </div>
 `;
