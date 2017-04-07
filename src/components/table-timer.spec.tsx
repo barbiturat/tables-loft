@@ -16,11 +16,18 @@ test('TableTimer renders correctly', () => {
     dispatch: (action: Action) => action
   };
 
-  const tree = (renderer as any).create(
+  const component = renderer.create(
     <TableTimerComponent
       {...props}
     />
-  ).toJSON();
+  );
 
+  let tree = component.toJSON();
+  expect(tree).toMatchSnapshot();
+
+  // manually trigger the callback
+  tree.props.onClick();
+  // re-rendering
+  tree = component.toJSON();
   expect(tree).toMatchSnapshot();
 });

@@ -8,3 +8,12 @@ exports[`TableTimer renders correctly 1`] = `
   0h 00m 00s
 </div>
 `;
+
+exports[`TableTimer renders correctly 2`] = `
+<div
+  className="table__label table__label_role_counter"
+  onClick={[Function]}
+>
+  0m
+</div>
+`;

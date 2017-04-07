@@ -72,7 +72,7 @@ export class Component extends React.Component<PropsFromConnect, State> {
     }
   }
 
-  onClick = (event: MouseEvent<HTMLDivElement>) => {
+  onClick = () => {
     this.setState({
       isFormatOfMinutes: !this.state.isFormatOfMinutes
     });
