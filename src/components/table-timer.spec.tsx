@@ -1,24 +1,17 @@
 import * as React from 'react';
 import * as renderer from 'react-test-renderer';
 import {Action} from 'redux';
+import {shallow} from 'enzyme';
 
 import {Component as TableTimerComponent} from './table-timer';
 
-test('TableTimer renders correctly', () => {
-  const startsAt = 1491581751312;
-  const utcMilliseconds = 1491581751312;
-  const isActive = true;
-
-  const props = {
-    isActive,
-    utcMilliseconds,
-    startsAt,
-    dispatch: (action: Action) => action
-  };
-
+test('Renders correctly', () => {
   const component = renderer.create(
     <TableTimerComponent
-      {...props}
+      isActive={true}
+      utcMilliseconds={1491581751312}
+      startsAt={1491581751312}
+      dispatch={(action: Action) => action}
     />
   );
 
@@ -30,4 +23,21 @@ test('TableTimer renders correctly', () => {
   // re-rendering
   tree = component.toJSON();
   expect(tree).toMatchSnapshot();
+});
+
+test('Reacts on click correctly', () => {
+  const component = shallow(
+    <TableTimerComponent
+      isActive={true}
+      utcMilliseconds={1491581751312}
+      startsAt={1491581751312}
+      dispatch={(action: Action) => action}
+    />
+  );
+
+  expect(component.find('div').text()).toEqual('0h 00m 00s');
+
+  component.find('div').simulate('click');
+
+  expect(component.find('div').text()).toEqual('0m');
 });
