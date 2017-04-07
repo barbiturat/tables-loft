@@ -22,7 +22,7 @@ interface MappedProps {
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
-class Component extends React.Component<PropsFromConnect, State> {
+export class Component extends React.Component<PropsFromConnect, State> {
 
   durationActivityStringSelector: Selector<PropsFromConnect, string>;
 

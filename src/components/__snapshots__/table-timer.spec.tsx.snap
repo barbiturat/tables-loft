@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TableTimer renders correctly 1`] = `
+<div
+  className="table__label table__label_role_counter"
+  onClick={[Function]}
+>
+  Wrong Parameters!
+</div>
+`;
