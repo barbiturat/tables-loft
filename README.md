@@ -12,6 +12,13 @@
 1. Use `name` as username and `password` as password
 1. Enjoy
 
+## Default parameters ##
+* Auth username: "name" 
+* Auth password: "password" 
+* "Manager mode" password: "111"
+* Port of API: 8081
+* Port of statics: 5000
+
 ## Changing app's settings ##
 All necessary settings are placed in the `appSettings/envVarStubs` section of the package.json
 

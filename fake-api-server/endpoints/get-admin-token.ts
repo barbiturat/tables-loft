@@ -13,7 +13,7 @@ const getAdminToken = (server: Application) => {
     .use(bodyParser.json())
     .post(urlGetAdminToken, sendWithTimeout(500, (req: CustomRequest<RequestGetAdminTokenPayload, any, any>, res) => {
 
-    if (req.body.password === 'qqq') {
+    if (req.body.password === '111') {
       const response: ResponseGetAdminTokenPayload = {
         adminToken: 'someToken'
       };
