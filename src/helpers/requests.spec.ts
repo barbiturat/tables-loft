@@ -1,26 +1,26 @@
-import {AjaxError, AjaxRequest} from 'rxjs';
+import {AjaxError, AjaxRequest, TestScheduler} from 'rxjs';
 
 import {handleError} from './requests';
 
 describe('handleError', () => {
-  test('returns observable of passed data', (done) => {
-    const sourceAjaxErrorData: AjaxError = {
-      name: 'some name',
-      message: 'some message',
-      xhr: ({} as XMLHttpRequest),
-      request: ({} as AjaxRequest),
-      status: 111
-    };
-    const handled = handleError(sourceAjaxErrorData as AjaxError);
-    const onNext = (data: AjaxError) => {
-      expect(data).toBe(sourceAjaxErrorData);
-    };
-    const error = () => {};
+  const testScheduler = new TestScheduler((actual: any, expected: any) => {
+    return expect(actual).toEqual(expected);
+  });
 
-    handled.subscribe(
-      onNext,
-      error,
-      done
-    );
+  afterAll(() => {
+    testScheduler.flush();
+  });
+
+  test('returns observable of passed data', () => {
+    const xhr = new XMLHttpRequest();
+    const request: AjaxRequest = {};
+    const sourceAjaxErrorData = new AjaxError('Some error', xhr, request);
+
+    const handled$ = handleError(sourceAjaxErrorData);
+    const expectedMap = {
+      a: sourceAjaxErrorData
+    };
+
+    testScheduler.expectObservable(handled$).toBe('(a|)', expectedMap);
   });
 });
