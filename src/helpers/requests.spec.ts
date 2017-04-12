@@ -5,12 +5,32 @@ import * as jsc from 'jsverify';
 require('./jasmineHelpers2'); // https://github.com/jsverify/jsverify#usage-with-jasmine
 
 import {handleError} from './requests';
+import {Arbitrary} from 'jsverify';
 
-/*
-const testProperty = (description: string, ...args: any[], handler: (...args: any[]) => void) => {
+type TestPropertyHandler = (propertyScheduler: TestScheduler, ...args: any[]) => void;
 
-};
-*/
+function testProperty(description: string, arbitrary1: Arbitrary<any>, handler: TestPropertyHandler): void {
+  const innerHandler = () => {
+    let areEqual = false;
+    const propertyScheduler = new TestScheduler((actual: any, expected: any) => {
+      areEqual = equals(actual)(expected);
+
+      if (!areEqual) {
+        // to have a verbose information about marble test error
+        return expect(actual).toEqual(expected);
+      }
+
+      return areEqual;
+    });
+
+    handler(propertyScheduler, arbitrary1);
+
+    propertyScheduler.flush();
+    return areEqual;
+  };
+
+  jsc.property(description, arbitrary1, innerHandler);
+}
 
 describe('handleError', () => {
   const testScheduler = new TestScheduler((actual: any, expected: any) => {
@@ -34,18 +54,7 @@ describe('handleError', () => {
     testScheduler.expectObservable(handled$).toBe('(a|)', expectedMap);
   });
 
-  jsc.property('works with any of error texts', jsc.nestring, function (errorText) {
-    let areEqual = false;
-    const scheduler = new TestScheduler((actual: any, expected: any) => {
-      areEqual = equals(actual)(expected);
-
-      if (!areEqual) {
-        return expect(actual).toEqual(expected);
-      }
-
-      return areEqual;
-    });
-
+  testProperty('works with any of error texts', jsc.nestring, function (propertyScheduler, errorText) {
     const xhr = new XMLHttpRequest();
     const request: AjaxRequest = {};
     const sourceAjaxErrorData = new AjaxError(errorText, xhr, request);
@@ -55,9 +64,6 @@ describe('handleError', () => {
       a: sourceAjaxErrorData
     };
 
-    scheduler.expectObservable(handled$).toBe('(a|)', expectedMap);
-    scheduler.flush();
-
-    return areEqual;
+    propertyScheduler.expectObservable(handled$).toBe('(a|)', expectedMap);
   });
 });
