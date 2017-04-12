@@ -12,6 +12,8 @@ export function testObservableProperty(description: string, arbitrary1: Arbitrar
 export function testObservableProperty(description: string, arbitrary1: Arbitrary<any>, arbitrary2: Arbitrary<any>, arbitrary3: Arbitrary<any>, handler: TestPropertyHandler): void;
 export function testObservableProperty(description: string, arbitrary1: Arbitrary<any>, ...other: (Arbitrary<any> | TestPropertyHandler)[]): void {
   const passedHandler = other[other.length - 1] as TestPropertyHandler;
+  const otherArbitrary = other.slice(0, -1);
+  const allArbitrary = [arbitrary1, ...otherArbitrary];
 
   const innerHandler = (...vars: any[]) => {
     let areEqual = false;
@@ -32,5 +34,5 @@ export function testObservableProperty(description: string, arbitrary1: Arbitrar
     return areEqual;
   };
 
-  jsc.property(description, arbitrary1, innerHandler);
+  jsc.property(description, ...[...allArbitrary, innerHandler]);
 }
