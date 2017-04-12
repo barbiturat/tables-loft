@@ -7,8 +7,13 @@ require('./jasmineHelpers2'); // https://github.com/jsverify/jsverify#usage-with
 
 type TestPropertyHandler = (propertyScheduler: TestScheduler, ...args: any[]) => void;
 
-export function testProperty(description: string, arbitrary1: Arbitrary<any>, handler: TestPropertyHandler): void {
-  const innerHandler = () => {
+export function testObservableProperty(description: string, arbitrary1: Arbitrary<any>, handler: TestPropertyHandler): void;
+export function testObservableProperty(description: string, arbitrary1: Arbitrary<any>, arbitrary2: Arbitrary<any>, handler: TestPropertyHandler): void;
+export function testObservableProperty(description: string, arbitrary1: Arbitrary<any>, arbitrary2: Arbitrary<any>, arbitrary3: Arbitrary<any>, handler: TestPropertyHandler): void;
+export function testObservableProperty(description: string, arbitrary1: Arbitrary<any>, ...other: (Arbitrary<any> | TestPropertyHandler)[]): void {
+  const passedHandler = other[other.length - 1] as TestPropertyHandler;
+
+  const innerHandler = (...vars: any[]) => {
     let areEqual = false;
     const propertyScheduler = new TestScheduler((actual: any, expected: any) => {
       areEqual = equals(actual)(expected);
@@ -21,7 +26,7 @@ export function testProperty(description: string, arbitrary1: Arbitrary<any>, ha
       return areEqual;
     });
 
-    handler(propertyScheduler, arbitrary1);
+    passedHandler(propertyScheduler, ...vars);
 
     propertyScheduler.flush();
     return areEqual;

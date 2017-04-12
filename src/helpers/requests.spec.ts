@@ -4,7 +4,7 @@ import * as jsc from 'jsverify';
 require('./testing/jasmineHelpers2'); // https://github.com/jsverify/jsverify#usage-with-jasmine
 
 import {handleError} from './requests';
-import {testProperty} from './testing/test-property';
+import {testObservableProperty} from './testing/test-observable-property';
 
 describe('handleError', () => {
   const testScheduler = new TestScheduler((actual: any, expected: any) => {
@@ -28,7 +28,7 @@ describe('handleError', () => {
     testScheduler.expectObservable(handled$).toBe('(a|)', expectedMap);
   });
 
-  testProperty('works with any of error texts', jsc.nestring, function (propertyScheduler, errorText) {
+  testObservableProperty('works with any of error texts', jsc.nestring, function(propertyScheduler, errorText: string) {
     const xhr = new XMLHttpRequest();
     const request: AjaxRequest = {};
     const sourceAjaxErrorData = new AjaxError(errorText, xhr, request);
