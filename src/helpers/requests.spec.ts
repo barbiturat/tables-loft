@@ -6,6 +6,12 @@ require('./jasmineHelpers2'); // https://github.com/jsverify/jsverify#usage-with
 
 import {handleError} from './requests';
 
+/*
+const testProperty = (description: string, ...args: any[], handler: (...args: any[]) => void) => {
+
+};
+*/
+
 describe('handleError', () => {
   const testScheduler = new TestScheduler((actual: any, expected: any) => {
     return expect(actual).toEqual(expected);
@@ -29,9 +35,13 @@ describe('handleError', () => {
   });
 
   jsc.property('works with any of error texts', jsc.nestring, function (errorText) {
-    const areEqual = false;
+    let areEqual = false;
     const scheduler = new TestScheduler((actual: any, expected: any) => {
       areEqual = equals(actual)(expected);
+
+      if (!areEqual) {
+        return expect(actual).toEqual(expected);
+      }
 
       return areEqual;
     });
@@ -45,7 +55,7 @@ describe('handleError', () => {
       a: sourceAjaxErrorData
     };
 
-    scheduler.expectObservable(handled$).toBe('(a|)', expectedMap);
+    scheduler.expectObservable(handled$).toBe('(aa|)', expectedMap);
     scheduler.flush();
 
     return areEqual;
