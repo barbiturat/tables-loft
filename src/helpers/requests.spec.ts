@@ -1,4 +1,8 @@
 import {AjaxError, AjaxRequest, TestScheduler} from 'rxjs';
+import {equals} from 'ramda';
+import * as jsc from 'jsverify';
+// tslint:disable-next-line:no-require-imports
+require('./jasmineHelpers2'); // https://github.com/jsverify/jsverify#usage-with-jasmine
 
 import {handleError} from './requests';
 
@@ -22,5 +26,28 @@ describe('handleError', () => {
     };
 
     testScheduler.expectObservable(handled$).toBe('(a|)', expectedMap);
+  });
+
+  jsc.property('works with any of error texts', jsc.nestring, function (errorText) {
+    const areEqual = false;
+    const scheduler = new TestScheduler((actual: any, expected: any) => {
+      areEqual = equals(actual)(expected);
+
+      return areEqual;
+    });
+
+    const xhr = new XMLHttpRequest();
+    const request: AjaxRequest = {};
+    const sourceAjaxErrorData = new AjaxError(errorText, xhr, request);
+
+    const handled$ = handleError(sourceAjaxErrorData);
+    const expectedMap = {
+      a: sourceAjaxErrorData
+    };
+
+    scheduler.expectObservable(handled$).toBe('(a|)', expectedMap);
+    scheduler.flush();
+
+    return areEqual;
   });
 });
