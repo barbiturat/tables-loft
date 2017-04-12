@@ -1,7 +1,7 @@
 import {equals} from 'ramda';
 import * as jsc from 'jsverify';
 // tslint:disable-next-line:no-require-imports
-require('../helpers/jasmineHelpers2'); // https://github.com/jsverify/jsverify#usage-with-jasmine
+require('../helpers/testing/jasmineHelpers2'); // https://github.com/jsverify/jsverify#usage-with-jasmine
 
 import email from './email';
 import {USER_EMAIL_CHANGED} from '../constants/action-names';

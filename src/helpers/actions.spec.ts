@@ -4,7 +4,7 @@ import {equals} from 'ramda';
 import {createSimpleAction, createActionWithPayload} from './actions';
 import {SimpleAction} from '../interfaces/actions';
 // tslint:disable-next-line:no-require-imports
-require('./jasmineHelpers2'); // https://github.com/jsverify/jsverify#usage-with-jasmine
+require('./testing/jasmineHelpers2'); // https://github.com/jsverify/jsverify#usage-with-jasmine
 
 describe('createSimpleAction', () => {
   jsc.property('returns proper action', jsc.nestring, actionType => {
