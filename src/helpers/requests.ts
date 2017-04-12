@@ -12,7 +12,7 @@ import {ActionWithPayload} from '../interfaces/actions';
 import globalErrorHappened from '../action-creators/global-error-happened';
 import {GlobalError} from '../interfaces/store-models';
 
-const handleError = (ajaxErrorData: AjaxError): Observable<AjaxError> => {
+export const handleError = (ajaxErrorData: AjaxError): Observable<AjaxError> => {
   /*if (ajaxErrorData.status === 401) {
     store.dispatch(logOutActionCreator());
   }*/

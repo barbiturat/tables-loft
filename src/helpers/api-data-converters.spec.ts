@@ -1,12 +1,12 @@
 import {pipe, keys, values, pluck, intersection} from 'ramda';
 import * as moment from 'moment';
 import * as jsc from 'jsverify';
+// tslint:disable-next-line:no-require-imports
+require('./jasmineHelpers2'); // https://github.com/jsverify/jsverify#usage-with-jasmine
 
 import {tablesToFront, tableSessionsToFront, tableSessionToFront} from './api-data-converters';
 import {Table as BackendTable, TableSession as BackendTableSession} from '../interfaces/backend-models';
 import {Table as FrontendTable, TableSession as FrontendTableSession} from '../interfaces/store-models';
-// tslint:disable-next-line:no-require-imports
-require('./jasmineHelpers2'); // https://github.com/jsverify/jsverify#usage-with-jasmine
 
 const getBackendSessionTemplate = (): BackendTableSession => ({
   id: 12,

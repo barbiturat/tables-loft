@@ -17,21 +17,3 @@ exports[`Renders correctly 2`] = `
   0m
 </div>
 `;
-
-exports[`TableTimer renders correctly 1`] = `
-<div
-  className="table__label table__label_role_counter"
-  onClick={[Function]}
->
-  0h 00m 00s
-</div>
-`;
-
-exports[`TableTimer renders correctly 2`] = `
-<div
-  className="table__label table__label_role_counter"
-  onClick={[Function]}
->
-  0m
-</div>
-`;
