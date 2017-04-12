@@ -55,7 +55,7 @@ describe('handleError', () => {
       a: sourceAjaxErrorData
     };
 
-    scheduler.expectObservable(handled$).toBe('(aa|)', expectedMap);
+    scheduler.expectObservable(handled$).toBe('(a|)', expectedMap);
     scheduler.flush();
 
     return areEqual;
