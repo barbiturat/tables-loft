@@ -48,7 +48,7 @@ describe('handleError', () => {
 });
 
 describe('getExtendedHeaders', () => {
-  jsc.property('adds a proper "Authorization" field', arbLatSymbols, (apiKey) => {
+  jsc.property('adds a proper "Authorization" field', arbLatSymbols(20), (apiKey) => {
     getProcessEnv.mockImplementation(() => ({
       API_KEY: apiKey
     }));
@@ -58,4 +58,16 @@ describe('getExtendedHeaders', () => {
 
     return equals(authorization)(`Token token=${apiKey}`);
   });
+
+  /*jsc.property('adds passed headers to result', jsc.dict(jsc.oneof<string | number>([jsc.string, jsc.integer])), (headers) => {
+    getProcessEnv.mockImplementation(() => ({
+      API_KEY: 'some'
+    }));
+
+    const extendedHeaders = getExtendedHeaders();
+    const authorization = extendedHeaders.Authorization;
+
+    return equals(authorization)(`Token token=${apiKey}`);
+  });*/
+
 });
