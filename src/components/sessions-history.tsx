@@ -45,7 +45,7 @@ export default class SessionsHistory extends React.Component<Props, {}> {
         </div>
       );
     }
-  };
+  }
 
   render() {
     return (

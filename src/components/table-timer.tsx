@@ -43,15 +43,15 @@ export class Component extends React.Component<PropsFromConnect, State> {
 
   isFormatOfMinutesSelector(props: PropsFromConnect) {
     return this.state.isFormatOfMinutes;
-  };
+  }
 
   static startsAtSelector(props: PropsFromConnect) {
     return props.startsAt;
-  };
+  }
 
   static utcMillisecondsSelector(props: PropsFromConnect) {
     return props.utcMilliseconds;
-  };
+  }
 
   static getDurationActivityString(startsAt: number, utcMilliseconds: number, isFormatOfMinutes: boolean) {
     if (!startsAt || !utcMilliseconds) {

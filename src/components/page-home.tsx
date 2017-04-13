@@ -22,7 +22,7 @@ class Component extends React.Component<PropsFromConnect, any> {
       ) : (
         <TablesGroup tables={tables}/>
       );
-  };
+  }
 
   render() {
     const {tables, areTablesInPending} = this.props;

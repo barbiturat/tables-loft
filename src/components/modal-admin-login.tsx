@@ -31,7 +31,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
   requestToClose() {
     this.resetPasswordInput();
     this.props.onClose();
-  };
+  }
 
   resetPasswordInput() {
     this.props.dispatch( actions.change('formsData.managerLoginForm.password', '') );
@@ -57,7 +57,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
     return isPending ? (
         <div>Wait...</div>
       ) : null;
-  };
+  }
 
   static renderErrorsBlock: React.StatelessComponent<ErrorsProps & WrapperProps> =
     (props) => <div className="modal__form-errors">{props.children}</div>;

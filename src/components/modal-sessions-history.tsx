@@ -47,7 +47,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   requestToClose() {
     this.props.dispatch( modalSessionsHistoryChanged(false) );
-  };
+  }
 
   onCloseClick = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
@@ -65,7 +65,7 @@ class Component extends React.Component<PropsFromConnect, State> {
       values,
       sortBy(prop('startsAt'))
     )(table.sessionsHistory);
-  };
+  }
 
   static getSessionsPage(sessions: TableSession[], pageIdx: number): TableSession[] {
     return pipe<TableSession[], TableSession[][], TableSession[]>(

@@ -158,7 +158,7 @@ class Component extends React.Component<PropsFromConnect, State> {
         </span>
       );
     }
-  };
+  }
 
   render() {
     const {session} = this.props;

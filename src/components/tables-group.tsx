@@ -27,7 +27,7 @@ export default class TablesGroup extends React.Component<Props, AnyDict> {
         <Table key={idx} {...params}/>
       );
     });
-  };
+  }
 
   render() {
     return (

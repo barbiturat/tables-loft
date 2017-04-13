@@ -41,9 +41,9 @@ const prolongSession = (ajaxData: AjaxResponse) => {
 */
 
 export function get(url: string): Observable<AjaxResponse | AjaxError>;
-export function get<TData>(url: string, dataToSend?: TData): Observable<AjaxResponse | AjaxError>;
-export function get<TData, THeaders extends {}>(url: string, dataToSend?: TData, headers: THeaders = {} as THeaders):
-    Observable<AjaxResponse | AjaxError> {
+export function get<TData extends object>(url: string, dataToSend?: TData): Observable<AjaxResponse | AjaxError>;
+export function get<TData extends object, THeaders extends {}>(url: string, dataToSend?: TData, headers?: THeaders): Observable<AjaxResponse | AjaxError>;
+export function get<TData extends object, THeaders extends {}>(url: string, dataToSend: TData = {} as TData, headers: THeaders = {} as THeaders): Observable<AjaxResponse | AjaxError> {
   const serializedData = queryString.stringify(dataToSend);
   const extendedHeaders = getExtendedHeaders(headers);
   const newUrl = `${url}?${serializedData}`;

@@ -51,7 +51,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   static isTableActive(currentSession?: TableSessionType): boolean {
     return !!currentSession;
-  };
+  }
 
   getCurrentSession() {
     const {sessions, currentSessionId} = this.props;
@@ -64,7 +64,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   static startsAtSelector(currentSession?: TableSessionType) {
     return currentSession && currentSession.startsAt;
-  };
+  }
 
   static getDisabledLabel(isDisabled?: boolean) {
     return isDisabled ? (
@@ -72,7 +72,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           Pool Table 2 Is Not Active
         </span>
       ) : null;
-  };
+  }
 
   static renderActiveSessionStartTime(currentSession?: TableSessionType) {
     if (!currentSession) {
@@ -84,7 +84,7 @@ class Component extends React.Component<PropsFromConnect, State> {
         <div className="table__label table__label_role_start-time">{startTime}</div>
       );
     }
-  };
+  }
 
   onPromptOk = () => {
     const {id, isDisabled} = this.props;
