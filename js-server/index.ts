@@ -1,13 +1,14 @@
 import * as express from 'express';
 import * as http from 'http';
 import * as path from 'path';
+import {getProcessEnv} from '../src/helpers/processEnv';
 // tslint:disable-next-line:no-require-imports
 const auth: any = require('http-auth');
 
 // tslint:disable-next-line:no-require-imports
 const packageJson = require('../../../package.json');
 
-const envVars = process.env;
+const envVars = getProcessEnv();
 const envVarStubs = packageJson.appSettings.envVarStubs;
 const publicPath = pathFromRoot('public');
 const app = express();

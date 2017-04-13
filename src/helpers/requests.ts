@@ -11,6 +11,7 @@ import {
 import {ActionWithPayload} from '../interfaces/actions';
 import globalErrorHappened from '../action-creators/global-error-happened';
 import {GlobalError} from '../interfaces/store-models';
+import {getProcessEnv} from './processEnv';
 
 export const handleError = (ajaxErrorData: AjaxError): Observable<AjaxError> => {
   /*if (ajaxErrorData.status === 401) {
@@ -20,7 +21,7 @@ export const handleError = (ajaxErrorData: AjaxError): Observable<AjaxError> => 
 };
 
 export const getExtendedHeaders = (headers = {}): Object => {
-  const token = process.env.API_KEY || '';
+  const token = getProcessEnv().API_KEY || '';
   const dataToAdd = token ? {
       Authorization: `Token token=${token}`
     } : {};

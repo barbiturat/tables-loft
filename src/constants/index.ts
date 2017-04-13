@@ -1,1 +1,3 @@
-export const API_URL = (process.env.API_HOST || '') + ':' + (process.env.API_PORT || '');
+import {getProcessEnv} from '../helpers/processEnv';
+
+export const API_URL = (getProcessEnv().API_HOST || '') + ':' + (getProcessEnv().API_PORT || '');
