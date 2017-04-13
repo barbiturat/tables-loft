@@ -20,7 +20,12 @@ export const handleError = (ajaxErrorData: AjaxError): Observable<AjaxError> => 
   return Observable.of(ajaxErrorData);
 };
 
-export const getExtendedHeaders = (headers = {}): Object => {
+interface ExtendedHeaders {
+  readonly Authorization: string;
+  readonly [name: string | number]: string | number;
+}
+
+export const getExtendedHeaders = (headers = {}): ExtendedHeaders => {
   const token = getProcessEnv().API_KEY || '';
   const dataToAdd = token ? {
       Authorization: `Token token=${token}`
