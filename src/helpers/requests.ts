@@ -11,7 +11,7 @@ import {
 import {ActionWithPayload} from '../interfaces/actions';
 import globalErrorHappened from '../action-creators/global-error-happened';
 import {GlobalError} from '../interfaces/store-models';
-import {getProcessEnv} from './processEnv';
+import {getProcessEnv} from './process-env';
 
 export const handleError = (ajaxErrorData: AjaxError): Observable<AjaxError> => {
   /*if (ajaxErrorData.status === 401) {

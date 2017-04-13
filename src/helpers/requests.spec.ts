@@ -3,7 +3,7 @@ import * as jsc from 'jsverify';
 // tslint:disable-next-line:no-require-imports
 require('./testing/jasmineHelpers2'); // https://github.com/jsverify/jsverify#usage-with-jasmine
 
-import {handleError} from './requests';
+import {getExtendedHeaders, handleError} from './requests';
 import {testObservableProperty} from './testing/test-observable-property';
 
 describe('handleError', () => {

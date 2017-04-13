@@ -1,7 +1,7 @@
 import * as express from 'express';
 import * as http from 'http';
 import * as path from 'path';
-import {getProcessEnv} from '../src/helpers/processEnv';
+import {getProcessEnv} from '../src/helpers/process-env';
 // tslint:disable-next-line:no-require-imports
 const auth: any = require('http-auth');
 
