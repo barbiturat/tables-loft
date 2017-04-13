@@ -12,7 +12,7 @@ describe('getProcessEnv', () => {
     process.env = origEnv;
   });
 
-  jsc.property('returns process.env data', jsc.dict(jsc.oneof<string | number>([jsc.string, jsc.integer])), (newEnv) => {
+  jsc.property('returns process.env data', jsc.dict(jsc.oneof([jsc.string, jsc.integer])), (newEnv) => {
     process.env = newEnv;
     const result = getProcessEnv();
 

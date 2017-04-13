@@ -59,15 +59,19 @@ describe('getExtendedHeaders', () => {
     return equals(authorization)(`Token token=${apiKey}`);
   });
 
-  /*jsc.property('adds passed headers to result', jsc.dict(jsc.oneof<string | number>([jsc.string, jsc.integer])), (headers) => {
+  jsc.property('adds passed headers to result', jsc.dict(jsc.oneof([jsc.string, jsc.integer, jsc.bool])), (passedHeaders: {}) => {
+    const apiKey = 'some';
     getProcessEnv.mockImplementation(() => ({
-      API_KEY: 'some'
+      API_KEY: apiKey
     }));
 
-    const extendedHeaders = getExtendedHeaders();
-    const authorization = extendedHeaders.Authorization;
+    const authorizationData = {
+      Authorization: `Token token=${apiKey}`
+    };
+    const expectedHeaders = {...authorizationData, ...passedHeaders};
+    const result = getExtendedHeaders(passedHeaders);
 
-    return equals(authorization)(`Token token=${apiKey}`);
-  });*/
+    return equals(result)(expectedHeaders);
+  });
 
 });
