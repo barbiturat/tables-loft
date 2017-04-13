@@ -41,3 +41,9 @@ describe('handleError', () => {
     propertyScheduler.expectObservable(handled$).toBe('(a|)', expectedMap);
   });
 });
+
+/*
+describe('getExtendedHeaders', () => {
+
+});
+*/
