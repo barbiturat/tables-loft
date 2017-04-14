@@ -16,7 +16,7 @@ export interface Dict<T> {
 export interface StringDict extends Dict<string> {}
 export interface BoolDict extends Dict<boolean> {}
 export interface ObjDict extends Dict<{}> {}
-export interface ArrDict<T> extends Dict< T[] > {}
+export interface ArrDict<T> extends Dict< ReadonlyArray<T> > {}
 export interface AnyDict extends Dict<any> {}
 
 type BasicType = boolean | number | string;

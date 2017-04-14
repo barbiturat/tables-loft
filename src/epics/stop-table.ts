@@ -77,7 +77,7 @@ const stopTable = ((action$, store: Store<StoreStructure>) => {
                 const tableSessionsChangedAction = createTableSessionsChangedAction(tableSessionsData.tableSessions, responseSession);
                 const changingTableAction = createChangingTableAction(tablesData.tables[tableId], tableId, responseSession.id);
 
-                const actions: SimpleAction[] = <SimpleAction[]>[tableSessionsChangedAction, changingTableAction]
+                const actions: ReadonlyArray<SimpleAction> = < ReadonlyArray<SimpleAction> >[tableSessionsChangedAction, changingTableAction]
                   .filter(Boolean);
 
                 return Observable.from<SimpleAction>(actions);

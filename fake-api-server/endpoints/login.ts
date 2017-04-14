@@ -31,7 +31,7 @@ const login = (server: Application) => {
         .send(responseDefaultOk);
 
     } else {
-      const emails: string[] = [testUserEmail];
+      const emails: ReadonlyArray<string> = [testUserEmail];
       const errors: LoginErrors = {
         email: {
           isRegistered: false

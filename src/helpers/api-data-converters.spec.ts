@@ -54,7 +54,7 @@ describe('tablesToFront: ', () => {
     const secondBackendTable = {...backendTableTemplate, ...{id: 5}};
     const thirdBackendTable = {...backendTableTemplate, ...{id: 55}};
 
-    const sourceTables: BackendTable[] = [firstBackendTable, secondBackendTable, thirdBackendTable];
+    const sourceTables: ReadonlyArray<BackendTable> = [firstBackendTable, secondBackendTable, thirdBackendTable];
     const resultTables = tablesToFront(sourceTables);
 
     const resultKeys = keys(resultTables);
@@ -68,7 +68,7 @@ describe('tablesToFront: ', () => {
     const secondBackendTable = {...backendTableTemplate, ...{id: 5}};
     const thirdBackendTable = {...backendTableTemplate, ...{id: 5}};
 
-    const sourceTables: BackendTable[] = [firstBackendTable, secondBackendTable, thirdBackendTable];
+    const sourceTables: ReadonlyArray<BackendTable> = [firstBackendTable, secondBackendTable, thirdBackendTable];
     const resultTables = tablesToFront(sourceTables);
 
     expect( Object.keys(resultTables) ).toEqual(['1', '5']);
@@ -80,7 +80,7 @@ describe('tablesToFront: ', () => {
     const secondBackendTable = {...backendTableTemplate, ...{id: 5}};
     const thirdBackendTable = {...backendTableTemplate, ...{id: 7}};
 
-    const sourceTables: BackendTable[] = [firstBackendTable, secondBackendTable, thirdBackendTable];
+    const sourceTables: ReadonlyArray<BackendTable> = [firstBackendTable, secondBackendTable, thirdBackendTable];
     const resultTables = tablesToFront(sourceTables);
 
     expect( Object.keys(resultTables).length ).toBe(sourceTables.length);
@@ -94,7 +94,7 @@ describe('tablesToFront: ', () => {
     const secondBackendTable = {...backendTableTemplate, ...{id: 1, currentSession: null}};
     const thirdBackendTable = {...backendTableTemplate, ...{id: 2, currentSession: backendSessionTemplate}};
 
-    const sourceTables: BackendTable[] = [firstBackendTable, secondBackendTable, thirdBackendTable];
+    const sourceTables: ReadonlyArray<BackendTable> = [firstBackendTable, secondBackendTable, thirdBackendTable];
     const resultTables = tablesToFront(sourceTables);
 
     const currentSessionIds = pipe(
@@ -113,7 +113,7 @@ describe('tablesToFront: ', () => {
     const secondBackendTable = {...backendTableTemplate, ...{id: 1, lastSession: null}};
     const thirdBackendTable = {...backendTableTemplate, ...{id: 2, lastSession: backendSessionTemplate}};
 
-    const sourceTables: BackendTable[] = [firstBackendTable, secondBackendTable, thirdBackendTable];
+    const sourceTables: ReadonlyArray<BackendTable> = [firstBackendTable, secondBackendTable, thirdBackendTable];
     const resultTables = tablesToFront(sourceTables);
 
     const currentSessionIds = pipe(
@@ -136,7 +136,7 @@ describe('tablesToFront: ', () => {
     const secondBackendTable = {...backendTableTemplate, ...{id: 1, currentSession: null, lastSession: null}};
     const thirdBackendTable = {...backendTableTemplate, ...{id: 2, currentSession: null, lastSession: lastSession2}};
 
-    const sourceTables: BackendTable[] = [firstBackendTable, secondBackendTable, thirdBackendTable];
+    const sourceTables: ReadonlyArray<BackendTable> = [firstBackendTable, secondBackendTable, thirdBackendTable];
     const resultTables = tablesToFront(sourceTables);
 
     const sessionsHistories = pipe(
@@ -226,7 +226,7 @@ describe('tableSessionsToFront: ', () => {
     const backendSession2 = {...backendSessionTemplate, ...{id: 33}};
     const backendSession3 = {...backendSessionTemplate, ...{id: 12}};
 
-    const sourceSessions: BackendTableSession[] = [backendSession1, backendSession2, backendSession3];
+    const sourceSessions: ReadonlyArray<BackendTableSession> = [backendSession1, backendSession2, backendSession3];
     const result = tableSessionsToFront(sourceSessions);
     const goalValues = ['12', '33'];
 
@@ -243,7 +243,7 @@ describe('tableSessionsToFront: ', () => {
     const backendSession2 = {...backendSessionTemplate, ...{id: 33}};
     const backendSession3 = {...backendSessionTemplate, ...{id: 77}};
 
-    const sourceSessions: BackendTableSession[] = [backendSession1, backendSession2, backendSession3];
+    const sourceSessions: ReadonlyArray<BackendTableSession> = [backendSession1, backendSession2, backendSession3];
     const result = tableSessionsToFront(sourceSessions);
     const exampleSession: FrontendTableSession = result[33];
 

@@ -4,13 +4,13 @@ import {TableSession} from '../interfaces/store-models';
 import TableHistorySession from './table-history-session';
 
 interface Props {
-  readonly tableSessions?: TableSession[];
+  readonly tableSessions?: ReadonlyArray<TableSession>;
   readonly isInPending: boolean;
   readonly firstIdx: number;
 }
 
 export default class SessionsHistory extends React.Component<Props, {}> {
-  static getRenderedSessions(tableSessions: TableSession[] = [], firstIdx: number) {
+  static getRenderedSessions(tableSessions: ReadonlyArray<TableSession> = [], firstIdx: number) {
     return tableSessions.map((session, idx) =>
       <TableHistorySession
         key={idx}
@@ -21,7 +21,7 @@ export default class SessionsHistory extends React.Component<Props, {}> {
 
   }
 
-  static getTableSessions (sessions: TableSession[] = [], isInPending: boolean, firstIdx: number) {
+  static getTableSessions (sessions: ReadonlyArray<TableSession> = [], isInPending: boolean, firstIdx: number) {
     if (isInPending) {
       return (
         <div className="sessions-list__wait"/>

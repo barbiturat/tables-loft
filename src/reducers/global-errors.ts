@@ -4,7 +4,7 @@ import {ActionWithPayload} from '../interfaces/actions';
 
 type ActionWithGlobalError = ActionWithPayload<GlobalError>;
 
-export type Structure = GlobalError[];
+export type Structure = ReadonlyArray<GlobalError>;
 
 const isActionWithGlobalError = (action: ActionWithGlobalError | ActionWithPayload<number>): action is ActionWithGlobalError => {
   return typeof (action as ActionWithGlobalError).payload.date !== 'undefined';

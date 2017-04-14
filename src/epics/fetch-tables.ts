@@ -23,12 +23,12 @@ import {tTable} from '../helpers/dynamic-type-validators/types';
 type ResponseOk = AjaxResponseTyped<ResponseTablesPayload>;
 type ResponseOkDefined = AjaxResponseDefined<ResponseTablesPayload>;
 
-const getTableSessionsFromTables = (tables: TableBackend[]) => {
-  return tables.reduce((memo: TableSession[], table) => {
+const getTableSessionsFromTables = (tables: ReadonlyArray<TableBackend>) => {
+  return tables.reduce((memo: ReadonlyArray<TableSession>, table) => {
     const {currentSession, lastSession} = table;
 
-    if (currentSession) { memo.push(currentSession); }
-    if (lastSession) { memo.push(lastSession); }
+    if (currentSession) { memo = [...memo, currentSession]; }
+    if (lastSession) { memo = [...memo, lastSession]; }
 
     return memo;
   }, []);
@@ -55,13 +55,13 @@ const fetchTables = ((action$) => {
 
                 const tables = ajaxData.response.tables;
 
-                const setTableSessions = pipe< TableBackend[], TableSession[], TableSessions, ActionWithPayload<TableSessions> >(
+                const setTableSessions = pipe< ReadonlyArray<TableBackend>, ReadonlyArray<TableSession>, TableSessions, ActionWithPayload<TableSessions> >(
                   getTableSessionsFromTables,
                   tableSessionsToFront,
                   changingTableSessions
                 )(tables);
 
-                const setTables = pipe< TableBackend[], Tables, ActionWithPayload<Tables> >(
+                const setTables = pipe< ReadonlyArray<TableBackend>, Tables, ActionWithPayload<Tables> >(
                   tablesToFront,
                   changingTables
                 )(tables);

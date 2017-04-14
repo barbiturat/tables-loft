@@ -17,11 +17,11 @@ export interface ResponseGetAdminTokenFailedPayload {
 }
 
 export interface ResponseTablesPayload {
-  readonly tables: Table[];
+  readonly tables: ReadonlyArray<Table>;
 }
 
 export interface ResponseSessionsHistoryPayload {
-  readonly sessions: TableSession[];
+  readonly sessions: ReadonlyArray<TableSession>;
 }
 
 export interface ResponseStartTablePayload {

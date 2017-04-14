@@ -58,8 +58,8 @@ class Component extends React.Component<PropsFromConnect, State> {
     this.requestToClose();
   };
 
-  static getTableSessions(allSessions: TableSessions, table: Table): TableSession[] {
-    return pipe<number[], string[], TableSessions, TableSession[], TableSession[]>(
+  static getTableSessions(allSessions: TableSessions, table: Table): ReadonlyArray<TableSession> {
+    return pipe< ReadonlyArray<number>, ReadonlyArray<string>, TableSessions, ReadonlyArray<TableSession>, ReadonlyArray<TableSession> >(
       map(String),
       flip(pick)(allSessions),
       values,
@@ -67,8 +67,8 @@ class Component extends React.Component<PropsFromConnect, State> {
     )(table.sessionsHistory);
   }
 
-  static getSessionsPage(sessions: TableSession[], pageIdx: number): TableSession[] {
-    return pipe<TableSession[], TableSession[][], TableSession[]>(
+  static getSessionsPage(sessions: ReadonlyArray<TableSession>, pageIdx: number): ReadonlyArray<TableSession> {
+    return pipe< ReadonlyArray<TableSession>, ReadonlyArray< ReadonlyArray<TableSession> >, ReadonlyArray<TableSession> >(
       splitEvery(Component.PAGE_SIZE),
       nth(pageIdx)
     )(sessions);

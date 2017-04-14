@@ -13,7 +13,7 @@ export interface Table {
   readonly isInPending: boolean;
   readonly isDisabled: boolean;
   readonly isSessionsHistoryInPending: boolean;
-  readonly sessionsHistory: number[];
+  readonly sessionsHistory: ReadonlyArray<number>;
 }
 
 export type Tables = IndexedDict<Table>;

@@ -9,8 +9,8 @@ import {PartialIndexedDict} from '../interfaces/index';
 const tableToFront = (table: BackendTable): FrontendTable => {
   const currentSessionId = table.currentSession ? table.currentSession.id : null;
   const lastSessionId = table.lastSession ? table.lastSession.id : null;
-  const sessionsHistory: number[] = [currentSessionId, lastSessionId]
-    .filter((session) => typeof session === 'number') as number[];
+  const sessionsHistory: ReadonlyArray<number> = [currentSessionId, lastSessionId]
+    .filter((session) => typeof session === 'number') as ReadonlyArray<number>;
 
   return {
     name: table.name,
@@ -25,7 +25,7 @@ const tableToFront = (table: BackendTable): FrontendTable => {
   };
 };
 
-export const tablesToFront = (tables: BackendTable[]): Tables => {
+export const tablesToFront = (tables: ReadonlyArray<BackendTable>): Tables => {
   return tables.reduce((memo, table) => {
     const convertedTable = tableToFront(table);
 
@@ -47,7 +47,7 @@ export const tableSessionToFront = (tableSession: TableSessionBackend): TableSes
   };
 };
 
-export const tableSessionsToFront = (tableSessions: TableSessionBackend[]): TableSessions => {
+export const tableSessionsToFront = (tableSessions: ReadonlyArray<TableSessionBackend>): TableSessions => {
   return tableSessions.reduce((memo, tableSession) => {
     const convertedTableSession = tableSessionToFront(tableSession);
 

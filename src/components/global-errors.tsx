@@ -10,13 +10,13 @@ interface Props {
 }
 
 interface MappedProps {
-  readonly errors: GlobalErrorType[];
+  readonly errors: ReadonlyArray<GlobalErrorType>;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
 class Component extends React.Component<PropsFromConnect, {}> {
-  static drawErrors(errors: GlobalErrorType[]) {
+  static drawErrors(errors: ReadonlyArray<GlobalErrorType>) {
     return errors.map((error) => (
       <GlobalError
         key={error.date}

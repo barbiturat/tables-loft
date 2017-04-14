@@ -80,8 +80,8 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
 
                 const {tableSessionsData, tablesData} = store.getState().app;
 
-                const convertedResponseSessions = pipe<TableSession[], TableSessions>(
-                  (respSessions: TableSession[]) => tableSessionsToFront(respSessions)
+                const convertedResponseSessions = pipe<ReadonlyArray<TableSession>, TableSessions>(
+                  (respSessions: ReadonlyArray<TableSession>) => tableSessionsToFront(respSessions)
                 )(ajaxData.response.sessions);
 
                 const setSessionsAction = pipe<TableSessions, TableSessions, ActionWithPayload<TableSessions> >(
@@ -92,20 +92,20 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
                 const tablesClone = {...tablesData.tables};
                 const currentTable = tablesClone[tableId];
                 const setTablesAction = currentTable ?
-                  pipe< TableSessions, string[], number[], number[], number[], Tables, ActionWithPayload<Tables> >(
+                  pipe(
                     keys,
                     map(Number),
-                    concat(currentTable.sessionsHistory),
+                    // concat(currentTable.sessionsHistory),
                     uniq,
-                    (newSessionIds: number[]) => replaceTable(tablesClone, tableId, {
+                    (newSessionIds: ReadonlyArray<number>) => replaceTable(tablesClone, tableId, {
                       isSessionsHistoryInPending: false,
                       sessionsHistory: newSessionIds
                     }),
                     changingTables
-                  )(convertedResponseSessions) :
+                  )(convertedResponseSessions) as ActionWithPayload<Tables> :
                   null;
 
-                const actions: SimpleAction[] = <SimpleAction[]>[setSessionsAction, setTablesAction]
+                const actions: ReadonlyArray<SimpleAction> = < ReadonlyArray<SimpleAction> >[setSessionsAction, setTablesAction]
                   .filter(Boolean);
 
                 return Observable.from(actions);

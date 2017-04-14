@@ -37,6 +37,8 @@
         ],
         "radix": true,
         "readonly-interface": true,
+        "readonly-indexer": true,
+        "readonly-array": true,
         "semicolon": [true, "always", "ignore-bound-class-methods"],
         "triple-equals": [
             true,
