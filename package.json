@@ -65,7 +65,7 @@
     "redux": "^3.6.0",
     "redux-observable": "^0.14.1",
     "redux-router": "^2.1.2",
-    "reselect": "^2.5.4",
+    "reselect": "^3.0.0",
     "rxjs": "^5.3.0",
     "tcomb-validation": "^3.3.0",
     "validator": "^7.0.0"
@@ -85,10 +85,10 @@
     "@types/redux-router": "^1.0.35",
     "@types/validator": "^6.2.0",
     "body-parser": "^1.17.1",
-    "css-loader": "^0.26.1",
+    "css-loader": "^0.28.0",
     "enzyme": "^2.8.2",
     "express": "^4.14.0",
-    "file-loader": "^0.10.0",
+    "file-loader": "^0.11.1",
     "html-webpack-plugin": "^2.26.0",
     "http-auth": "^3.1.1",
     "jest": "^19.0.2",
@@ -100,9 +100,9 @@
     "react-addons-test-utils": "^15.5.1",
     "react-test-renderer": "^15.5.4",
     "rimraf": "^2.5.4",
-    "rollbar-sourcemap-webpack-plugin": "^1.7.0",
-    "sass-loader": "^4.0.2",
-    "style-loader": "^0.13.1",
+    "rollbar-sourcemap-webpack-plugin": "^2.0.1",
+    "sass-loader": "^6.0.3",
+    "style-loader": "^0.16.1",
     "ts-jest": "^19.0.9",
     "ts-loader": "^2.0.0",
     "tslib": "^1.5.0",
@@ -112,7 +112,7 @@
     "typescript": "^2.2.2",
     "typings": "^2.1.1",
     "url-loader": "^0.5.7",
-    "webpack": "2.2.0",
-    "webpack-dev-server": "2.2.0"
+    "webpack": "^2.4.1",
+    "webpack-dev-server": "^2.4.2"
   }
 }
