@@ -52,7 +52,7 @@ describe('handleError', () => {
 
 describe('getExtendedHeaders', () => {
   jsc.property('adds a proper "Authorization" field', arbLatSymbols(20), (apiKey) => {
-    (getProcessEnv as Mock<any>).mockImplementation(() => ({
+    (getProcessEnv as Mock<any>).mockImplementationOnce(() => ({
       API_KEY: apiKey
     }));
 
@@ -64,7 +64,7 @@ describe('getExtendedHeaders', () => {
 
   jsc.property('adds passed headers to result', jsc.dict(jsc.oneof<string | number | boolean>([jsc.string, jsc.integer, jsc.bool])), (passedHeaders: {}) => {
     const apiKey = 'some';
-    (getProcessEnv as Mock<any>).mockImplementation(() => ({
+    (getProcessEnv as Mock<any>).mockImplementationOnce(() => ({
       API_KEY: apiKey
     }));
 
@@ -80,17 +80,28 @@ describe('getExtendedHeaders', () => {
 
 describe('get', () => {
   const originalAjaxGet = Observable.ajax.get;
+  const API_KEY = 'some';
 
   beforeEach(() => {
+    // because "get" method uses "API_KEY", that returned by "getProcessEnv" method
+    (getProcessEnv as Mock<any>).mockImplementationOnce(() => ({
+      API_KEY
+    }));
+  });
+
+  afterEach(() => {
     Observable.ajax.get = originalAjaxGet;
   });
 
-  it('Observable.ajax.get is called', () => {
+  it('Observable.ajax.get is called once', () => {
     Observable.ajax.get = jest.fn(() => Observable.of(null));
 
     get('http://some-url.com');
 
-    expect(Observable.ajax.get).toBeCalled();
+    const calls = (Observable.ajax.get as Mock<any>).mock.calls;
+
+    expect(Array.isArray(calls)).toBeTruthy();
+    expect(calls.length).toEqual(1);
   });
 
   it('Observable.ajax.get is called with 1-st arg which equals to a passed URL', () => {
