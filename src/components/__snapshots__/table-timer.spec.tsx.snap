@@ -14,6 +14,6 @@ exports[`Renders correctly 2`] = `
   className="table__label table__label_role_counter"
   onClick={[Function]}
 >
-  0m
+  0h 00m 00s
 </div>
 `;

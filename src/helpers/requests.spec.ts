@@ -1,13 +1,13 @@
 jest.mock('./process-env');
 
-import {AjaxError, AjaxRequest, TestScheduler} from 'rxjs';
+import {AjaxError, AjaxRequest, TestScheduler, Observable} from 'rxjs';
 import {equals} from 'ramda';
 import * as jsc from 'jsverify';
 // tslint:disable-next-line:no-require-imports
 require('./testing/jasmineHelpers2'); // https://github.com/jsverify/jsverify#usage-with-jasmine
 
 import {arbLatSymbols} from './testing/arbitrary';
-import {getExtendedHeaders, handleError} from './requests';
+import {getExtendedHeaders, handleError, get} from './requests';
 import {testObservableProperty} from './testing/test-observable-property';
 import {getProcessEnv} from './process-env';
 
@@ -72,6 +72,22 @@ describe('getExtendedHeaders', () => {
     const result = getExtendedHeaders(passedHeaders);
 
     return equals(result)(expectedHeaders);
+  });
+});
+
+describe('get', () => {
+  const originalAjaxGet = Observable.ajax.get;
+
+  beforeEach(() => {
+    Observable.ajax.get = originalAjaxGet;
+  });
+
+  it('Observable.ajax.get is called', () => {
+    Observable.ajax.get = jest.fn(() => Observable.of(null));
+
+    get('some');
+
+    expect(Observable.ajax.get).toBeCalled();
   });
 
 });
