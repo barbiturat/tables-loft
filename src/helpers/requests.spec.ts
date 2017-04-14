@@ -1,3 +1,5 @@
+/// <reference path="../custom-typings/jsverify.d.ts" />
+
 jest.mock('./process-env');
 
 import Mock = jest.Mock;
@@ -60,7 +62,7 @@ describe('getExtendedHeaders', () => {
     return equals(authorization)(`Token token=${apiKey}`);
   });
 
-  jsc.property('adds passed headers to result', jsc.dict(jsc.oneof([jsc.string, jsc.integer, jsc.bool])), (passedHeaders: {}) => {
+  jsc.property('adds passed headers to result', jsc.dict(jsc.oneof<string | number | boolean>([jsc.string, jsc.integer, jsc.bool])), (passedHeaders: {}) => {
     const apiKey = 'some';
     (getProcessEnv as Mock<any>).mockImplementation(() => ({
       API_KEY: apiKey
