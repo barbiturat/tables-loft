@@ -21,8 +21,8 @@ export const handleError = (ajaxErrorData: AjaxError): Observable<AjaxError> => 
 };
 
 interface ExtendedHeaders {
-  readonly Authorization: string;
-  readonly [name: string | number]: string | number;
+  readonly Authorization?: string;
+  readonly [name: string]: string | number | undefined;
 }
 
 export const getExtendedHeaders = (headers = {}): ExtendedHeaders => {
