@@ -1,5 +1,6 @@
 jest.mock('./process-env');
 
+import Mock = jest.Mock;
 import {AjaxError, AjaxRequest, TestScheduler, Observable} from 'rxjs';
 import {equals} from 'ramda';
 import * as jsc from 'jsverify';
@@ -49,7 +50,7 @@ describe('handleError', () => {
 
 describe('getExtendedHeaders', () => {
   jsc.property('adds a proper "Authorization" field', arbLatSymbols(20), (apiKey) => {
-    getProcessEnv.mockImplementation(() => ({
+    (getProcessEnv as Mock<any>).mockImplementation(() => ({
       API_KEY: apiKey
     }));
 
@@ -61,7 +62,7 @@ describe('getExtendedHeaders', () => {
 
   jsc.property('adds passed headers to result', jsc.dict(jsc.oneof([jsc.string, jsc.integer, jsc.bool])), (passedHeaders: {}) => {
     const apiKey = 'some';
-    getProcessEnv.mockImplementation(() => ({
+    (getProcessEnv as Mock<any>).mockImplementation(() => ({
       API_KEY: apiKey
     }));
 
@@ -85,9 +86,20 @@ describe('get', () => {
   it('Observable.ajax.get is called', () => {
     Observable.ajax.get = jest.fn(() => Observable.of(null));
 
-    get('some');
+    get('http://some-url.com');
 
     expect(Observable.ajax.get).toBeCalled();
+  });
+
+  it('Observable.ajax.get is called with 1-st arg which equals to a passed URL', () => {
+    Observable.ajax.get = jest.fn(() => Observable.of(null));
+
+    get('http://some-url.com');
+
+    const firstCall = (Observable.ajax.get as Mock<any>).mock.calls[0];
+    const firstArg = firstCall[0];
+
+    expect(firstArg).toEqual('http://some-url.com');
   });
 
 });

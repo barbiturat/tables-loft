@@ -52,7 +52,7 @@ export function get<TData extends {}, THeaders extends {}>(url: string, dataToSe
 export function get<TData extends {}, THeaders extends {}>(url: string, dataToSend: TData = {} as TData, headers: THeaders = {} as THeaders): Observable<AjaxResponse | AjaxError> {
   const serializedData = queryString.stringify(dataToSend);
   const extendedHeaders = getExtendedHeaders(headers);
-  const newUrl = `${url}?${serializedData}`;
+  const newUrl = `${url}${serializedData ? '?' : ''}${serializedData}`;
 
   return Observable.ajax.get(newUrl, extendedHeaders)
   // .map(prolongSession)
