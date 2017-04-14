@@ -1,5 +1,3 @@
-/// <reference path="../custom-typings/jsverify.d.ts" />
-
 jest.mock('./process-env');
 
 import Mock = jest.Mock;

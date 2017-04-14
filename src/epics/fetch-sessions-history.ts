@@ -1,5 +1,3 @@
-/// <reference path="../custom-typings/ramda.d.ts" />
-
 import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
 import {Store} from 'redux';

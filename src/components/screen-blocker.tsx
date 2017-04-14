@@ -1,5 +1,3 @@
-/// <reference path="../custom-typings/react-modal.d.ts" />
-
 import * as React from 'react';
 import {connect} from 'react-redux';
 import MouseEvent = React.MouseEvent;
