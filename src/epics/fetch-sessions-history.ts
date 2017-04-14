@@ -1,3 +1,5 @@
+/// <reference path="../custom-typings/ramda.d.ts" />
+
 import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
 import {Store} from 'redux';
@@ -92,10 +94,10 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
                 const tablesClone = {...tablesData.tables};
                 const currentTable = tablesClone[tableId];
                 const setTablesAction = currentTable ?
-                  pipe(
+                  pipe< TableSessions, ReadonlyArray<string>, ReadonlyArray<number>, ReadonlyArray<number>, ReadonlyArray<number>, Tables, ActionWithPayload<Tables> >(
                     keys,
                     map(Number),
-                    // concat(currentTable.sessionsHistory),
+                    concat(currentTable.sessionsHistory),
                     uniq,
                     (newSessionIds: ReadonlyArray<number>) => replaceTable(tablesClone, tableId, {
                       isSessionsHistoryInPending: false,

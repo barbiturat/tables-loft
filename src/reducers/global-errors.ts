@@ -12,7 +12,7 @@ const isActionWithGlobalError = (action: ActionWithGlobalError | ActionWithPaylo
 
 const globalErrors = (state: Structure = [], action: ActionWithGlobalError | ActionWithPayload<number>): Structure => {
   if ( action.type === GLOBAL_ERROR_HAPPENED && isActionWithGlobalError(action) ) {
-    return state.concat([action.payload]);
+    return [...state, action.payload];
   } else if (action.type === GLOBAL_ERROR_EXPIRED && !isActionWithGlobalError(action)) {
     return state.filter((error) => error.date !== action.payload);
   } else {
