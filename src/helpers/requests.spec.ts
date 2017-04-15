@@ -1,13 +1,14 @@
 jest.mock('./process-env');
 
 import Mock = jest.Mock;
+import * as queryString from 'querystring';
 import {AjaxError, AjaxRequest, TestScheduler, Observable} from 'rxjs';
 import {equals} from 'ramda';
 import * as jsc from 'jsverify';
 // tslint:disable-next-line:no-require-imports
 require('./testing/jasmineHelpers2'); // https://github.com/jsverify/jsverify#usage-with-jasmine
 
-import {arbLatSymbols} from './testing/arbitrary';
+import {alphanumericSymbolsArb} from './testing/arbitrary';
 import {getExtendedHeaders, handleError, get} from './requests';
 import {testObservableProperty} from './testing/test-observable-property';
 import {getProcessEnv} from './process-env';
@@ -49,7 +50,7 @@ describe('handleError', () => {
 });
 
 describe('getExtendedHeaders', () => {
-  jsc.property('adds a proper "Authorization" field', arbLatSymbols(20), (apiKey) => {
+  jsc.property('adds a proper "Authorization" field', alphanumericSymbolsArb(20, '-'), (apiKey) => {
     (getProcessEnv as Mock<any>).mockImplementationOnce(() => ({
       API_KEY: apiKey
     }));
@@ -112,5 +113,50 @@ describe('get', () => {
 
     expect(firstArg).toEqual('http://some-url.com');
   });
+
+/*
+  it('handleError is called with proper parameters on catch', () => {
+    Observable.ajax.get = jest.fn(() => Observable.of(null));
+
+    get('http://some-url.com');
+
+    const firstCall = (Observable.ajax.get as Mock<any>).mock.calls[0];
+    const firstArg = firstCall[0];
+
+    expect(firstArg).toEqual('http://some-url.com');
+  });
+*/
+
+  /*it(`Observable.ajax.get is called with data from get's "dataToSend" argument`, () => {
+    Observable.ajax.get = jest.fn(() => Observable.of(null));
+
+    const dataToSend = {
+      field1: 'some value',
+      field2: 222
+    };
+    const serializedData = queryString.stringify(dataToSend);
+    const url = 'http://some-url.com';
+    const urlWithQueryString = `${url}?${serializedData}`;
+
+    get('http://some-url.com', dataToSend);
+
+    const firstCall = (Observable.ajax.get as Mock<any>).mock.calls[0];
+    const firstArg = firstCall[0];
+
+    expect(firstArg).toEqual(urlWithQueryString);
+  });*/
+
+/*
+  it(`Observable.ajax.get is called with data from get's "headers" argument`, () => {
+    Observable.ajax.get = jest.fn(() => Observable.of(null));
+
+    get('http://some-url.com');
+
+    const firstCall = (Observable.ajax.get as Mock<any>).mock.calls[0];
+    const firstArg = firstCall[0];
+
+    expect(firstArg).toEqual('http://some-url.com');
+  });
+*/
 
 });
