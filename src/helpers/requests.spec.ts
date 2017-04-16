@@ -1,7 +1,6 @@
 jest.mock('./process-env');
 
 import Mock = jest.Mock;
-import * as queryString from 'querystring';
 import {AjaxError, AjaxRequest, TestScheduler, Observable} from 'rxjs';
 import {equals} from 'ramda';
 import * as jsc from 'jsverify';
@@ -81,11 +80,13 @@ describe('get', () => {
   const originalAjaxGet = Observable.ajax.get;
   const API_KEY = 'some';
 
+  // because "get" method uses "API_KEY", that returned by "getProcessEnv" method
+  const mockGetProcessEnvOnce = (apiKey = API_KEY) => (getProcessEnv as Mock<any>).mockImplementationOnce(() => ({
+    API_KEY: apiKey
+  }));
+
   beforeEach(() => {
-    // because "get" method uses "API_KEY", that returned by "getProcessEnv" method
-    (getProcessEnv as Mock<any>).mockImplementationOnce(() => ({
-      API_KEY
-    }));
+    mockGetProcessEnvOnce();
   });
 
   afterEach(() => {
@@ -103,27 +104,33 @@ describe('get', () => {
     expect(calls.length).toEqual(1);
   });
 
-  it('Observable.ajax.get is called with 1-st arg which equals to a passed URL', () => {
+  jsc.property('Observable.ajax.get is called with 1-st arg which equals to a passed URL', alphanumericSymbolsArb(20, '---...'), (siteName: string) => {
+    mockGetProcessEnvOnce();
     Observable.ajax.get = jest.fn(() => Observable.of(null));
 
-    get('http://some-url.com');
+    const url = `http://${siteName}.com`;
+
+    get(url);
 
     const firstCall = (Observable.ajax.get as Mock<any>).mock.calls[0];
     const firstArg = firstCall[0];
 
-    expect(firstArg).toEqual('http://some-url.com');
+    return equals(firstArg)(url);
   });
 
 /*
   it('handleError is called with proper parameters on catch', () => {
-    Observable.ajax.get = jest.fn(() => Observable.of(null));
+    const errorData = new Error('some error!');
+
+    Observable.ajax.get = jest.fn(() => Observable.throw(errorData));
+    // requests.handleError = jest.fn(() => {});
+    (handleError as Mock<any>).mockImplementationOnce(() => {});
 
     get('http://some-url.com');
 
-    const firstCall = (Observable.ajax.get as Mock<any>).mock.calls[0];
-    const firstArg = firstCall[0];
+    const handleErrorCalls = (handleError as Mock<any>).mock.calls;
 
-    expect(firstArg).toEqual('http://some-url.com');
+    expect(handleErrorCalls).toEqual([errorData]);
   });
 */
 
