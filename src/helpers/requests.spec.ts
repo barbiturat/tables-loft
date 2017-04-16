@@ -8,11 +8,11 @@ import * as jsc from 'jsverify';
 require('./testing/jasmineHelpers2'); // https://github.com/jsverify/jsverify#usage-with-jasmine
 
 import {alphanumericSymbolsArb} from './testing/arbitrary';
-import {getExtendedHeaders, handleError, get} from './requests';
+import {getExtendedHeaders, DependencyContainer, get} from './requests';
 import {testObservableProperty} from './testing/test-observable-property';
 import {getProcessEnv} from './process-env';
 
-describe('handleError', () => {
+describe('DependencyContainer.handleError', () => {
   const testScheduler = new TestScheduler((actual: any, expected: any) => {
     return expect(actual).toEqual(expected);
   });
@@ -26,7 +26,7 @@ describe('handleError', () => {
     const request: AjaxRequest = {};
     const sourceAjaxErrorData = new AjaxError('Some error', xhr, request);
 
-    const handled$ = handleError(sourceAjaxErrorData);
+    const handled$ = DependencyContainer.handleError(sourceAjaxErrorData);
     const expectedMap = {
       a: sourceAjaxErrorData
     };
@@ -39,7 +39,7 @@ describe('handleError', () => {
     const request: AjaxRequest = {};
     const sourceAjaxErrorData = new AjaxError(errorText, xhr, request);
 
-    const handled$ = handleError(sourceAjaxErrorData);
+    const handled$ = DependencyContainer.handleError(sourceAjaxErrorData);
     const expectedMap = {
       a: sourceAjaxErrorData
     };
@@ -77,7 +77,8 @@ describe('getExtendedHeaders', () => {
 });
 
 describe('get', () => {
-  const originalAjaxGet = Observable.ajax.get;
+  const originalAjaxGet = DependencyContainer.ajaxGet;
+  const originalHandleError = DependencyContainer.handleError;
   const API_KEY = 'some';
 
   // because "get" method uses "API_KEY", that returned by "getProcessEnv" method
@@ -90,49 +91,51 @@ describe('get', () => {
   });
 
   afterEach(() => {
-    Observable.ajax.get = originalAjaxGet;
+    DependencyContainer.ajaxGet = originalAjaxGet;
+    DependencyContainer.handleError = originalHandleError;
   });
 
-  it('Observable.ajax.get is called once', () => {
-    Observable.ajax.get = jest.fn(() => Observable.of(null));
+  it('DependencyContainer.ajaxGet is called once', () => {
+    DependencyContainer.ajaxGet = jest.fn(() => Observable.of(null));
 
     get('http://some-url.com');
 
-    const calls = (Observable.ajax.get as Mock<any>).mock.calls;
+    const calls = (DependencyContainer.ajaxGet as Mock<any>).mock.calls;
 
     expect(Array.isArray(calls)).toBeTruthy();
     expect(calls.length).toEqual(1);
   });
 
-  jsc.property('Observable.ajax.get is called with 1-st arg which equals to a passed URL', alphanumericSymbolsArb(20, '---...'), (siteName: string) => {
+  jsc.property('DependencyContainer.ajaxGet is called with 1-st arg which equals to a passed URL', alphanumericSymbolsArb(20, '---...'), (siteName: string) => {
     mockGetProcessEnvOnce();
-    Observable.ajax.get = jest.fn(() => Observable.of(null));
+    DependencyContainer.ajaxGet = jest.fn(() => Observable.of(null));
 
     const url = `http://${siteName}.com`;
 
     get(url);
 
-    const firstCall = (Observable.ajax.get as Mock<any>).mock.calls[0];
+    const firstCall = (DependencyContainer.ajaxGet as Mock<any>).mock.calls[0];
     const firstArg = firstCall[0];
 
     return equals(firstArg)(url);
   });
 
-/*
   it('handleError is called with proper parameters on catch', () => {
     const errorData = new Error('some error!');
 
-    Observable.ajax.get = jest.fn(() => Observable.throw(errorData));
-    // requests.handleError = jest.fn(() => {});
-    (handleError as Mock<any>).mockImplementationOnce(() => {});
+    DependencyContainer.ajaxGet = jest.fn(() => Observable.throw(errorData));
+    DependencyContainer.handleError = jest.fn();
 
-    get('http://some-url.com');
+    get('http://some-url.com').subscribe(
+      (data: any) => {},
+      (error: any) => {},
+      () => {}
+    );
 
-    const handleErrorCalls = (handleError as Mock<any>).mock.calls;
+    const handleErrorFirstCall = (DependencyContainer.handleError as Mock<any>).mock.calls[0];
 
-    expect(handleErrorCalls).toEqual([errorData]);
+    expect(handleErrorFirstCall).toEqual([errorData]);
   });
-*/
 
   /*it(`Observable.ajax.get is called with data from get's "dataToSend" argument`, () => {
     Observable.ajax.get = jest.fn(() => Observable.of(null));

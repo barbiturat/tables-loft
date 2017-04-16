@@ -13,11 +13,14 @@ import globalErrorHappened from '../action-creators/global-error-happened';
 import {GlobalError} from '../interfaces/store-models';
 import {getProcessEnv} from './process-env';
 
-export const handleError = (ajaxErrorData: AjaxError): Observable<AjaxError> => {
-  /*if (ajaxErrorData.status === 401) {
-    store.dispatch(logOutActionCreator());
-  }*/
-  return Observable.of(ajaxErrorData);
+export const DependencyContainer = {
+  handleError: (ajaxErrorData: AjaxError): Observable<AjaxError> => {
+    /*if (ajaxErrorData.status === 401) {
+     store.dispatch(logOutActionCreator());
+     }*/
+    return Observable.of(ajaxErrorData);
+  },
+  ajaxGet: Observable.ajax.get
 };
 
 interface ExtendedHeaders {
@@ -54,10 +57,10 @@ export function get<TData extends {}, THeaders extends {}>(url: string, dataToSe
   const extendedHeaders = getExtendedHeaders(headers);
   const newUrl = `${url}${serializedData ? '?' : ''}${serializedData}`;
 
-  return Observable.ajax.get(newUrl, extendedHeaders)
+  return DependencyContainer.ajaxGet(newUrl, extendedHeaders)
   // .map(prolongSession)
     .catch((ajaxErrorData: AjaxError) => {
-      return handleError(ajaxErrorData);
+      return DependencyContainer.handleError(ajaxErrorData);
     });
 }
 
@@ -74,7 +77,8 @@ export const post = (url: string, body?: any, headers = {}): Observable<AjaxResp
   return Observable.ajax.post(url, body, extendedHeaders)
     // .map(prolongSession)
     .catch((ajaxErrorData: AjaxError) => {
-      return handleError(ajaxErrorData);
+      DependencyContainer.handleError(ajaxErrorData);
+      return Observable.of(null);
     });
 };
 
@@ -89,7 +93,7 @@ export const request = (method: string, url: string, body?: any, headers = {}): 
   })
   // .map(prolongSession)
     .catch((ajaxErrorData: AjaxError) => {
-      return handleError(ajaxErrorData);
+      return DependencyContainer.handleError(ajaxErrorData);
     });
 };
 
