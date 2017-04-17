@@ -78,7 +78,7 @@ export const post = (url: string, body?: any, headers = {}): Observable<AjaxResp
     // .map(prolongSession)
     .catch((ajaxErrorData: AjaxError) => {
       DependencyContainer.handleError(ajaxErrorData);
-      return Observable.of(null);
+      return Observable.of(ajaxErrorData);
     });
 };
 

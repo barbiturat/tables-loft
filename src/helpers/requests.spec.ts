@@ -11,7 +11,19 @@ require('./testing/jasmineHelpers2'); // https://github.com/jsverify/jsverify#us
 import {alphanumericSymbolsArb} from './testing/arbitrary';
 import {getExtendedHeaders, DependencyContainer, get} from './requests';
 import {testObservableProperty} from './testing/test-observable-property';
-import {getProcessEnv} from './process-env';
+import * as processEnv from './process-env';
+
+let {getProcessEnv} = processEnv;
+const initGetProcessEnv = getProcessEnv;
+
+// because "get" method uses "API_KEY", that returned by "getProcessEnv" method
+const mockGetProcessEnv = (apiKey = 'some') => (getProcessEnv as Mock<any>).mockImplementation(() => ({
+  API_KEY: apiKey
+}));
+
+const restoreGetProcessEnv = () => {
+  getProcessEnv = initGetProcessEnv;
+};
 
 describe('DependencyContainer.handleError', () => {
   const testScheduler = new TestScheduler((actual: any, expected: any) => {
@@ -50,10 +62,12 @@ describe('DependencyContainer.handleError', () => {
 });
 
 describe('getExtendedHeaders', () => {
+  afterEach(() => {
+    restoreGetProcessEnv();
+  });
+
   jsc.property('adds a proper "Authorization" field', alphanumericSymbolsArb(20, '-'), (apiKey) => {
-    (getProcessEnv as Mock<any>).mockImplementationOnce(() => ({
-      API_KEY: apiKey
-    }));
+    mockGetProcessEnv(apiKey);
 
     const extendedHeaders = getExtendedHeaders();
     const authorization = extendedHeaders.Authorization;
@@ -63,9 +77,7 @@ describe('getExtendedHeaders', () => {
 
   jsc.property('adds passed headers to result', jsc.dict(jsc.oneof<string | number | boolean>([jsc.string, jsc.integer, jsc.bool])), (passedHeaders: {}) => {
     const apiKey = 'some';
-    (getProcessEnv as Mock<any>).mockImplementationOnce(() => ({
-      API_KEY: apiKey
-    }));
+    mockGetProcessEnv(apiKey);
 
     const authorizationData = {
       Authorization: `Token token=${apiKey}`
@@ -80,23 +92,15 @@ describe('getExtendedHeaders', () => {
 describe('get', () => {
   const originalAjaxGet = DependencyContainer.ajaxGet;
   const originalHandleError = DependencyContainer.handleError;
-  const API_KEY = 'some';
-
-  // because "get" method uses "API_KEY", that returned by "getProcessEnv" method
-  const mockGetProcessEnvOnce = (apiKey = API_KEY) => (getProcessEnv as Mock<any>).mockImplementationOnce(() => ({
-    API_KEY: apiKey
-  }));
-
-  beforeEach(() => {
-    mockGetProcessEnvOnce();
-  });
 
   afterEach(() => {
     DependencyContainer.ajaxGet = originalAjaxGet;
     DependencyContainer.handleError = originalHandleError;
+    restoreGetProcessEnv();
   });
 
   it('DependencyContainer.ajaxGet is called once', () => {
+    mockGetProcessEnv();
     DependencyContainer.ajaxGet = jest.fn(() => Observable.of(null));
 
     get('http://some-url.com');
@@ -108,7 +112,7 @@ describe('get', () => {
   });
 
   jsc.property('DependencyContainer.ajaxGet is called with 1-st arg which equals to a passed URL', alphanumericSymbolsArb(20, '---...'), (siteName: string) => {
-    mockGetProcessEnvOnce();
+    mockGetProcessEnv();
     DependencyContainer.ajaxGet = jest.fn(() => Observable.of(null));
 
     const url = `http://${siteName}.com`;
@@ -122,6 +126,7 @@ describe('get', () => {
   });
 
   it('handleError is called with proper parameters on catch', () => {
+    mockGetProcessEnv();
     const errorData = new Error('some error!');
 
     DependencyContainer.ajaxGet = jest.fn(() => Observable.throw(errorData));
@@ -143,9 +148,7 @@ describe('get', () => {
     alphanumericSymbolsArb(20, '---...'),
     alphanumericSymbolsArb(20, '-'),
     (dataToSend: {}, siteName: string, apiKey: string) => {
-      (getProcessEnv as Mock<any>).mockImplementationOnce(() => ({
-        API_KEY: apiKey
-      }));
+      mockGetProcessEnv(apiKey);
       DependencyContainer.ajaxGet = jest.fn(() => Observable.of(null));
 
       const serializedData = queryString.stringify(dataToSend);
@@ -160,17 +163,20 @@ describe('get', () => {
       return equals(firstArg)(urlWithQueryString);
   });
 
-/*
-  it(`Observable.ajax.get is called with data from get's "headers" argument`, () => {
-    Observable.ajax.get = jest.fn(() => Observable.of(null));
+  jsc.property(`DependencyContainer.ajaxGet is called with data from get's "headers" argument`,
+    jsc.dict(jsc.oneof<string | number | boolean>([jsc.string, jsc.integer, jsc.bool])),
+    (headers: {}) => {
+      mockGetProcessEnv('apiKey');
+      DependencyContainer.ajaxGet = jest.fn(() => Observable.of(null));
 
-    get('http://some-url.com');
+      const extendedHeaders = getExtendedHeaders(headers);
+      const url = 'http://some-url.com';
 
-    const firstCall = (Observable.ajax.get as Mock<any>).mock.calls[0];
-    const firstArg = firstCall[0];
+      get(url, {}, extendedHeaders);
 
-    expect(firstArg).toEqual('http://some-url.com');
+      const firstCall = (DependencyContainer.ajaxGet as Mock<any>).mock.calls[0];
+
+      return equals(firstCall)([url, extendedHeaders]);
   });
-*/
 
 });

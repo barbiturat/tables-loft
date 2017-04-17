@@ -1,5 +1,5 @@
 {
-    "rulesDirectory": "./node_modules/tslint-immutable/rules",
+    "rulesDirectory": ["./node_modules/tslint-immutable/rules"],
     "rules": {
         "class-name": true,
         "comment-format": [
