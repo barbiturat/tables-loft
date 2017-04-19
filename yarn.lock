@@ -46,13 +46,19 @@
   version "4.3.1"
   resolved "https://registry.yarnpkg.com/@types/query-string/-/query-string-4.3.1.tgz#59ea5c75d425817370158789aa4f6197e5abd987"
 
-"@types/ramda@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@types/ramda/-/ramda-0.0.6.tgz#576ae4a12af63f0dbb358c639af9422b720bb6df"
+"@types/ramda@^0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@types/ramda/-/ramda-0.0.7.tgz#1226d32bc779e05ac9e6f76f960eeb660447fcab"
 
-"@types/react-dom@^0.14.21":
-  version "0.14.23"
-  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-0.14.23.tgz#cecfcfad754b4c2765fe5d29b81b301889ad6c2e"
+"@types/react-dom@^15.5.0":
+  version "15.5.0"
+  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-15.5.0.tgz#7f4fb9613d4051141773242f7b6b5f1a46b34bd9"
+  dependencies:
+    "@types/react" "*"
+
+"@types/react-modal@^1.6.6":
+  version "1.6.6"
+  resolved "https://registry.yarnpkg.com/@types/react-modal/-/react-modal-1.6.6.tgz#9e77be4f0dea4d95ffb9ebec05047ff42e0381d9"
   dependencies:
     "@types/react" "*"
 
@@ -70,9 +76,9 @@
     "@types/history" "^2"
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^15.0.4":
-  version "15.0.21"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-15.0.21.tgz#29d849427237c1463abfb7b370755ee3e5b5b375"
+"@types/react@*", "@types/react@^15.0.22":
+  version "15.0.22"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-15.0.22.tgz#50803cde8d89f60a9b034f2dd0d619bc5f0273b5"
 
 "@types/redux-router@^1.0.35":
   version "1.0.39"
@@ -4369,9 +4375,9 @@ query-string@^3.0.0:
   dependencies:
     strict-uri-encode "^1.0.0"
 
-query-string@^4.1.0, query-string@^4.3.1:
-  version "4.3.2"
-  resolved "https://registry.yarnpkg.com/query-string/-/query-string-4.3.2.tgz#ec0fd765f58a50031a3968c2431386f8947a5cdd"
+query-string@^4.1.0, query-string@^4.3.3:
+  version "4.3.3"
+  resolved "https://registry.yarnpkg.com/query-string/-/query-string-4.3.3.tgz#91c90ff7173d9acd9e088b3cc223f9b437865692"
   dependencies:
     object-assign "^4.1.0"
     strict-uri-encode "^1.0.0"
@@ -4451,9 +4457,9 @@ react-dom@^15.5.4:
     object-assign "^4.1.0"
     prop-types "~15.5.7"
 
-react-modal@^1.7.6:
-  version "1.7.6"
-  resolved "https://registry.yarnpkg.com/react-modal/-/react-modal-1.7.6.tgz#ee719e480b0e0d959c2e249bcb7acc204950c755"
+react-modal@^1.7.7:
+  version "1.7.7"
+  resolved "https://registry.yarnpkg.com/react-modal/-/react-modal-1.7.7.tgz#70205f51c58708c487aff681ba3fed7946e391d9"
   dependencies:
     create-react-class "^15.5.2"
     element-class "^0.2.0"
@@ -4469,9 +4475,9 @@ react-paginate@^4.1.0:
     react "^15.0.0"
     react-addons-create-fragment "^15.0.0"
 
-react-redux-form@^1.10.2:
-  version "1.10.2"
-  resolved "https://registry.yarnpkg.com/react-redux-form/-/react-redux-form-1.10.2.tgz#6852367d5b9b90327854d49abec178952a2a4fa0"
+react-redux-form@^1.11.0:
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/react-redux-form/-/react-redux-form-1.11.0.tgz#81dd698a01687d81772381f792f7aa474de9ab80"
   dependencies:
     icepick "^1.1.0"
     invariant "~2.2.1"
@@ -5346,9 +5352,9 @@ trim-right@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/trim-right/-/trim-right-1.0.1.tgz#cb2e1203067e0c8de1f614094b9fe45704ea6003"
 
-ts-jest@^19.0.9:
-  version "19.0.9"
-  resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-19.0.9.tgz#049a599be6e09264b421be05f56567165995199c"
+ts-jest@^19.0.10:
+  version "19.0.10"
+  resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-19.0.10.tgz#62d086569f44ed86173cf8f0f332606606142add"
   dependencies:
     fs-extra "^2.1.2"
     glob-all "^3.1.0"
