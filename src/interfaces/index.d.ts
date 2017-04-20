@@ -23,6 +23,10 @@ type BasicType = boolean | number | string;
 
 export type Defined = BasicType | {};
 
+export type ValueOf<A> = A[keyof A];
+
+export type Writable<T> = Record<keyof T, ValueOf<T>>;
+
 export type Partial<Fields> = {
   [Field in keyof Fields]?: Fields[Field];
 };
