@@ -67,7 +67,7 @@ describe('expectEpic', () => {
     });
   });
 
-it('handles errors correctly', () => {
+  it('handles errors correctly', () => {
     const url = 'some-url';
     const responseData = {id: 123, name: 'Bilbo'};
     const getEpic = dataProvider(url).getEpic;
@@ -76,19 +76,45 @@ it('handles errors correctly', () => {
       action: {
         marbles: '(a|)',
         values: {
-          a: { type: actions.FETCH_FOO, payload: {id: 123} }
+          a: {type: actions.FETCH_FOO, payload: {id: 123}}
         }
       },
       expected: {
         marbles: '-(a|)',
         values: {
-          a: { type: actions.FETCH_FOO_REJECTED, error: true }
+          a: {type: actions.FETCH_FOO_REJECTED, error: true}
         }
       },
       response: {
         marbles: '-#',
         values: null,
-        error: { xhr: { responseData } }
+        error: {xhr: {responseData}}
+      },
+      callAjaxArgs: [url, {id: 123}]
+    });
+  });
+
+  it('handles cancellation correctly', () => {
+    const url = 'some-url';
+    const responseData = {id: 123, name: 'Bilbo'};
+    const getEpic = dataProvider(url).getEpic;
+
+    expectEpic(getEpic, {
+      action: {
+        marbles: 'ab|',
+        values: {
+          a: { type: actions.FETCH_FOO, payload: { id: 123 } },
+          b: { type: actions.FETCH_FOO_CANCELLED }
+        }
+      },
+      expected: {
+        marbles: '--|',
+      },
+      response: {
+        marbles: '-a|',
+        values: {
+          a: { message: 'SHOULD_NOT_EMIT_THIS' }
+        }
       },
       callAjaxArgs: [url, {id: 123}]
     });
