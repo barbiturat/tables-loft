@@ -1,6 +1,9 @@
-import {NOTHING_DONE} from '../constants/action-names';
-import {createSimpleAction} from '../helpers/actions';
+import {BaseAction} from 'redux-actions';
 
-const nothingDone = createSimpleAction(NOTHING_DONE);
+import {NOTHING_DONE} from '../constants/action-names';
+
+const nothingDone: BaseAction = {
+  type: NOTHING_DONE
+};
 
 export default nothingDone;

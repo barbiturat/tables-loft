@@ -1,6 +1,9 @@
-import {NEW_DAY_BEGUN} from '../constants/action-names';
-import {createSimpleAction} from '../helpers/actions';
+import {BaseAction} from 'redux-actions';
 
-const newDayBegun = createSimpleAction(NEW_DAY_BEGUN);
+import {NEW_DAY_BEGUN} from '../constants/action-names';
+
+const newDayBegun: BaseAction = {
+  type: NEW_DAY_BEGUN
+};
 
 export default newDayBegun;

@@ -1,6 +1,9 @@
-import {ADMIN_TOKEN_REMOVED} from '../constants/action-names';
-import {createSimpleAction} from '../helpers/actions';
+import {BaseAction} from 'redux-actions';
 
-const adminTokenRemoved = createSimpleAction(ADMIN_TOKEN_REMOVED);
+import {ADMIN_TOKEN_REMOVED} from '../constants/action-names';
+
+const adminTokenRemoved: BaseAction = {
+  type: ADMIN_TOKEN_REMOVED
+};
 
 export default adminTokenRemoved;

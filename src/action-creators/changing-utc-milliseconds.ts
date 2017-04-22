@@ -1,6 +1,9 @@
-import {UPDATING_UTC_MILLISECONDS} from '../constants/action-names';
-import {createSimpleAction} from '../helpers/actions';
+import {BaseAction} from 'redux-actions';
 
-const changingUtcMilliseconds = createSimpleAction(UPDATING_UTC_MILLISECONDS);
+import {UPDATING_UTC_MILLISECONDS} from '../constants/action-names';
+
+const changingUtcMilliseconds: BaseAction = {
+  type: UPDATING_UTC_MILLISECONDS
+};
 
 export default changingUtcMilliseconds;

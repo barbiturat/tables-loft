@@ -1,6 +1,9 @@
-import {FETCHING_TABLES} from '../constants/action-names';
-import {createSimpleAction} from '../helpers/actions';
+import {BaseAction} from 'redux-actions';
 
-const fetchingTables = createSimpleAction(FETCHING_TABLES);
+import {FETCHING_TABLES} from '../constants/action-names';
+
+const fetchingTables: BaseAction = {
+  type: FETCHING_TABLES
+};
 
 export default fetchingTables;
