@@ -1,11 +1,11 @@
+import {ActionFunctionAny, createAction} from 'redux-actions';
+
 import {GLOBAL_ERROR_EXPIRED} from '../constants/action-names';
 import {ActionWithPayload} from '../interfaces/actions';
-import {createActionWithPayload} from '../helpers/actions';
 
+type PayloadType = number;
 export type ActionType = ActionWithPayload<number>;
 
-const globalErrorExpired = (timestamp: number): ActionType => {
-  return createActionWithPayload(GLOBAL_ERROR_EXPIRED, timestamp);
-};
+const globalErrorExpired = createAction<PayloadType>(GLOBAL_ERROR_EXPIRED);
 
-export default globalErrorExpired;
+export default globalErrorExpired as ActionFunctionAny<ActionWithPayload<PayloadType>>;

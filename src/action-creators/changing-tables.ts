@@ -1,11 +1,11 @@
+import {ActionFunctionAny, createAction} from 'redux-actions';
+
 import {CHANGING_TABLES} from '../constants/action-names';
 import {ActionWithPayload} from '../interfaces/actions';
 import {Tables} from '../interfaces/store-models';
-import {createActionWithPayload} from '../helpers/actions';
 
-export type ActionType = ActionWithPayload<Tables>;
+type PayloadType = Tables;
 
-const changingTables = (tables: Tables): ActionType =>
-  createActionWithPayload(CHANGING_TABLES, tables);
+const changingTables = createAction<PayloadType>(CHANGING_TABLES);
 
-export default changingTables;
+export default changingTables as ActionFunctionAny<ActionWithPayload<PayloadType>>;
