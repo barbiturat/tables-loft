@@ -1,4 +1,4 @@
-import {ActionFunction2, createAction} from 'redux-actions';
+import {createAction} from 'redux-actions';
 
 import {MODAL_SESSIONS_HISTORY_CHANGED} from '../constants/action-names';
 import {ActionWithPayload} from '../interfaces/actions';

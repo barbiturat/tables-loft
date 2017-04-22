@@ -13,6 +13,6 @@ export interface RequestGetAdminTokenPayload {
 export interface RequestUpdateTableSessionPayload {
   readonly sessionId: number;
   readonly durationSeconds: number;
-  readonly adminToken: string;
+  readonly adminToken?: string;
 }
 
