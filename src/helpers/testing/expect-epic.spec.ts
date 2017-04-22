@@ -6,7 +6,14 @@ import {expectEpic} from './expect-epic';
 
 describe('expectEpic', () => {
 
-  const dataProvider = (actions: Record<'FETCH_FOO' | 'FETCH_FOO_FULFILLED' | 'FETCH_FOO_CANCELLED' | 'FETCH_FOO_REJECTED', string>, url) => {
+  const actions = {
+    FETCH_FOO: 'FETCH_FOO',
+    FETCH_FOO_FULFILLED: 'FETCH_FOO_FULFILLED',
+    FETCH_FOO_CANCELLED: 'FETCH_FOO_CANCELLED',
+    FETCH_FOO_REJECTED: 'FETCH_FOO_REJECTED'
+  };
+
+  const dataProvider = (url) => {
     const getEpic = (getAjax: (url: string, dataToSend: any) => Observable<any>): Epic<{payload: {}}, {}> => {
       return (action$, store) => {
         return action$.ofType(actions.FETCH_FOO)
@@ -29,24 +36,16 @@ describe('expectEpic', () => {
     };
 
     return {
-      actions,
       url,
       getEpic
     };
   };
 
   it('calls the correct API', () => {
-    const testData = dataProvider(
-      {
-        FETCH_FOO: 'FETCH_FOO',
-        FETCH_FOO_FULFILLED: 'FETCH_FOO_FULFILLED',
-        FETCH_FOO_CANCELLED: 'FETCH_FOO_CANCELLED',
-        FETCH_FOO_REJECTED: 'FETCH_FOO_REJECTED'
-      },
-      'some-url'
-    );
+    const url = 'some-url';
     const responseData = {id: 123, name: 'Bilbo'};
-    const {actions, url, getEpic} = testData;
+    const testData = dataProvider(url);
+    const {getEpic} = testData;
 
     expectEpic(getEpic, {
       action: {
