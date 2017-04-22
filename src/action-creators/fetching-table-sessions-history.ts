@@ -1,12 +1,12 @@
-import {FETCHING_TABLE_SESSIONS_HISTORY} from '../constants/action-names';
+import {createAction} from 'redux-actions';
+
 import {ActionWithPayload} from '../interfaces/actions';
-import {createActionWithPayload} from '../helpers/actions';
+import {FETCHING_TABLE_SESSIONS_HISTORY} from '../constants/action-names';
 
 type PayloadType = number;
 
 export type ActionType = ActionWithPayload<PayloadType>;
 
-const fetchingTableSessionsHistory = (tableId: PayloadType): ActionType =>
-  createActionWithPayload(FETCHING_TABLE_SESSIONS_HISTORY, tableId);
+const fetchingTableSessionsHistory = createAction<PayloadType>(FETCHING_TABLE_SESSIONS_HISTORY);
 
 export default fetchingTableSessionsHistory;
