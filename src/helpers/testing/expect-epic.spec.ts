@@ -44,37 +44,56 @@ describe('expectEpic', () => {
   it('calls the correct API', () => {
     const url = 'some-url';
     const responseData = {id: 123, name: 'Bilbo'};
-    const testData = dataProvider(url);
-    const {getEpic} = testData;
+    const getEpic = dataProvider(url).getEpic;
 
     expectEpic(getEpic, {
       action: {
         marbles: '(a|)',
         values: {
-          a: {
-            type: actions.FETCH_FOO,
-            payload: {id: 123}
-          }
+          a: { type: actions.FETCH_FOO, payload: {id: 123} }
         }
       },
       expected: {
         marbles: '-a|',
         values: {
-          a: {
-            type: actions.FETCH_FOO_FULFILLED,
-            payload: responseData
-          }
+          a: { type: actions.FETCH_FOO_FULFILLED, payload: responseData }
         }
       },
       response: {
         marbles: '-a|',
-        values: {
-          a: responseData
-        }
+        values: { a: responseData }
       },
       callAjaxArgs: [url, {id: 123}]
     });
   });
+
+it('handles errors correctly', () => {
+    const url = 'some-url';
+    const responseData = {id: 123, name: 'Bilbo'};
+    const getEpic = dataProvider(url).getEpic;
+
+    expectEpic(getEpic, {
+      action: {
+        marbles: '(a|)',
+        values: {
+          a: { type: actions.FETCH_FOO, payload: {id: 123} }
+        }
+      },
+      expected: {
+        marbles: '-(a|)',
+        values: {
+          a: { type: actions.FETCH_FOO_REJECTED, error: true }
+        }
+      },
+      response: {
+        marbles: '-#',
+        values: null,
+        error: { xhr: { responseData } }
+      },
+      callAjaxArgs: [url, {id: 123}]
+    });
+  });
+
 
 });
 
