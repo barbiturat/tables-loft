@@ -1,12 +1,10 @@
+import {ActionFunctionAny, createAction} from 'redux-actions';
+
 import {PENDING_BLOCKING_REQUEST} from '../constants/action-names';
-import {createActionWithPayload} from '../helpers/actions';
 import {ActionWithPayload} from '../interfaces/actions';
 
 type PayloadType = boolean;
 
-export type ActionType = ActionWithPayload<PayloadType>;
+const pendingBlockingRequest = createAction<PayloadType>(PENDING_BLOCKING_REQUEST);
 
-const pendingBlockingRequest = (pending: PayloadType): ActionType =>
-  createActionWithPayload(PENDING_BLOCKING_REQUEST, pending);
-
-export default pendingBlockingRequest;
+export default pendingBlockingRequest as ActionFunctionAny<ActionWithPayload<PayloadType>>;

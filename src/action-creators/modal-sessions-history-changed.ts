@@ -1,14 +1,16 @@
+import {ActionFunction2, createAction} from 'redux-actions';
+
 import {MODAL_SESSIONS_HISTORY_CHANGED} from '../constants/action-names';
-import {createActionWithPayload} from '../helpers/actions';
 import {ActionWithPayload} from '../interfaces/actions';
 import {ModalSessionsHistory} from '../interfaces/store-models';
 
+type PayloadType = ModalSessionsHistory;
+
 export type ActionType = ActionWithPayload<ModalSessionsHistory>;
 
-const modalSessionsHistoryChanged = (isOpened: boolean, tableId?: number): ActionType =>
-  createActionWithPayload(MODAL_SESSIONS_HISTORY_CHANGED, {
-    isOpened,
-    tableId
-  });
+const modalSessionsHistoryChanged = createAction<PayloadType, boolean, number>(MODAL_SESSIONS_HISTORY_CHANGED, (isOpened: boolean, tableId?: number) => ({
+  isOpened,
+  tableId
+}));
 
-export default modalSessionsHistoryChanged;
+export default modalSessionsHistoryChanged as (isOpened: boolean, tableId?: number) => ActionWithPayload<PayloadType>;

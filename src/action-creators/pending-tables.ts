@@ -1,12 +1,10 @@
+import {ActionFunctionAny, createAction} from 'redux-actions';
+
 import {PENDING_TABLES} from '../constants/action-names';
-import {createActionWithPayload} from '../helpers/actions';
 import {ActionWithPayload} from '../interfaces/actions';
 
 type PayloadType = boolean;
 
-export type ActionType = ActionWithPayload<PayloadType>;
+const pendingTables = createAction<PayloadType>(PENDING_TABLES);
 
-const pendingTables = (pending: PayloadType): ActionType =>
-  createActionWithPayload(PENDING_TABLES, pending);
-
-export default pendingTables;
+export default pendingTables as ActionFunctionAny<ActionWithPayload<PayloadType>>;
