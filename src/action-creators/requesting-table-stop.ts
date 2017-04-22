@@ -1,12 +1,10 @@
+import {ActionFunction0, createAction} from 'redux-actions';
+
 import {REQUESTING_TABLE_STOP} from '../constants/action-names';
-import {createActionWithPayload} from '../helpers/actions';
 import {ActionWithPayload} from '../interfaces/actions';
 
 type PayloadType = number;
 
-export type ActionType = ActionWithPayload<PayloadType>;
+const requestingTableStop = createAction<PayloadType>(REQUESTING_TABLE_STOP);
 
-const requestingTableStop = (tableId: PayloadType): ActionType =>
-  createActionWithPayload(REQUESTING_TABLE_STOP, tableId);
-
-export default requestingTableStop;
+export default requestingTableStop as ActionFunction0<ActionWithPayload<PayloadType>>;
