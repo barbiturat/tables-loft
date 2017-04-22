@@ -1,8 +1,36 @@
 import Mock = jest.Mock;
 import {Epic} from 'redux-observable';
-import {Observable} from 'rxjs';
+import {Observable} from 'rxjs/Observable';
 
 import {expectEpic} from './expect-epic';
+
+const getEpic = (getAjax: (url: string, dataToSend: any) => Observable<any>): Epic<{payload: {}}, {}> => {
+  const actions = {
+    FETCH_FOO: 'FETCH_FOO',
+    FETCH_FOO_FULFILLED: 'FETCH_FOO_FULFILLED',
+    FETCH_FOO_CANCELLED: 'FETCH_FOO_CANCELLED',
+    FETCH_FOO_REJECTED: 'FETCH_FOO_REJECTED'
+  };
+
+  return (action$, store) => {
+    return action$.ofType(actions.FETCH_FOO)
+      .switchMap(action => {
+        const dataToSend = action.payload;
+
+        return getAjax('some-url', dataToSend)
+          .takeUntil(action$.ofType(actions.FETCH_FOO_CANCELLED))
+          .map(payload => ({
+            type: actions.FETCH_FOO_FULFILLED,
+            payload: payload
+          }))
+          .catch(error => Observable.of({
+            type: actions.FETCH_FOO_REJECTED,
+            payload: error.xhr.response,
+            error: true
+          }));
+      });
+  };
+};
 
 describe('expectEpic', () => {
 
@@ -13,38 +41,9 @@ describe('expectEpic', () => {
     FETCH_FOO_REJECTED: 'FETCH_FOO_REJECTED'
   };
 
-  const dataProvider = (url) => {
-    const getEpic = (getAjax: (url: string, dataToSend: any) => Observable<any>): Epic<{payload: {}}, {}> => {
-      return (action$, store) => {
-        return action$.ofType(actions.FETCH_FOO)
-          .switchMap(action => {
-            const dataToSend = action.payload;
-
-            return getAjax(url, dataToSend)
-              .takeUntil(action$.ofType(actions.FETCH_FOO_CANCELLED))
-              .map(payload => ({
-                type: actions.FETCH_FOO_FULFILLED,
-                payload: payload
-              }))
-              .catch(error => Observable.of({
-                type: actions.FETCH_FOO_REJECTED,
-                payload: error.xhr.response,
-                error: true
-              }));
-          });
-      };
-    };
-
-    return {
-      url,
-      getEpic
-    };
-  };
-
   it('calls the correct API', () => {
     const url = 'some-url';
     const responseData = {id: 123, name: 'Bilbo'};
-    const getEpic = dataProvider(url).getEpic;
 
     expectEpic(getEpic, {
       action: {
@@ -70,7 +69,6 @@ describe('expectEpic', () => {
   it('handles errors correctly', () => {
     const url = 'some-url';
     const responseData = {id: 123, name: 'Bilbo'};
-    const getEpic = dataProvider(url).getEpic;
 
     expectEpic(getEpic, {
       action: {
@@ -96,8 +94,6 @@ describe('expectEpic', () => {
 
   it('handles cancellation correctly', () => {
     const url = 'some-url';
-    const responseData = {id: 123, name: 'Bilbo'};
-    const getEpic = dataProvider(url).getEpic;
 
     expectEpic(getEpic, {
       action: {
@@ -119,7 +115,6 @@ describe('expectEpic', () => {
       callAjaxArgs: [url, {id: 123}]
     });
   });
-
 
 });
 
