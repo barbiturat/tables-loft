@@ -1,9 +1,10 @@
+import {BaseAction} from 'redux-actions';
 import {Store} from 'redux';
 import {Epic} from 'redux-observable';
 import {pipe, objOf, ifElse, prop, merge, clone, flip} from 'ramda';
 
 import {CHANGING_TABLE_FIELDS} from '../constants/action-names';
-import {SimpleAction, ActionWithPayload} from '../interfaces/actions';
+import {ActionWithPayload} from '../interfaces/actions';
 import {ActionType} from '../action-creators/changing-table-fields';
 import {StoreStructure, Tables, Table} from '../interfaces/store-models';
 import changingTables from '../action-creators/changing-tables';
@@ -15,7 +16,7 @@ const changeTableFields = ((action$, store: Store<StoreStructure>) => {
       const {tableId, changedFields} = action.payload;
       const tblId = String(tableId);
 
-      return pipe< Tables, SimpleAction | undefined >(
+      return pipe< Tables, BaseAction | undefined >(
         ifElse( prop(tblId),
           (tables: Tables) =>
             pipe< Tables, Tables, Table, Table, Tables, Tables, ActionWithPayload<Tables> >(
@@ -30,6 +31,6 @@ const changeTableFields = ((action$, store: Store<StoreStructure>) => {
         )
       )(store.getState().app.tablesData.tables);
     });
-}) as Epic<SimpleAction, StoreStructure>;
+}) as Epic<BaseAction, StoreStructure>;
 
 export default changeTableFields;

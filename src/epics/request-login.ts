@@ -1,4 +1,5 @@
 import {Observable} from 'rxjs';
+import {BaseAction} from 'redux-actions';
 import {Epic} from 'redux-observable';
 import {actions, FieldsObject, ValidityObject} from 'react-redux-form';
 import {push} from 'redux-router';
@@ -10,7 +11,7 @@ import {AjaxResponseTyped, AjaxErrorTyped} from '../interfaces/index';
 import {STATUS_OK} from '../constants/used-http-status-codes';
 import {RequestLoginPayload} from '../interfaces/api-requests';
 import {urlLogin} from '../constants/urls';
-import {SimpleAction, FormSubmitAction} from '../interfaces/actions';
+import {FormSubmitAction} from '../interfaces/actions';
 import {API_URL} from '../constants/index';
 import {StoreStructure} from '../interfaces/store-models';
 
@@ -31,7 +32,7 @@ const requestLogin = ((action$) => {
                   pathname: '/'
                 });
 
-                return Observable.of<SimpleAction>(
+                return Observable.of<BaseAction>(
                   setSubmittedAction,
                   redirectToIndexAction
                 );
@@ -65,6 +66,6 @@ const requestLogin = ((action$) => {
         loginRequest$
       );
     });
-}) as Epic<SimpleAction, StoreStructure>;
+}) as Epic<BaseAction, StoreStructure>;
 
 export default requestLogin;

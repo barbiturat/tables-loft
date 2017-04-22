@@ -1,8 +1,8 @@
 import {Store} from 'redux';
+import {BaseAction} from 'redux-actions';
 import {Epic} from 'redux-observable';
 
 import {GLOBAL_ERROR_HAPPENED} from '../constants/action-names';
-import {SimpleAction} from '../interfaces/actions';
 import {StoreStructure} from '../interfaces/store-models';
 import {ActionType} from '../action-creators/global-error-happened';
 import globalErrorExpired from '../action-creators/global-error-expired';
@@ -19,6 +19,6 @@ const unsetGlobalError = ((action$, store: Store<StoreStructure>) => {
 
       return globalErrorExpired(timestamp);
     });
-}) as Epic<SimpleAction, StoreStructure>;
+}) as Epic<BaseAction, StoreStructure>;
 
 export default unsetGlobalError;

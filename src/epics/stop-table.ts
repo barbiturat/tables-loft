@@ -1,4 +1,5 @@
 import {Observable} from 'rxjs';
+import {BaseAction} from 'redux-actions';
 import {Epic} from 'redux-observable';
 import {Store} from 'redux';
 import {pipe, merge, clone, ifElse} from 'ramda';
@@ -10,7 +11,7 @@ import {post, isAjaxResponseDefined, getRequestFailedAction} from '../helpers/re
 import {ResponseFailedPayload, ResponseStopTablePayload} from '../interfaces/api-responses';
 import {AjaxResponseTyped, AjaxErrorTyped, AjaxResponseDefined, IndexedDict} from '../interfaces/index';
 import {urlStopTable} from '../constants/urls';
-import {SimpleAction, ActionWithPayload} from '../interfaces/actions';
+import {ActionWithPayload} from '../interfaces/actions';
 import {ActionType} from '../action-creators/requesting-table-start';
 import {StoreStructure, TableSessions, TableSession as TableSessionFrontend, Table} from '../interfaces/store-models';
 import changingTableSessions from '../action-creators/changing-table-sessions';
@@ -77,17 +78,17 @@ const stopTable = ((action$, store: Store<StoreStructure>) => {
                 const tableSessionsChangedAction = createTableSessionsChangedAction(tableSessionsData.tableSessions, responseSession);
                 const changingTableAction = createChangingTableAction(tablesData.tables[tableId], tableId, responseSession.id);
 
-                const actions: ReadonlyArray<SimpleAction> = < ReadonlyArray<SimpleAction> >[tableSessionsChangedAction, changingTableAction]
+                const actions: ReadonlyArray<BaseAction> = < ReadonlyArray<BaseAction> >[tableSessionsChangedAction, changingTableAction]
                   .filter(Boolean);
 
-                return Observable.from<SimpleAction>(actions);
+                return Observable.from<BaseAction>(actions);
               } else {
                 const pendingStopAction = changingTableFields({
                   isInPending: false
                 }, tableId);
                 const fetchFailedAction = getRequestFailedAction(ajaxData.status, 'Table stop error');
 
-                return Observable.of<SimpleAction>(
+                return Observable.of<BaseAction>(
                   pendingStopAction,
                   fetchFailedAction
                 );
@@ -100,6 +101,6 @@ const stopTable = ((action$, store: Store<StoreStructure>) => {
         request$
       );
     });
-}) as Epic<SimpleAction, StoreStructure>;
+}) as Epic<BaseAction, StoreStructure>;
 
 export default stopTable;

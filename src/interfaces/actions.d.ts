@@ -1,10 +1,6 @@
-import {Action} from 'redux';
+import {BaseAction} from 'redux-actions';
 
-export interface SimpleAction extends Action {
-  readonly type: string;
-}
-
-export interface ActionWithPayload<TPayload> extends SimpleAction {
+export interface ActionWithPayload<TPayload> extends BaseAction {
   readonly payload: TPayload;
   readonly type: string;
   readonly [key: string]: any;

@@ -1,4 +1,5 @@
 import {Observable} from 'rxjs';
+import {BaseAction} from 'redux-actions';
 import {Epic} from 'redux-observable';
 import {actions} from 'react-redux-form';
 // tslint:disable-next-line:no-require-imports
@@ -11,7 +12,7 @@ import {ResponseGetAdminTokenFailedPayload, ResponseGetAdminTokenPayload
 import {AjaxResponseTyped, AjaxErrorTyped, AjaxResponseDefined} from '../interfaces/index';
 import {RequestGetAdminTokenPayload} from '../interfaces/api-requests';
 import {urlGetAdminToken} from '../constants/urls';
-import {SimpleAction, FormSubmitAction} from '../interfaces/actions';
+import {FormSubmitAction} from '../interfaces/actions';
 import adminTokenUpdated from '../action-creators/admin-token-updated';
 import {API_URL} from '../constants/index';
 import {validateResponse} from '../helpers/dynamic-type-validators/index';
@@ -56,7 +57,7 @@ const requestAdminToken = ((action$) => {
                 const clearPasswordInputAction = actions.change(passwordFieldModelPath, '');
                 const resetPasswordInputAction = actions.setInitial(passwordFieldModelPath);
 
-                return Observable.of<SimpleAction>(
+                return Observable.of<BaseAction>(
                   blockingPendingTurnOffAction,
                   setSubmittedAction,
                   setAdminTokenAction,
@@ -72,7 +73,7 @@ const requestAdminToken = ((action$) => {
                   }
                 });
 
-                return Observable.of<SimpleAction>(
+                return Observable.of<BaseAction>(
                   blockingPendingTurnOffAction,
                   setFormSubmitFailedAction,
                   setFieldsValidityAction
@@ -87,6 +88,6 @@ const requestAdminToken = ((action$) => {
         tokenRequest$
       );
     });
-}) as Epic<SimpleAction, StoreStructure>;
+}) as Epic<BaseAction, StoreStructure>;
 
 export default requestAdminToken;

@@ -1,4 +1,5 @@
 import {Store} from 'redux';
+import {BaseAction} from 'redux-actions';
 import {Observable} from 'rxjs';
 import {Epic} from 'redux-observable';
 import * as moment from 'moment';
@@ -7,7 +8,6 @@ import {UPDATING_UTC_MILLISECONDS} from '../constants/action-names';
 import utcMillisecondsUpdated from '../action-creators/utc-milliseconds-updated';
 import {StoreStructure} from '../interfaces/store-models';
 import newDayBegun from '../action-creators/new-day-begun';
-import {SimpleAction} from '../interfaces/actions';
 
 const DAY_BEGIN_HOURS = 8;
 
@@ -24,11 +24,11 @@ const updateUtcMilliseconds = ((action$, store: Store<StoreStructure>) => {
       const utcMillisecondsUpdatedAction = utcMillisecondsUpdated(newTime.valueOf());
       const newDayBegunAction = isNewDayBegun ? newDayBegun : null;
 
-      const actions: ReadonlyArray<SimpleAction> = < ReadonlyArray<SimpleAction> >[utcMillisecondsUpdatedAction, newDayBegunAction]
+      const actions: ReadonlyArray<BaseAction> = < ReadonlyArray<BaseAction> >[utcMillisecondsUpdatedAction, newDayBegunAction]
         .filter(Boolean);
 
-      return Observable.from<SimpleAction>(actions);
+      return Observable.from<BaseAction>(actions);
     });
-}) as Epic<SimpleAction, StoreStructure>;
+}) as Epic<BaseAction, StoreStructure>;
 
 export default updateUtcMilliseconds;

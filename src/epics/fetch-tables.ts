@@ -1,4 +1,5 @@
 import {Observable, AjaxError} from 'rxjs';
+import {BaseAction} from 'redux-actions';
 import {Epic} from 'redux-observable';
 import {pipe} from 'ramda';
 // tslint:disable-next-line:no-require-imports
@@ -10,7 +11,7 @@ import {ResponseTablesPayload} from '../interfaces/api-responses';
 import {AjaxResponseTyped, AjaxResponseDefined} from '../interfaces/index';
 import pendingTables from '../action-creators/pending-tables';
 import {urlTables} from '../constants/urls';
-import {SimpleAction, ActionWithPayload} from '../interfaces/actions';
+import {ActionWithPayload} from '../interfaces/actions';
 import {tablesToFront, tableSessionsToFront} from '../helpers/api-data-converters';
 import {TableSession, Table as TableBackend} from '../interfaces/backend-models';
 import changingTableSessions from '../action-creators/changing-table-sessions';
@@ -68,7 +69,7 @@ const fetchTables = ((action$) => {
 
                 const tablesPendingStop = pendingTables(false);
 
-                return Observable.of<SimpleAction>(
+                return Observable.of<BaseAction>(
                   setTables,
                   setTableSessions,
                   tablesPendingStop
@@ -77,7 +78,7 @@ const fetchTables = ((action$) => {
                 const fetchFailedAction = getRequestFailedAction(ajaxData.status, 'Fetching tables error');
                 const tablesPendingStopAction = pendingTables(false);
 
-                return Observable.of<SimpleAction>(
+                return Observable.of<BaseAction>(
                   tablesPendingStopAction,
                   fetchFailedAction
                 );
@@ -90,6 +91,6 @@ const fetchTables = ((action$) => {
         tablesRequest$
       );
     });
-}) as Epic<SimpleAction, StoreStructure>;
+}) as Epic<BaseAction, StoreStructure>;
 
 export default fetchTables;

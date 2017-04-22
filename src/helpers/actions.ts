@@ -1,6 +1,6 @@
-import {SimpleAction} from '../interfaces/actions';
+import {BaseAction} from 'redux-actions';
 
-export const createSimpleAction = (type: string): SimpleAction => ({
+export const createSimpleAction = (type: string): BaseAction => ({
   type
 });
 

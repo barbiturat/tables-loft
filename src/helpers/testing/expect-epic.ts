@@ -1,10 +1,11 @@
 import Mock = jest.Mock;
+import {BaseAction} from 'redux-actions';
 import {TestScheduler, Observable} from 'rxjs';
 import {ActionsObservable, Epic} from 'redux-observable';
 import {MiddlewareAPI} from 'redux';
 import configureMockStore from 'redux-mock-store';
 
-import {ActionWithPayload, SimpleAction} from '../../interfaces/actions';
+import {ActionWithPayload} from '../../interfaces/actions';
 import {Dict} from '../../interfaces/index';
 
 interface TestObservableData <T> {
@@ -17,8 +18,8 @@ const mockStore = configureMockStore();
 
 export const expectEpic = (getEpic: (getAjax: (url: string, dataToSend: any) => Observable<any>) => Epic<any, any>,
                            options: {
-                             action: TestObservableData<SimpleAction | ActionWithPayload<any>>,
-                             expected: TestObservableData<SimpleAction | ActionWithPayload<any>>,
+                             action: TestObservableData<BaseAction | ActionWithPayload<any>>,
+                             expected: TestObservableData<BaseAction | ActionWithPayload<any>>,
                              response: TestObservableData<any>,
                              store?: MiddlewareAPI<any>
                              callAjaxArgs: ReadonlyArray<any>

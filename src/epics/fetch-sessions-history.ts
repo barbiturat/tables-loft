@@ -1,4 +1,5 @@
 import {Observable} from 'rxjs';
+import {BaseAction} from 'redux-actions';
 import {Epic} from 'redux-observable';
 import {Store} from 'redux';
 import {pipe, clone, merge, keys, map, concat, uniq} from 'ramda';
@@ -16,7 +17,7 @@ import {
 } from '../interfaces/api-responses';
 import {AjaxResponseTyped, AjaxErrorTyped, AjaxResponseDefined} from '../interfaces/index';
 import {urlSessionHistory} from '../constants/urls';
-import {SimpleAction, ActionWithPayload} from '../interfaces/actions';
+import {ActionWithPayload} from '../interfaces/actions';
 import {tableSessionsToFront} from '../helpers/api-data-converters';
 import changingTableSessions from '../action-creators/changing-table-sessions';
 import {ActionType} from '../action-creators/fetching-table-sessions-history';
@@ -105,7 +106,7 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
                   )(convertedResponseSessions) as ActionWithPayload<Tables> :
                   null;
 
-                const actions: ReadonlyArray<SimpleAction> = < ReadonlyArray<SimpleAction> >[setSessionsAction, setTablesAction]
+                const actions: ReadonlyArray<BaseAction> = < ReadonlyArray<BaseAction> >[setSessionsAction, setTablesAction]
                   .filter(Boolean);
 
                 return Observable.from(actions);
@@ -118,7 +119,7 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
 
                 const fetchFailedAction = getRequestFailedAction(ajaxData.status, 'Fetching table sessions error');
 
-                return Observable.of<SimpleAction>(
+                return Observable.of<BaseAction>(
                   setTablesWithoutPendingAction,
                   fetchFailedAction
                 );
@@ -131,6 +132,6 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
         historyRequest$
       );
     });
-}) as Epic<SimpleAction, StoreStructure>;
+}) as Epic<BaseAction, StoreStructure>;
 
 export default fetchSessionsHistory;

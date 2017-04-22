@@ -1,4 +1,5 @@
 import {Observable} from 'rxjs';
+import {BaseAction} from 'redux-actions';
 import {Epic} from 'redux-observable';
 import {Store} from 'redux';
 import {pipe, merge, clone} from 'ramda';
@@ -10,7 +11,7 @@ import {post, isAjaxResponseDefined, getRequestFailedAction} from '../helpers/re
 import {ResponseFailedPayload, ResponseStartTablePayload} from '../interfaces/api-responses';
 import {AjaxResponseTyped, AjaxErrorTyped, AjaxResponseDefined} from '../interfaces/index';
 import {urlStartTable} from '../constants/urls';
-import {SimpleAction, ActionWithPayload} from '../interfaces/actions';
+import {ActionWithPayload} from '../interfaces/actions';
 import {ActionType} from '../action-creators/requesting-table-start';
 import {StoreStructure, TableSessions} from '../interfaces/store-models';
 import changingTableSessions from '../action-creators/changing-table-sessions';
@@ -62,7 +63,7 @@ const startTable = ((action$, store: Store<StoreStructure>) => {
                   isInPending: false
                 }, tableId);
 
-                return Observable.of<SimpleAction>(
+                return Observable.of<BaseAction>(
                   tableSessionsChangedAction,
                   changingTableAction
                 );
@@ -72,7 +73,7 @@ const startTable = ((action$, store: Store<StoreStructure>) => {
                   isInPending: false
                 }, tableId);
 
-                return Observable.of<SimpleAction>(
+                return Observable.of<BaseAction>(
                   fetchFailedAction,
                   pendingStopAction
                 );
@@ -85,6 +86,6 @@ const startTable = ((action$, store: Store<StoreStructure>) => {
         request$
       );
     });
-}) as Epic<SimpleAction, StoreStructure>;
+}) as Epic<BaseAction, StoreStructure>;
 
 export default startTable;

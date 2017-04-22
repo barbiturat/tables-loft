@@ -1,9 +1,8 @@
 import {Dispatch} from 'redux';
-
-import {SimpleAction} from './actions';
+import {BaseAction} from 'redux-actions';
 
 interface DefaultDispatchProps {
-  readonly dispatch: Dispatch<SimpleAction>;
+  readonly dispatch: Dispatch<BaseAction>;
 }
 
 type PropsExtendedByConnect<OwnProps, MappedProps> = OwnProps & MappedProps & DefaultDispatchProps;
