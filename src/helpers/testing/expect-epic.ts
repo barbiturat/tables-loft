@@ -2,6 +2,7 @@ import Mock = jest.Mock;
 import {TestScheduler, Observable} from 'rxjs';
 import {ActionsObservable, Epic} from 'redux-observable';
 import {MiddlewareAPI} from 'redux';
+import configureMockStore from 'redux-mock-store';
 
 import {ActionWithPayload, SimpleAction} from '../../interfaces/actions';
 import {Dict, Writable} from '../../interfaces/index';
@@ -16,15 +17,18 @@ interface AjaxDependencies {
   readonly getAjax: () => Observable<any>;
 }
 
+const mockStore = configureMockStore();
+
 export const expectEpic = (epic: Epic<any, any>, options: {
   action: TestObservableData< SimpleAction | ActionWithPayload<any> >,
   expected: TestObservableData< SimpleAction | ActionWithPayload<any> >,
   response: TestObservableData<any>,
-  store: MiddlewareAPI<any>
+  store?: MiddlewareAPI<any>
   callAjaxArgs: ReadonlyArray<any>,
   dependenciesObj?: Writable<AjaxDependencies>
 }) => {
-  const {action, expected, response, store, callAjaxArgs, dependenciesObj} = options;
+  const {action, expected, response, callAjaxArgs, dependenciesObj} = options;
+  const store = options.store || mockStore();
   const testScheduler = new TestScheduler((actual: any, expectedData: any) => {
     return expect(actual).toEqual(expectedData);
   });

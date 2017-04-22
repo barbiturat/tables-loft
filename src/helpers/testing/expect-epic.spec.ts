@@ -1,11 +1,8 @@
 import Mock = jest.Mock;
 import {Epic} from 'redux-observable';
 import {Observable} from 'rxjs';
-import configureMockStore from 'redux-mock-store';
 
 import {expectEpic} from './expect-epic';
-
-const mockStore = configureMockStore();
 
 const actions = {
   FETCH_FOO: 'FETCH_FOO',
@@ -38,7 +35,7 @@ const testEpic: Epic<{payload: {}}, {}> = (action$, store) => {
 };
 
 describe('expectEpic', () => {
-  it('works', () => {
+  it('calls the correct API', () => {
     const responseData = {id: 123, name: 'Bilbo'};
 
     expectEpic(testEpic, {
@@ -66,7 +63,6 @@ describe('expectEpic', () => {
           a: responseData
         }
       },
-      store: mockStore(),
       callAjaxArgs: ['some-url', {id: 123}],
       dependenciesObj: ajaxDependencies
     });
