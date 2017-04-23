@@ -1,17 +1,12 @@
-import {ActionWithPayload} from '../interfaces/actions';
-import {ADMIN_TOKEN_UPDATED, ADMIN_TOKEN_REMOVED} from '../constants/action-names';
+import {handleActions} from 'redux-actions';
+
 import {AdminToken} from '../interfaces/store-models';
 
 export type Structure = AdminToken;
 
-const adminToken = (state: Structure = null, action: ActionWithPayload<Structure>): Structure => {
-  if (action.type === ADMIN_TOKEN_UPDATED) {
-    return action.payload;
-  } else if (action.type === ADMIN_TOKEN_REMOVED) {
-    return null;
-  } else {
-    return state;
-  }
-};
+const adminToken = handleActions<Structure, Structure>({
+  ADMIN_TOKEN_UPDATED: (state, action) => action.payload,
+  ADMIN_TOKEN_REMOVED: (state, action) => null
+}, null);
 
 export default adminToken;
