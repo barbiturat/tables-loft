@@ -2,8 +2,6 @@
 @import 'mixins';
 
 .buttons-group {
-  @include normalize-block();
-
   display: block;
   white-space: nowrap;
 

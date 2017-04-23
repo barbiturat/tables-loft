@@ -1,25 +1,5 @@
 @import 'settings';
 
-@mixin normalize-block() {
-  border-collapse: separate;
-  border-spacing: 0;
-  color: $body-font-color;
-  cursor: auto;
-  empty-cells: show;
-  font-family: $body-font-family;
-  font-size: $global-font-size;
-  font-style: normal;
-  font-variant: normal;
-  font-weight: $global-weight-normal;
-  letter-spacing: normal;
-  line-height: $global-line-height;
-  text-align: left;
-  text-indent: 0;
-  text-transform: none;
-  white-space: normal;
-  word-spacing: normal;
-}
-
 @mixin link-to-button($color) {
   color: $color;
   text-decoration: none;

@@ -5,8 +5,6 @@ $table-side-padding: 70px;
 $table-columns-padding: $table-side-padding / 2;
 
 .sessions-list {
-  @include normalize-block();
-
   display: table;
   min-width: 550px;
   font-size: 13px;

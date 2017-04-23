@@ -4,8 +4,6 @@
 .modal {
   $border-radius: 20px;
 
-  @include normalize-block();
-
   position: absolute;
   left: 50%;
   top: 50%;

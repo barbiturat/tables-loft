@@ -10,8 +10,6 @@ $shuffle-table-border-radius: 50px;
   $table-width: 524px;
   $table-height: 320px;
 
-  @include normalize-block();
-
   position: relative;
   display: inline-block;
   width: $table-width;

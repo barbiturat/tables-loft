@@ -2,8 +2,6 @@
 @import 'mixins';
 
 .header {
-  @include normalize-block();
-
   display: flex;
   height: $header-height;
   background-color: #464646;

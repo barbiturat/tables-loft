@@ -4,8 +4,6 @@
 .button {
   $button-radius: 7px;
 
-  @include normalize-block();
-
   display: inline-block;
   padding: 0 18px;
   font-size: 16px;
