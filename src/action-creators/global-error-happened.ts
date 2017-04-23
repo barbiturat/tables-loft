@@ -1,4 +1,4 @@
-import {ActionFunction1, createAction} from 'redux-actions';
+import {createAction} from 'redux-actions';
 
 import {GLOBAL_ERROR_HAPPENED} from '../constants/action-names';
 import {ActionWithPayload} from '../interfaces/actions';
@@ -13,4 +13,4 @@ const globalErrorHappened = createAction<PayloadType, string>(GLOBAL_ERROR_HAPPE
   date: Date.now()
 }));
 
-export default globalErrorHappened as ActionFunction1<string, ActionWithPayload<PayloadType>>;
+export default globalErrorHappened;
