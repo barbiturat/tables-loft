@@ -1,17 +1,12 @@
-import {ActionWithPayload} from '../interfaces/actions';
+import {handleAction} from 'redux-actions';
+
 import {MODAL_SESSIONS_HISTORY_CHANGED} from '../constants/action-names';
 import {ModalSessionsHistory} from '../interfaces/store-models';
 
 export type Structure = ModalSessionsHistory;
 
-const modalSessionsHistory = (state: Structure = {
+const modalSessionsHistory = handleAction<Structure, Structure>(MODAL_SESSIONS_HISTORY_CHANGED, (state, action) => ({...action.payload}), {
   isOpened: false
-}, action: ActionWithPayload<Structure>): Structure => {
-  if (action.type === MODAL_SESSIONS_HISTORY_CHANGED) {
-    return {...action.payload};
-  } else {
-    return state;
-  }
-};
+});
 
 export default modalSessionsHistory;

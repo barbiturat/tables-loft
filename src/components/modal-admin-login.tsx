@@ -7,7 +7,7 @@ import {Control, Form, Errors, actions, ErrorsProps, WrapperProps, CustomCompone
 import {StoreStructure} from '../interfaces/store-models';
 import {PropsExtendedByConnect} from '../interfaces/component';
 import {managerLoginForm} from '../constants/form-fields';
-import {ManagerLoginForm} from '../reducers/forms';
+import {ManagerLoginForm} from '../interfaces/forms';
 import {isRequiredField} from '../constants/messages';
 import {isNotEmpty as isFilled} from '../helpers';
 import {StringDict} from '../interfaces/index';

@@ -1,14 +1,9 @@
-import {ActionWithPayload} from '../interfaces/actions';
+import {handleAction} from 'redux-actions';
+
 import {USER_EMAIL_CHANGED} from '../constants/action-names';
 
 export type Structure = string;
 
-const email = (state: Structure = '', action: ActionWithPayload<Structure>): Structure => {
-  if (action.type === USER_EMAIL_CHANGED) {
-    return action.payload;
-  } else {
-    return state;
-  }
-};
+const email = handleAction<Structure, Structure>(USER_EMAIL_CHANGED, (state, action) => action.payload, '');
 
 export default email;

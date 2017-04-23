@@ -1,14 +1,9 @@
-import {ActionWithPayload} from '../interfaces/actions';
+import {handleAction} from 'redux-actions';
+
 import {PENDING_TABLE_SESSIONS} from '../constants/action-names';
 
 export type Structure = boolean;
 
-const isInPending = (state: Structure = false, action: ActionWithPayload<Structure>): Structure => {
-  if (action.type === PENDING_TABLE_SESSIONS) {
-    return action.payload;
-  } else {
-    return state;
-  }
-};
+const isInPending = handleAction<Structure, Structure>(PENDING_TABLE_SESSIONS, (state, action) => action.payload, false);
 
 export default isInPending;

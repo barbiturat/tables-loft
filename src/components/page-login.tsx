@@ -8,7 +8,7 @@ import {isNotEmpty as isFilled} from '../helpers';
 import {renderErrorComponent, renderErrorsBlock} from '../helpers/renderers';
 import {isRequiredField} from '../constants/messages';
 import {PropsExtendedByConnect} from '../interfaces/component';
-import {LoginForm} from '../reducers/forms';
+import {LoginForm} from '../interfaces/forms';
 import requestingLogin from '../action-creators/requesting-login';
 import {loginForm} from '../constants/form-fields';
 import {StoreStructure} from '../interfaces/store-models';
