@@ -4,7 +4,7 @@ const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const RollbarSourceMapPlugin = require('rollbar-sourcemap-webpack-plugin');
 
-const envVarStubs = require('../package.json').appSettings.envVarStubs;
+const envVarStubs = require('./package.json').appSettings.envVarStubs;
 
 const envVars = process.env;
 const isProd = process.argv.includes('-p');
@@ -20,7 +20,7 @@ const sourcePath = pathFromRoot('./src');
 const outputPath = pathFromRoot('./public');
 
 function pathFromRoot(url = '') {
-  return path.resolve(__dirname, '..', url);
+  return path.resolve(__dirname, url);
 }
 
 if (!API_KEY) throw('The "API_KEY" env variable must be set');
