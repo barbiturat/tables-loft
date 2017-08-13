@@ -103,7 +103,7 @@ module.exports = {
         exclude: /node_modules/,
         loader: 'ts-loader',
         options: {
-          configFileName: pathFromRoot('./configs/tsconfig.json')
+          configFileName: pathFromRoot('./tsconfig.json')
         }
       },
       {

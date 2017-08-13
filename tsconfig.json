@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "..",
+    "baseUrl": "./",
     "allowJs": true,
     "noEmitOnError": true,
     "noImplicitAny": true,
@@ -22,8 +22,8 @@
     }
   },
   "files": [
-    "../src/custom-typings/ramda.d.ts",
-    "../src/index.tsx"
+    "./src/custom-typings/ramda.d.ts",
+    "./src/index.tsx"
   ],
   "exclude": [
     "node_modules",
