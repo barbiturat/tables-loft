@@ -12,14 +12,17 @@
             "spaces"
         ],
         "no-conditional-assignment": true,
+        "no-class": false,
         "no-duplicate-variable": true,
-        "no-label": true,
         "no-eval": true,
         "no-inferrable-types": true,
         "no-internal-module": true,
+        "no-let": false,
+        "no-mixed-interface": false,
         "no-require-imports": true,
         "no-shadowed-variable": true,
         "no-string-literal": false,
+        "no-this": false,
         "no-use-before-declare": true,
         "no-var-keyword": true,
         "object-literal-sort-keys": false,
@@ -36,8 +39,7 @@
             "jsx-double"
         ],
         "radix": true,
-        "readonly-interface": true,
-        "readonly-indexer": true,
+        "readonly-keyword": true,
         "readonly-array": true,
         "semicolon": [true, "always", "ignore-bound-class-methods"],
         "triple-equals": [

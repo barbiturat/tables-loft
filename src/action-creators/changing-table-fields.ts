@@ -7,8 +7,8 @@ import {Table} from '../interfaces/store-models';
 type ChangedFields = Partial<Table>;
 
 type PayloadType = {
-  changedFields: ChangedFields;
-  tableId: number;
+  readonly changedFields: ChangedFields;
+  readonly tableId: number;
 };
 
 export type ActionType = ActionWithPayload<PayloadType>;

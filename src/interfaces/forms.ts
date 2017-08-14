@@ -10,7 +10,7 @@ interface FormStateWithValue<TValue> extends FormState {
 }
 
 type FormStructure<FormFields> = FieldsOfType<FormFields, FieldState> & {
-  $form: FormStateWithValue< FieldsOfType<FormFields, string> >;
+  readonly $form: FormStateWithValue< FieldsOfType<FormFields, string> >;
 };
 
 interface LoginFormFields {
@@ -41,9 +41,9 @@ export type ManagerLoginForm = FormStructure<ManagerLoginFormFields>;
 
 export interface Structure extends FormModels {
   readonly forms: {
-    loginForm: LoginForm;
-    managerLoginForm: ManagerLoginForm;
-    $form: FormStateWithValue<FormModels>;
+    readonly loginForm: LoginForm;
+    readonly managerLoginForm: ManagerLoginForm;
+    readonly $form: FormStateWithValue<FormModels>;
   };
 }
 
