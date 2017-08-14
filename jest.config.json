@@ -1,7 +1,9 @@
 {
   "rootDir": ".",
   "globals": {
-    "__TS_CONFIG__": "<rootDir>/tsconfig.json"
+    "ts-jest": {
+      "tsConfigFile": "<rootDir>/tsconfig.json"
+    }
   },
   "testRegex": "\\.spec\\.(ts|tsx|js)$",
   "transform": {
