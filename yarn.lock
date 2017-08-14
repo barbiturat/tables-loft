@@ -63,6 +63,12 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-paginate@^4.3.1":
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/@types/react-paginate/-/react-paginate-4.3.1.tgz#04c558a67751c38c24160df8f812f6b57600081a"
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-redux@^5.0.1":
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/@types/react-redux/-/react-redux-5.0.1.tgz#7fb482e44645b650e335afa633d0f1349e124002"

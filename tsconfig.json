@@ -22,7 +22,6 @@
     }
   },
   "files": [
-    "./src/custom-typings/ramda.d.ts",
     "./src/index.tsx"
   ],
   "exclude": [
