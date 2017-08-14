@@ -57,7 +57,7 @@
     "@types/node" "*"
     "@types/react" "*"
 
-"@types/react-modal@^1.6.6":
+"@types/react-modal@^1.6.8":
   version "1.6.8"
   resolved "https://registry.yarnpkg.com/@types/react-modal/-/react-modal-1.6.8.tgz#ba6ee9ef43cea15be4b8c379aacd22a7059de35e"
   dependencies:
@@ -81,7 +81,7 @@
   version "16.0.2"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.0.2.tgz#0b31a73cdde6272b719e5b05a7df6d1e2654a804"
 
-"@types/redux-actions@^1.2.4":
+"@types/redux-actions@^1.2.7":
   version "1.2.7"
   resolved "https://registry.yarnpkg.com/@types/redux-actions/-/redux-actions-1.2.7.tgz#72c6fa373353058371eba363713d796e5b85b03e"
 
@@ -4992,7 +4992,7 @@ ts-jest@^20.0.10:
     source-map-support "^0.4.4"
     yargs "^8.0.1"
 
-ts-loader@^2.0.0:
+ts-loader@^2.3.2:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/ts-loader/-/ts-loader-2.3.2.tgz#b71b9f0d0062c791a654d462140718f9f7817665"
   dependencies:
@@ -5009,7 +5009,7 @@ tslint-immutable@^3.2.0:
   version "3.4.2"
   resolved "https://registry.yarnpkg.com/tslint-immutable/-/tslint-immutable-3.4.2.tgz#99a9ecd063322b3b1ec4e2d1f89b54072ffd16fc"
 
-tslint-loader@^3.3.0:
+tslint-loader@^3.5.3:
   version "3.5.3"
   resolved "https://registry.yarnpkg.com/tslint-loader/-/tslint-loader-3.5.3.tgz#343f74122d94f356b689457d3f59f64a69ab606f"
   dependencies:
