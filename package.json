@@ -23,8 +23,8 @@
     "run-server": "node ./js-server/out/js-server",
     "start": "node ./js-server/out/js-server",
     "start-locally": "npm run build-dev & npm run build-and-run-fake-api-server & npm run build-and-run-server",
-    "test": "jest --config=./configs/jest.config.json",
-    "update-test-snapshots": "jest -u --config=./configs/jest.config.json"
+    "test": "jest --config=./jest.config.json",
+    "update-test-snapshots": "jest -u --config=./jest.config.json"
   },
   "repository": {
     "type": "git",

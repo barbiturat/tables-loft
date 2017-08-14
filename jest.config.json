@@ -1,5 +1,5 @@
 {
-  "rootDir": "..",
+  "rootDir": ".",
   "globals": {
     "__TS_CONFIG__": "<rootDir>/tsconfig.json"
   },
