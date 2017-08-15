@@ -1,11 +1,10 @@
-import {ActionFunction2, createAction} from 'redux-actions';
+import {Action, ActionFunction2, createAction} from 'redux-actions';
 
 import {REQUESTING_TABLE_SESSION_CHANGE} from '../constants/action-names';
-import {ActionWithPayload} from '../interfaces/actions';
 import {RequestUpdateTableSessionPayload} from '../interfaces/api-requests';
 
 type PayloadType = RequestUpdateTableSessionPayload;
-export type ActionType = ActionWithPayload<PayloadType>;
+export type ActionType = Action<PayloadType>;
 
 const requestingTableSessionChange = createAction<PayloadType, number, number>(REQUESTING_TABLE_SESSION_CHANGE, (sessionId: number, durationSeconds: number) => ({
   sessionId,

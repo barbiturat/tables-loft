@@ -1,5 +1,5 @@
 import {Observable} from 'rxjs';
-import {BaseAction} from 'redux-actions';
+import {Action, BaseAction} from 'redux-actions';
 import {Epic} from 'redux-observable';
 import {Store} from 'redux';
 import {pipe, when, merge, prop, objOf, flip, clone, ifElse} from 'ramda';
@@ -14,7 +14,6 @@ import {
 } from '../interfaces/api-responses';
 import {AjaxResponseTyped, AjaxErrorTyped, Partial, AjaxResponseDefined} from '../interfaces/index';
 import {urlUpdateTableSession} from '../constants/urls';
-import {ActionWithPayload} from '../interfaces/actions';
 import changingTableSessions from '../action-creators/changing-table-sessions';
 import {RequestUpdateTableSessionPayload} from '../interfaces/api-requests';
 import {StoreStructure, TableSession, TableSessions} from '../interfaces/store-models';
@@ -58,7 +57,7 @@ const requestTableSessionChange = ((action$, store: Store<StoreStructure>) => {
 
       const {sessionId, durationSeconds} = action.payload;
 
-      const setSessionsWithPending$ = pipe<TableSessions, TableSessions, TableSessions, ActionWithPayload<TableSessions>, Observable< ActionWithPayload<TableSessions> > >(
+      const setSessionsWithPending$ = pipe<TableSessions, TableSessions, TableSessions, Action<TableSessions>, Observable< Action<TableSessions> > >(
         clone,
         (currSessionsClone) => setNewParamsToSession(currSessionsClone, sessionId, {
           isInPending: true

@@ -1,12 +1,11 @@
-import {createAction} from 'redux-actions';
+import {Action, createAction} from 'redux-actions';
 
 import {GLOBAL_ERROR_HAPPENED} from '../constants/action-names';
-import {ActionWithPayload} from '../interfaces/actions';
 import {GlobalError} from '../interfaces/store-models';
 
 type PayloadType = GlobalError;
 
-export type ActionType = ActionWithPayload<PayloadType>;
+export type ActionType = Action<PayloadType>;
 
 const globalErrorHappened = createAction<PayloadType, string>(GLOBAL_ERROR_HAPPENED, (message: string) => ({
   message,

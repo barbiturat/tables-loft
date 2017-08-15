@@ -5,11 +5,11 @@ require('../helpers/testing/jasmineHelpers2'); // https://github.com/jsverify/js
 
 import email from './email';
 import {USER_EMAIL_CHANGED} from '../constants/action-names';
-import {ActionWithPayload} from '../interfaces/actions';
+import {Action} from 'redux-actions';
 
 test(`returns proper result`, () => {
   const actionPayload = '111';
-  const action: ActionWithPayload<string> = {
+  const action: Action<string> = {
     type: USER_EMAIL_CHANGED,
     payload: actionPayload
   };
@@ -19,7 +19,7 @@ test(`returns proper result`, () => {
 });
 
 jsc.property('returns proper result with any string data', jsc.nestring, (actionPayload) => {
-  const action: ActionWithPayload<string> = {
+  const action: Action<string> = {
     type: USER_EMAIL_CHANGED,
     payload: actionPayload
   };

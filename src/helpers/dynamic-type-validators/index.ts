@@ -2,9 +2,9 @@ import {AjaxResponse} from 'rxjs';
 import {pipe} from 'ramda';
 import globalErrorHappened from '../../action-creators/global-error-happened';
 import store from '../../store/index';
-import {ActionWithPayload} from '../../interfaces/actions';
 import {GlobalError} from '../../interfaces/store-models';
 import {ValidationError} from '../../custom-typings/tcomb-validation';
+import {Action} from 'redux-actions';
 // tslint:disable-next-line:no-require-imports
 const t = require('tcomb-validation');
 
@@ -17,7 +17,7 @@ export const validateResponse = (format: InputFormat, ajaxData: AjaxResponse) =>
     console.log('validationRes', validationRes);
     const url = ajaxData.xhr.responseURL;
 
-    pipe< string, string, ActionWithPayload<GlobalError>, void >(
+    pipe< string, string, Action<GlobalError>, void >(
       (errUrl) => `Invalid response format from ${url}`,
       globalErrorHappened,
       (globalErrorAction) => {

@@ -1,4 +1,4 @@
-import {BaseAction} from 'redux-actions';
+import {Action, BaseAction} from 'redux-actions';
 
 export interface ActionWithPayload<TPayload> extends BaseAction {
   readonly payload: TPayload;
@@ -11,4 +11,4 @@ interface FormSubmitActionPayload {
   readonly formData: any;
 }
 
-export type FormSubmitAction = ActionWithPayload<FormSubmitActionPayload>;
+export type FormSubmitAction = Action<FormSubmitActionPayload>;

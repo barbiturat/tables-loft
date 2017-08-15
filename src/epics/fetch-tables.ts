@@ -1,5 +1,5 @@
 import {Observable, AjaxError} from 'rxjs';
-import {BaseAction} from 'redux-actions';
+import {Action, BaseAction} from 'redux-actions';
 import {Epic} from 'redux-observable';
 import {pipe} from 'ramda';
 // tslint:disable-next-line:no-require-imports
@@ -11,7 +11,6 @@ import {ResponseTablesPayload} from '../interfaces/api-responses';
 import {AjaxResponseTyped, AjaxResponseDefined} from '../interfaces/index';
 import pendingTables from '../action-creators/pending-tables';
 import {urlTables} from '../constants/urls';
-import {ActionWithPayload} from '../interfaces/actions';
 import {tablesToFront, tableSessionsToFront} from '../helpers/api-data-converters';
 import {TableSession, Table as TableBackend} from '../interfaces/backend-models';
 import changingTableSessions from '../action-creators/changing-table-sessions';
@@ -56,13 +55,13 @@ const fetchTables = ((action$) => {
 
                 const tables = ajaxData.response.tables;
 
-                const setTableSessions = pipe< ReadonlyArray<TableBackend>, ReadonlyArray<TableSession>, TableSessions, ActionWithPayload<TableSessions> >(
+                const setTableSessions = pipe< ReadonlyArray<TableBackend>, ReadonlyArray<TableSession>, TableSessions, Action<TableSessions> >(
                   getTableSessionsFromTables,
                   tableSessionsToFront,
                   changingTableSessions
                 )(tables);
 
-                const setTables = pipe< ReadonlyArray<TableBackend>, Tables, ActionWithPayload<Tables> >(
+                const setTables = pipe< ReadonlyArray<TableBackend>, Tables, Action<Tables> >(
                   tablesToFront,
                   changingTables
                 )(tables);

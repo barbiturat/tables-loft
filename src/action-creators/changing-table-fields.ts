@@ -1,7 +1,6 @@
-import {createAction} from 'redux-actions';
+import {Action, createAction} from 'redux-actions';
 
 import {CHANGING_TABLE_FIELDS} from '../constants/action-names';
-import {ActionWithPayload} from '../interfaces/actions';
 import {Table} from '../interfaces/store-models';
 
 type ChangedFields = Partial<Table>;
@@ -11,7 +10,7 @@ type PayloadType = {
   readonly tableId: number;
 };
 
-export type ActionType = ActionWithPayload<PayloadType>;
+export type ActionType = Action<PayloadType>;
 
 const changingTableFields = createAction<PayloadType, ChangedFields, number>(CHANGING_TABLE_FIELDS, (changedFields, tableId) => ({
   changedFields,

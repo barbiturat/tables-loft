@@ -1,5 +1,5 @@
 import {Observable} from 'rxjs';
-import {BaseAction} from 'redux-actions';
+import {Action, BaseAction} from 'redux-actions';
 import {Epic} from 'redux-observable';
 import {Store} from 'redux';
 import {pipe, clone, merge, keys, map, concat, uniq} from 'ramda';
@@ -17,7 +17,6 @@ import {
 } from '../interfaces/api-responses';
 import {AjaxResponseTyped, AjaxErrorTyped, AjaxResponseDefined} from '../interfaces/index';
 import {urlSessionHistory} from '../constants/urls';
-import {ActionWithPayload} from '../interfaces/actions';
 import {tableSessionsToFront} from '../helpers/api-data-converters';
 import changingTableSessions from '../action-creators/changing-table-sessions';
 import {ActionType} from '../action-creators/fetching-table-sessions-history';
@@ -65,11 +64,11 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
       const dataToSend: RequestSessionHistoryPayload = {};
       const url = `${API_URL}${urlSessionHistory}`.replace(':table_id', String(tableId));
 
-      const setTablesWithPending$ = pipe< Tables, Tables, Tables, ActionWithPayload<Tables>, Observable<ActionWithPayload<Tables>> >(
+      const setTablesWithPending$ = pipe< Tables, Tables, Tables, Action<Tables>, Observable<Action<Tables>> >(
         clone,
         (currentTablesClone: Tables) => getTablesWithSetHistoryPending(currentTablesClone, tableId, true),
         (tablesWithSetPending: Tables) => changingTables(tablesWithSetPending),
-        (tablesPendingAction: ActionWithPayload<Tables>) => Observable.of(tablesPendingAction)
+        (tablesPendingAction: Action<Tables>) => Observable.of(tablesPendingAction)
       )(store.getState().app.tablesData.tables);
 
       const historyRequest$ = Observable.of(null)
@@ -85,7 +84,7 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
                   (respSessions: ReadonlyArray<TableSession>) => tableSessionsToFront(respSessions)
                 )(ajaxData.response.sessions);
 
-                const setSessionsAction = pipe<TableSessions, TableSessions, ActionWithPayload<TableSessions> >(
+                const setSessionsAction = pipe<TableSessions, TableSessions, Action<TableSessions> >(
                   merge(tableSessionsData.tableSessions),
                   (newSessionsAll: TableSessions) => changingTableSessions(newSessionsAll)
                 )(convertedResponseSessions);
@@ -93,7 +92,7 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
                 const tablesClone = {...tablesData.tables};
                 const currentTable = tablesClone[tableId];
                 const setTablesAction = currentTable ?
-                  pipe< TableSessions, ReadonlyArray<string>, ReadonlyArray<number>, ReadonlyArray<number>, ReadonlyArray<number>, Tables, ActionWithPayload<Tables> >(
+                  pipe< TableSessions, ReadonlyArray<string>, ReadonlyArray<number>, ReadonlyArray<number>, ReadonlyArray<number>, Tables, Action<Tables> >(
                     keys,
                     map(Number),
                     concat(currentTable.sessionsHistory),
@@ -103,7 +102,7 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
                       sessionsHistory: newSessionIds
                     }),
                     changingTables
-                  )(convertedResponseSessions) as ActionWithPayload<Tables> :
+                  )(convertedResponseSessions) as Action<Tables> :
                   null;
 
                 const actions: ReadonlyArray<BaseAction> = < ReadonlyArray<BaseAction> >[setSessionsAction, setTablesAction]
@@ -111,7 +110,7 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
 
                 return Observable.from(actions);
               } else {
-                const setTablesWithoutPendingAction = pipe<Tables, Tables, Tables, ActionWithPayload<Tables> >(
+                const setTablesWithoutPendingAction = pipe<Tables, Tables, Tables, Action<Tables> >(
                   clone,
                   (tablesClone) => getTablesWithSetHistoryPending(tablesClone, tableId, false),
                   changingTables

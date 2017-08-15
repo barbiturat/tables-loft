@@ -1,5 +1,5 @@
 import {Observable} from 'rxjs';
-import {BaseAction} from 'redux-actions';
+import {Action, BaseAction} from 'redux-actions';
 import {Epic} from 'redux-observable';
 import {Store} from 'redux';
 import {pipe, merge, clone, ifElse} from 'ramda';
@@ -11,7 +11,6 @@ import {post, isAjaxResponseDefined, getRequestFailedAction} from '../helpers/re
 import {ResponseFailedPayload, ResponseStopTablePayload} from '../interfaces/api-responses';
 import {AjaxResponseTyped, AjaxErrorTyped, AjaxResponseDefined, IndexedDict} from '../interfaces/index';
 import {urlStopTable} from '../constants/urls';
-import {ActionWithPayload} from '../interfaces/actions';
 import {ActionType} from '../action-creators/requesting-table-start';
 import {StoreStructure, TableSessions, TableSession as TableSessionFrontend, Table} from '../interfaces/store-models';
 import changingTableSessions from '../action-creators/changing-table-sessions';
@@ -35,7 +34,7 @@ const assertResponse = (ajaxData: ResponseOk) => {
 };
 
 const createTableSessionsChangedAction = (storeTableSessions: TableSessions, responseSession: TableSession) =>
-  pipe< TableSessions, TableSessions, TableSessions, ActionWithPayload<TableSessions> >(
+  pipe< TableSessions, TableSessions, TableSessions, Action<TableSessions> >(
     clone,
     (sessions) => pipe<TableSession, TableSessionFrontend, IndexedDict<TableSessionFrontend>, TableSessions >(
       tableSessionToFront, // converted table session
