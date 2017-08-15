@@ -43,7 +43,7 @@ class Component extends React.Component<PropsFromConnect, State> {
   };
 
   static defaultProps = {
-    type: 'generic',
+    type: 'generic' as TableType,
     name: 'No Name',
     isInPending: false,
     isDisabled: false
