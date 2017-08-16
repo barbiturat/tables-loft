@@ -12,4 +12,4 @@ const requestingTableSessionChange = createAction<PayloadType, number, number>(R
   durationSeconds
 }));
 
-export default requestingTableSessionChange as ActionFunction2<number, number, ActionType>;
+export default requestingTableSessionChange;

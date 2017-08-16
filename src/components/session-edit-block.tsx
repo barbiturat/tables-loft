@@ -1,14 +1,11 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
-import MouseEvent = React.MouseEvent;
 import KeyboardEvent = React.KeyboardEvent;
 import * as moment from 'moment';
 
 import {StoreStructure} from '../interfaces/store-models';
 import {PropsExtendedByConnect} from '../interfaces/component';
 import requestingTableSessionChange from '../action-creators/requesting-table-session-change';
-import EventHandler = React.EventHandler;
-import FocusEvent = React.FocusEvent;
 import ChangeEvent = React.ChangeEvent;
 
 interface SessionDurationData {
