@@ -1,11 +1,14 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import * as moment from 'moment';
 import MouseEvent = React.MouseEvent;
 
-import {StoreStructure, TableSession as TableSessionType} from '../interfaces/store-models';
-import {PropsExtendedByConnect} from '../interfaces/component';
+import {
+  StoreStructure,
+  TableSession as TableSessionType
+} from '../interfaces/store-models';
+import { PropsExtendedByConnect } from '../interfaces/component';
 import SessionEditBlock from './session-edit-block';
 
 interface SessionDurationData {
@@ -31,13 +34,13 @@ interface MappedProps {
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
 class Component extends React.Component<PropsFromConnect, State> {
-
   editSessionButtonId: string;
 
   constructor(props: PropsFromConnect) {
     super(props);
 
-    this.editSessionButtonId = 'editSessionButton' + Math.floor( Math.random() * 10000000 );
+    this.editSessionButtonId =
+      'editSessionButton' + Math.floor(Math.random() * 10000000);
 
     this.state = {
       isFormatOfMinutes: false,
@@ -61,7 +64,8 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   handleClick = (event: any) => {
     const clickedEl = event.target;
-    const isClickedOutside = !ReactDOM.findDOMNode(this).contains(clickedEl) &&
+    const isClickedOutside =
+      !ReactDOM.findDOMNode(this).contains(clickedEl) &&
       !clickedEl.classList.contains(this.editSessionButtonId);
 
     if (isClickedOutside) {
@@ -75,25 +79,27 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   onSessionInfoClick = (event: MouseEvent<HTMLDivElement>) => {
     this.setState({
-      ...this.state, ...{
+      ...this.state,
+      ...{
         isFormatOfMinutes: !this.state.isFormatOfMinutes
       }
     });
   };
 
   static getSessionDurationData(durationSeconds: number): SessionDurationData {
-    const duration = moment.duration({seconds: durationSeconds});
+    const duration = moment.duration({ seconds: durationSeconds });
 
     return {
-      hours: Math.floor( duration.asHours() ),
-      minutes: Math.floor( duration.minutes() ),
-      minutesTotal: Math.floor( duration.asMinutes() )
+      hours: Math.floor(duration.asHours()),
+      minutes: Math.floor(duration.minutes()),
+      minutesTotal: Math.floor(duration.asMinutes())
     };
   }
 
   setEditingMode(turnOn: boolean) {
     this.setState({
-      ...this.state, ...{
+      ...this.state,
+      ...{
         isInEditing: turnOn
       }
     });
@@ -107,31 +113,37 @@ class Component extends React.Component<PropsFromConnect, State> {
     this.setEditingMode(false);
   };
 
-  static getDurationString(hours: number, minutes: number, minutesTotal: number, isFormatOfMinutes: boolean): string {
+  static getDurationString(
+    hours: number,
+    minutes: number,
+    minutesTotal: number,
+    isFormatOfMinutes: boolean
+  ): string {
     if (isFormatOfMinutes) {
       return `${minutesTotal}m`;
     } else {
-      return moment.utc({
-        hours,
-        minutes
-      })
+      return moment
+        .utc({
+          hours,
+          minutes
+        })
         .format('H[h] mm[m]');
     }
   }
 
   drawEditButton(toDraw: boolean) {
-    return toDraw ? (
-        <div
+    return toDraw
+      ? <div
           className={`sessions-list__edit-button ${this.editSessionButtonId}`}
           onClick={this.onEditButtonClick}
         />
-      ) : null;
+      : null;
   }
 
   drawDuration(session: TableSessionType) {
-    const {adminEdited, isInPending, durationSeconds, id} = session;
+    const { adminEdited, isInPending, durationSeconds, id } = session;
     const durationData = Component.getSessionDurationData(durationSeconds);
-    const {hours, minutes, minutesTotal} = durationData;
+    const { hours, minutes, minutesTotal } = durationData;
 
     if (this.state.isInEditing) {
       return (
@@ -142,9 +154,17 @@ class Component extends React.Component<PropsFromConnect, State> {
         />
       );
     } else {
-      const adminEditedClassName = adminEdited ? 'table__session-length_admin-edited' : '';
-      const durationString = isInPending ?
-        'wait...' : Component.getDurationString(hours, minutes, minutesTotal, this.state.isFormatOfMinutes);
+      const adminEditedClassName = adminEdited
+        ? 'table__session-length_admin-edited'
+        : '';
+      const durationString = isInPending
+        ? 'wait...'
+        : Component.getDurationString(
+            hours,
+            minutes,
+            minutesTotal,
+            this.state.isFormatOfMinutes
+          );
 
       return (
         <span
@@ -158,11 +178,12 @@ class Component extends React.Component<PropsFromConnect, State> {
   }
 
   render() {
-    const {session} = this.props;
+    const { session } = this.props;
 
     if (session) {
-      const {durationSeconds, startsAt} = session;
-      const finishTime = moment.utc(startsAt)
+      const { durationSeconds, startsAt } = session;
+      const finishTime = moment
+        .utc(startsAt)
         .add({
           seconds: durationSeconds
         })
@@ -170,7 +191,9 @@ class Component extends React.Component<PropsFromConnect, State> {
 
       return (
         <div className="sessions-list__tr">
-          <div className="sessions-list__td sessions-list__td_role_time">{finishTime}</div>
+          <div className="sessions-list__td sessions-list__td_role_time">
+            {finishTime}
+          </div>
           <div className="sessions-list__td sessions-list__td_role_duration">
             <div
               className="sessions-list__text"
@@ -178,26 +201,32 @@ class Component extends React.Component<PropsFromConnect, State> {
             >
               {this.drawDuration(this.props.session)}
             </div>
-            {this.drawEditButton(this.props.inAdminMode && !this.state.isInEditing)}
+            {this.drawEditButton(
+              this.props.inAdminMode && !this.state.isInEditing
+            )}
           </div>
         </div>
       );
     } else {
       return (
         <div className="table__session-info">
-          <div className="table__label table__label_role_no-session">No Sessions Today</div>
+          <div className="table__label table__label_role_no-session">
+            No Sessions Today
+          </div>
         </div>
       );
     }
   }
 }
 
-const TableHistorySession = connect<any, any, Props>(
-  (state: StoreStructure, ownProps: Props): MappedProps => {
-    return {
-      inAdminMode: !!state.app.adminToken,
-    };
-  }
-)(Component);
+const TableHistorySession = connect<
+  any,
+  any,
+  Props
+>((state: StoreStructure, ownProps: Props): MappedProps => {
+  return {
+    inAdminMode: !!state.app.adminToken
+  };
+})(Component);
 
 export default TableHistorySession;

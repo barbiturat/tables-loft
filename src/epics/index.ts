@@ -1,4 +1,4 @@
-import {combineEpics} from 'redux-observable';
+import { combineEpics } from 'redux-observable';
 
 import formValidation from './request-login';
 import fetchTables from './fetch-tables';
@@ -23,5 +23,5 @@ export default combineEpics(
   stopTable,
   requestTableSessionChange,
   changeTableFields,
-  unsetGlobalError,
+  unsetGlobalError
 );

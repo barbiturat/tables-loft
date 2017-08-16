@@ -1,9 +1,9 @@
 import * as React from 'react';
 import * as renderer from 'react-test-renderer';
-import {Action} from 'redux';
-import {shallow} from 'enzyme';
+import { Action } from 'redux';
+import { shallow } from 'enzyme';
 
-import {Component as TableTimerComponent} from './table-timer';
+import { Component as TableTimerComponent } from './table-timer';
 
 test('Renders correctly', () => {
   const component = renderer.create(

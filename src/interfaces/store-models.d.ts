@@ -1,6 +1,6 @@
-import {TableType as TableTypeBackend} from './backend-models';
-import {Structure as ReducersStructure} from '../reducers/index';
-import {IndexedDict} from './index';
+import { TableType as TableTypeBackend } from './backend-models';
+import { Structure as ReducersStructure } from '../reducers/index';
+import { IndexedDict } from './index';
 
 export type TableType = TableTypeBackend;
 

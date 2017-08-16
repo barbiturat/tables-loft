@@ -1,10 +1,10 @@
 import * as React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import MouseEvent = React.MouseEvent;
 import ReactModal from 'react-modal';
 
-import {StoreStructure} from '../interfaces/store-models';
-import {PropsExtendedByConnect} from '../interfaces/component';
+import { StoreStructure } from '../interfaces/store-models';
+import { PropsExtendedByConnect } from '../interfaces/component';
 
 interface State {
   readonly isOpen: boolean;
@@ -17,13 +17,11 @@ interface Props {
   readonly onClose: () => void;
 }
 
-interface MappedProps {
-}
+interface MappedProps {}
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
 class Component extends React.Component<PropsFromConnect, State> {
-
   state = {
     isOpen: false
   };
@@ -67,26 +65,37 @@ class Component extends React.Component<PropsFromConnect, State> {
         className="modal modal_role_prompt"
         overlayClassName="modal__overlay"
       >
-        <h4 className="modal__description">{this.props.message}</h4>
+        <h4 className="modal__description">
+          {this.props.message}
+        </h4>
 
         <div className="buttons-group">
-          <a href="" className="button button_role_ok buttons-group_adjust_button"
-               onClick={this.onClickOk}
-          >Ok</a>
-          <a href="" className="button button_role_cancel buttons-group_adjust_button"
-               onClick={this.onClickCancel}
-          >Cancel</a>
+          <a
+            href=""
+            className="button button_role_ok buttons-group_adjust_button"
+            onClick={this.onClickOk}
+          >
+            Ok
+          </a>
+          <a
+            href=""
+            className="button button_role_cancel buttons-group_adjust_button"
+            onClick={this.onClickCancel}
+          >
+            Cancel
+          </a>
         </div>
       </ReactModal>
     );
   }
 }
 
-const ModalPrompt = connect<any, any, Props>(
-  (state: StoreStructure, ownProps: Props): MappedProps => {
-    return {
-    };
-  }
-)(Component);
+const ModalPrompt = connect<
+  any,
+  any,
+  Props
+>((state: StoreStructure, ownProps: Props): MappedProps => {
+  return {};
+})(Component);
 
 export default ModalPrompt;

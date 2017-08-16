@@ -1,6 +1,6 @@
-import {createAction} from 'redux-actions';
+import { createAction } from 'redux-actions';
 
-import {PENDING_TABLES} from '../constants/action-names';
+import { PENDING_TABLES } from '../constants/action-names';
 
 type PayloadType = boolean;
 

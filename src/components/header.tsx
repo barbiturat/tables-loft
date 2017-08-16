@@ -1,9 +1,9 @@
 import * as React from 'react';
 
 import MouseEvent = React.MouseEvent;
-import {connect} from 'react-redux';
-import {StoreStructure} from '../interfaces/store-models';
-import {PropsExtendedByConnect} from '../interfaces/component';
+import { connect } from 'react-redux';
+import { StoreStructure } from '../interfaces/store-models';
+import { PropsExtendedByConnect } from '../interfaces/component';
 import adminTokenRemoved from '../action-creators/admin-token-removed';
 import ModalAdminLogin from './modal-admin-login';
 
@@ -11,8 +11,7 @@ interface State {
   readonly isAdminModalOpen: boolean;
 }
 
-interface Props {
-}
+interface Props {}
 
 interface MappedProps {
   readonly isAdminTokenSet: boolean;
@@ -26,7 +25,10 @@ class Component extends React.Component<PropsFromConnect, State> {
   };
 
   componentWillReceiveProps(newProps: PropsFromConnect) {
-    if (newProps.isAdminTokenSet !== this.props.isAdminTokenSet && !newProps.isAdminTokenSet) {
+    if (
+      newProps.isAdminTokenSet !== this.props.isAdminTokenSet &&
+      !newProps.isAdminTokenSet
+    ) {
       this.setState({
         isAdminModalOpen: false
       });
@@ -52,23 +54,29 @@ class Component extends React.Component<PropsFromConnect, State> {
   onBtnLogOutClick = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
 
-    this.props.dispatch( adminTokenRemoved );
+    this.props.dispatch(adminTokenRemoved);
   };
 
   drawManagerButton(toLogIn: boolean) {
     if (toLogIn) {
       return (
-        <a href=""
-           className="button button_role_manager"
-           onClick={this.onBtnManagerClick}
-        >Manager Mode</a>
+        <a
+          href=""
+          className="button button_role_manager"
+          onClick={this.onBtnManagerClick}
+        >
+          Manager Mode
+        </a>
       );
     } else {
       return (
-        <a href=""
-           className="button button_role_log-out"
-           onClick={this.onBtnLogOutClick}
-        >Log Out</a>
+        <a
+          href=""
+          className="button button_role_log-out"
+          onClick={this.onBtnLogOutClick}
+        >
+          Log Out
+        </a>
       );
     }
   }
@@ -76,13 +84,12 @@ class Component extends React.Component<PropsFromConnect, State> {
   render() {
     return (
       <div className="header">
-        <div className="header__section header__section_role_hamburger">
-        </div>
+        <div className="header__section header__section_role_hamburger" />
         <div className="header__section header__section_role_caption">
           <span className="header__caption">Boston Pool Loft</span>
         </div>
         <div className="header__section header__section_role_utils">
-          { this.drawManagerButton(this.props.isAdminTokenSet) }
+          {this.drawManagerButton(this.props.isAdminTokenSet)}
         </div>
 
         <ModalAdminLogin
@@ -94,12 +101,14 @@ class Component extends React.Component<PropsFromConnect, State> {
   }
 }
 
-const Header = connect<any, any, Props>(
-  (state: StoreStructure, ownProps: Props): MappedProps => {
-    return {
-      isAdminTokenSet: state.app.adminToken === null
-    };
-  }
-)(Component);
+const Header = connect<
+  any,
+  any,
+  Props
+>((state: StoreStructure, ownProps: Props): MappedProps => {
+  return {
+    isAdminTokenSet: state.app.adminToken === null
+  };
+})(Component);
 
 export default Header;

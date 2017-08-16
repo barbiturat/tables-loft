@@ -1,33 +1,34 @@
 /* global jasmine:true, beforeEach:true, jsc:true */
 /* eslint strict:[2,"function"] */
-beforeEach(function () {
-  "use strict";
+beforeEach(function() {
+  'use strict';
   jasmine.addMatchers({
     // Expects that property is synchronous
-    toHold: function () {
+    toHold: function() {
       return {
-        compare: function (actual) {
-
+        compare: function(actual) {
           /* global window */
-          var quiet = window && !(/verbose=true/).test(window.location.search);
+          var quiet = window && !/verbose=true/.test(window.location.search);
 
           var r = jsc.check(actual, { quiet: quiet });
 
           var pass = r === true;
-          var message = "";
+          var message = '';
 
           if (pass) {
-            message = "Expected property not to hold.";
+            message = 'Expected property not to hold.';
           } else {
-            message = "Expected property to hold. Counterexample found: " + r.counterexamplestr;
+            message =
+              'Expected property to hold. Counterexample found: ' +
+              r.counterexamplestr;
           }
 
           return {
             pass: pass,
-            message: message,
+            message: message
           };
-        },
+        }
       };
-    },
+    }
   });
 });

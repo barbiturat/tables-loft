@@ -1,7 +1,7 @@
-import {createAction} from 'redux-actions';
+import { createAction } from 'redux-actions';
 
-import {CHANGING_TABLES} from '../constants/action-names';
-import {Tables} from '../interfaces/store-models';
+import { CHANGING_TABLES } from '../constants/action-names';
+import { Tables } from '../interfaces/store-models';
 
 export type PayloadType = Tables;
 

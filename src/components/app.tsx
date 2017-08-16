@@ -1,22 +1,20 @@
 import * as React from 'react';
-import {connect} from 'react-redux';
-import {Observable} from 'rxjs';
+import { connect } from 'react-redux';
+import { Observable } from 'rxjs';
 
-import {AnyDict} from '../interfaces/index';
+import { AnyDict } from '../interfaces/index';
 import * as styles from '../styles/index.scss';
 import fetchingTables from '../action-creators/fetching-tables';
-import {PropsExtendedByConnect} from '../interfaces/component';
-import {StoreStructure} from '../interfaces/store-models';
+import { PropsExtendedByConnect } from '../interfaces/component';
+import { StoreStructure } from '../interfaces/store-models';
 import changingUtcMilliseconds from '../action-creators/changing-utc-milliseconds';
 import ModalSessionsHistory from './modal-sessions-history';
 import GlobalErrors from './global-errors';
 import ScreenBlocker from './screen-blocker';
 
-interface Props {
-}
+interface Props {}
 
-interface MappedProps {
-}
+interface MappedProps {}
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
@@ -54,25 +52,23 @@ class App extends React.Component<PropsFromConnect, State> {
   render() {
     return (
       /* data-styles is used just to load styles */
-      <div
-          className="app"
-          data-styles={styles}
-      >
+      <div className="app" data-styles={styles}>
         {this.props.children}
 
-        <ScreenBlocker/>
+        <ScreenBlocker />
 
-        <ModalSessionsHistory/>
-        <GlobalErrors/>
+        <ModalSessionsHistory />
+        <GlobalErrors />
       </div>
     );
   }
 }
 
-const mapStateToProps = (state: StoreStructure, ownProps?: AnyDict): MappedProps => {
+const mapStateToProps = (
+  state: StoreStructure,
+  ownProps?: AnyDict
+): MappedProps => {
   return {};
 };
 
-export default connect(
-  mapStateToProps
-)(App);
+export default connect(mapStateToProps)(App);

@@ -1,11 +1,11 @@
 import * as React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import * as moment from 'moment';
 import MouseEvent = React.MouseEvent;
 import { createSelector, Selector } from 'reselect';
 
-import {StoreStructure} from '../interfaces/store-models';
-import {PropsExtendedByConnect} from '../interfaces/component';
+import { StoreStructure } from '../interfaces/store-models';
+import { PropsExtendedByConnect } from '../interfaces/component';
 
 interface Props {
   readonly isActive: boolean;
@@ -23,7 +23,6 @@ interface MappedProps {
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
 export class Component extends React.Component<PropsFromConnect, State> {
-
   durationActivityStringSelector: Selector<PropsFromConnect, string>;
 
   constructor(props: PropsFromConnect) {
@@ -53,7 +52,11 @@ export class Component extends React.Component<PropsFromConnect, State> {
     return props.utcMilliseconds;
   }
 
-  static getDurationActivityString(startsAt: number, utcMilliseconds: number, isFormatOfMinutes: boolean) {
+  static getDurationActivityString(
+    startsAt: number,
+    utcMilliseconds: number,
+    isFormatOfMinutes: boolean
+  ) {
     if (!startsAt || !utcMilliseconds) {
       return 'Wrong Parameters!';
     }
@@ -63,12 +66,11 @@ export class Component extends React.Component<PropsFromConnect, State> {
 
     if (isFormatOfMinutes) {
       const duration = moment.duration(durationMs);
-      const minutes = Math.floor( duration.asMinutes() );
+      const minutes = Math.floor(duration.asMinutes());
 
       return `${minutes}m`;
     } else {
-      return moment.utc(durationMs)
-        .format('H[h] mm[m] ss[s]');
+      return moment.utc(durationMs).format('H[h] mm[m] ss[s]');
     }
   }
 
@@ -80,27 +82,29 @@ export class Component extends React.Component<PropsFromConnect, State> {
 
   render() {
     const isAvailable = !this.props.isActive;
-    const labelAvailableText = isAvailable ? 'Available' : this.durationActivityStringSelector(this.props);
-    const availabilityClass = isAvailable ?
-      'table__label table__label_role_availability' : 'table__label table__label_role_counter';
+    const labelAvailableText = isAvailable
+      ? 'Available'
+      : this.durationActivityStringSelector(this.props);
+    const availabilityClass = isAvailable
+      ? 'table__label table__label_role_availability'
+      : 'table__label table__label_role_counter';
 
     return (
-      <div
-          className={availabilityClass}
-          onClick={this.onClick}
-      >
+      <div className={availabilityClass} onClick={this.onClick}>
         {labelAvailableText}
       </div>
     );
   }
 }
 
-const TableTimer = connect<any, any, Props>(
-  (state: StoreStructure, ownProps: Props): MappedProps => {
-    return {
-      utcMilliseconds: state.app.utcMilliseconds
-    };
-  }
-)(Component);
+const TableTimer = connect<
+  any,
+  any,
+  Props
+>((state: StoreStructure, ownProps: Props): MappedProps => {
+  return {
+    utcMilliseconds: state.app.utcMilliseconds
+  };
+})(Component);
 
 export default TableTimer;

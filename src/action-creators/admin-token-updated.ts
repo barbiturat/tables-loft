@@ -1,8 +1,8 @@
-import {createAction} from 'redux-actions';
+import { createAction } from 'redux-actions';
 
-import {ADMIN_TOKEN_UPDATED} from '../constants/action-names';
-import {AdminToken} from '../interfaces/store-models';
-import {ActionWithPayload} from '../interfaces/actions';
+import { ADMIN_TOKEN_UPDATED } from '../constants/action-names';
+import { AdminToken } from '../interfaces/store-models';
+import { ActionWithPayload } from '../interfaces/actions';
 
 type PayloadType = AdminToken;
 

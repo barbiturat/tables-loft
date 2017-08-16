@@ -1,7 +1,7 @@
-import {combineReducers} from 'redux';
+import { combineReducers } from 'redux';
 
-import email, {Structure as EmailStructure} from './email';
-import {ReducersOfType} from '../interfaces/index';
+import email, { Structure as EmailStructure } from './email';
+import { ReducersOfType } from '../interfaces/index';
 
 export interface Structure {
   readonly email: EmailStructure;

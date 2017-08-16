@@ -1,7 +1,7 @@
-import {combineForms, FieldState, FormState} from 'react-redux-form';
+import { combineForms, FieldState, FormState } from 'react-redux-form';
 
 type FieldsOfType<FieldsSet, FieldsType> = {
-  [Field in keyof FieldsSet]: FieldsType;
+  [Field in keyof FieldsSet]: FieldsType
 };
 
 interface FormStateWithValue<TValue> extends FormState {
@@ -10,7 +10,7 @@ interface FormStateWithValue<TValue> extends FormState {
 }
 
 type FormStructure<FormFields> = FieldsOfType<FormFields, FieldState> & {
-  readonly $form: FormStateWithValue< FieldsOfType<FormFields, string> >;
+  readonly $form: FormStateWithValue<FieldsOfType<FormFields, string>>;
 };
 
 interface LoginFormFields {
@@ -27,14 +27,17 @@ interface FormModels {
   readonly managerLoginForm: FieldsOfType<ManagerLoginFormFields, string>;
 }
 
-const formsData = combineForms({
-  loginForm: {
-    email: ''
+const formsData = combineForms(
+  {
+    loginForm: {
+      email: ''
+    },
+    managerLoginForm: {
+      password: ''
+    }
   },
-  managerLoginForm: {
-    password: ''
-  }
-}, 'formsData');
+  'formsData'
+);
 
 export type LoginForm = FormStructure<LoginFormFields>;
 export type ManagerLoginForm = FormStructure<ManagerLoginFormFields>;
@@ -48,4 +51,3 @@ export interface Structure extends FormModels {
 }
 
 export default formsData;
-

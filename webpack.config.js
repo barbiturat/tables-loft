@@ -9,11 +9,21 @@ const envVarStubs = require('./package.json').appSettings.envVarStubs;
 const envVars = process.env;
 const isProd = process.argv.includes('-p');
 
-const API_KEY = isProd ? envVars.API_KEY : envVarStubs.API_KEY || envVars.API_KEY;
-const API_HOST = isProd ? envVars.API_HOST : envVarStubs.API_HOST || envVars.API_HOST;
-const API_PORT = isProd ? envVars.API_PORT : envVarStubs.API_PORT || envVars.API_PORT;
-const ROLLBAR_TOKEN = isProd ? envVars.ROLLBAR_TOKEN : envVarStubs.ROLLBAR_TOKEN || envVars.ROLLBAR_TOKEN;
-const ROLLBAR_SERVER_TOKEN = isProd ? envVars.ROLLBAR_SERVER_TOKEN : envVarStubs.ROLLBAR_SERVER_TOKEN || envVars.ROLLBAR_SERVER_TOKEN;
+const API_KEY = isProd
+  ? envVars.API_KEY
+  : envVarStubs.API_KEY || envVars.API_KEY;
+const API_HOST = isProd
+  ? envVars.API_HOST
+  : envVarStubs.API_HOST || envVars.API_HOST;
+const API_PORT = isProd
+  ? envVars.API_PORT
+  : envVarStubs.API_PORT || envVars.API_PORT;
+const ROLLBAR_TOKEN = isProd
+  ? envVars.ROLLBAR_TOKEN
+  : envVarStubs.ROLLBAR_TOKEN || envVars.ROLLBAR_TOKEN;
+const ROLLBAR_SERVER_TOKEN = isProd
+  ? envVars.ROLLBAR_SERVER_TOKEN
+  : envVarStubs.ROLLBAR_SERVER_TOKEN || envVars.ROLLBAR_SERVER_TOKEN;
 
 const nodeEnv = isProd ? 'production' : 'development';
 const sourcePath = pathFromRoot('./src');
@@ -23,9 +33,9 @@ function pathFromRoot(url = '') {
   return path.resolve(__dirname, url);
 }
 
-if (!API_KEY) throw('The "API_KEY" env variable must be set');
-if (!API_HOST) throw('The "API_HOST" env variable must be set');
-if (!API_PORT) throw('The "API_PORT" env variable must be set');
+if (!API_KEY) throw 'The "API_KEY" env variable must be set';
+if (!API_HOST) throw 'The "API_HOST" env variable must be set';
+if (!API_PORT) throw 'The "API_PORT" env variable must be set';
 
 const plugins = [
   new webpack.optimize.CommonsChunkPlugin({
@@ -38,7 +48,7 @@ const plugins = [
       API_PORT: JSON.stringify(API_PORT),
       ROLLBAR_TOKEN: JSON.stringify(ROLLBAR_TOKEN),
       ROLLBAR_SERVER_TOKEN: JSON.stringify(ROLLBAR_SERVER_TOKEN),
-      NODE_ENV: JSON.stringify(nodeEnv)  // NODE_ENV: '"production"' for decreasing size of react library
+      NODE_ENV: JSON.stringify(nodeEnv) // NODE_ENV: '"production"' for decreasing size of react library
     }
   }),
   new HtmlWebpackPlugin({
@@ -160,9 +170,7 @@ module.exports = {
           {
             loader: 'sass-loader',
             options: {
-              includePaths: [
-                pathFromRoot('./node_modules')
-              ]
+              includePaths: [pathFromRoot('./node_modules')]
             }
           }
         ]
@@ -171,10 +179,7 @@ module.exports = {
   },
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
-    modules: [
-      sourcePath,
-      'node_modules'
-    ]
+    modules: [sourcePath, 'node_modules']
   },
   plugins: plugins
 };

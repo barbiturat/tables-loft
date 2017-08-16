@@ -8,13 +8,19 @@ const getRandomString = (length: number, chars: string) => {
   return result;
 };
 
-export const alphanumericSymbolsArb = (maxLength: number, additionalSymbols = '') => jsc.bless<string>({
-  generator: jsc.generator.bless(() => {
+export const alphanumericSymbolsArb = (
+  maxLength: number,
+  additionalSymbols = ''
+) =>
+  jsc.bless<string>({
+    generator: jsc.generator.bless(() => {
       const stringLength = jsc.random(1, maxLength);
 
-      return getRandomString(stringLength, `0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ${additionalSymbols}`);
-    }
-  ),
-  show: (val) => val,
-  shrink: jsc.shrink.noop
-});
+      return getRandomString(
+        stringLength,
+        `0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ${additionalSymbols}`
+      );
+    }),
+    show: val => val,
+    shrink: jsc.shrink.noop
+  });

@@ -3,8 +3,7 @@ export interface RequestLoginPayload {
   readonly password?: string;
 }
 
-export interface RequestSessionHistoryPayload {
-}
+export interface RequestSessionHistoryPayload {}
 
 export interface RequestGetAdminTokenPayload {
   readonly password: string;
@@ -15,4 +14,3 @@ export interface RequestUpdateTableSessionPayload {
   readonly durationSeconds: number;
   readonly adminToken?: string;
 }
-

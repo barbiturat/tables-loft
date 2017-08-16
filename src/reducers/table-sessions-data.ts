@@ -1,8 +1,12 @@
-import {combineReducers} from 'redux';
+import { combineReducers } from 'redux';
 
-import {ReducersOfType} from '../interfaces/index';
-import isInPending, {Structure as IsInPendingStructure} from './tables-sessions-pending';
-import tableSessions, {Structure as TableSessionsStructure} from './table-sessions';
+import { ReducersOfType } from '../interfaces/index';
+import isInPending, {
+  Structure as IsInPendingStructure
+} from './tables-sessions-pending';
+import tableSessions, {
+  Structure as TableSessionsStructure
+} from './table-sessions';
 
 export interface Structure {
   readonly tableSessions: TableSessionsStructure;

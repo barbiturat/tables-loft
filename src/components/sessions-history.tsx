@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import {TableSession} from '../interfaces/store-models';
+import { TableSession } from '../interfaces/store-models';
 import TableHistorySession from './table-history-session';
 
 interface Props {
@@ -10,7 +10,10 @@ interface Props {
 }
 
 export default class SessionsHistory extends React.Component<Props, {}> {
-  static getRenderedSessions(tableSessions: ReadonlyArray<TableSession> = [], firstIdx: number) {
+  static getRenderedSessions(
+    tableSessions: ReadonlyArray<TableSession> = [],
+    firstIdx: number
+  ) {
     return tableSessions.map((session, idx) =>
       <TableHistorySession
         key={idx}
@@ -18,27 +21,27 @@ export default class SessionsHistory extends React.Component<Props, {}> {
         idx={idx + firstIdx + 1}
       />
     );
-
   }
 
-  static getTableSessions (sessions: ReadonlyArray<TableSession> = [], isInPending: boolean, firstIdx: number) {
+  static getTableSessions(
+    sessions: ReadonlyArray<TableSession> = [],
+    isInPending: boolean,
+    firstIdx: number
+  ) {
     if (isInPending) {
-      return (
-        <div className="sessions-list__wait"/>
-      );
+      return <div className="sessions-list__wait" />;
     } else if (!Object.keys(sessions).length) {
-      return (
-        <div className="sessions-list__message">
-          No sessions
-        </div>
-      );
+      return <div className="sessions-list__message">No sessions</div>;
     } else {
       return (
         <div className="sessions-list">
-
           <div className="sessions-list__header">
-            <div className="sessions-list__th sessions-list__th_role_time">Start Time</div>
-            <div className="sessions-list__th sessions-list__th_role_duration">Duration</div>
+            <div className="sessions-list__th sessions-list__th_role_time">
+              Start Time
+            </div>
+            <div className="sessions-list__th sessions-list__th_role_duration">
+              Duration
+            </div>
           </div>
 
           {SessionsHistory.getRenderedSessions(sessions, firstIdx)}
@@ -50,7 +53,11 @@ export default class SessionsHistory extends React.Component<Props, {}> {
   render() {
     return (
       <div className="sessions-screen">
-        {SessionsHistory.getTableSessions(this.props.tableSessions, this.props.isInPending, this.props.firstIdx)}
+        {SessionsHistory.getTableSessions(
+          this.props.tableSessions,
+          this.props.isInPending,
+          this.props.firstIdx
+        )}
       </div>
     );
   }

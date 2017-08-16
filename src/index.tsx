@@ -1,11 +1,11 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import {Provider} from 'react-redux';
-import {ReduxRouter} from 'redux-router';
+import { Provider } from 'react-redux';
+import { ReduxRouter } from 'redux-router';
 
 import store from './store/index';
 
-const Root = class extends React.Component <{}, {}> {
+const Root = class extends React.Component<{}, {}> {
   render() {
     return (
       <Provider store={store}>
@@ -15,7 +15,4 @@ const Root = class extends React.Component <{}, {}> {
   }
 };
 
-ReactDOM.render(
-  <Root />,
-  document.getElementById('root')
-);
+ReactDOM.render(<Root />, document.getElementById('root'));

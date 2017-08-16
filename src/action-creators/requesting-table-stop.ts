@@ -1,6 +1,6 @@
-import {createAction} from 'redux-actions';
+import { createAction } from 'redux-actions';
 
-import {REQUESTING_TABLE_STOP} from '../constants/action-names';
+import { REQUESTING_TABLE_STOP } from '../constants/action-names';
 
 type PayloadType = number;
 

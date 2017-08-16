@@ -1,10 +1,10 @@
 import * as React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import KeyboardEvent = React.KeyboardEvent;
 import * as moment from 'moment';
 
-import {StoreStructure} from '../interfaces/store-models';
-import {PropsExtendedByConnect} from '../interfaces/component';
+import { StoreStructure } from '../interfaces/store-models';
+import { PropsExtendedByConnect } from '../interfaces/component';
 import requestingTableSessionChange from '../action-creators/requesting-table-session-change';
 import ChangeEvent = React.ChangeEvent;
 
@@ -24,17 +24,17 @@ interface State {
   readonly minutes: number;
 }
 
-interface MappedProps {
-}
+interface MappedProps {}
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
 class Component extends React.Component<PropsFromConnect, State> {
-
   constructor(props: PropsFromConnect) {
     super(props);
 
-    const durationData = Component.getSessionDurationData(props.durationSeconds);
+    const durationData = Component.getSessionDurationData(
+      props.durationSeconds
+    );
 
     this.state = {
       hours: durationData.hours,
@@ -44,8 +44,10 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   componentWillReceiveProps(nextProps: PropsFromConnect) {
     if (nextProps.durationSeconds !== this.props.durationSeconds) {
-      const durationData = Component.getSessionDurationData(nextProps.durationSeconds);
-      const {hours, minutes} = durationData;
+      const durationData = Component.getSessionDurationData(
+        nextProps.durationSeconds
+      );
+      const { hours, minutes } = durationData;
 
       this.setState({
         hours,
@@ -58,15 +60,15 @@ class Component extends React.Component<PropsFromConnect, State> {
     const input = event.currentTarget;
 
     if (input.name === 'hours') {
-      this.setEditingHours( Number(input.value) );
+      this.setEditingHours(Number(input.value));
     }
     if (input.name === 'minutes') {
-      this.setEditingMinutes( Number(input.value) );
+      this.setEditingMinutes(Number(input.value));
     }
   };
 
   onInputKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    const {dispatch, sessionId, onEditComplete} = this.props;
+    const { dispatch, sessionId, onEditComplete } = this.props;
 
     if (typeof sessionId !== 'number') {
       return;
@@ -99,7 +101,8 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   setEditingHours(hours: number) {
     this.setState({
-      ...this.state, ...{
+      ...this.state,
+      ...{
         hours: hours
       }
     });
@@ -107,18 +110,19 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   setEditingMinutes(minutes: number) {
     this.setState({
-      ...this.state, ...{
+      ...this.state,
+      ...{
         minutes: minutes
       }
     });
   }
 
   static getSessionDurationData(durationSeconds: number): SessionDurationData {
-    const duration = moment.duration({seconds: durationSeconds});
+    const duration = moment.duration({ seconds: durationSeconds });
 
     return {
-      hours: Math.floor( duration.asHours() ),
-      minutes: Math.floor( duration.minutes() ),
+      hours: Math.floor(duration.asHours()),
+      minutes: Math.floor(duration.minutes())
     };
   }
 
@@ -128,7 +132,6 @@ class Component extends React.Component<PropsFromConnect, State> {
 
     return (
       <form className="session-edit-block__form">
-
         <label className="session-edit-block__label">
           <span className="session-edit-block__text">hr:</span>
           <span className="session-edit-block__input-container">
@@ -154,18 +157,17 @@ class Component extends React.Component<PropsFromConnect, State> {
             />
           </span>
         </label>
-
       </form>
-
     );
   }
 }
 
-const SessionEditBlock = connect<any, any, Props>(
-  (state: StoreStructure, ownProps: Props): MappedProps => {
-    return {
-    };
-  }
-)(Component);
+const SessionEditBlock = connect<
+  any,
+  any,
+  Props
+>((state: StoreStructure, ownProps: Props): MappedProps => {
+  return {};
+})(Component);
 
 export default SessionEditBlock;

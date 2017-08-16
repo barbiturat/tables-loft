@@ -1,4 +1,4 @@
-import {ResponseDefaultPayload} from '../../src/interfaces/api-responses';
+import { ResponseDefaultPayload } from '../../src/interfaces/api-responses';
 
 export const SESSION_COOKIE_NAME = 'session';
 

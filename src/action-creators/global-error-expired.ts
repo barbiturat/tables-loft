@@ -1,6 +1,6 @@
-import {createAction} from 'redux-actions';
+import { createAction } from 'redux-actions';
 
-import {GLOBAL_ERROR_EXPIRED} from '../constants/action-names';
+import { GLOBAL_ERROR_EXPIRED } from '../constants/action-names';
 
 type PayloadType = number;
 

@@ -1,7 +1,7 @@
-import {createAction} from 'redux-actions';
+import { createAction } from 'redux-actions';
 
-import {REQUESTING_TABLE_START} from '../constants/action-names';
-import {ActionWithPayload} from '../interfaces/actions';
+import { REQUESTING_TABLE_START } from '../constants/action-names';
+import { ActionWithPayload } from '../interfaces/actions';
 
 type PayloadType = number;
 

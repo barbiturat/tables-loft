@@ -1,14 +1,16 @@
 import * as React from 'react';
-import {shallow} from 'enzyme';
-import {FieldState} from 'react-redux-form';
+import { shallow } from 'enzyme';
+import { FieldState } from 'react-redux-form';
 
-import {renderErrorsBlock} from './renderers';
+import { renderErrorsBlock } from './renderers';
 
 describe('renderErrorsBlock', () => {
   it('renders block with passed children', () => {
-    const childrenEl = (<div id="someEl">
-      <span className="someChild">111</span>
-    </div>);
+    const childrenEl = (
+      <div id="someEl">
+        <span className="someChild">111</span>
+      </div>
+    );
 
     const resultBlock = renderErrorsBlock({
       model: '',

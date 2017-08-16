@@ -31,4 +31,3 @@ export interface AdminTokenErrors {
     isCorrect: boolean;
   };
 }
-

@@ -1,7 +1,9 @@
-import {combineReducers} from 'redux';
+import { combineReducers } from 'redux';
 
-import {ReducersOfType} from '../interfaces/index';
-import modalSessionsHistory, {Structure as ModalSessionsHistoryStructure} from './modal-sessions-history';
+import { ReducersOfType } from '../interfaces/index';
+import modalSessionsHistory, {
+  Structure as ModalSessionsHistoryStructure
+} from './modal-sessions-history';
 
 export interface Structure {
   readonly modalSessionsHistory: ModalSessionsHistoryStructure;

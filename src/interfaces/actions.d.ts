@@ -1,4 +1,4 @@
-import {Action} from 'redux-actions';
+import { Action } from 'redux-actions';
 
 export interface ActionWithPayload<TPayload> extends Action<TPayload> {
   readonly payload: TPayload;

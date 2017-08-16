@@ -6,7 +6,6 @@ export interface ValidationError {
 }
 
 declare module 'tcomb-validation' {
-
   type Predicate<T> = (x: T) => boolean;
   type TypeGuardPredicate<T> = (x: any) => x is T;
 
@@ -35,7 +34,10 @@ declare module 'tcomb-validation' {
     };
   }
 
-  export function irreducible<T>(name: string, predicate: Predicate<any>): Irreducible<T>;
+  export function irreducible<T>(
+    name: string,
+    predicate: Predicate<any>
+  ): Irreducible<T>;
 
   //
   // basic types
@@ -53,16 +55,40 @@ declare module 'tcomb-validation' {
   export let RegExp: Irreducible<RegExp>;
   export let Date: Irreducible<Date>;
 
-  interface ApplyCommand { $apply: Function; }
-  interface PushCommand { $push: Array<any>; }
-  interface RemoveCommand { $remove: Array<string>; }
-  interface SetCommand { $set: any; }
-  interface SpliceCommand { $splice: Array<Array<any>>; }
-  interface SwapCommand { $swap: { from: number; to: number; }; }
-  interface UnshiftCommand { $unshift: Array<any>; }
-  interface MergeCommand { $merge: Object; }
-  type Command = ApplyCommand | PushCommand | RemoveCommand | SetCommand | SpliceCommand | SwapCommand | UnshiftCommand | MergeCommand;
-  type UpdatePatch = Command | {[key: string]: UpdatePatch};
+  interface ApplyCommand {
+    $apply: Function;
+  }
+  interface PushCommand {
+    $push: Array<any>;
+  }
+  interface RemoveCommand {
+    $remove: Array<string>;
+  }
+  interface SetCommand {
+    $set: any;
+  }
+  interface SpliceCommand {
+    $splice: Array<Array<any>>;
+  }
+  interface SwapCommand {
+    $swap: { from: number; to: number };
+  }
+  interface UnshiftCommand {
+    $unshift: Array<any>;
+  }
+  interface MergeCommand {
+    $merge: Object;
+  }
+  type Command =
+    | ApplyCommand
+    | PushCommand
+    | RemoveCommand
+    | SetCommand
+    | SpliceCommand
+    | SwapCommand
+    | UnshiftCommand
+    | MergeCommand;
+  type UpdatePatch = Command | { [key: string]: UpdatePatch };
   type Update<T> = (instance: T, spec: UpdatePatch) => T;
 
   type Constructor<T> = Type<T> | Function;
@@ -82,13 +108,17 @@ declare module 'tcomb-validation' {
     update: Update<T>;
   }
 
-  export function refinement<T>(type: Constructor<T>, predicate: Predicate<T>, name?: string): Refinement<T>;
+  export function refinement<T>(
+    type: Constructor<T>,
+    predicate: Predicate<T>,
+    name?: string
+  ): Refinement<T>;
 
   //
   // struct
   //
 
-  type StructProps = {[key: string]: Constructor<any>};
+  type StructProps = { [key: string]: Constructor<any> };
   type StructMixin = StructProps | Struct<any> | Interface<any>;
 
   interface Struct<T> extends Type<T> {
@@ -100,7 +130,10 @@ declare module 'tcomb-validation' {
       props: StructProps;
     };
     update: Update<T>;
-    extend<E extends T>(mixins: StructMixin | Array<StructMixin>, name?: string): Struct<E>;
+    extend<E extends T>(
+      mixins: StructMixin | Array<StructMixin>,
+      name?: string
+    ): Struct<E>;
   }
 
   export function struct<T>(props: StructProps, name?: string): Struct<T>;
@@ -117,7 +150,10 @@ declare module 'tcomb-validation' {
       props: StructProps;
     };
     update: Update<T>;
-    extend<E extends T>(mixins: StructMixin | Array<StructMixin>, name?: string): Struct<E>;
+    extend<E extends T>(
+      mixins: StructMixin | Array<StructMixin>,
+      name?: string
+    ): Struct<E>;
   }
 
   export function interface<T>(props: StructProps, name?: string): Interface<T>;
@@ -142,7 +178,7 @@ declare module 'tcomb-validation' {
   // dict combinator
   //
 
-  interface Dict<T> extends Type<{[key: string]: T}> {
+  interface Dict<T> extends Type<{ [key: string]: T }> {
     meta: {
       kind: string;
       name: string;
@@ -150,10 +186,14 @@ declare module 'tcomb-validation' {
       domain: Constructor<string>;
       codomain: T;
     };
-    update: Update<{[key: string]: T}>;
+    update: Update<{ [key: string]: T }>;
   }
 
-  export function dict<T>(domain: Constructor<string>, codomain: Constructor<T>, name?: string): Dict<T>;
+  export function dict<T>(
+    domain: Constructor<string>,
+    codomain: Constructor<T>,
+    name?: string
+  ): Dict<T>;
 
   //
   // enums combinator
@@ -206,7 +246,10 @@ declare module 'tcomb-validation' {
     update: Update<T>;
   }
 
-  export function tuple<T>(types: Array<Constructor<any>>, name?: string): Tuple<T>;
+  export function tuple<T>(
+    types: Array<Constructor<any>>,
+    name?: string
+  ): Tuple<T>;
 
   //
   // union combinator
@@ -223,7 +266,10 @@ declare module 'tcomb-validation' {
     dispatch(x: any): Constructor<T>;
   }
 
-  export function union<T>(types: Array<Constructor<T>>, name?: string): Union<T>;
+  export function union<T>(
+    types: Array<Constructor<T>>,
+    name?: string
+  ): Union<T>;
 
   //
   // intersection combinator
@@ -239,7 +285,10 @@ declare module 'tcomb-validation' {
     update: Update<T>;
   }
 
-  export function intersection<T>(types: Array<Constructor<any>>, name?: string): Intersection<T>;
+  export function intersection<T>(
+    types: Array<Constructor<any>>,
+    name?: string
+  ): Intersection<T>;
 
   //
   // declare combinator
@@ -281,6 +330,9 @@ declare module 'tcomb-validation' {
     value: TValue;
   }
 
-  export function validate<TValue>(value: TValue, type: Type<any>, options: ValidateOptions): ValidationResult<TValue>;
+  export function validate<TValue>(
+    value: TValue,
+    type: Type<any>,
+    options: ValidateOptions
+  ): ValidationResult<TValue>;
 }
-
