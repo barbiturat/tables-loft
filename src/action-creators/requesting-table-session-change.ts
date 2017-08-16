@@ -1,4 +1,4 @@
-import { ActionFunction2, createAction } from 'redux-actions';
+import { createAction } from 'redux-actions';
 
 import { REQUESTING_TABLE_SESSION_CHANGE } from '../constants/action-names';
 import { RequestUpdateTableSessionPayload } from '../interfaces/api-requests';

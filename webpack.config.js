@@ -66,7 +66,7 @@ module.exports = {
   devtool: isProd ? 'source-map' : 'eval',
   context: sourcePath,
   entry: {
-    rollbar: './external-tools/rollbar-snippet.js',
+    rollbar: '../external-tools/rollbar-snippet.js',
     bundle: './index.tsx',
     img: '../resources/img/index.js',
     fonts: '../resources/fonts/index.js',

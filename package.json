@@ -24,7 +24,8 @@
     "start": "node ./js-server/out/js-server",
     "start-locally": "npm run build-dev & npm run build-and-run-fake-api-server & npm run build-and-run-server",
     "test": "jest --config=./jest.config.json",
-    "update-test-snapshots": "jest -u --config=./jest.config.json"
+    "update-test-snapshots": "jest -u --config=./jest.config.json",
+    "reformat-all-code": "prettier --write --single-quote '{src/**,js-server{,/!(out)/**},fake-api-server{,/!(out)/**}}/*.+(ts|tsx|js|jsx)'"
   },
   "repository": {
     "type": "git",
