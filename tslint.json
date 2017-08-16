@@ -17,7 +17,7 @@
         "no-eval": true,
         "no-inferrable-types": true,
         "no-internal-module": true,
-        "no-let": false,
+        "no-let": true,
         "no-mixed-interface": false,
         "no-require-imports": true,
         "no-shadowed-variable": true,

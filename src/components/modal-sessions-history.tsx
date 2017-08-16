@@ -160,11 +160,7 @@ const ModalSessionsHistory = connect<any, any, Props>(
     const modalData = appData.modals.modalSessionsHistory;
     const tables = appData.tablesData.tables;
     const tableId = modalData.tableId;
-    let currentTable;
-
-    if (tableId) {
-      currentTable = tables[tableId];
-    }
+    const currentTable = tableId ? tables[tableId] : undefined;
 
     return {
       isOpen: modalData.isOpened,
