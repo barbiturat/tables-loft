@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import MouseEvent = React.MouseEvent;
-import * as Modal from 'react-modal';
+import ReactModal from 'react-modal';
 import * as ReactPaginate from 'react-paginate';
 import {pipe, pick, splitEvery, nth, map, flip, sortBy, prop, values} from 'ramda';
 
@@ -121,7 +121,7 @@ class Component extends React.Component<PropsFromConnect, State> {
       const firstIdx = currentPageNum * Component.PAGE_SIZE;
 
       return (
-        <Modal
+        <ReactModal
           contentLabel="Sessions History"
           isOpen={this.props.isOpen}
           shouldCloseOnOverlayClick={true}
@@ -146,7 +146,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           />
 
           { this.getPaginator(numOfPages, currentPageNum, historyPending) }
-        </Modal>
+        </ReactModal>
       );
     } else {
       return null;

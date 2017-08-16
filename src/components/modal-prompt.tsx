@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import MouseEvent = React.MouseEvent;
-import * as Modal from 'react-modal';
+import ReactModal from 'react-modal';
 
 import {StoreStructure} from '../interfaces/store-models';
 import {PropsExtendedByConnect} from '../interfaces/component';
@@ -60,7 +60,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   render() {
     return (
-      <Modal
+      <ReactModal
         contentLabel="Prompt"
         isOpen={this.state.isOpen}
         shouldCloseOnOverlayClick={false}
@@ -77,7 +77,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                onClick={this.onClickCancel}
           >Cancel</a>
         </div>
-      </Modal>
+      </ReactModal>
     );
   }
 }

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import MouseEvent = React.MouseEvent;
-import * as Modal from 'react-modal';
+import ReactModal from 'react-modal';
 import {Control, Form, Errors, actions, ErrorsProps, WrapperProps, CustomComponentProps} from 'react-redux-form';
 
 import {StoreStructure} from '../interfaces/store-models';
@@ -67,7 +67,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
 
   render() {
     return (
-      <Modal
+      <ReactModal
         contentLabel="Admin Login"
         isOpen={this.props.isOpen}
         shouldCloseOnOverlayClick={true}
@@ -121,7 +121,7 @@ class Component extends React.Component<PropsFromConnect, {}> {
         </Form>
 
 
-      </Modal>
+      </ReactModal>
     );
   }
 }

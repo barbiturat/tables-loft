@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
-import MouseEvent = React.MouseEvent;
-import * as Modal from 'react-modal';
+import ReactModal from 'react-modal';
 
 import {StoreStructure} from '../interfaces/store-models';
 import {PropsExtendedByConnect} from '../interfaces/component';
@@ -18,7 +17,7 @@ type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 class Component extends React.Component<PropsFromConnect, {}> {
   render() {
     return this.props.toBlock ? (
-        <Modal
+        <ReactModal
           contentLabel="Screen Blocker"
           isOpen={this.props.toBlock}
           shouldCloseOnOverlayClick={false}
