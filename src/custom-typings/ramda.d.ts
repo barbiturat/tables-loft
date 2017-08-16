@@ -17,13 +17,13 @@ declare let R: R.Static;
 declare namespace R {
   type Ord = number | string | boolean;
 
-  type Path = Array<(number | string)>;
+  type Path = ReadonlyArray<(number | string)>;
 
   interface Functor<T> {
     map<U>(fn: (t: T) => U): Functor<U>;
   }
 
-  interface KeyValuePair<K, V> extends Array<K | V> {
+  interface KeyValuePair<K, V> extends ReadonlyArray<K | V> {
     0: K;
     1: V;
   }
@@ -206,8 +206,8 @@ declare namespace R {
     /**
      * ap applies a list of functions to a list of values.
      */
-    ap<T, U>(fns: Array<((a: T) => U)>, vs: ReadonlyArray<T>): ReadonlyArray<U>;
-    ap<T, U>(fns: Array<((a: T) => U)>): (vs: ReadonlyArray<T>) => ReadonlyArray<U>;
+    ap<T, U>(fns: ReadonlyArray<((a: T) => U)>, vs: ReadonlyArray<T>): ReadonlyArray<U>;
+    ap<T, U>(fns: ReadonlyArray<((a: T) => U)>): (vs: ReadonlyArray<T>) => ReadonlyArray<U>;
 
     /**
      * Returns a new list, composed of n-tuples of consecutive elements If n is greater than the length of the list,
@@ -219,9 +219,9 @@ declare namespace R {
     /**
      * Returns a new list containing the contents of the given list, followed by the given element.
      */
-    append<T, U>(el: U, list: ReadonlyArray<T>): Array<(T & U)>;
-    append<U>(el: U): <T>(list: ReadonlyArray<T>) => Array<(T & U)>;
-    append<U>(el: U): <T>(list: ReadonlyArray<T>) => Array<(T & U)>;
+    append<T, U>(el: U, list: ReadonlyArray<T>): ReadonlyArray<(T & U)>;
+    append<U>(el: U): <T>(list: ReadonlyArray<T>) => ReadonlyArray<(T & U)>;
+    append<U>(el: U): <T>(list: ReadonlyArray<T>) => ReadonlyArray<(T & U)>;
 
     /**
      * Applies function fn to the argument list args. This is useful for creating a fixed-arity function from
@@ -385,7 +385,7 @@ declare namespace R {
      * point fn returns the result of applying its arguments to the corresponding transformer. If none of the predicates
      * matches, fn returns undefined.
      */
-    cond(fns: Array<[Pred, (...a: ReadonlyArray<any>) => any]>): (...a: ReadonlyArray<any>) => any;
+    cond(fns: ReadonlyArray<[Pred, (...a: ReadonlyArray<any>) => any]>): (...a: ReadonlyArray<any>) => any;
 
     /**
      * Wraps a constructor function inside a curried function that can be called with the same arguments and returns the same type.
@@ -413,7 +413,7 @@ declare namespace R {
      * function is applied to those same arguments. The results of each branching function
      * are passed as arguments to the converging function to produce the return value.
      */
-    converge(after: ((...a: ReadonlyArray<any>) => any), fns: Array<((...a: ReadonlyArray<any>) => any)>): (...a: ReadonlyArray<any>) => any;
+    converge(after: ((...a: ReadonlyArray<any>) => any), fns: ReadonlyArray<((...a: ReadonlyArray<any>) => any)>): (...a: ReadonlyArray<any>) => any;
 
     /**
      * Counts the elements of a list according to how many match each value
@@ -540,7 +540,7 @@ declare namespace R {
     either(pred1: Pred): (pred2: Pred) => Pred;
 
     /**
-     * Returns the empty value of its argument's type. Ramda defines the empty value of Array ReadonlyArray<(>), Object ({}),
+     * Returns the empty value of its argument's type. Ramda defines the empty value of ReadonlyArray ReadonlyArray<(>), Object ({}),
      * String (''), and Arguments. Other types are supported if they define <Type>.empty and/or <Type>.prototype.empty.
      * Dispatches to the empty method of the first argument, if present.
      */
@@ -642,8 +642,8 @@ declare namespace R {
     /**
      * Creates a new object out of a list key-value pairs.
      */
-    fromPairs<V>(pairs: Array<KeyValuePair<string, V>>): { [index: string]: V };
-    fromPairs<V>(pairs: Array<KeyValuePair<number, V>>): { [index: number]: V };
+    fromPairs<V>(pairs: ReadonlyArray<KeyValuePair<string, V>>): { [index: string]: V };
+    fromPairs<V>(pairs: ReadonlyArray<KeyValuePair<number, V>>): { [index: number]: V };
 
     /**
      * Splits a list into sublists stored in an object, based on the result of
@@ -836,7 +836,7 @@ declare namespace R {
     /**
      * Applies a list of functions to a list of values.
      */
-    juxt<T, U>(fns: Array<(...args: ReadonlyArray<T>) => U>): (...args: ReadonlyArray<T>) => ReadonlyArray<U>;
+    juxt<T, U>(fns: ReadonlyArray<(...args: ReadonlyArray<T>) => U>): (...args: ReadonlyArray<T>) => ReadonlyArray<U>;
 
     /**
      * Returns a list containing the names of all the enumerable own
@@ -1234,7 +1234,7 @@ declare namespace R {
      * Returns a partial copy of an object containing only the keys specified.  If the key does not exist, the
      * property is ignored.
      */
-    pick<T, K extends keyof T>(names: Array<K | string>, obj: T): Pick<T, K>;
+    pick<T, K extends keyof T>(names: ReadonlyArray<K | string>, obj: T): Pick<T, K>;
     pick(names: ReadonlyArray<string>): <T, U>(obj: T) => U;
 
     /**
@@ -1593,8 +1593,8 @@ declare namespace R {
     /**
      * Sorts a list according to a list of comparators.
      */
-    sortWith<T>(fns: Array<((a: T, b: T) => number)>, list: ReadonlyArray<T>): ReadonlyArray<T>;
-    sortWith<T>(fns: Array<((a: T, b: T) => number)>): (list: ReadonlyArray<T>) => ReadonlyArray<T>;
+    sortWith<T>(fns: ReadonlyArray<((a: T, b: T) => number)>, list: ReadonlyArray<T>): ReadonlyArray<T>;
+    sortWith<T>(fns: ReadonlyArray<((a: T, b: T) => number)>): (list: ReadonlyArray<T>) => ReadonlyArray<T>;
 
     /**
      * Splits a string into an array of strings based on the given
@@ -1736,7 +1736,7 @@ declare namespace R {
      * Note that the order of the output array is not guaranteed to be
      * consistent across different JS platforms.
      */
-    toPairs<F, S>(obj: { [k: string]: S } | { [k: number]: S } | any): Array<[F, S]>;
+    toPairs<F, S>(obj: { [k: string]: S } | { [k: number]: S } | any): ReadonlyArray<[F, S]>;
 
     /**
      * Converts an object into an array of key, value arrays.
@@ -1744,7 +1744,7 @@ declare namespace R {
      * Note that the order of the output array is not guaranteed to be
      * consistent across different JS platforms.
      */
-    toPairsIn<F, S>(obj: { [k: string]: S } | { [k: number]: S } | any): Array<[F, S]>;
+    toPairsIn<F, S>(obj: { [k: string]: S } | { [k: number]: S } | any): ReadonlyArray<[F, S]>;
 
     /**
      * Returns the string representation of the given value. eval'ing the output should
@@ -1802,7 +1802,7 @@ declare namespace R {
 
     /**
      * Gives a single-word string description of the (native) type of a value, returning such answers as 'Object',
-     * 'Number', 'Array', or 'Null'. Does not attempt to distinguish user Object types any further, reporting them
+     * 'Number', 'ReadonlyArray', or 'Null'. Does not attempt to distinguish user Object types any further, reporting them
      * all as 'Object'.
      */
     type(val: any): string;
@@ -1909,7 +1909,7 @@ declare namespace R {
      * need to be transformed, although you can ignore them, it's best to pass an identity function so
      * that the new function reports the correct arity.
      */
-    useWith(fn: ((...a: ReadonlyArray<any>) => any), transformers: Array<((...a: ReadonlyArray<any>) => any)>): (...a: ReadonlyArray<any>) => any;
+    useWith(fn: ((...a: ReadonlyArray<any>) => any), transformers: ReadonlyArray<((...a: ReadonlyArray<any>) => any)>): (...a: ReadonlyArray<any>) => any;
 
     /**
      * Returns a list of all the enumerable own properties of the supplied object.
@@ -1980,15 +1980,15 @@ declare namespace R {
     /**
      * Creates a new list out of the two supplied by creating each possible pair from the lists.
      */
-    xprod<K, V>(as: ReadonlyArray<K>, bs: ReadonlyArray<V>): Array<KeyValuePair<K, V>>;
-    xprod<K>(as: ReadonlyArray<K>): <V>(bs: ReadonlyArray<V>) => Array<KeyValuePair<K, V>>;
+    xprod<K, V>(as: ReadonlyArray<K>, bs: ReadonlyArray<V>): ReadonlyArray<KeyValuePair<K, V>>;
+    xprod<K>(as: ReadonlyArray<K>): <V>(bs: ReadonlyArray<V>) => ReadonlyArray<KeyValuePair<K, V>>;
 
     /**
      * Creates a new list out of the two supplied by pairing up equally-positioned items from
      * both lists. Note: `zip` is equivalent to `zipWith(function(a, b) { return [a, b] })`.
      */
-    zip<K, V>(list1: ReadonlyArray<K>, list2: ReadonlyArray<V>): Array<KeyValuePair<K, V>>;
-    zip<K>(list1: ReadonlyArray<K>): <V>(list2: ReadonlyArray<V>) => Array<KeyValuePair<K, V>>;
+    zip<K, V>(list1: ReadonlyArray<K>, list2: ReadonlyArray<V>): ReadonlyArray<KeyValuePair<K, V>>;
+    zip<K>(list1: ReadonlyArray<K>): <V>(list2: ReadonlyArray<V>) => ReadonlyArray<KeyValuePair<K, V>>;
 
     /**
      * Creates a new object out of a list of keys and a list of values.
