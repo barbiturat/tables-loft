@@ -2,12 +2,12 @@
   "rootDir": ".",
   "globals": {
     "ts-jest": {
-      "tsConfigFile": "<rootDir>/tsconfig.json"
+      "tsConfigFile": "./tsconfig.json"
     }
   },
   "testRegex": "\\.spec\\.(ts|tsx|js)$",
   "transform": {
-    ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    ".(ts|tsx)": "./node_modules/ts-jest/preprocessor.js"
   },
   "moduleFileExtensions": [
     "ts",
@@ -16,5 +16,5 @@
   ],
   "collectCoverage": true,
   "collectCoverageFrom": ["src/**/*.(ts|tsx)", "!**/node_modules/**", "!**/*.d.(ts|tsx)"],
-  "coverageDirectory": "<rootDir>/coverage"
+  "coverageDirectory": "./coverage"
 }
