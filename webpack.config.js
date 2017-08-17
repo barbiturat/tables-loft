@@ -39,7 +39,7 @@ if (!API_PORT) throw 'The "API_PORT" env variable must be set';
 
 const plugins = [
   new webpack.optimize.CommonsChunkPlugin({
-    names: ['vendor', 'img', 'fonts', 'manifest']
+    names: ['fonts', 'img', 'bundle', 'manifest']
   }),
   new webpack.DefinePlugin({
     'process.env': {
@@ -69,29 +69,7 @@ module.exports = {
     rollbar: '../external-tools/rollbar-snippet.js',
     bundle: './index.tsx',
     img: '../resources/img/index.js',
-    fonts: '../resources/fonts/index.js',
-    vendor: [
-      'classnames',
-      'moment',
-      'query-string',
-      'ramda',
-      'react',
-      'react-addons-create-fragment',
-      'react-dom',
-      'react-modal',
-      'react-paginate',
-      'react-redux',
-      'react-redux-form',
-      'react-router',
-      'redux',
-      'redux-observable',
-      'redux-router',
-      'reselect',
-      'rxjs',
-      'tcomb-validation',
-      'tslib',
-      'validator'
-    ]
+    fonts: '../resources/fonts/index.js'
   },
   output: {
     filename: '[name].[chunkhash].js',
@@ -153,7 +131,7 @@ module.exports = {
         loader: 'url-loader',
         options: {
           mimetype: 'application/octet-stream',
-          limit: 30000
+          limit: 100000
         }
       },
       {
