@@ -25,7 +25,7 @@
     "start-locally": "npm run build-dev & npm run build-and-run-fake-api-server & npm run build-and-run-server",
     "test": "jest --config=./jest.config.json",
     "update-test-snapshots": "jest -u --config=./jest.config.json",
-    "reformat-all-code": "prettier --write --single-quote '{src/**,js-server{,/!(out)/**},fake-api-server{,/!(out)/**}}/*.+(ts|tsx|js|jsx)'"
+    "prettier-all-pages": "prettier --write --single-quote '{src/**,js-server{,/!(out)/**},fake-api-server{,/!(out)/**}}/*.+(ts|tsx|js|jsx)'"
   },
   "repository": {
     "type": "git",
@@ -61,7 +61,7 @@
     "react-modal": "^2.2.4",
     "react-paginate": "^4.4.3",
     "react-redux": "^5.0.6",
-    "react-redux-form": "^1.14.0",
+    "react-redux-form": "^1.14.1",
     "react-router": "^2.8.1",
     "redux": "^3.7.2",
     "redux-actions": "^2.2.1",

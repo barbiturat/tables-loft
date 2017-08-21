@@ -83,7 +83,8 @@ module.exports = {
         loader: 'tslint-loader',
         exclude: /node_modules/,
         options: {
-          failOnHint: true
+          failOnHint: true,
+          typeCheck: true
         }
       },
       {

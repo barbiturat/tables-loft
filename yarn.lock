@@ -4098,9 +4098,9 @@ react-paginate@^4.4.3:
     react "^15.0.0"
     react-addons-create-fragment "^15.0.0"
 
-react-redux-form@^1.14.0:
-  version "1.14.0"
-  resolved "https://registry.yarnpkg.com/react-redux-form/-/react-redux-form-1.14.0.tgz#f229cfcd882f7fb0050415530f4abf4c8041e2cd"
+react-redux-form@^1.14.1:
+  version "1.14.1"
+  resolved "https://registry.yarnpkg.com/react-redux-form/-/react-redux-form-1.14.1.tgz#868567bcd83b269989c10495cf4683898d9711ae"
   dependencies:
     icepick "^1.1.0"
     invariant "~2.2.1"
