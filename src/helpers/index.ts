@@ -15,6 +15,15 @@ type ReplacedKeys<A extends AnyDict, B extends StringDict> = {
   [P in ValueOf<B> | keyof A]: ValueOf<A>
 };
 
+/*
+interface RenameKeys {
+  <B extends StringDict, A extends AnyDict>(
+    keysMap: B,
+    obj: A
+  ): R.CurriedFunction2<B, A, ReplacedKeys<A, B>>;
+}
+*/
+
 interface RenameKeys<B extends StringDict, A extends AnyDict>
   extends R.CurriedFunction2<B, A, ReplacedKeys<A, B>> {}
 
