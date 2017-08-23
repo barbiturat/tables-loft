@@ -1,40 +1,40 @@
 import * as React from 'react';
+import * as R from 'ramda';
 
-import { AnyDict } from '../interfaces/index';
+import {AnyDict} from '../interfaces/index';
 import Table, { Props as TableProps } from './table';
 import { Tables } from '../interfaces/store-models';
+import {renameKeys} from '../helpers/index';
 
 interface Props {
   readonly tables: Tables;
 }
 
+const numOrUndefined = R.unless(R.is(Number), R.always(undefined));
+
 export default class TablesGroup extends React.Component<Props, AnyDict> {
   static getTables(tables: Tables) {
-    return Object.keys(tables).map(value => {
-      const idx = Number(value);
-      const {
-        id,
-        name,
-        currentSessionId,
-        lastSessionId,
-        tableType,
-        isInPending,
-        isDisabled
-      } = tables[idx];
-      const params: TableProps = {
-        id,
-        name,
-        type: tableType,
-        isInPending,
-        isDisabled,
-        currentSessionId:
-          typeof currentSessionId === 'number' ? currentSessionId : undefined,
-        lastSessionId:
-          typeof lastSessionId === 'number' ? lastSessionId : undefined
-      };
+    const generateTables = R.mapObjIndexed((table, idx) => R.pipe(
+      R.pickAll(
+        [
+          'id',
+          'name',
+          'tableType',
+          'isInPending',
+          'isDisabled',
+          'currentSessionId',
+          'lastSessionId'
+        ]
+      ),
+      renameKeys({tableType: 'type'}),
+      R.evolve<TableProps>({
+        currentSessionId: numOrUndefined,
+        lastSessionId: numOrUndefined
+      }),
+      (params: TableProps) => <Table key={idx} {...params} />
+    )(table));
 
-      return <Table key={idx} {...params} />;
-    });
+    return R.pipe(generateTables, R.values)(tables);
   }
 
   render() {

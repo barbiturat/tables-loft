@@ -84,7 +84,7 @@ module.exports = {
         exclude: /node_modules/,
         options: {
           failOnHint: true,
-          typeCheck: true
+          // typeCheck: true
         }
       },
       {
