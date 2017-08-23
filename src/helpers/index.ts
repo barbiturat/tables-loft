@@ -30,3 +30,11 @@ export const renameKeys: RenameKeys<StringDict, AnyDict> = R.curry<
     R.keys(obj)
   )
 );
+
+export const indexedDictToArray = R.curry<
+  string,
+  {},
+  ReadonlyArray<{}>
+>((key, object) =>
+  R.converge(R.zipWith(R.assoc(key)), [R.keys, R.values])(object)
+);
