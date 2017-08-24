@@ -4,26 +4,30 @@ import { mapProps } from 'recompose';
 
 import Table, { Props as TableProps } from './table';
 import { Tables, Table as StoreTable } from '../interfaces/store-models';
-import { indexedDictToArray, renameKeys } from '../helpers/index';
-import { drawListComponent } from 'helpers/renderers';
+import { renameKeys } from '../helpers/index';
+import {
+  drawComponent,
+  DrawComponent,
+  drawListComponent,
+  DrawListComponent
+} from 'helpers/renderers';
 
 interface Props {
   readonly tables: Tables;
 }
 
-type TablePropsWithIdx = TableProps & { readonly idx: number };
-type StoreTableWithIdx = StoreTable & { readonly idx: number };
-
 const numOrUndefined = R.unless(R.is(Number), R.always(undefined));
 
-const SimpleTable = (params: TablePropsWithIdx): JSX.Element =>
-  <Table key={params.idx} {...params} />;
+const SimpleTable = (drawComponent as DrawComponent<
+  React.ComponentType<TableProps>,
+  TableProps
+>)(Table);
+// const SimpleTable = drawComponent<React.StatelessComponent<TableProps>, TableProps>(Table);
 
-const mapTableProps = mapProps<TablePropsWithIdx, StoreTableWithIdx>(
+const mapTableProps = mapProps<TableProps, StoreTable>(
   R.pipe(
     R.pickAll([
       'id',
-      'idx',
       'name',
       'tableType',
       'isInPending',
@@ -32,7 +36,7 @@ const mapTableProps = mapProps<TablePropsWithIdx, StoreTableWithIdx>(
       'lastSessionId'
     ]),
     renameKeys({ tableType: 'type' }),
-    R.evolve<TablePropsWithIdx>({
+    R.evolve<TableProps>({
       currentSessionId: numOrUndefined,
       lastSessionId: numOrUndefined
     })
@@ -41,13 +45,16 @@ const mapTableProps = mapProps<TablePropsWithIdx, StoreTableWithIdx>(
 
 const MappedTable = mapTableProps(SimpleTable);
 
-const drawTable = drawListComponent(MappedTable);
+const drawTable = (drawListComponent as DrawListComponent<
+  React.ComponentType<StoreTable>,
+  StoreTable
+>)(MappedTable);
 
 const drawTables = R.pipe<
   Tables,
-  ReadonlyArray<StoreTableWithIdx>,
+  ReadonlyArray<StoreTable>,
   ReadonlyArray<JSX.Element>
->(indexedDictToArray('idx'), R.addIndex(R.map)(drawTable));
+>(R.values, R.addIndex(R.map)(drawTable));
 
 const TablesGroup = ({ tables }: Props) =>
   <div className="tables-set">
