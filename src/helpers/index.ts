@@ -15,24 +15,14 @@ type ReplacedKeys<A extends AnyDict, B extends StringDict> = {
   [P in ValueOf<B> | keyof A]: ValueOf<A>
 };
 
-/*
-interface RenameKeys {
-  <B extends StringDict, A extends AnyDict>(
-    keysMap: B,
-    obj: A
-  ): R.CurriedFunction2<B, A, ReplacedKeys<A, B>>;
-}
-*/
-
 interface RenameKeys<B extends StringDict, A extends AnyDict>
   extends R.CurriedFunction2<B, A, ReplacedKeys<A, B>> {}
 
 // https://github.com/ramda/ramda/wiki/Cookbook#rename-keys-of-an-object
-export const renameKeys: RenameKeys<StringDict, AnyDict> = R.curry<
+export const renameKeys: RenameKeys<
   StringDict,
-  AnyDict,
   AnyDict
->((keysMap, obj) =>
+> = R.curry((keysMap, obj) =>
   R.reduce<any, AnyDict>(
     (acc, key) => R.assoc(keysMap[key] || key, obj[key], acc),
     {},
@@ -40,10 +30,6 @@ export const renameKeys: RenameKeys<StringDict, AnyDict> = R.curry<
   )
 );
 
-export const indexedDictToArray = R.curry<
-  string,
-  {},
-  ReadonlyArray<{}>
->((key, object) =>
+export const indexedDictToArray = R.curry((key: string, object) =>
   R.converge(R.zipWith(R.assoc(key)), [R.keys, R.values])(object)
 );
