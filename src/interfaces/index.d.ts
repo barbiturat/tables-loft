@@ -9,9 +9,7 @@ export type PartialIndexedDict<T> = {
   readonly [name: number]: T;
 };
 
-export interface Dict<T> {
-  readonly [name: string]: T;
-}
+export interface Dict<T> extends Record<string, T> {}
 
 export interface StringDict extends Dict<string> {}
 export interface BoolDict extends Dict<boolean> {}
