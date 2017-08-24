@@ -96,7 +96,8 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
         clone,
         (currentTablesClone: TablesStore) =>
           getTablesWithSetHistoryPending(currentTablesClone, tableId, true),
-        (tablesWithSetPending: TablesStore) => changingTables(tablesWithSetPending),
+        (tablesWithSetPending: TablesStore) =>
+          changingTables(tablesWithSetPending),
         (tablesPendingAction: Action<TablesStore>) =>
           Observable.of(tablesPendingAction)
       )(store.getState().app.tablesData.tables);

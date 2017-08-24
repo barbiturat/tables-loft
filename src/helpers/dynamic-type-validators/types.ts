@@ -1,4 +1,7 @@
-import { TableSessionBackend, TableBackend } from '../../interfaces/backend-models';
+import {
+  TableSessionBackend,
+  TableBackend
+} from '../../interfaces/backend-models';
 // tslint:disable-next-line:no-require-imports
 const t = require('tcomb-validation');
 

@@ -4,10 +4,7 @@ import { connect } from 'react-redux';
 import * as moment from 'moment';
 import MouseEvent = React.MouseEvent;
 
-import {
-  StoreStructure,
-  TableSessionStore
-} from '../interfaces/store-models';
+import { StoreStructure, TableSessionStore } from '../interfaces/store-models';
 import { PropsExtendedByConnect } from '../interfaces/component';
 import SessionEditBlock from './session-edit-block';
 

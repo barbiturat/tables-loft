@@ -56,7 +56,12 @@ const createTableSessionsChangedAction = (
   storeTableSessions: TableSessionsStore,
   responseSession: TableSessionBackend
 ) =>
-  pipe<TableSessionsStore, TableSessionsStore, TableSessionsStore, Action<TableSessionsStore>>(
+  pipe<
+    TableSessionsStore,
+    TableSessionsStore,
+    TableSessionsStore,
+    Action<TableSessionsStore>
+  >(
     clone,
     sessions =>
       pipe<

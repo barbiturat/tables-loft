@@ -5,7 +5,11 @@ import { pipe, objOf, ifElse, prop, merge, clone, flip } from 'ramda';
 
 import { CHANGING_TABLE_FIELDS } from '../constants/action-names';
 import { ActionType } from '../action-creators/changing-table-fields';
-import { StoreStructure, TablesStore, TableStore } from '../interfaces/store-models';
+import {
+  StoreStructure,
+  TablesStore,
+  TableStore
+} from '../interfaces/store-models';
 import changingTables from '../action-creators/changing-tables';
 import nothingDone from '../action-creators/nothing-done';
 
@@ -18,7 +22,15 @@ const changeTableFields = ((action$, store: Store<StoreStructure>) => {
       ifElse(
         prop(tblId),
         (tables: TablesStore) =>
-          pipe<TablesStore, TablesStore, TableStore, TableStore, TablesStore, TablesStore, Action<TablesStore>>(
+          pipe<
+            TablesStore,
+            TablesStore,
+            TableStore,
+            TableStore,
+            TablesStore,
+            TablesStore,
+            Action<TablesStore>
+          >(
             clone,
             prop(tblId), // table
             flip(merge)(changedFields), // merge with new props

@@ -42,7 +42,7 @@ export const tablesToFront = (
   return tables.reduce((memo, table) => {
     const convertedTable = tableToFront(table);
 
-    return R.merge(memo, { [convertedTable.id]: convertedTable });
+    return { ...memo, ...{ [convertedTable.id]: convertedTable } };
   }, {} as PartialIndexedDict<TableStore>);
 };
 
@@ -66,6 +66,9 @@ export const tableSessionsToFront = (
   return tableSessions.reduce((memo, tableSession) => {
     const convertedTableSession = tableSessionToFront(tableSession);
 
-    return R.merge(memo, { [convertedTableSession.id]: convertedTableSession });
+    return {
+      ...memo,
+      ...{ [convertedTableSession.id]: convertedTableSession }
+    };
   }, {} as PartialIndexedDict<TableSessionStore>);
 };
