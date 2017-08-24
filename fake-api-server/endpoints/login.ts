@@ -35,7 +35,6 @@ const login = (server: Application) => {
             })
             .send(responseDefaultOk);
         } else {
-          const emails: ReadonlyArray<string> = [testUserEmail];
           const errors: LoginErrors = {
             email: {
               isRegistered: false
@@ -45,13 +44,16 @@ const login = (server: Application) => {
             }
           };
 
+          // Temporarily commented
+          /*
+          const emails: ReadonlyArray<string> = [testUserEmail];
           if (email && emails.indexOf(email) === -1) {
             errors.email.isRegistered = false;
           } else {
             if (password !== testUserPassword) {
               errors.password.isCorrect = false;
             }
-          }
+          }*/
 
           res.status(STATUS_FORBIDDEN).send(
             <ResponseLoginFailedPayload>{
