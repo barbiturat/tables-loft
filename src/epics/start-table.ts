@@ -23,7 +23,7 @@ import {
 } from '../interfaces/index';
 import { urlStartTable } from '../constants/urls';
 import { ActionType } from '../action-creators/requesting-table-start';
-import { StoreStructure, TableSessions } from '../interfaces/store-models';
+import { StoreStructure, TableSessionsStore } from '../interfaces/store-models';
 import changingTableSessions from '../action-creators/changing-table-sessions';
 import { tableSessionToFront } from '../helpers/api-data-converters';
 import { API_URL } from '../constants/index';
@@ -70,10 +70,10 @@ const startTable = ((action$, store: Store<StoreStructure>) => {
               ajaxData.response.session
             );
             const tableSessionsChangedAction = pipe<
-              TableSessions,
-              TableSessions,
-              TableSessions,
-              Action<TableSessions>
+              TableSessionsStore,
+              TableSessionsStore,
+              TableSessionsStore,
+              Action<TableSessionsStore>
             >(
               clone,
               merge({

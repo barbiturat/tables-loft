@@ -17,10 +17,10 @@ import {
 
 import {
   StoreStructure,
-  Table,
-  TableSession,
-  Tables,
-  TableSessions
+  TableStore,
+  TableSessionStore,
+  TablesStore,
+  TableSessionsStore
 } from '../interfaces/store-models';
 import { PropsExtendedByConnect } from '../interfaces/component';
 import modalSessionsHistoryChanged from '../action-creators/modal-sessions-history-changed';
@@ -30,9 +30,9 @@ interface Props {}
 
 interface MappedProps {
   readonly isOpen: boolean;
-  readonly tables: Tables;
-  readonly currentTable?: Table;
-  readonly allTableSessions: TableSessions;
+  readonly tables: TablesStore;
+  readonly currentTable?: TableStore;
+  readonly allTableSessions: TableSessionsStore;
 }
 
 interface State {
@@ -51,7 +51,7 @@ class Component extends React.Component<PropsFromConnect, State> {
     generic: 'modal_table_default'
   };
 
-  static getSessionsHistoryInPending(currentTable?: Table) {
+  static getSessionsHistoryInPending(currentTable?: TableStore) {
     return currentTable ? currentTable.isSessionsHistoryInPending : false;
   }
 
@@ -73,28 +73,28 @@ class Component extends React.Component<PropsFromConnect, State> {
   };
 
   static getTableSessions(
-    allSessions: TableSessions,
-    table: Table
-  ): ReadonlyArray<TableSession> {
+    allSessions: TableSessionsStore,
+    table: TableStore
+  ): ReadonlyArray<TableSessionStore> {
     return pipe<
       ReadonlyArray<number>,
       ReadonlyArray<string>,
-      TableSessions,
-      ReadonlyArray<TableSession>,
-      ReadonlyArray<TableSession>
+      TableSessionsStore,
+      ReadonlyArray<TableSessionStore>,
+      ReadonlyArray<TableSessionStore>
     >(map(String), flip(pick)(allSessions), values, sortBy(prop('startsAt')))(
       table.sessionsHistory
     );
   }
 
   static getSessionsPage(
-    sessions: ReadonlyArray<TableSession>,
+    sessions: ReadonlyArray<TableSessionStore>,
     pageIdx: number
-  ): ReadonlyArray<TableSession> {
+  ): ReadonlyArray<TableSessionStore> {
     return pipe<
-      ReadonlyArray<TableSession>,
-      ReadonlyArray<ReadonlyArray<TableSession>>,
-      ReadonlyArray<TableSession>
+      ReadonlyArray<TableSessionStore>,
+      ReadonlyArray<ReadonlyArray<TableSessionStore>>,
+      ReadonlyArray<TableSessionStore>
     >(splitEvery(Component.PAGE_SIZE), nth(pageIdx))(sessions);
   }
 

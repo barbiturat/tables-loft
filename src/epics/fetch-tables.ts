@@ -20,14 +20,14 @@ import {
   tableSessionsToFront
 } from '../helpers/api-data-converters';
 import {
-  TableSession,
-  Table as TableBackend
+  TableSessionBackend,
+  TableBackend
 } from '../interfaces/backend-models';
 import changingTableSessions from '../action-creators/changing-table-sessions';
 import changingTables from '../action-creators/changing-tables';
 import {
-  Tables,
-  TableSessions,
+  TablesStore,
+  TableSessionsStore,
   StoreStructure
 } from '../interfaces/store-models';
 import { API_URL } from '../constants/index';
@@ -38,7 +38,7 @@ type ResponseOk = AjaxResponseTyped<ResponseTablesPayload>;
 type ResponseOkDefined = AjaxResponseDefined<ResponseTablesPayload>;
 
 const getTableSessionsFromTables = (tables: ReadonlyArray<TableBackend>) => {
-  return tables.reduce((memo: ReadonlyArray<TableSession>, table) => {
+  return tables.reduce((memo: ReadonlyArray<TableSessionBackend>, table) => {
     const { currentSession, lastSession } = table;
 
     if (currentSession) {
@@ -74,9 +74,9 @@ const fetchTables = (action$ => {
 
           const setTableSessions = pipe<
             ReadonlyArray<TableBackend>,
-            ReadonlyArray<TableSession>,
-            TableSessions,
-            Action<TableSessions>
+            ReadonlyArray<TableSessionBackend>,
+            TableSessionsStore,
+            Action<TableSessionsStore>
           >(
             getTableSessionsFromTables,
             tableSessionsToFront,
@@ -85,8 +85,8 @@ const fetchTables = (action$ => {
 
           const setTables = pipe<
             ReadonlyArray<TableBackend>,
-            Tables,
-            Action<Tables>
+            TablesStore,
+            Action<TablesStore>
           >(tablesToFront, changingTables)(tables);
 
           const tablesPendingStop = pendingTables(false);

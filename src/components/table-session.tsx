@@ -3,11 +3,10 @@ import * as ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import * as moment from 'moment';
 import MouseEvent = React.MouseEvent;
-import KeyboardEvent = React.KeyboardEvent;
 
 import {
   StoreStructure,
-  TableSession as TableSessionType
+  TableSessionStore
 } from '../interfaces/store-models';
 import { PropsExtendedByConnect } from '../interfaces/component';
 import SessionEditBlock from './session-edit-block';
@@ -23,7 +22,7 @@ interface State {
 
 interface MappedProps {
   readonly inAdminMode: boolean;
-  readonly session: TableSessionType | null;
+  readonly session: TableSessionStore | null;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
@@ -141,7 +140,7 @@ class Component extends React.Component<PropsFromConnect, State> {
     this.setEditingMode(false);
   };
 
-  drawDuration(session: TableSessionType) {
+  drawDuration(session: TableSessionStore) {
     const { adminEdited, isInPending, durationSeconds, id } = session;
     const durationData = Component.getSessionDurationData(durationSeconds);
     const { hours, minutes, minutesTotal } = durationData;

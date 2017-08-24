@@ -3,18 +3,18 @@ import * as R from 'ramda';
 import { mapProps } from 'recompose';
 
 import Table, { Props as TableProps } from './table';
-import { Tables, Table as StoreTable } from '../interfaces/store-models';
+import { TablesStore, TableStore } from '../interfaces/store-models';
 import { renameKeys } from '../helpers/index';
 
 interface Props {
-  readonly tables: Tables;
+  readonly tables: TablesStore;
 }
 
 const numOrUndefined = R.unless(R.is(Number), R.always(undefined));
 
 const SimpleTable = (props: TableProps): JSX.Element => <Table {...props} />;
 
-const mapTableProps = mapProps<TableProps, StoreTable>(
+const mapTableProps = mapProps<TableProps, TableStore>(
   R.pipe(
     R.pickAll([
       'id',
@@ -35,12 +35,12 @@ const mapTableProps = mapProps<TableProps, StoreTable>(
 
 const MappedTable = mapTableProps(SimpleTable);
 
-const drawTable = (props: StoreTable, idx: number) =>
+const drawTable = (props: TableStore, idx: number) =>
   <MappedTable key={idx} {...props} />;
 
 const drawTables = R.pipe<
-  Tables,
-  ReadonlyArray<StoreTable>,
+  TablesStore,
+  ReadonlyArray<TableStore>,
   ReadonlyArray<JSX.Element>
 >(R.values, R.addIndex(R.map)(drawTable));
 

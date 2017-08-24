@@ -26,9 +26,9 @@ import { urlStopTable } from '../constants/urls';
 import { ActionType } from '../action-creators/requesting-table-start';
 import {
   StoreStructure,
-  TableSessions,
-  TableSession as TableSessionFrontend,
-  Table
+  TableSessionsStore,
+  TableSessionStore,
+  TableStore
 } from '../interfaces/store-models';
 import changingTableSessions from '../action-creators/changing-table-sessions';
 import { tableSessionToFront } from '../helpers/api-data-converters';
@@ -38,7 +38,7 @@ import changingTableFields, {
 } from '../action-creators/changing-table-fields';
 import { tTableSession } from '../helpers/dynamic-type-validators/types';
 import { validateResponse } from '../helpers/dynamic-type-validators/index';
-import { TableSession } from '../interfaces/backend-models';
+import { TableSessionBackend } from '../interfaces/backend-models';
 
 type ResponseOk = AjaxResponseTyped<ResponseStopTablePayload>;
 type ResponseOkDefined = AjaxResponseDefined<ResponseStopTablePayload>;
@@ -53,17 +53,17 @@ const assertResponse = (ajaxData: ResponseOk) => {
 };
 
 const createTableSessionsChangedAction = (
-  storeTableSessions: TableSessions,
-  responseSession: TableSession
+  storeTableSessions: TableSessionsStore,
+  responseSession: TableSessionBackend
 ) =>
-  pipe<TableSessions, TableSessions, TableSessions, Action<TableSessions>>(
+  pipe<TableSessionsStore, TableSessionsStore, TableSessionsStore, Action<TableSessionsStore>>(
     clone,
     sessions =>
       pipe<
-        TableSession,
-        TableSessionFrontend,
-        IndexedDict<TableSessionFrontend>,
-        TableSessions
+        TableSessionBackend,
+        TableSessionStore,
+        IndexedDict<TableSessionStore>,
+        TableSessionsStore
       >(
         tableSessionToFront, // converted table session
         convertedSession => ({ [convertedSession.id]: convertedSession }), // creates new table session record
@@ -73,11 +73,11 @@ const createTableSessionsChangedAction = (
   )(storeTableSessions);
 
 const createChangingTableAction = (
-  storeTable: Table,
+  storeTable: TableStore,
   tableId: number,
   responseSessionId: number
 ) =>
-  pipe<Table | undefined, ChangingTableFieldsAction | null>(
+  pipe<TableStore | undefined, ChangingTableFieldsAction | null>(
     ifElse(
       Boolean,
       currTable =>

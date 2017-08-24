@@ -1,10 +1,10 @@
 import { createAction } from 'redux-actions';
 
 import { CHANGING_TABLE_FIELDS } from '../constants/action-names';
-import { Table } from '../interfaces/store-models';
+import { TableStore } from '../interfaces/store-models';
 import { ActionWithPayload } from '../interfaces/actions';
 
-type ChangedFields = Partial<Table>;
+type ChangedFields = Partial<TableStore>;
 
 type PayloadType = {
   readonly changedFields: ChangedFields;

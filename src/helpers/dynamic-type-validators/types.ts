@@ -1,4 +1,4 @@
-import { TableSession, Table } from '../../interfaces/backend-models';
+import { TableSessionBackend, TableBackend } from '../../interfaces/backend-models';
 // tslint:disable-next-line:no-require-imports
 const t = require('tcomb-validation');
 
@@ -20,19 +20,19 @@ const tNonEmptyString = t.refinement(
   'tNonEmptyString'
 );
 
-export const tTableSession = <TableSession>t.interface({
+export const tTableSession = <TableSessionBackend>t.interface({
   id: tPositiveInt,
   startsAt: tNonEmptyString,
   durationSeconds: tPositiveNullableInt,
   adminEdited: t.Boolean
 });
 
-export const tNullableSession = <TableSession | null>t.union([
+export const tNullableSession = <TableSessionBackend | null>t.union([
   tTableSession,
   t.Nil
 ]);
 
-export const tTable = <Table>t.interface({
+export const tTable = <TableBackend>t.interface({
   name: t.String,
   id: tPositiveInt,
   tableType: tTableType,

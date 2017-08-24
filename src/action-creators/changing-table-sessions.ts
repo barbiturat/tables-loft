@@ -1,9 +1,9 @@
 import { createAction } from 'redux-actions';
 
 import { CHANGING_TABLE_SESSIONS } from '../constants/action-names';
-import { TableSessions } from '../interfaces/store-models';
+import { TableSessionsStore } from '../interfaces/store-models';
 
-const changingTableSessions = createAction<TableSessions>(
+const changingTableSessions = createAction<TableSessionsStore>(
   CHANGING_TABLE_SESSIONS
 );
 

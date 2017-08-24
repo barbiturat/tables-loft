@@ -27,8 +27,8 @@ import changingTableSessions from '../action-creators/changing-table-sessions';
 import { RequestUpdateTableSessionPayload } from '../interfaces/api-requests';
 import {
   StoreStructure,
-  TableSession,
-  TableSessions
+  TableSessionStore,
+  TableSessionsStore
 } from '../interfaces/store-models';
 import { ActionType } from '../action-creators/requesting-table-session-change';
 import { API_URL } from '../constants/index';
@@ -46,9 +46,9 @@ const assertResponse = (ajaxData: ResponseOk) => {
 };
 
 const setNewParamsToSession = (
-  sessions: TableSessions,
+  sessions: TableSessionsStore,
   sessionId: number,
-  params: Partial<TableSession>
+  params: Partial<TableSessionStore>
 ) => {
   return pipe(
     when(
@@ -76,11 +76,11 @@ const requestTableSessionChange = ((action$, store: Store<StoreStructure>) => {
       const { sessionId, durationSeconds } = action.payload;
 
       const setSessionsWithPending$ = pipe<
-        TableSessions,
-        TableSessions,
-        TableSessions,
-        Action<TableSessions>,
-        Observable<Action<TableSessions>>
+        TableSessionsStore,
+        TableSessionsStore,
+        TableSessionsStore,
+        Action<TableSessionsStore>,
+        Observable<Action<TableSessionsStore>>
       >(
         clone,
         currSessionsClone =>
@@ -116,7 +116,7 @@ const requestTableSessionChange = ((action$, store: Store<StoreStructure>) => {
           if (isAjaxResponseDefined<ResponseOkDefined>(ajaxData)) {
             assertResponse(ajaxData);
 
-            const sessionsClone: TableSessions = {
+            const sessionsClone: TableSessionsStore = {
               ...store.getState().app.tableSessionsData.tableSessions
             };
             const editedSessions = setNewParamsToSession(

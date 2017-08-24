@@ -4,7 +4,7 @@ import { IndexedDict } from './index';
 
 export type TableType = TableTypeBackend;
 
-export interface Table {
+export interface TableStore {
   readonly name: string;
   readonly id: number;
   readonly tableType: TableType;
@@ -16,9 +16,9 @@ export interface Table {
   readonly sessionsHistory: ReadonlyArray<number>;
 }
 
-export type Tables = IndexedDict<Table>;
+export type TablesStore = IndexedDict<TableStore>;
 
-export interface TableSession {
+export interface TableSessionStore {
   readonly id: number;
   readonly startsAt: number;
   readonly durationSeconds: number;
@@ -26,7 +26,7 @@ export interface TableSession {
   readonly isInPending: boolean;
 }
 
-export type TableSessions = IndexedDict<TableSession>;
+export type TableSessionsStore = IndexedDict<TableSessionStore>;
 
 export type StoreStructure = ReducersStructure;
 

@@ -1,8 +1,8 @@
 import { CHANGING_TABLE_SESSIONS } from '../constants/action-names';
-import { TableSessions } from '../interfaces/store-models';
+import { TableSessionsStore } from '../interfaces/store-models';
 import { handleAction } from 'redux-actions';
 
-export type Structure = TableSessions;
+export type Structure = TableSessionsStore;
 
 const tableSessions = handleAction<Structure, Structure>(
   CHANGING_TABLE_SESSIONS,

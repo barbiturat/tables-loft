@@ -6,9 +6,9 @@ import MouseEvent = React.MouseEvent;
 import TableSession from './table-session';
 import { TableType } from '../interfaces/backend-models';
 import {
-  TableSession as TableSessionType,
+  TableSessionStore,
   StoreStructure,
-  TableSessions
+  TableSessionsStore
 } from '../interfaces/store-models';
 import store from '../store/index';
 import requestingTableStart from '../action-creators/requesting-table-start';
@@ -35,7 +35,7 @@ export interface Props {
 }
 
 interface MappedProps {
-  readonly sessions: TableSessions;
+  readonly sessions: TableSessionsStore;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
@@ -53,7 +53,7 @@ class Component extends React.Component<PropsFromConnect, State> {
     isDisabled: false
   };
 
-  static isTableActive(currentSession?: TableSessionType): boolean {
+  static isTableActive(currentSession?: TableSessionStore): boolean {
     return !!currentSession;
   }
 
@@ -66,7 +66,7 @@ class Component extends React.Component<PropsFromConnect, State> {
     return;
   }
 
-  static startsAtSelector(currentSession?: TableSessionType) {
+  static startsAtSelector(currentSession?: TableSessionStore) {
     return currentSession && currentSession.startsAt;
   }
 
@@ -78,7 +78,7 @@ class Component extends React.Component<PropsFromConnect, State> {
       : null;
   }
 
-  static renderActiveSessionStartTime(currentSession?: TableSessionType) {
+  static renderActiveSessionStartTime(currentSession?: TableSessionStore) {
     if (!currentSession) {
       return null;
     } else {

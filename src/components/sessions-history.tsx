@@ -1,17 +1,17 @@
 import * as React from 'react';
 
-import { TableSession } from '../interfaces/store-models';
+import { TableSessionStore } from '../interfaces/store-models';
 import TableHistorySession from './table-history-session';
 
 interface Props {
-  readonly tableSessions?: ReadonlyArray<TableSession>;
+  readonly tableSessions?: ReadonlyArray<TableSessionStore>;
   readonly isInPending: boolean;
   readonly firstIdx: number;
 }
 
 export default class SessionsHistory extends React.Component<Props, {}> {
   static getRenderedSessions(
-    tableSessions: ReadonlyArray<TableSession> = [],
+    tableSessions: ReadonlyArray<TableSessionStore> = [],
     firstIdx: number
   ) {
     return tableSessions.map((session, idx) =>
@@ -24,7 +24,7 @@ export default class SessionsHistory extends React.Component<Props, {}> {
   }
 
   static getTableSessions(
-    sessions: ReadonlyArray<TableSession> = [],
+    sessions: ReadonlyArray<TableSessionStore> = [],
     isInPending: boolean,
     firstIdx: number
   ) {

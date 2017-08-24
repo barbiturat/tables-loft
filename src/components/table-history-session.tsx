@@ -6,7 +6,7 @@ import MouseEvent = React.MouseEvent;
 
 import {
   StoreStructure,
-  TableSession as TableSessionType
+  TableSessionStore
 } from '../interfaces/store-models';
 import { PropsExtendedByConnect } from '../interfaces/component';
 import SessionEditBlock from './session-edit-block';
@@ -18,7 +18,7 @@ interface SessionDurationData {
 }
 
 interface Props {
-  readonly session: TableSessionType;
+  readonly session: TableSessionStore;
   readonly idx: number;
 }
 
@@ -140,7 +140,7 @@ class Component extends React.Component<PropsFromConnect, State> {
       : null;
   }
 
-  drawDuration(session: TableSessionType) {
+  drawDuration(session: TableSessionStore) {
     const { adminEdited, isInPending, durationSeconds, id } = session;
     const durationData = Component.getSessionDurationData(durationSeconds);
     const { hours, minutes, minutesTotal } = durationData;

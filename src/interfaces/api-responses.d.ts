@@ -1,6 +1,6 @@
 import {
-  TableSession,
-  Table,
+  TableSessionBackend,
+  TableBackend,
   LoginErrors,
   AdminTokenErrors
 } from './backend-models';
@@ -22,19 +22,19 @@ export interface ResponseGetAdminTokenFailedPayload {
 }
 
 export interface ResponseTablesPayload {
-  readonly tables: ReadonlyArray<Table>;
+  readonly tables: ReadonlyArray<TableBackend>;
 }
 
 export interface ResponseSessionsHistoryPayload {
-  readonly sessions: ReadonlyArray<TableSession>;
+  readonly sessions: ReadonlyArray<TableSessionBackend>;
 }
 
 export interface ResponseStartTablePayload {
-  readonly session: TableSession;
+  readonly session: TableSessionBackend;
 }
 
 export interface ResponseStopTablePayload {
-  readonly session: TableSession;
+  readonly session: TableSessionBackend;
 }
 
 export interface ResponseGetAdminTokenPayload {

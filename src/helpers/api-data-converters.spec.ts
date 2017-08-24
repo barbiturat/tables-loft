@@ -10,22 +10,19 @@ import {
   tableSessionToFront
 } from './api-data-converters';
 import {
-  Table as BackendTable,
-  TableSession as BackendTableSession
+  TableBackend,
+  TableSessionBackend
 } from '../interfaces/backend-models';
-import {
-  Table as FrontendTable,
-  TableSession as FrontendTableSession
-} from '../interfaces/store-models';
+import { TableSessionStore } from '../interfaces/store-models';
 
-const getBackendSessionTemplate = (): BackendTableSession => ({
+const getBackendSessionTemplate = (): TableSessionBackend => ({
   id: 12,
   startsAt: moment().utc().subtract().toISOString(),
   durationSeconds: 555,
   adminEdited: false
 });
 
-const getBackendTableTemplate = (): BackendTable => ({
+const getBackendTableTemplate = (): TableBackend => ({
   name: 'first',
   id: 1,
   tableType: 'pool',
@@ -64,7 +61,7 @@ describe('tablesToFront: ', () => {
     const secondBackendTable = { ...backendTableTemplate, ...{ id: 5 } };
     const thirdBackendTable = { ...backendTableTemplate, ...{ id: 55 } };
 
-    const sourceTables: ReadonlyArray<BackendTable> = [
+    const sourceTables: ReadonlyArray<TableBackend> = [
       firstBackendTable,
       secondBackendTable,
       thirdBackendTable
@@ -82,7 +79,7 @@ describe('tablesToFront: ', () => {
     const secondBackendTable = { ...backendTableTemplate, ...{ id: 5 } };
     const thirdBackendTable = { ...backendTableTemplate, ...{ id: 5 } };
 
-    const sourceTables: ReadonlyArray<BackendTable> = [
+    const sourceTables: ReadonlyArray<TableBackend> = [
       firstBackendTable,
       secondBackendTable,
       thirdBackendTable
@@ -98,7 +95,7 @@ describe('tablesToFront: ', () => {
     const secondBackendTable = { ...backendTableTemplate, ...{ id: 5 } };
     const thirdBackendTable = { ...backendTableTemplate, ...{ id: 7 } };
 
-    const sourceTables: ReadonlyArray<BackendTable> = [
+    const sourceTables: ReadonlyArray<TableBackend> = [
       firstBackendTable,
       secondBackendTable,
       thirdBackendTable
@@ -125,7 +122,7 @@ describe('tablesToFront: ', () => {
       ...{ id: 2, currentSession: backendSessionTemplate }
     };
 
-    const sourceTables: ReadonlyArray<BackendTable> = [
+    const sourceTables: ReadonlyArray<TableBackend> = [
       firstBackendTable,
       secondBackendTable,
       thirdBackendTable
@@ -160,7 +157,7 @@ describe('tablesToFront: ', () => {
       ...{ id: 2, lastSession: backendSessionTemplate }
     };
 
-    const sourceTables: ReadonlyArray<BackendTable> = [
+    const sourceTables: ReadonlyArray<TableBackend> = [
       firstBackendTable,
       secondBackendTable,
       thirdBackendTable
@@ -199,7 +196,7 @@ describe('tablesToFront: ', () => {
       ...{ id: 2, currentSession: null, lastSession: lastSession2 }
     };
 
-    const sourceTables: ReadonlyArray<BackendTable> = [
+    const sourceTables: ReadonlyArray<TableBackend> = [
       firstBackendTable,
       secondBackendTable,
       thirdBackendTable
@@ -230,7 +227,7 @@ describe('tableSessionToFront: ', () => {
 
   test(`returns object with "adminEdited" which equals to source's "adminEdited"`, () => {
     const backendSessionTemplate = getBackendSessionTemplate();
-    const sourceSession: BackendTableSession = {
+    const sourceSession: TableSessionBackend = {
       ...backendSessionTemplate,
       ...{ adminEdited: true }
     };
@@ -263,7 +260,7 @@ describe('tableSessionToFront: ', () => {
 
   test(`returns object with "durationSeconds" which equals to source's "durationSeconds" if it is not null`, () => {
     const backendSessionTemplate = getBackendSessionTemplate();
-    const sourceSession: BackendTableSession = {
+    const sourceSession: TableSessionBackend = {
       ...backendSessionTemplate,
       ...{ durationSeconds: 33 }
     };
@@ -278,7 +275,7 @@ describe('tableSessionToFront: ', () => {
     const startsAt = moment().utc().subtract().toISOString();
     const startsAtMs = moment(startsAt, moment.ISO_8601).valueOf();
 
-    const sourceSession: BackendTableSession = {
+    const sourceSession: TableSessionBackend = {
       ...backendSessionTemplate,
       ...{ startsAt }
     };
@@ -300,7 +297,7 @@ describe('tableSessionsToFront: ', () => {
     const backendSession2 = { ...backendSessionTemplate, ...{ id: 33 } };
     const backendSession3 = { ...backendSessionTemplate, ...{ id: 12 } };
 
-    const sourceSessions: ReadonlyArray<BackendTableSession> = [
+    const sourceSessions: ReadonlyArray<TableSessionBackend> = [
       backendSession1,
       backendSession2,
       backendSession3
@@ -324,13 +321,13 @@ describe('tableSessionsToFront: ', () => {
     const backendSession2 = { ...backendSessionTemplate, ...{ id: 33 } };
     const backendSession3 = { ...backendSessionTemplate, ...{ id: 77 } };
 
-    const sourceSessions: ReadonlyArray<BackendTableSession> = [
+    const sourceSessions: ReadonlyArray<TableSessionBackend> = [
       backendSession1,
       backendSession2,
       backendSession3
     ];
     const result = tableSessionsToFront(sourceSessions);
-    const exampleSession: FrontendTableSession = result[33];
+    const exampleSession: TableSessionStore = result[33];
 
     const goalValues = [
       'id',

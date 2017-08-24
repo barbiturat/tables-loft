@@ -1,17 +1,17 @@
 import {
-  Table as BackendTable,
-  TableSession as TableSessionBackend
+  TableBackend,
+  TableSessionBackend
 } from '../interfaces/backend-models';
 import {
-  Table as FrontendTable,
-  TableSession as TableSessionFrontend,
-  Tables,
-  TableSessions
+  TableStore,
+  TableSessionStore,
+  TablesStore,
+  TableSessionsStore
 } from '../interfaces/store-models';
 import * as moment from 'moment';
 import { PartialIndexedDict } from '../interfaces/index';
 
-const tableToFront = (table: BackendTable): FrontendTable => {
+const tableToFront = (table: TableBackend): TableStore => {
   const currentSessionId = table.currentSession
     ? table.currentSession.id
     : null;
@@ -34,19 +34,21 @@ const tableToFront = (table: BackendTable): FrontendTable => {
   };
 };
 
-export const tablesToFront = (tables: ReadonlyArray<BackendTable>): Tables => {
+export const tablesToFront = (
+  tables: ReadonlyArray<TableBackend>
+): TablesStore => {
   return tables.reduce((memo, table) => {
     const convertedTable = tableToFront(table);
 
     memo[convertedTable.id] = convertedTable;
 
     return memo;
-  }, {} as PartialIndexedDict<FrontendTable>);
+  }, {} as PartialIndexedDict<TableStore>);
 };
 
 export const tableSessionToFront = (
   tableSession: TableSessionBackend
-): TableSessionFrontend => {
+): TableSessionStore => {
   const startsAtMs = moment(tableSession.startsAt, moment.ISO_8601).valueOf();
 
   return {
@@ -60,12 +62,12 @@ export const tableSessionToFront = (
 
 export const tableSessionsToFront = (
   tableSessions: ReadonlyArray<TableSessionBackend>
-): TableSessions => {
+): TableSessionsStore => {
   return tableSessions.reduce((memo, tableSession) => {
     const convertedTableSession = tableSessionToFront(tableSession);
 
     memo[convertedTableSession.id] = convertedTableSession;
 
     return memo;
-  }, {} as PartialIndexedDict<TableSessionFrontend>);
+  }, {} as PartialIndexedDict<TableSessionStore>);
 };

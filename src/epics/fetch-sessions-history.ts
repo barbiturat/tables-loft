@@ -28,13 +28,13 @@ import { ActionType } from '../action-creators/fetching-table-sessions-history';
 import { RequestSessionHistoryPayload } from '../interfaces/api-requests';
 import {
   StoreStructure,
-  Tables,
-  TableSessions,
-  Table
+  TablesStore,
+  TableSessionsStore,
+  TableStore
 } from '../interfaces/store-models';
 import changingTables from '../action-creators/changing-tables';
 import { API_URL } from '../constants/index';
-import { TableSession } from '../interfaces/backend-models';
+import { TableSessionBackend } from '../interfaces/backend-models';
 import { validateResponse } from '../helpers/dynamic-type-validators/index';
 import { tTableSession } from '../helpers/dynamic-type-validators/types';
 
@@ -43,10 +43,10 @@ type ResponseOkDefined = AjaxResponseDefined<ResponseSessionsHistoryPayload>;
 type ResponseError = AjaxErrorTyped<ResponseFailedPayload>;
 
 const replaceTable = (
-  tables: Tables,
+  tables: TablesStore,
   tableId: number,
-  newTableData: Partial<Table>
-): Tables => {
+  newTableData: Partial<TableStore>
+): TablesStore => {
   const currentTable = tables[tableId];
 
   if (currentTable) {
@@ -58,10 +58,10 @@ const replaceTable = (
 };
 
 const getTablesWithSetHistoryPending = (
-  tables: Tables,
+  tables: TablesStore,
   tableId: number,
   isInPending: boolean
-): Tables => {
+): TablesStore => {
   return replaceTable(tables, tableId, {
     isSessionsHistoryInPending: isInPending
   });
@@ -87,17 +87,17 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
       );
 
       const setTablesWithPending$ = pipe<
-        Tables,
-        Tables,
-        Tables,
-        Action<Tables>,
-        Observable<Action<Tables>>
+        TablesStore,
+        TablesStore,
+        TablesStore,
+        Action<TablesStore>,
+        Observable<Action<TablesStore>>
       >(
         clone,
-        (currentTablesClone: Tables) =>
+        (currentTablesClone: TablesStore) =>
           getTablesWithSetHistoryPending(currentTablesClone, tableId, true),
-        (tablesWithSetPending: Tables) => changingTables(tablesWithSetPending),
-        (tablesPendingAction: Action<Tables>) =>
+        (tablesWithSetPending: TablesStore) => changingTables(tablesWithSetPending),
+        (tablesPendingAction: Action<TablesStore>) =>
           Observable.of(tablesPendingAction)
       )(store.getState().app.tablesData.tables);
 
@@ -112,19 +112,19 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
             const { tableSessionsData, tablesData } = store.getState().app;
 
             const convertedResponseSessions = pipe<
-              ReadonlyArray<TableSession>,
-              TableSessions
-            >((respSessions: ReadonlyArray<TableSession>) =>
+              ReadonlyArray<TableSessionBackend>,
+              TableSessionsStore
+            >((respSessions: ReadonlyArray<TableSessionBackend>) =>
               tableSessionsToFront(respSessions)
             )(ajaxData.response.sessions);
 
             const setSessionsAction = pipe<
-              TableSessions,
-              TableSessions,
-              Action<TableSessions>
+              TableSessionsStore,
+              TableSessionsStore,
+              Action<TableSessionsStore>
             >(
               merge(tableSessionsData.tableSessions),
-              (newSessionsAll: TableSessions) =>
+              (newSessionsAll: TableSessionsStore) =>
                 changingTableSessions(newSessionsAll)
             )(convertedResponseSessions);
 
@@ -132,13 +132,13 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
             const currentTable = tablesClone[tableId];
             const setTablesAction = currentTable
               ? pipe<
-                  TableSessions,
+                  TableSessionsStore,
                   ReadonlyArray<string>,
                   ReadonlyArray<number>,
                   ReadonlyArray<number>,
                   ReadonlyArray<number>,
-                  Tables,
-                  Action<Tables>
+                  TablesStore,
+                  Action<TablesStore>
                 >(
                   keys,
                   map(Number),
@@ -150,7 +150,7 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
                       sessionsHistory: newSessionIds
                     }),
                   changingTables
-                )(convertedResponseSessions) as Action<Tables>
+                )(convertedResponseSessions) as Action<TablesStore>
               : null;
 
             const actions: ReadonlyArray<BaseAction> = <ReadonlyArray<
@@ -160,10 +160,10 @@ const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
             return Observable.from(actions);
           } else {
             const setTablesWithoutPendingAction = pipe<
-              Tables,
-              Tables,
-              Tables,
-              Action<Tables>
+              TablesStore,
+              TablesStore,
+              TablesStore,
+              Action<TablesStore>
             >(
               clone,
               tablesClone =>

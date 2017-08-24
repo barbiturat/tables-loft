@@ -1,33 +1,33 @@
 export type TableType = 'pool' | 'shuffleBoard' | 'tableTennis' | 'generic';
 export type TableStatus = 'enabled' | 'disabled';
 
-export interface TableSession {
+export interface TableSessionBackend {
   readonly id: number;
   readonly startsAt: string;
   readonly durationSeconds: number | null;
   readonly adminEdited: boolean;
 }
 
-export interface Table {
+export interface TableBackend {
   readonly name: string;
   readonly id: number;
   readonly tableType: TableType;
   readonly status: TableStatus;
-  readonly currentSession: TableSession | null;
-  readonly lastSession: TableSession | null;
+  readonly currentSession: TableSessionBackend | null;
+  readonly lastSession: TableSessionBackend | null;
 }
 
 export interface LoginErrors {
   readonly email: {
-    isRegistered: boolean;
+    readonly isRegistered: boolean;
   };
   readonly password: {
-    isCorrect: boolean;
+    readonly isCorrect: boolean;
   };
 }
 
 export interface AdminTokenErrors {
   readonly password: {
-    isCorrect: boolean;
+    readonly isCorrect: boolean;
   };
 }

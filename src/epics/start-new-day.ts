@@ -4,16 +4,16 @@ import { Epic } from 'redux-observable';
 import { pipe, clone, map } from 'ramda';
 
 import { NEW_DAY_BEGUN } from '../constants/action-names';
-import { StoreStructure, Tables, Table } from '../interfaces/store-models';
+import { StoreStructure, TablesStore, TableStore } from '../interfaces/store-models';
 import changingTables from '../action-creators/changing-tables';
 
 const startNewDay = ((action$, store: Store<StoreStructure>) => {
   return action$
     .ofType(NEW_DAY_BEGUN)
     .map(() =>
-      pipe<Tables, Tables, Tables, Action<Tables>>(
+      pipe<TablesStore, TablesStore, TablesStore, Action<TablesStore>>(
         clone,
-        map((table: Table) => ({ ...table, ...{ lastSessionId: null } })),
+        map((table: TableStore) => ({ ...table, ...{ lastSessionId: null } })),
         changingTables
       )(store.getState().app.tablesData.tables)
     );
