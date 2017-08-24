@@ -5,12 +5,6 @@ import { mapProps } from 'recompose';
 import Table, { Props as TableProps } from './table';
 import { Tables, Table as StoreTable } from '../interfaces/store-models';
 import { renameKeys } from '../helpers/index';
-import {
-  drawComponent,
-  DrawComponent,
-  drawListComponent,
-  DrawListComponent
-} from 'helpers/renderers';
 
 interface Props {
   readonly tables: Tables;
@@ -18,11 +12,7 @@ interface Props {
 
 const numOrUndefined = R.unless(R.is(Number), R.always(undefined));
 
-const SimpleTable = (drawComponent as DrawComponent<
-  React.ComponentType<TableProps>,
-  TableProps
->)(Table);
-// const SimpleTable = drawComponent<React.StatelessComponent<TableProps>, TableProps>(Table);
+const SimpleTable = (props: TableProps): JSX.Element => <Table {...props} />;
 
 const mapTableProps = mapProps<TableProps, StoreTable>(
   R.pipe(
@@ -45,10 +35,8 @@ const mapTableProps = mapProps<TableProps, StoreTable>(
 
 const MappedTable = mapTableProps(SimpleTable);
 
-const drawTable = (drawListComponent as DrawListComponent<
-  React.ComponentType<StoreTable>,
-  StoreTable
->)(MappedTable);
+const drawTable = (props: StoreTable, idx: number) =>
+  <MappedTable key={idx} {...props} />;
 
 const drawTables = R.pipe<
   Tables,
