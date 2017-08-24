@@ -6,7 +6,7 @@ export interface IndexedDict<T> {
 }
 
 export type PartialIndexedDict<T> = {
-  [name: number]: T;
+  readonly [name: number]: T;
 };
 
 export interface Dict<T> {

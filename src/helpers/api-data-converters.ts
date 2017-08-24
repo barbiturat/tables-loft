@@ -1,3 +1,5 @@
+import * as R from 'ramda';
+
 import {
   TableBackend,
   TableSessionBackend
@@ -40,9 +42,7 @@ export const tablesToFront = (
   return tables.reduce((memo, table) => {
     const convertedTable = tableToFront(table);
 
-    memo[convertedTable.id] = convertedTable;
-
-    return memo;
+    return R.merge(memo, { [convertedTable.id]: convertedTable });
   }, {} as PartialIndexedDict<TableStore>);
 };
 
@@ -66,8 +66,6 @@ export const tableSessionsToFront = (
   return tableSessions.reduce((memo, tableSession) => {
     const convertedTableSession = tableSessionToFront(tableSession);
 
-    memo[convertedTableSession.id] = convertedTableSession;
-
-    return memo;
+    return R.merge(memo, { [convertedTableSession.id]: convertedTableSession });
   }, {} as PartialIndexedDict<TableSessionStore>);
 };
