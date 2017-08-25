@@ -15,7 +15,12 @@ const numOrUndefined = R.unless(R.is(Number), R.always(undefined));
 const SimpleTable = (props: TableProps): JSX.Element => <Table {...props} />;
 
 const mapTableProps = mapProps<TableProps, TableStore>(
-  R.pipe(
+  R.compose(
+    R.evolve<TableProps>({
+      currentSessionId: numOrUndefined,
+      lastSessionId: numOrUndefined
+    }),
+    renameKeys({ tableType: 'type' }),
     R.pickAll([
       'id',
       'name',
@@ -24,12 +29,7 @@ const mapTableProps = mapProps<TableProps, TableStore>(
       'isDisabled',
       'currentSessionId',
       'lastSessionId'
-    ]),
-    renameKeys({ tableType: 'type' }),
-    R.evolve<TableProps>({
-      currentSessionId: numOrUndefined,
-      lastSessionId: numOrUndefined
-    })
+    ])
   )
 );
 
@@ -38,11 +38,11 @@ const MappedTable = mapTableProps(SimpleTable);
 const drawTable = (props: TableStore, idx: number) =>
   <MappedTable key={idx} {...props} />;
 
-const drawTables = R.pipe<
+const drawTables = R.compose<
   TablesStore,
-  ReadonlyArray<TableStore>,
-  ReadonlyArray<JSX.Element>
->(R.values, R.addIndex(R.map)(drawTable));
+  ReadonlyArray<JSX.Element>,
+  ReadonlyArray<TableStore>
+>(R.addIndex(R.map)(drawTable), R.values);
 
 const TablesGroup = ({ tables }: Props) =>
   <div className="tables-set">
