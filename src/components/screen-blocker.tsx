@@ -4,6 +4,7 @@ import ReactModal from 'react-modal';
 
 import { StoreStructure } from '../interfaces/store-models';
 import { PropsExtendedByConnect } from '../interfaces/component';
+import { branch, compose, renderNothing } from 'recompose';
 
 interface Props {}
 
@@ -13,29 +14,30 @@ interface MappedProps {
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
-class Component extends React.Component<PropsFromConnect, {}> {
-  render() {
-    return this.props.toBlock
-      ? <ReactModal
-          contentLabel="Screen Blocker"
-          isOpen={this.props.toBlock}
-          shouldCloseOnOverlayClick={false}
-          portalClassName="block-screen"
-          className="block-screen__window"
-          overlayClassName="block-screen__overlay"
-        />
-      : null;
-  }
-}
+const Modal = (props: PropsFromConnect) =>
+  <ReactModal
+    contentLabel="Screen Blocker"
+    isOpen={props.toBlock}
+    shouldCloseOnOverlayClick={false}
+    portalClassName="block-screen"
+    className="block-screen__window"
+    overlayClassName="block-screen__overlay"
+  />;
 
-const ScreenBlocker = connect<
-  any,
-  any,
-  Props
->((state: StoreStructure, ownProps: Props): MappedProps => {
-  return {
+const WithToBlock = branch<PropsFromConnect>(
+  ({ toBlock }) => !toBlock,
+  renderNothing
+);
+
+const ScreenBlocker = compose(
+  connect<
+    any,
+    any,
+    Props
+  >((state: StoreStructure, ownProps: Props): MappedProps => ({
     toBlock: state.app.isBlockingRequestPending
-  };
-})(Component);
+  })),
+  WithToBlock
+);
 
-export default ScreenBlocker;
+export default ScreenBlocker(Modal);

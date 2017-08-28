@@ -35,11 +35,9 @@ const GlobalErrors = compose(
     any,
     any,
     Props
-  >((state: StoreStructure, ownProps: Props): MappedProps => {
-    return {
-      errors: state.app.globalErrors
-    };
-  }),
+  >((state: StoreStructure, ownProps: Props): MappedProps => ({
+    errors: state.app.globalErrors
+  })),
   checkForErrors
 );
 
