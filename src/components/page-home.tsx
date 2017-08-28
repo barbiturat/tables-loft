@@ -1,4 +1,6 @@
 import * as React from 'react';
+import * as R from 'ramda';
+import { branch, compose, renderComponent } from 'recompose';
 
 import { PropsExtendedByConnect } from '../interfaces/component';
 import { connect } from 'react-redux';
@@ -18,37 +20,31 @@ interface MappedProps {
 
 type PropsFromConnect = PropsExtendedByConnect<any, MappedProps>;
 
-class Component extends React.Component<PropsFromConnect, any> {
-  static renderTablesGroup(tables: TablesStore, isInPending: boolean) {
-    return isInPending
-      ? <div className="label label_type_wait label_role_wait-tables" />
-      : <TablesGroup tables={tables} />;
-  }
+const TablesGroupEnhance = compose(
+  branch(
+    R.prop('areTablesInPending'),
+    renderComponent(() =>
+      <div className="label label_type_wait label_role_wait-tables" />
+    )
+  )
+)(({ tables }: PropsFromConnect) => <TablesGroup tables={tables} />);
 
-  render() {
-    const { tables, areTablesInPending } = this.props;
-
-    return (
-      <div className="page">
-        <Header />
-        {Component.renderTablesGroup(tables, areTablesInPending)}
-      </div>
-    );
-  }
-}
+const Component = (props: PropsFromConnect) =>
+  <div className="page">
+    <Header />
+    <TablesGroupEnhance {...props} />
+  </div>;
 
 const PageHome = connect<
-  any,
-  any,
-  any
+  MappedProps,
+  null,
+  {}
 >((state: StoreStructure, ownProps?: any): MappedProps => {
-  const appData = state.app;
-
-  return {
-    areTablesInPending: appData.tablesData.isInPending,
-    tables: appData.tablesData.tables,
-    tableSessions: appData.tableSessionsData.tableSessions
-  };
+  return R.applySpec<MappedProps>({
+    areTablesInPending: R.path(['tablesData', 'isInPending']),
+    tables: R.path(['tablesData', 'tables']),
+    tableSessions: R.path(['tableSessionsData', 'tableSessions'])
+  })(state.app);
 })(Component);
 
 export default PageHome;
