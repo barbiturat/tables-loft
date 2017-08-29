@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { withHandlers, compose } from 'recompose';
 import { connect } from 'react-redux';
 import MouseEvent = React.MouseEvent;
 import ReactModal from 'react-modal';
@@ -20,6 +21,7 @@ import { isRequiredField } from '../constants/messages';
 import { isNotEmpty as isFilled } from '../helpers';
 import { StringDict } from '../interfaces/index';
 import requestingManagerLogin from '../action-creators/requesting-admin-token';
+import * as R from 'ramda';
 
 interface Props {
   readonly isOpen: boolean;
@@ -35,123 +37,129 @@ type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
 const { validators: { password: passwordChecks } } = managerLoginForm;
 
-class Component extends React.Component<PropsFromConnect, {}> {
-  requestToClose() {
-    this.resetPasswordInput();
-    this.props.onClose();
-  }
+const WaitMessage = ({isPending}: {readonly isPending: boolean}) =>
+  isPending ? <div>Wait...</div> : null;
 
-  resetPasswordInput() {
-    this.props.dispatch(
-      actions.change('formsData.managerLoginForm.password', '')
-    );
-    this.props.dispatch(
-      actions.setInitial('formsData.managerLoginForm.password')
-    );
-  }
+const ErrorsBlock: React.StatelessComponent<
+  ErrorsProps & WrapperProps
+> = props =>
+  <div className="modal__form-errors">
+    {props.children}
+  </div>;
 
-  onCloseClick = (event: MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
-    this.requestToClose();
-  };
+const ErrorComponent: React.StatelessComponent<
+  ErrorsProps & CustomComponentProps
+> = props =>
+  <div className="modal__form-error">
+    {props.children}
+  </div>;
 
-  handleRequestCloseFunc = () => {
-    this.requestToClose();
-  };
+type Handlers = {
+  readonly resetPasswordInput: () => void;
+  readonly handleSubmit: (formModelData: StringDict) => void;
+  readonly requestToClose: () => void;
+  readonly onCloseClick: () => void;
+  readonly handleRequestCloseFunc: () => void;
+};
 
-  handleSubmit = (formModelData: StringDict) => {
-    const action = requestingManagerLogin(
-      'formsData.managerLoginForm',
-      formModelData
-    );
+const HandlersComponent = compose(
+  withHandlers({
+    resetPasswordInput: ({ dispatch }) => () => {
+      dispatch(actions.change('formsData.managerLoginForm.password', ''));
+      dispatch(actions.setInitial('formsData.managerLoginForm.password'));
+    },
+    handleSubmit: ({ dispatch }) => (formModelData: StringDict) => {
+      R.compose(dispatch, requestingManagerLogin)(
+        'formsData.managerLoginForm',
+        formModelData
+      );
+    }
+  }),
+  withHandlers({
+    requestToClose: ({ resetPasswordInput, onClose }: any) => () => {
+      resetPasswordInput();
+      onClose();
+    }
+  }),
+  withHandlers({
+    onCloseClick: ({ requestToClose }: any) => (
+      event: MouseEvent<HTMLAnchorElement>
+    ) => {
+      event.preventDefault();
+      requestToClose();
+    },
+    handleRequestCloseFunc: ({ requestToClose }: any) => () => {
+      requestToClose();
+    }
+  })
+);
 
-    this.props.dispatch(action);
-  };
+const Component = HandlersComponent(
+  ({
+    isOpen,
+    pending,
+    handleRequestCloseFunc,
+    onCloseClick,
+    handleSubmit
+  }: PropsFromConnect & Handlers) =>
+    <ReactModal
+      contentLabel="Admin Login"
+      isOpen={isOpen}
+      shouldCloseOnOverlayClick={true}
+      onRequestClose={handleRequestCloseFunc}
+      className="modal modal_role_login-manager"
+      overlayClassName="modal__overlay"
+    >
+      <a className="modal__button-close" href="" onClick={onCloseClick} />
+      <div className="modal__header">
+        <h3 className="modal__header-caption">Manager Mode</h3>
+      </div>
+      <h4 className="modal__description">
+        Type password to enter manager mode
+      </h4>
 
-  static getWaitMessage(isPending: boolean) {
-    return isPending ? <div>Wait...</div> : null;
-  }
+      <WaitMessage isPending={pending} />
 
-  static renderErrorsBlock: React.StatelessComponent<
-    ErrorsProps & WrapperProps
-  > = props =>
-    <div className="modal__form-errors">
-      {props.children}
-    </div>;
-
-  static renderErrorComponent: React.StatelessComponent<
-    ErrorsProps & CustomComponentProps
-  > = props =>
-    <div className="modal__form-error">
-      {props.children}
-    </div>;
-
-  render() {
-    return (
-      <ReactModal
-        contentLabel="Admin Login"
-        isOpen={this.props.isOpen}
-        shouldCloseOnOverlayClick={true}
-        onRequestClose={this.handleRequestCloseFunc}
-        className="modal modal_role_login-manager"
-        overlayClassName="modal__overlay"
+      <Form
+        className="modal__form modal__form_role_login"
+        model="formsData.managerLoginForm"
+        onSubmit={handleSubmit}
       >
-        <a
-          className="modal__button-close"
-          href=""
-          onClick={this.onCloseClick}
-        />
-        <div className="modal__header">
-          <h3 className="modal__header-caption">Manager Mode</h3>
-        </div>
-        <h4 className="modal__description">
-          Type password to enter manager mode
-        </h4>
-
-        {Component.getWaitMessage(this.props.pending)}
-
-        <Form
-          className="modal__form modal__form_role_login"
-          model="formsData.managerLoginForm"
-          onSubmit={this.handleSubmit}
-        >
-          <label className="form-label form-label_type_big form-label_role_password modal_adjust_form-label">
-            <Control
-              type="password"
-              className="input input_type_big input_role_manager-password"
-              autoComplete="false"
-              autoFocus={true}
-              model=".password"
-              validators={{
-                [passwordChecks.isFilled]: isFilled,
-                [passwordChecks.isCorrect]: () => true
-              }}
-            />
-          </label>
-
-          <Errors
+        <label className="form-label form-label_type_big form-label_role_password modal_adjust_form-label">
+          <Control
+            type="password"
+            className="input input_type_big input_role_manager-password"
+            autoComplete="false"
+            autoFocus={true}
             model=".password"
-            messages={{
-              isFilled: isRequiredField,
-              isCorrect: 'Password is wrong'
+            validators={{
+              [passwordChecks.isFilled]: isFilled,
+              [passwordChecks.isCorrect]: () => true
             }}
-            show={{ touched: true }}
-            wrapper={Component.renderErrorsBlock}
-            component={Component.renderErrorComponent}
           />
+        </label>
 
-          <div className="modal__buttons-group">
-            <input
-              type="submit"
-              value="Login"
-              className="button button_type_modal-big"
-            />
-          </div>
-        </Form>
-      </ReactModal>
-    );
-  }
-}
+        <Errors
+          model=".password"
+          messages={{
+            isFilled: isRequiredField,
+            isCorrect: 'Password is wrong'
+          }}
+          show={{ touched: true }}
+          wrapper={ErrorsBlock}
+          component={ErrorComponent}
+        />
+
+        <div className="modal__buttons-group">
+          <input
+            type="submit"
+            value="Login"
+            className="button button_type_modal-big"
+          />
+        </div>
+      </Form>
+    </ReactModal>
+);
 
 const ModalAdminLogin = connect<
   any,
