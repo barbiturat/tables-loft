@@ -37,7 +37,7 @@ type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
 const { validators: { password: passwordChecks } } = managerLoginForm;
 
-const WaitMessage = ({isPending}: {readonly isPending: boolean}) =>
+const WaitMessage = ({ isPending }: { readonly isPending: boolean }) =>
   isPending ? <div>Wait...</div> : null;
 
 const ErrorsBlock: React.StatelessComponent<
