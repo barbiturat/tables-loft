@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { compose, withHandlers, withState } from 'recompose';
 import MouseEvent = React.MouseEvent;
 import ReactModal from 'react-modal';
 import * as ReactPaginate from 'react-paginate';
@@ -25,6 +26,7 @@ import {
 import { PropsExtendedByConnect } from '../interfaces/component';
 import modalSessionsHistoryChanged from '../action-creators/modal-sessions-history-changed';
 import SessionsHistory from './sessions-history';
+import { StringDict } from '../interfaces/index';
 
 interface Props {}
 
@@ -41,153 +43,140 @@ interface State {
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
-class Component extends React.Component<PropsFromConnect, State> {
-  static PAGE_SIZE = 5;
+const PAGE_SIZE = 5;
 
-  static modalClasses = {
-    pool: 'modal_table_pool',
-    shuffleBoard: 'modal_table_shuffle',
-    tableTennis: 'modal_table_tennis',
-    generic: 'modal_table_default'
-  };
+const modalClasses: StringDict = {
+  pool: 'modal_table_pool',
+  shuffleBoard: 'modal_table_shuffle',
+  tableTennis: 'modal_table_tennis',
+  generic: 'modal_table_default'
+};
 
-  static getSessionsHistoryInPending(currentTable?: TableStore) {
-    return currentTable ? currentTable.isSessionsHistoryInPending : false;
-  }
+const getSessionsHistoryInPending = (currentTable?: TableStore) =>
+  currentTable ? currentTable.isSessionsHistoryInPending : false;
 
-  state = {
-    currentPageNum: 0
-  };
+const getTableSessions = (
+  allSessions: TableSessionsStore,
+  table: TableStore
+): ReadonlyArray<TableSessionStore> =>
+  pipe<
+    ReadonlyArray<number>,
+    ReadonlyArray<string>,
+    TableSessionsStore,
+    ReadonlyArray<TableSessionStore>,
+    ReadonlyArray<TableSessionStore>
+  >(map(String), flip(pick)(allSessions), values, sortBy(prop('startsAt')))(
+    table.sessionsHistory
+  );
 
-  requestToClose() {
-    this.props.dispatch(modalSessionsHistoryChanged(false));
-  }
+const getSessionsPage = (
+  sessions: ReadonlyArray<TableSessionStore>,
+  pageIdx: number
+): ReadonlyArray<TableSessionStore> =>
+  pipe<
+    ReadonlyArray<TableSessionStore>,
+    ReadonlyArray<ReadonlyArray<TableSessionStore>>,
+    ReadonlyArray<TableSessionStore>
+  >(splitEvery(PAGE_SIZE), nth(pageIdx))(sessions);
 
-  onCloseClick = (event: MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
-    this.requestToClose();
-  };
+const enhance = compose(
+  withState('currentPageNum', 'setCurrentPageNum', 0),
+  withHandlers({
+    requestToClose: ({ dispatch }: PropsFromConnect) => () =>
+      dispatch(modalSessionsHistoryChanged(false)),
+    onPageChangeHandler: ({ setCurrentPageNum }) => ({ selected }: any) =>
+      setCurrentPageNum(selected)
+  }),
+  withHandlers({
+    onCloseClick: ({ requestToClose }) => (
+      event: MouseEvent<HTMLAnchorElement>
+    ) => {
+      event.preventDefault();
+      requestToClose();
+    },
+    handleRequestClose: ({ requestToClose }) => () => requestToClose(),
+    getPaginator: ({ onPageChangeHandler }) => ({
+      numOfPages,
+      currentPageNum,
+      isInPending
+    }: any) =>
+      numOfPages > 1 && !isInPending
+        ? <ReactPaginate
+            pageCount={numOfPages}
+            pageRangeDisplayed={2}
+            marginPagesDisplayed={0}
+            initialPage={0}
+            forcePage={currentPageNum}
+            previousLabel="previous"
+            nextLabel="next"
+            breakLabel={<span>...</span>}
+            containerClassName="paginator"
+            pageClassName="paginator__button paginator__button_role_page"
+            pageLinkClassName="paginator__button-link"
+            previousClassName="paginator__button paginator__button_role_prev"
+            previousLinkClassName="paginator__button-link"
+            nextClassName="paginator__button paginator__button_role_next"
+            nextLinkClassName="paginator__button-link"
+            breakClassName="paginator__button paginator__button_role_break"
+            activeClassName="paginator-active"
+            disabledClassName="paginator-disabled"
+            onPageChange={onPageChangeHandler}
+          />
+        : null
+  })
+);
 
-  handleRequestClose = () => {
-    this.requestToClose();
-  };
+const ComponentView = ({
+  allTableSessions,
+  currentTable,
+  isOpen,
+  currentPageNum,
+  handleRequestClose,
+  onCloseClick,
+  getPaginator
+}: any) => {
+  if (currentTable) {
+    const historyPending = getSessionsHistoryInPending(currentTable);
+    const modalClass = modalClasses[currentTable.tableType as string] || '';
+    const caption = currentTable.name;
+    const sessions = getTableSessions(allTableSessions, currentTable);
+    const sessionCount = sessions.length;
+    const sessionsPage = getSessionsPage(sessions, currentPageNum);
+    const numOfPages = Math.ceil(sessionCount / PAGE_SIZE);
+    const firstIdx = currentPageNum * PAGE_SIZE;
 
-  static getTableSessions(
-    allSessions: TableSessionsStore,
-    table: TableStore
-  ): ReadonlyArray<TableSessionStore> {
-    return pipe<
-      ReadonlyArray<number>,
-      ReadonlyArray<string>,
-      TableSessionsStore,
-      ReadonlyArray<TableSessionStore>,
-      ReadonlyArray<TableSessionStore>
-    >(map(String), flip(pick)(allSessions), values, sortBy(prop('startsAt')))(
-      table.sessionsHistory
-    );
-  }
+    return (
+      <ReactModal
+        contentLabel="Sessions History"
+        isOpen={isOpen}
+        shouldCloseOnOverlayClick={true}
+        onRequestClose={handleRequestClose}
+        className={`modal modal_role_sessions-history ${modalClass}`}
+        overlayClassName="modal__overlay"
+      >
+        <a className="modal__button-close" href="" onClick={onCloseClick} />
+        <div className="modal__header">
+          <h3 className="modal__header-caption">
+            {caption}
+          </h3>
+          <h4 className="modal__header-sub-caption">Today's Sessions</h4>
+        </div>
 
-  static getSessionsPage(
-    sessions: ReadonlyArray<TableSessionStore>,
-    pageIdx: number
-  ): ReadonlyArray<TableSessionStore> {
-    return pipe<
-      ReadonlyArray<TableSessionStore>,
-      ReadonlyArray<ReadonlyArray<TableSessionStore>>,
-      ReadonlyArray<TableSessionStore>
-    >(splitEvery(Component.PAGE_SIZE), nth(pageIdx))(sessions);
-  }
-
-  onPageChangeHandler = (data: any) => {
-    this.setState({
-      currentPageNum: data.selected
-    });
-  };
-
-  getPaginator(
-    numOfPages: number,
-    currentPageNum: number,
-    isInPending: boolean
-  ) {
-    return numOfPages > 1 && !isInPending
-      ? <ReactPaginate
-          pageCount={numOfPages}
-          pageRangeDisplayed={2}
-          marginPagesDisplayed={0}
-          initialPage={0}
-          forcePage={currentPageNum}
-          previousLabel="previous"
-          nextLabel="next"
-          breakLabel={<span>...</span>}
-          containerClassName="paginator"
-          pageClassName="paginator__button paginator__button_role_page"
-          pageLinkClassName="paginator__button-link"
-          previousClassName="paginator__button paginator__button_role_prev"
-          previousLinkClassName="paginator__button-link"
-          nextClassName="paginator__button paginator__button_role_next"
-          nextLinkClassName="paginator__button-link"
-          breakClassName="paginator__button paginator__button_role_break"
-          activeClassName="paginator-active"
-          disabledClassName="paginator-disabled"
-          onPageChange={this.onPageChangeHandler}
+        <SessionsHistory
+          isInPending={historyPending}
+          tableSessions={sessionsPage}
+          firstIdx={firstIdx}
         />
-      : null;
+
+        {getPaginator({ numOfPages, currentPageNum, historyPending })}
+      </ReactModal>
+    );
+  } else {
+    return null;
   }
+};
 
-  render() {
-    const { allTableSessions, currentTable } = this.props;
-
-    if (currentTable) {
-      const currentPageNum = this.state.currentPageNum;
-      const historyPending = Component.getSessionsHistoryInPending(
-        currentTable
-      );
-      const modalClass = Component.modalClasses[currentTable.tableType] || '';
-      const caption = currentTable.name;
-      const sessions = Component.getTableSessions(
-        allTableSessions,
-        currentTable
-      );
-      const sessionCount = sessions.length;
-      const sessionsPage = Component.getSessionsPage(sessions, currentPageNum);
-      const numOfPages = Math.ceil(sessionCount / Component.PAGE_SIZE);
-      const firstIdx = currentPageNum * Component.PAGE_SIZE;
-
-      return (
-        <ReactModal
-          contentLabel="Sessions History"
-          isOpen={this.props.isOpen}
-          shouldCloseOnOverlayClick={true}
-          onRequestClose={this.handleRequestClose}
-          className={`modal modal_role_sessions-history ${modalClass}`}
-          overlayClassName="modal__overlay"
-        >
-          <a
-            className="modal__button-close"
-            href=""
-            onClick={this.onCloseClick}
-          />
-          <div className="modal__header">
-            <h3 className="modal__header-caption">
-              {caption}
-            </h3>
-            <h4 className="modal__header-sub-caption">Today's Sessions</h4>
-          </div>
-
-          <SessionsHistory
-            isInPending={historyPending}
-            tableSessions={sessionsPage}
-            firstIdx={firstIdx}
-          />
-
-          {this.getPaginator(numOfPages, currentPageNum, historyPending)}
-        </ReactModal>
-      );
-    } else {
-      return null;
-    }
-  }
-}
+const Component = enhance(ComponentView);
 
 const ModalSessionsHistory = connect<
   any,
