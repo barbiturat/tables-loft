@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import * as moment from 'moment';
-import MouseEvent = React.MouseEvent;
 import { createSelector, Selector } from 'reselect';
 
 import { StoreStructure } from '../interfaces/store-models';
@@ -22,6 +21,33 @@ interface MappedProps {
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
+const startsAtSelector = (props: PropsFromConnect) => props.startsAt;
+
+const utcMillisecondsSelector = (props: PropsFromConnect) =>
+  props.utcMilliseconds;
+
+const getDurationActivityString = (
+  startsAt: number,
+  utcMilliseconds: number,
+  isFormatOfMinutes: boolean
+) => {
+  if (!startsAt || !utcMilliseconds) {
+    return 'Wrong Parameters!';
+  }
+
+  const utcMillisecondsFixed = Math.max(startsAt, utcMilliseconds);
+  const durationMs = utcMillisecondsFixed - startsAt;
+
+  if (isFormatOfMinutes) {
+    const duration = moment.duration(durationMs);
+    const minutes = Math.floor(duration.asMinutes());
+
+    return `${minutes}m`;
+  } else {
+    return moment.utc(durationMs).format('H[h] mm[m] ss[s]');
+  }
+};
+
 export class Component extends React.Component<PropsFromConnect, State> {
   durationActivityStringSelector: Selector<PropsFromConnect, string>;
 
@@ -33,45 +59,15 @@ export class Component extends React.Component<PropsFromConnect, State> {
     };
 
     this.durationActivityStringSelector = createSelector(
-      Component.startsAtSelector,
-      Component.utcMillisecondsSelector,
+      startsAtSelector,
+      utcMillisecondsSelector,
       this.isFormatOfMinutesSelector.bind(this),
-      Component.getDurationActivityString
+      getDurationActivityString
     );
   }
 
   isFormatOfMinutesSelector(props: PropsFromConnect) {
     return this.state.isFormatOfMinutes;
-  }
-
-  static startsAtSelector(props: PropsFromConnect) {
-    return props.startsAt;
-  }
-
-  static utcMillisecondsSelector(props: PropsFromConnect) {
-    return props.utcMilliseconds;
-  }
-
-  static getDurationActivityString(
-    startsAt: number,
-    utcMilliseconds: number,
-    isFormatOfMinutes: boolean
-  ) {
-    if (!startsAt || !utcMilliseconds) {
-      return 'Wrong Parameters!';
-    }
-
-    const utcMillisecondsFixed = Math.max(startsAt, utcMilliseconds);
-    const durationMs = utcMillisecondsFixed - startsAt;
-
-    if (isFormatOfMinutes) {
-      const duration = moment.duration(durationMs);
-      const minutes = Math.floor(duration.asMinutes());
-
-      return `${minutes}m`;
-    } else {
-      return moment.utc(durationMs).format('H[h] mm[m] ss[s]');
-    }
   }
 
   onClick = () => {

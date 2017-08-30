@@ -40,6 +40,33 @@ interface MappedProps {
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
+const isTableActive = (currentSession?: TableSessionStore): boolean =>
+  !!currentSession;
+
+const startsAtSelector = (currentSession?: TableSessionStore) =>
+  currentSession && currentSession.startsAt;
+
+const getDisabledLabel = (isDisabled?: boolean) =>
+  isDisabled
+    ? <span className="table__label table__label_role_disabled">
+        Pool Table 2 Is Not Active
+      </span>
+    : null;
+
+const renderActiveSessionStartTime = (currentSession?: TableSessionStore) => {
+  if (!currentSession) {
+    return null;
+  } else {
+    const startTime = moment.utc(currentSession.startsAt).format('H[h] mm[m]');
+
+    return (
+      <div className="table__label table__label_role_start-time">
+        {startTime}
+      </div>
+    );
+  }
+};
+
 class Component extends React.Component<PropsFromConnect, State> {
   state = {
     isPromptOpen: false,
@@ -53,10 +80,6 @@ class Component extends React.Component<PropsFromConnect, State> {
     isDisabled: false
   };
 
-  static isTableActive(currentSession?: TableSessionStore): boolean {
-    return !!currentSession;
-  }
-
   getCurrentSession() {
     const { sessions, currentSessionId } = this.props;
 
@@ -66,34 +89,6 @@ class Component extends React.Component<PropsFromConnect, State> {
     return;
   }
 
-  static startsAtSelector(currentSession?: TableSessionStore) {
-    return currentSession && currentSession.startsAt;
-  }
-
-  static getDisabledLabel(isDisabled?: boolean) {
-    return isDisabled
-      ? <span className="table__label table__label_role_disabled">
-          Pool Table 2 Is Not Active
-        </span>
-      : null;
-  }
-
-  static renderActiveSessionStartTime(currentSession?: TableSessionStore) {
-    if (!currentSession) {
-      return null;
-    } else {
-      const startTime = moment
-        .utc(currentSession.startsAt)
-        .format('H[h] mm[m]');
-
-      return (
-        <div className="table__label table__label_role_start-time">
-          {startTime}
-        </div>
-      );
-    }
-  }
-
   onPromptOk = () => {
     const { id, isDisabled } = this.props;
 
@@ -101,7 +96,7 @@ class Component extends React.Component<PropsFromConnect, State> {
       return;
     }
 
-    const actionCreator = Component.isTableActive(this.getCurrentSession())
+    const actionCreator = isTableActive(this.getCurrentSession())
       ? requestingTableStop
       : requestingTableStart;
     const action = actionCreator(id);
@@ -122,7 +117,7 @@ class Component extends React.Component<PropsFromConnect, State> {
     event.preventDefault();
     // throw('test rollbar sourcemaps support');
 
-    const toStop = Component.isTableActive(this.getCurrentSession());
+    const toStop = isTableActive(this.getCurrentSession());
     const promptMessage = `${toStop ? 'Stop' : 'Start'} table "${this.props
       .name}"`;
 
@@ -146,7 +141,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   render() {
     const { name, type, isInPending, isDisabled } = this.props;
-    const isActive = Component.isTableActive(this.getCurrentSession());
+    const isActive = isTableActive(this.getCurrentSession());
     const tableTypeClassName = type
       ? {
           pool: 'table_type_pool',
@@ -164,13 +159,11 @@ class Component extends React.Component<PropsFromConnect, State> {
       <div
         className={`table ${tableTypeClassName} ${statusClassName} ${pendingClassName} tables-set_adjust_table`}
       >
-        {Component.getDisabledLabel(isDisabled)}
+        {getDisabledLabel(isDisabled)}
         <div className="table__label table__label_role_table-type">
           {name}
         </div>
-        {isActive
-          ? Component.renderActiveSessionStartTime(this.getCurrentSession())
-          : ''}
+        {isActive ? renderActiveSessionStartTime(this.getCurrentSession()) : ''}
         <a
           href=""
           className="table__button table__button_role_change-availability"
@@ -178,7 +171,7 @@ class Component extends React.Component<PropsFromConnect, State> {
         />
         <TableTimer
           isActive={isActive}
-          startsAt={Component.startsAtSelector(this.getCurrentSession())}
+          startsAt={startsAtSelector(this.getCurrentSession())}
         />
         <TableSession sessionId={this.props.lastSessionId} />
         <a

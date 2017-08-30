@@ -28,13 +28,22 @@ interface MappedProps {}
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
+const getSessionDurationData = (
+  durationSeconds: number
+): SessionDurationData => {
+  const duration = moment.duration({ seconds: durationSeconds });
+
+  return {
+    hours: Math.floor(duration.asHours()),
+    minutes: Math.floor(duration.minutes())
+  };
+};
+
 class Component extends React.Component<PropsFromConnect, State> {
   constructor(props: PropsFromConnect) {
     super(props);
 
-    const durationData = Component.getSessionDurationData(
-      props.durationSeconds
-    );
+    const durationData = getSessionDurationData(props.durationSeconds);
 
     this.state = {
       hours: durationData.hours,
@@ -44,9 +53,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   componentWillReceiveProps(nextProps: PropsFromConnect) {
     if (nextProps.durationSeconds !== this.props.durationSeconds) {
-      const durationData = Component.getSessionDurationData(
-        nextProps.durationSeconds
-      );
+      const durationData = getSessionDurationData(nextProps.durationSeconds);
       const { hours, minutes } = durationData;
 
       this.setState({
@@ -115,15 +122,6 @@ class Component extends React.Component<PropsFromConnect, State> {
         minutes: minutes
       }
     });
-  }
-
-  static getSessionDurationData(durationSeconds: number): SessionDurationData {
-    const duration = moment.duration({ seconds: durationSeconds });
-
-    return {
-      hours: Math.floor(duration.asHours()),
-      minutes: Math.floor(duration.minutes())
-    };
   }
 
   render() {

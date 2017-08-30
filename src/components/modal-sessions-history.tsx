@@ -121,24 +121,18 @@ const enhance = compose(
         : null
   }),
   branch(R.compose(R.not, R.prop('currentTable')), renderNothing),
-  withProps(
-    ({
-      allTableSessions,
-      currentTable,
-      currentPageNum,
-    }) => {
-      const sessions = getTableSessions(allTableSessions, currentTable);
+  withProps(({ allTableSessions, currentTable, currentPageNum }) => {
+    const sessions = getTableSessions(allTableSessions, currentTable);
 
-      return {
-        historyPending: getSessionsHistoryInPending(currentTable),
-        modalClass: MODAL_CLASSES[currentTable.tableType as string] || '',
-        caption: currentTable.name,
-        sessionsPage: getSessionsPage(sessions, currentPageNum),
-        numOfPages: Math.ceil(sessions.length / PAGE_SIZE),
-        firstIdx: currentPageNum * PAGE_SIZE
-      };
-    }
-  )
+    return {
+      historyPending: getSessionsHistoryInPending(currentTable),
+      modalClass: MODAL_CLASSES[currentTable.tableType as string] || '',
+      caption: currentTable.name,
+      sessionsPage: getSessionsPage(sessions, currentPageNum),
+      numOfPages: Math.ceil(sessions.length / PAGE_SIZE),
+      firstIdx: currentPageNum * PAGE_SIZE
+    };
+  })
 );
 
 const Component = enhance(
@@ -153,7 +147,7 @@ const Component = enhance(
     caption,
     sessionsPage,
     numOfPages,
-    firstIdx,
+    firstIdx
   }: any) => {
     return (
       <ReactModal

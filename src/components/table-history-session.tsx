@@ -30,6 +30,36 @@ interface MappedProps {
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
+const getSessionDurationData = (
+  durationSeconds: number
+): SessionDurationData => {
+  const duration = moment.duration({ seconds: durationSeconds });
+
+  return {
+    hours: Math.floor(duration.asHours()),
+    minutes: Math.floor(duration.minutes()),
+    minutesTotal: Math.floor(duration.asMinutes())
+  };
+};
+
+const getDurationString = (
+  hours: number,
+  minutes: number,
+  minutesTotal: number,
+  isFormatOfMinutes: boolean
+): string => {
+  if (isFormatOfMinutes) {
+    return `${minutesTotal}m`;
+  } else {
+    return moment
+      .utc({
+        hours,
+        minutes
+      })
+      .format('H[h] mm[m]');
+  }
+};
+
 class Component extends React.Component<PropsFromConnect, State> {
   editSessionButtonId: string;
 
@@ -83,16 +113,6 @@ class Component extends React.Component<PropsFromConnect, State> {
     });
   };
 
-  static getSessionDurationData(durationSeconds: number): SessionDurationData {
-    const duration = moment.duration({ seconds: durationSeconds });
-
-    return {
-      hours: Math.floor(duration.asHours()),
-      minutes: Math.floor(duration.minutes()),
-      minutesTotal: Math.floor(duration.asMinutes())
-    };
-  }
-
   setEditingMode(turnOn: boolean) {
     this.setState({
       ...this.state,
@@ -110,24 +130,6 @@ class Component extends React.Component<PropsFromConnect, State> {
     this.setEditingMode(false);
   };
 
-  static getDurationString(
-    hours: number,
-    minutes: number,
-    minutesTotal: number,
-    isFormatOfMinutes: boolean
-  ): string {
-    if (isFormatOfMinutes) {
-      return `${minutesTotal}m`;
-    } else {
-      return moment
-        .utc({
-          hours,
-          minutes
-        })
-        .format('H[h] mm[m]');
-    }
-  }
-
   drawEditButton(toDraw: boolean) {
     return toDraw
       ? <div
@@ -139,7 +141,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   drawDuration(session: TableSessionStore) {
     const { adminEdited, isInPending, durationSeconds, id } = session;
-    const durationData = Component.getSessionDurationData(durationSeconds);
+    const durationData = getSessionDurationData(durationSeconds);
     const { hours, minutes, minutesTotal } = durationData;
 
     if (this.state.isInEditing) {
@@ -156,7 +158,7 @@ class Component extends React.Component<PropsFromConnect, State> {
         : '';
       const durationString = isInPending
         ? 'wait...'
-        : Component.getDurationString(
+        : getDurationString(
             hours,
             minutes,
             minutesTotal,
