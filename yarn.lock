@@ -46,9 +46,9 @@
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/@types/query-string/-/query-string-5.0.0.tgz#5dbebd24d0abeb555d0dd9704c33462d84a45e69"
 
-"@types/ramda@^0.24.7":
-  version "0.24.7"
-  resolved "https://registry.yarnpkg.com/@types/ramda/-/ramda-0.24.7.tgz#4d3c3696e019acd63486e1119f1067c9d59da8e8"
+"@types/ramda@^0.24.8":
+  version "0.24.8"
+  resolved "https://registry.yarnpkg.com/@types/ramda/-/ramda-0.24.8.tgz#60294c5adfa5b83762033f5a9c426b041cf49b88"
 
 "@types/react-dom@^15.5.4":
   version "15.5.4"
