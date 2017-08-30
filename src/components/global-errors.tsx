@@ -8,6 +8,7 @@ import {
 } from '../interfaces/store-models';
 import { PropsExtendedByConnect } from '../interfaces/component';
 import GlobalError from './global-error';
+import * as R from 'ramda';
 
 interface Props {}
 
@@ -26,7 +27,7 @@ const ErrorsComponent = ({ errors }: PropsFromConnect) =>
   </div>;
 
 const checkForErrors = branch<PropsFromConnect>(
-  ({ errors }) => !errors,
+  R.compose(R.not, R.prop('errors')),
   renderNothing
 );
 

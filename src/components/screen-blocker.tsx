@@ -5,6 +5,7 @@ import ReactModal from 'react-modal';
 import { StoreStructure } from '../interfaces/store-models';
 import { PropsExtendedByConnect } from '../interfaces/component';
 import { branch, compose, renderNothing } from 'recompose';
+import * as R from 'ramda';
 
 interface Props {}
 
@@ -25,7 +26,7 @@ const Modal = (props: PropsFromConnect) =>
   />;
 
 const WithToBlock = branch<PropsFromConnect>(
-  ({ toBlock }) => !toBlock,
+  R.compose(R.not, R.prop('toBlock')),
   renderNothing
 );
 

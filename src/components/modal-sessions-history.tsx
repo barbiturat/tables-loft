@@ -1,6 +1,13 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { compose, withHandlers, withState } from 'recompose';
+import {
+  compose,
+  withHandlers,
+  withState,
+  branch,
+  renderNothing,
+  withProps
+} from 'recompose';
 import MouseEvent = React.MouseEvent;
 import ReactModal from 'react-modal';
 import * as ReactPaginate from 'react-paginate';
@@ -31,7 +38,7 @@ type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
 const PAGE_SIZE = 5;
 
-const modalClasses: StringDict = {
+const MODAL_CLASSES: StringDict = {
   pool: 'modal_table_pool',
   shuffleBoard: 'modal_table_shuffle',
   tableTennis: 'modal_table_tennis',
@@ -112,58 +119,68 @@ const enhance = compose(
             onPageChange={onPageChangeHandler}
           />
         : null
-  })
+  }),
+  branch(R.compose(R.not, R.prop('currentTable')), renderNothing),
+  withProps(
+    ({
+      allTableSessions,
+      currentTable,
+      currentPageNum,
+    }) => {
+      const sessions = getTableSessions(allTableSessions, currentTable);
+
+      return {
+        historyPending: getSessionsHistoryInPending(currentTable),
+        modalClass: MODAL_CLASSES[currentTable.tableType as string] || '',
+        caption: currentTable.name,
+        sessionsPage: getSessionsPage(sessions, currentPageNum),
+        numOfPages: Math.ceil(sessions.length / PAGE_SIZE),
+        firstIdx: currentPageNum * PAGE_SIZE
+      };
+    }
+  )
 );
 
 const Component = enhance(
   ({
-    allTableSessions,
-    currentTable,
     isOpen,
     currentPageNum,
     handleRequestClose,
     onCloseClick,
-    getPaginator
+    getPaginator,
+    historyPending,
+    modalClass,
+    caption,
+    sessionsPage,
+    numOfPages,
+    firstIdx,
   }: any) => {
-    if (currentTable) {
-      const historyPending = getSessionsHistoryInPending(currentTable);
-      const modalClass = modalClasses[currentTable.tableType as string] || '';
-      const caption = currentTable.name;
-      const sessions = getTableSessions(allTableSessions, currentTable);
-      const sessionCount = sessions.length;
-      const sessionsPage = getSessionsPage(sessions, currentPageNum);
-      const numOfPages = Math.ceil(sessionCount / PAGE_SIZE);
-      const firstIdx = currentPageNum * PAGE_SIZE;
+    return (
+      <ReactModal
+        contentLabel="Sessions History"
+        isOpen={isOpen}
+        shouldCloseOnOverlayClick={true}
+        onRequestClose={handleRequestClose}
+        className={`modal modal_role_sessions-history ${modalClass}`}
+        overlayClassName="modal__overlay"
+      >
+        <a className="modal__button-close" href="" onClick={onCloseClick} />
+        <div className="modal__header">
+          <h3 className="modal__header-caption">
+            {caption}
+          </h3>
+          <h4 className="modal__header-sub-caption">Today's Sessions</h4>
+        </div>
 
-      return (
-        <ReactModal
-          contentLabel="Sessions History"
-          isOpen={isOpen}
-          shouldCloseOnOverlayClick={true}
-          onRequestClose={handleRequestClose}
-          className={`modal modal_role_sessions-history ${modalClass}`}
-          overlayClassName="modal__overlay"
-        >
-          <a className="modal__button-close" href="" onClick={onCloseClick} />
-          <div className="modal__header">
-            <h3 className="modal__header-caption">
-              {caption}
-            </h3>
-            <h4 className="modal__header-sub-caption">Today's Sessions</h4>
-          </div>
+        <SessionsHistory
+          isInPending={historyPending}
+          tableSessions={sessionsPage}
+          firstIdx={firstIdx}
+        />
 
-          <SessionsHistory
-            isInPending={historyPending}
-            tableSessions={sessionsPage}
-            firstIdx={firstIdx}
-          />
-
-          {getPaginator({ numOfPages, currentPageNum, historyPending })}
-        </ReactModal>
-      );
-    } else {
-      return null;
-    }
+        {getPaginator({ numOfPages, currentPageNum, historyPending })}
+      </ReactModal>
+    );
   }
 );
 
