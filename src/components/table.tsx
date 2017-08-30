@@ -18,6 +18,8 @@ import TableTimer from './table-timer';
 import fetchingTableSessionsHistory from '../action-creators/fetching-table-sessions-history';
 import modalSessionsHistoryChanged from '../action-creators/modal-sessions-history-changed';
 import ModalPrompt from './modal-prompt';
+import { compose, defaultProps, withHandlers, withState } from 'recompose';
+import {StringDict} from '../interfaces/index';
 
 interface State {
   readonly isPromptOpen: boolean;
@@ -67,88 +69,66 @@ const renderActiveSessionStartTime = (currentSession?: TableSessionStore) => {
   }
 };
 
-class Component extends React.Component<PropsFromConnect, State> {
-  state = {
-    isPromptOpen: false,
-    promptMessage: ''
-  };
-
-  static defaultProps = {
+const enhance = compose(
+  withState('isPromptOpen', 'setPromptOpen', false),
+  withState('promptMessage', 'setPromptMessage', ''),
+  defaultProps({
     type: 'generic' as TableType,
     name: 'No Name',
     isInPending: false,
     isDisabled: false
-  };
+  }),
+  withHandlers({
+    getCurrentSession: ({ sessions, currentSessionId }) => () =>
+      sessions[currentSessionId],
+    onPromptClose: ({setPromptOpen}) => () => {
+      setPromptOpen(false);
+    },
+    onViewMoreClick: ({dispatch, id}) => (event: MouseEvent<HTMLAnchorElement>) => {
+      event.preventDefault();
 
-  getCurrentSession() {
-    const { sessions, currentSessionId } = this.props;
+      dispatch(fetchingTableSessionsHistory(id));
+      dispatch(modalSessionsHistoryChanged(true, id));
 
-    if (currentSessionId) {
-      return sessions[currentSessionId];
+      event.currentTarget.blur();
     }
-    return;
-  }
+  }),
+  withHandlers({
+    onPromptOk: ({ getCurrentSession, id, isDisabled }) => () => {
+      if (isDisabled) {
+        return;
+      }
 
-  onPromptOk = () => {
-    const { id, isDisabled } = this.props;
+      const actionCreator = isTableActive(getCurrentSession())
+        ? requestingTableStop
+        : requestingTableStart;
+      const action = actionCreator(id);
 
-    if (isDisabled) {
-      return;
+      store.dispatch(action);
+    },
+    onChangeStatusClick: ({getCurrentSession, name, setPromptOpen, setPromptMessage}) => (event: MouseEvent<HTMLAnchorElement>) => {
+      event.preventDefault();
+      // throw('test rollbar sourcemaps support');
+
+      const toStop = isTableActive(getCurrentSession());
+      const promptMessage = `${toStop ? 'Stop' : 'Start'} table "${name}"`;
+
+      setPromptOpen(true);
+      setPromptMessage(promptMessage);
     }
+  })
+);
 
-    const actionCreator = isTableActive(this.getCurrentSession())
-      ? requestingTableStop
-      : requestingTableStart;
-    const action = actionCreator(id);
-
-    store.dispatch(action);
-  };
-
-  onPromptClose = () => {
-    this.setState({
-      ...this.state,
-      ...{
-        isPromptOpen: false
-      }
-    });
-  };
-
-  onChangeStatusClick = (event: MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
-    // throw('test rollbar sourcemaps support');
-
-    const toStop = isTableActive(this.getCurrentSession());
-    const promptMessage = `${toStop ? 'Stop' : 'Start'} table "${this.props
-      .name}"`;
-
-    this.setState({
-      ...this.state,
-      ...{
-        isPromptOpen: true,
-        promptMessage
-      }
-    });
-  };
-
-  onViewMoreClick = (event: MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
-
-    this.props.dispatch(fetchingTableSessionsHistory(this.props.id));
-    this.props.dispatch(modalSessionsHistoryChanged(true, this.props.id));
-
-    event.currentTarget.blur();
-  };
-
-  render() {
-    const { name, type, isInPending, isDisabled } = this.props;
-    const isActive = isTableActive(this.getCurrentSession());
+const Component = enhance(({ name, type, isInPending, isDisabled, getCurrentSession, onChangeStatusClick,
+                             onViewMoreClick, lastSessionId, onPromptOk, onPromptClose, isPromptOpen, promptMessage }: any) => {
+    const isActive = isTableActive(getCurrentSession());
     const tableTypeClassName = type
-      ? {
-          pool: 'table_type_pool',
-          shuffleBoard: 'table_type_shuffle',
-          tableTennis: 'table_type_tennis',
-          generic: 'table_type_default'
-        }[type]
+      ? ({
+        pool: 'table_type_pool',
+        shuffleBoard: 'table_type_shuffle',
+        tableTennis: 'table_type_tennis',
+        generic: 'table_type_default'
+      } as StringDict)[type]
       : '';
     const statusClassName = isActive
       ? 'table_status_active'
@@ -163,35 +143,35 @@ class Component extends React.Component<PropsFromConnect, State> {
         <div className="table__label table__label_role_table-type">
           {name}
         </div>
-        {isActive ? renderActiveSessionStartTime(this.getCurrentSession()) : ''}
+        {isActive ? renderActiveSessionStartTime(getCurrentSession()) : ''}
         <a
           href=""
           className="table__button table__button_role_change-availability"
-          onClick={this.onChangeStatusClick}
+          onClick={onChangeStatusClick}
         />
         <TableTimer
           isActive={isActive}
-          startsAt={startsAtSelector(this.getCurrentSession())}
+          startsAt={startsAtSelector(getCurrentSession())}
         />
-        <TableSession sessionId={this.props.lastSessionId} />
+        <TableSession sessionId={lastSessionId} />
         <a
           href=""
           className="table__btn-view-sessions"
-          onClick={this.onViewMoreClick}
+          onClick={onViewMoreClick}
         >
           View More
         </a>
 
         <ModalPrompt
-          isOpen={this.state.isPromptOpen}
-          onClickOk={this.onPromptOk}
-          onClose={this.onPromptClose}
-          message={this.state.promptMessage}
+          isOpen={isPromptOpen}
+          onClickOk={onPromptOk}
+          onClose={onPromptClose}
+          message={promptMessage}
         />
       </div>
     );
   }
-}
+);
 
 const Table = connect<
   any,
