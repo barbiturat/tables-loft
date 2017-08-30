@@ -3,14 +3,16 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import { StoreStructure } from '../interfaces/store-models';
-import { PropsExtendedByConnect } from '../interfaces/component';
+import {
+  compose,
+  lifecycle,
+  withHandlers,
+  withProps,
+  withState
+} from 'recompose';
 // tslint:disable-next-line:no-require-imports
 const ERROR_DISPLAY_DURATION = require('../../package.json').appSettings
   .ERROR_DISPLAY_DURATION;
-
-interface State {
-  readonly isMounted: boolean;
-}
 
 interface Props {
   readonly message: string;
@@ -18,55 +20,46 @@ interface Props {
 
 interface MappedProps {}
 
-type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
+const TIME_TO_DISAPPEAR = (ERROR_DISPLAY_DURATION - 1) * 1000;
 
-const timeToDisappear = (ERROR_DISPLAY_DURATION - 1) * 1000;
+const enhance = compose(
+  withState('isMounted', 'setMounted', false),
+  withProps({
+    errorContainer: HTMLDivElement
+  }),
+  withHandlers({
+    updateErrorContainer: ({ errorContainer }) => () =>
+      errorContainer.classList.add('global-errors-disappear')
+  }),
+  lifecycle({
+    componentDidMount() {
+      (this.props as any).setMounted(true);
 
-class Component extends React.Component<PropsFromConnect, State> {
-  errorContainer: HTMLDivElement;
+      Observable.of(null)
+        .delay(TIME_TO_DISAPPEAR)
+        .takeWhile(() => (this.props as any).isMounted)
+        .subscribe(() => (this.props as any).updateErrorContainer());
+    },
+    componentWillUnmount() {
+      (this.props as any).setMounted(false);
+    }
+  })
+);
 
-  state = {
-    isMounted: false
-  };
-
-  componentDidMount() {
-    this.setState({
-      isMounted: true
-    });
-
-    Observable.of(null)
-      .delay(timeToDisappear)
-      .takeWhile(() => this.state.isMounted)
-      .subscribe(() => this.updateErrorContainer());
-  }
-
-  componentWillUnmount() {
-    this.setState({
-      isMounted: false
-    });
-  }
-
-  updateErrorContainer = () => {
-    this.errorContainer.classList.add('global-errors-disappear');
-  };
-
-  render() {
-    return (
-      <div
-        className="global-errors__error-window"
-        ref={el => {
-          if (el !== null) {
-            this.errorContainer = el;
-          }
-        }}
-      >
-        <span className="global-errors__error-message">
-          {this.props.message}
-        </span>
-      </div>
-    );
-  }
-}
+const Component = enhance(({ errorContainer, message }: any) =>
+  <div
+    className="global-errors__error-window"
+    ref={el => {
+      if (el !== null) {
+        errorContainer = el;
+      }
+    }}
+  >
+    <span className="global-errors__error-message">
+      {message}
+    </span>
+  </div>
+);
 
 const GlobalError = connect<
   any,
