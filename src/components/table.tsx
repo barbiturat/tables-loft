@@ -10,21 +10,15 @@ import {
   StoreStructure,
   TableSessionsStore
 } from '../interfaces/store-models';
-import store from '../store/index';
 import requestingTableStart from '../action-creators/requesting-table-start';
 import requestingTableStop from '../action-creators/requesting-table-stop';
-import { PropsExtendedByConnect } from '../interfaces/component';
 import TableTimer from './table-timer';
 import fetchingTableSessionsHistory from '../action-creators/fetching-table-sessions-history';
 import modalSessionsHistoryChanged from '../action-creators/modal-sessions-history-changed';
 import ModalPrompt from './modal-prompt';
 import { compose, defaultProps, withHandlers, withState } from 'recompose';
-import {StringDict} from '../interfaces/index';
-
-interface State {
-  readonly isPromptOpen: boolean;
-  readonly promptMessage: string;
-}
+import { StringDict } from '../interfaces/index';
+import * as R from 'ramda';
 
 export interface Props {
   readonly id: number;
@@ -39,8 +33,6 @@ export interface Props {
 interface MappedProps {
   readonly sessions: TableSessionsStore;
 }
-
-type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
 const isTableActive = (currentSession?: TableSessionStore): boolean =>
   !!currentSession;
@@ -81,10 +73,12 @@ const enhance = compose(
   withHandlers({
     getCurrentSession: ({ sessions, currentSessionId }) => () =>
       sessions[currentSessionId],
-    onPromptClose: ({setPromptOpen}) => () => {
+    onPromptClose: ({ setPromptOpen }) => () => {
       setPromptOpen(false);
     },
-    onViewMoreClick: ({dispatch, id}) => (event: MouseEvent<HTMLAnchorElement>) => {
+    onViewMoreClick: ({ dispatch, id }) => (
+      event: MouseEvent<HTMLAnchorElement>
+    ) => {
       event.preventDefault();
 
       dispatch(fetchingTableSessionsHistory(id));
@@ -94,51 +88,72 @@ const enhance = compose(
     }
   }),
   withHandlers({
-    onPromptOk: ({ getCurrentSession, id, isDisabled }) => () => {
+    onPromptOk: ({ dispatch, getCurrentSession, id, isDisabled }) => () => {
       if (isDisabled) {
         return;
       }
 
-      const actionCreator = isTableActive(getCurrentSession())
-        ? requestingTableStop
-        : requestingTableStart;
-      const action = actionCreator(id);
+      const getActionCreator = (identyfier: number) =>
+        (isTableActive(getCurrentSession())
+          ? requestingTableStop
+          : requestingTableStart)(identyfier);
 
-      store.dispatch(action);
+      R.compose(dispatch, getActionCreator)(id);
     },
-    onChangeStatusClick: ({getCurrentSession, name, setPromptOpen, setPromptMessage}) => (event: MouseEvent<HTMLAnchorElement>) => {
+    onChangeStatusClick: ({
+      getCurrentSession,
+      name,
+      setPromptOpen,
+      setPromptMessage
+    }) => (event: MouseEvent<HTMLAnchorElement>) => {
       event.preventDefault();
       // throw('test rollbar sourcemaps support');
 
-      const toStop = isTableActive(getCurrentSession());
-      const promptMessage = `${toStop ? 'Stop' : 'Start'} table "${name}"`;
+      const getPromptMessage = (toStop: boolean) =>
+        `${toStop ? 'Stop' : 'Start'} table "${name}"`;
 
       setPromptOpen(true);
-      setPromptMessage(promptMessage);
+      R.compose(setPromptMessage, getPromptMessage, isTableActive)(
+        getCurrentSession()
+      );
     }
   })
 );
 
-const Component = enhance(({ name, type, isInPending, isDisabled, getCurrentSession, onChangeStatusClick,
-                             onViewMoreClick, lastSessionId, onPromptOk, onPromptClose, isPromptOpen, promptMessage }: any) => {
+const Component = enhance(
+  ({
+    name,
+    type,
+    isInPending,
+    isDisabled,
+    getCurrentSession,
+    onChangeStatusClick,
+    onViewMoreClick,
+    lastSessionId,
+    onPromptOk,
+    onPromptClose,
+    isPromptOpen,
+    promptMessage
+  }: any) => {
     const isActive = isTableActive(getCurrentSession());
-    const tableTypeClassName = type
-      ? ({
-        pool: 'table_type_pool',
-        shuffleBoard: 'table_type_shuffle',
-        tableTennis: 'table_type_tennis',
-        generic: 'table_type_default'
-      } as StringDict)[type]
-      : '';
-    const statusClassName = isActive
-      ? 'table_status_active'
-      : 'table_status_ready';
-    const pendingClassName = isInPending ? 'table_state_in-pending' : '';
+    const getTableTypeClassName = () =>
+      type
+        ? ({
+            pool: 'table_type_pool',
+            shuffleBoard: 'table_type_shuffle',
+            tableTennis: 'table_type_tennis',
+            generic: 'table_type_default'
+          } as StringDict)[type]
+        : '';
+    const getStatusClassName = () =>
+      isActive ? 'table_status_active' : 'table_status_ready';
+    const getPendingClassName = () =>
+      isInPending ? 'table_state_in-pending' : '';
+    const getFullClassName = () =>
+      `table ${getTableTypeClassName()} ${getStatusClassName()} ${getPendingClassName()} tables-set_adjust_table`;
 
     return (
-      <div
-        className={`table ${tableTypeClassName} ${statusClassName} ${pendingClassName} tables-set_adjust_table`}
-      >
+      <div className={getFullClassName()}>
         {getDisabledLabel(isDisabled)}
         <div className="table__label table__label_role_table-type">
           {name}
@@ -177,10 +192,8 @@ const Table = connect<
   any,
   any,
   Props
->((state: StoreStructure, ownProps: Props): MappedProps => {
-  return {
-    sessions: state.app.tableSessionsData.tableSessions
-  };
-})(Component);
+>((state: StoreStructure, ownProps: Props): MappedProps => ({
+  sessions: state.app.tableSessionsData.tableSessions
+}))(Component);
 
 export default Table;
