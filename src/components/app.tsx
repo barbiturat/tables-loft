@@ -1,68 +1,55 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Observable } from 'rxjs';
+import { compose, withHandlers, withState, lifecycle } from 'recompose';
 
 import { AnyDict } from '../interfaces/index';
 import * as styles from '../styles/index.scss';
 import fetchingTables from '../action-creators/fetching-tables';
-import { PropsExtendedByConnect } from '../interfaces/component';
 import { StoreStructure } from '../interfaces/store-models';
 import changingUtcMilliseconds from '../action-creators/changing-utc-milliseconds';
 import ModalSessionsHistory from './modal-sessions-history';
 import GlobalErrors from './global-errors';
 import ScreenBlocker from './screen-blocker';
 
-interface Props {}
-
 interface MappedProps {}
 
-type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
+const enhance = compose(
+  withState('isMounted', 'setMounted', false),
+  withHandlers({
+    getMounted: ({ isMounted }) => () => isMounted
+  }),
+  withHandlers({
+    setGlobalTimer: ({ isMounted, dispatch, getMounted }) => () =>
+      Observable.interval(1000)
+        .takeWhile(() => {
+          return getMounted();
+        })
+        .subscribe(() => dispatch(changingUtcMilliseconds))
+  }),
+  (lifecycle as Function)({
+    componentDidMount() {
+      (this.props as any).setMounted(true);
 
-interface State {
-  readonly isMounted: boolean;
-}
+      (this.props as any).setGlobalTimer();
+      (this.props as any).dispatch(fetchingTables);
+    },
+    componentWillUnmount() {
+      (this.props as any).setMounted(false);
+    }
+  })
+);
 
-class App extends React.Component<PropsFromConnect, State> {
-  state = {
-    isMounted: false
-  };
+const App = enhance(({ children, isMounted }: any) =>
+  <div className="app" data-styles={styles}>
+    {children}
 
-  componentDidMount() {
-    this.setState({
-      isMounted: true
-    });
+    <ScreenBlocker />
 
-    this.setGlobalTimer();
-
-    this.props.dispatch(fetchingTables);
-  }
-
-  componentWillUnmount() {
-    this.setState({
-      isMounted: false
-    });
-  }
-
-  setGlobalTimer() {
-    Observable.interval(1000)
-      .takeWhile(() => this.state.isMounted)
-      .subscribe(() => this.props.dispatch(changingUtcMilliseconds));
-  }
-
-  render() {
-    return (
-      /* data-styles is used just to load styles */
-      <div className="app" data-styles={styles}>
-        {this.props.children}
-
-        <ScreenBlocker />
-
-        <ModalSessionsHistory />
-        <GlobalErrors />
-      </div>
-    );
-  }
-}
+    <ModalSessionsHistory />
+    <GlobalErrors />
+  </div>
+);
 
 const mapStateToProps = (
   state: StoreStructure,
