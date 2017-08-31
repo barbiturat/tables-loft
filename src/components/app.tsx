@@ -27,7 +27,7 @@ const enhance = compose(
         })
         .subscribe(() => dispatch(changingUtcMilliseconds))
   }),
-  (lifecycle as Function)({
+  lifecycle({
     componentDidMount() {
       (this.props as any).setMounted(true);
 
