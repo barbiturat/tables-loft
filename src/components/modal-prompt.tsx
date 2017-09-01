@@ -2,13 +2,11 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import MouseEvent = React.MouseEvent;
 import ReactModal from 'react-modal';
+import { compose, lifecycle, withHandlers, withState } from 'recompose';
+import * as R from 'ramda';
 
 import { StoreStructure } from '../interfaces/store-models';
 import { PropsExtendedByConnect } from '../interfaces/component';
-
-interface State {
-  readonly isOpen: boolean;
-}
 
 interface Props {
   readonly isOpen: boolean;
@@ -21,74 +19,68 @@ interface MappedProps {}
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
-class Component extends React.Component<PropsFromConnect, State> {
-  state = {
-    isOpen: false
-  };
-
-  componentWillReceiveProps(nextProps: PropsFromConnect) {
-    const newIsOpen = nextProps.isOpen;
-
-    if (newIsOpen !== this.props.isOpen) {
-      this.setState({
-        isOpen: newIsOpen
-      });
+const enhance = compose(
+  withState('isOpenInner', 'setOpenInner', false),
+  withHandlers({
+    close: ({ setOpenInner, onClose }) => () => {
+      setOpenInner(false);
+      onClose();
     }
-  }
+  }),
+  withHandlers({
+    onClickOkInner: ({ close, onClickOk }) => (
+      event: MouseEvent<HTMLAnchorElement>
+    ) => {
+      event.preventDefault();
+      close();
+      onClickOk();
+    },
+    onClickCancel: ({ close }) => (event: MouseEvent<HTMLAnchorElement>) => {
+      event.preventDefault();
+      close();
+    }
+  }),
+  lifecycle({
+    componentWillReceiveProps(nextProps: PropsFromConnect) {
+      R.unless(
+        R.identical(this.props.isOpen),
+        (this.props as any).setOpenInner
+      )(nextProps.isOpen);
+    }
+  })
+);
 
-  close = () => {
-    this.setState({
-      isOpen: false
-    });
-    this.props.onClose();
-  };
+const Component = enhance(
+  ({ isOpen, message, onClickOkInner, onClickCancel }: any) =>
+    <ReactModal
+      contentLabel="Prompt"
+      isOpen={isOpen}
+      shouldCloseOnOverlayClick={false}
+      className="modal modal_role_prompt"
+      overlayClassName="modal__overlay"
+    >
+      <h4 className="modal__description">
+        {message}
+      </h4>
 
-  onClickOk = (event: MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
-
-    this.close();
-    this.props.onClickOk();
-  };
-
-  onClickCancel = (event: MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
-
-    this.close();
-  };
-
-  render() {
-    return (
-      <ReactModal
-        contentLabel="Prompt"
-        isOpen={this.state.isOpen}
-        shouldCloseOnOverlayClick={false}
-        className="modal modal_role_prompt"
-        overlayClassName="modal__overlay"
-      >
-        <h4 className="modal__description">
-          {this.props.message}
-        </h4>
-
-        <div className="buttons-group">
-          <a
-            href=""
-            className="button button_role_ok buttons-group_adjust_button"
-            onClick={this.onClickOk}
-          >
-            Ok
-          </a>
-          <a
-            href=""
-            className="button button_role_cancel buttons-group_adjust_button"
-            onClick={this.onClickCancel}
-          >
-            Cancel
-          </a>
-        </div>
-      </ReactModal>
-    );
-  }
-}
+      <div className="buttons-group">
+        <a
+          href=""
+          className="button button_role_ok buttons-group_adjust_button"
+          onClick={onClickOkInner}
+        >
+          Ok
+        </a>
+        <a
+          href=""
+          className="button button_role_cancel buttons-group_adjust_button"
+          onClick={onClickCancel}
+        >
+          Cancel
+        </a>
+      </div>
+    </ReactModal>
+);
 
 const ModalPrompt = connect<
   any,
