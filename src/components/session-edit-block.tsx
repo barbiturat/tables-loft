@@ -21,19 +21,23 @@ interface Props {
   readonly onEditComplete: () => void;
 }
 
+type InnerProps = Props & {
+  readonly hours: number;
+  readonly minutes: number;
+  readonly setHours: (hours: number) => void;
+  readonly setMinutes: (minutes: number) => void;
+};
+
 interface MappedProps {}
 
-type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
+type PropsFromConnect = PropsExtendedByConnect<InnerProps, MappedProps>;
 
-const getSessionDurationData = R.memoize(
-  (durationSeconds: number): SessionDurationData => {
-    const duration = moment.duration({ seconds: durationSeconds });
-
-    return {
-      hours: Math.floor(duration.asHours()),
-      minutes: Math.floor(duration.minutes())
-    };
-  }
+const getSessionDurationData: (durationSeconds: number) => SessionDurationData = R.memoize(
+  (durationSeconds: number): SessionDurationData =>
+    R.applySpec<SessionDurationData>({
+      hours: R.compose(Math.floor, R.invoker(0, 'asHours')),
+      minutes: R.compose(Math.floor, R.invoker(0, 'minutes'))
+    })(moment.duration({ seconds: durationSeconds }))
 );
 
 const enhance = compose(
@@ -41,13 +45,13 @@ const enhance = compose(
     'hours',
     'setHours',
     ({ durationSeconds }) =>
-      (getSessionDurationData(durationSeconds) as any).hours
+      getSessionDurationData(durationSeconds).hours
   ),
   withState(
     'minutes',
     'setMinutes',
     ({ durationSeconds }) =>
-      (getSessionDurationData(durationSeconds) as any).minutes
+      getSessionDurationData(durationSeconds).minutes
   ),
   withHandlers({
     onInputChange: ({ setHours, setMinutes }) => (
@@ -83,14 +87,16 @@ const enhance = compose(
       }
 
       if (isEnter) {
-        const duration = moment.duration({
+        R.compose(
+          dispatch,
+          requestingTableSessionChange(sessionId),
+          R.invoker(0, 'asSeconds'),
+          moment.duration
+        )({
           hours,
           minutes
         });
-        const newSeconds = duration.asSeconds();
-        const action = requestingTableSessionChange(sessionId, newSeconds);
 
-        dispatch(action);
         onEditComplete();
         return;
       }
@@ -100,11 +106,11 @@ const enhance = compose(
       }
     }
   }),
-  lifecycle({
+  lifecycle<InnerProps, any>({
     componentWillReceiveProps(nextProps: PropsFromConnect) {
       const changeStates = R.converge(R.T, [
-        R.compose((this.props as any).setHours, R.prop('hours')),
-        R.compose((this.props as any).setMinutes, R.prop('minutes'))
+        R.compose(this.props.setHours, R.prop('hours')),
+        R.compose(this.props.setMinutes, R.prop('minutes'))
       ]);
       const updateStates = R.compose(changeStates, getSessionDurationData);
 

@@ -620,8 +620,13 @@ declare namespace R {
      */
     curryN(
       length: number,
-      fn: (...args: ReadonlyArray<any>) => any
+      fn?: (...args: ReadonlyArray<any>) => any
     ): (...a: ReadonlyArray<any>) => any;
+    curryN(
+      length: number
+    ): (
+      fn: (...args: ReadonlyArray<any>) => any
+    ) => (...a: ReadonlyArray<any>) => any;
 
     /**
      * Decrements its argument.
@@ -1064,13 +1069,13 @@ declare namespace R {
      * when `len` is not specified), and the final parameter is the target object.
      */
     invoker(
+      len: number,
       name: string,
-      obj: any,
-      len?: number
+      obj?: any
     ): (...a: ReadonlyArray<any>) => any;
     invoker(
-      name: string
-    ): (obj: any, len?: number) => (...a: ReadonlyArray<any>) => any;
+      len: number
+    ): (name: string, obj?: any) => (...a: ReadonlyArray<any>) => any;
 
     /**
      * See if an object (`val`) is an instance of the supplied constructor.
