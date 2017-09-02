@@ -2,7 +2,13 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import KeyboardEvent = React.KeyboardEvent;
 import * as moment from 'moment';
-import { compose, lifecycle, withHandlers, withState } from 'recompose';
+import {
+  compose,
+  lifecycle,
+  withHandlers,
+  withProps,
+  withState
+} from 'recompose';
 import * as R from 'ramda';
 
 import { StoreStructure } from '../interfaces/store-models';
@@ -32,7 +38,9 @@ interface MappedProps {}
 
 type PropsFromConnect = PropsExtendedByConnect<InnerProps, MappedProps>;
 
-const getSessionDurationData: (durationSeconds: number) => SessionDurationData = R.memoize(
+const getSessionDurationData: (
+  durationSeconds: number
+) => SessionDurationData = R.memoize(
   (durationSeconds: number): SessionDurationData =>
     R.applySpec<SessionDurationData>({
       hours: R.compose(Math.floor, R.invoker(0, 'asHours')),
@@ -40,18 +48,24 @@ const getSessionDurationData: (durationSeconds: number) => SessionDurationData =
     })(moment.duration({ seconds: durationSeconds }))
 );
 
+const keyCodeIs = R.useWith(R.call, [R.identical, R.prop('keyCode')]);
+const isEsc = keyCodeIs(27);
+const isEnter = keyCodeIs(13);
+const preventDefaultOnControlKeys = R.when(
+  R.either(isEsc, isEnter),
+  R.invoker(0, 'preventDefault')
+);
+
 const enhance = compose(
   withState(
     'hours',
     'setHours',
-    ({ durationSeconds }) =>
-      getSessionDurationData(durationSeconds).hours
+    ({ durationSeconds }) => getSessionDurationData(durationSeconds).hours
   ),
   withState(
     'minutes',
     'setMinutes',
-    ({ durationSeconds }) =>
-      getSessionDurationData(durationSeconds).minutes
+    ({ durationSeconds }) => getSessionDurationData(durationSeconds).minutes
   ),
   withHandlers({
     onInputChange: ({ setHours, setMinutes }) => (
@@ -69,41 +83,39 @@ const enhance = compose(
       ])(event.currentTarget);
     },
     onInputKeyDown: ({
-      dispatch,
       sessionId,
       onEditComplete,
+      dispatch,
       hours,
       minutes
     }) => (event: KeyboardEvent<HTMLInputElement>) => {
-      if (typeof sessionId !== 'number') {
-        return;
-      }
+      const _dispatchTableSessionChange = R.compose(
+        dispatch,
+        requestingTableSessionChange(sessionId),
+        R.invoker(0, 'asSeconds'),
+        moment.duration
+      );
+      const dispatchTableSessionChange = R.partial(
+        _dispatchTableSessionChange,
+        [
+          {
+            hours,
+            minutes
+          }
+        ]
+      );
+      const ifEsc = R.when(isEsc, onEditComplete);
+      const enterCondition = R.ifElse(
+        isEnter,
+        R.juxt([dispatchTableSessionChange, onEditComplete]),
+        ifEsc
+      );
+      const isSessionIdIsNumber = R.partial(R.is, [Number, sessionId]);
 
-      const isEsc = event.keyCode === 27;
-      const isEnter = event.keyCode === 13;
-
-      if (isEsc || isEnter) {
-        event.preventDefault();
-      }
-
-      if (isEnter) {
-        R.compose(
-          dispatch,
-          requestingTableSessionChange(sessionId),
-          R.invoker(0, 'asSeconds'),
-          moment.duration
-        )({
-          hours,
-          minutes
-        });
-
-        onEditComplete();
-        return;
-      }
-
-      if (isEsc) {
-        onEditComplete();
-      }
+      return R.when(
+        isSessionIdIsNumber,
+        R.juxt([preventDefaultOnControlKeys, enterCondition])
+      )(event);
     }
   }),
   lifecycle<InnerProps, any>({
