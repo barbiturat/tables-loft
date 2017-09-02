@@ -20,8 +20,10 @@ interface Props {
 }
 
 interface State {
+  readonly thisInstance?: React.ReactInstance | null;
   readonly isFormatOfMinutes: boolean;
   readonly isInEditing: boolean;
+  readonly editSessionButtonId: string;
 }
 
 interface MappedProps {
@@ -61,28 +63,29 @@ const getDurationString = (
 };
 
 class Component extends React.Component<PropsFromConnect, State> {
-  editSessionButtonId: string;
+  state = {
+    thisInstance: null,
+    editSessionButtonId: '',
+    isFormatOfMinutes: false,
+    isInEditing: false
+  };
 
-  constructor(props: PropsFromConnect) {
-    super(props);
+  componentWillMount() {
+    this.setState({
+      ...this.state,
+      ...{
+        thisInstance: this,
+        editSessionButtonId: 'editSessionButton' + Math.floor(Math.random() * 10000000)
+      }
+    });
 
-    this.editSessionButtonId =
-      'editSessionButton' + Math.floor(Math.random() * 10000000);
-
-    this.state = {
-      isFormatOfMinutes: false,
-      isInEditing: false
-    };
+    window.addEventListener('click', this.handleClick, false);
   }
 
   componentWillReceiveProps(nextProps: PropsFromConnect) {
     if (!nextProps.inAdminMode) {
       this.setEditingMode(false);
     }
-  }
-
-  componentWillMount() {
-    window.addEventListener('click', this.handleClick, false);
   }
 
   componentWillUnmount() {
@@ -92,8 +95,8 @@ class Component extends React.Component<PropsFromConnect, State> {
   handleClick = (event: any) => {
     const clickedEl = event.target;
     const isClickedOutside =
-      !ReactDOM.findDOMNode(this).contains(clickedEl) &&
-      !clickedEl.classList.contains(this.editSessionButtonId);
+      !ReactDOM.findDOMNode(this.state.thisInstance! as React.ReactInstance).contains(clickedEl) &&
+      !clickedEl.classList.contains(this.state.editSessionButtonId);
 
     if (isClickedOutside) {
       this.onClickOutside();
@@ -133,7 +136,7 @@ class Component extends React.Component<PropsFromConnect, State> {
   drawEditButton(toDraw: boolean) {
     return toDraw
       ? <div
-          className={`sessions-list__edit-button ${this.editSessionButtonId}`}
+          className={`sessions-list__edit-button ${this.state.editSessionButtonId}`}
           onClick={this.onEditButtonClick}
         />
       : null;
