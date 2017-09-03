@@ -55,6 +55,8 @@ const getSessionDurationData = (durationSeconds: number): SessionDurationData =>
   });
 };
 
+const getDurationData = R.compose(getSessionDurationData, R.prop('durationSeconds'));
+
 const getDurationString = (
   hours: number,
   minutes: number,
@@ -72,6 +74,12 @@ const getDurationString = (
       .format('H[h] mm[m]');
   }
 };
+
+const getAdminEditedClassName = R.ifElse(
+  R.compose(Boolean, R.prop('adminEdited')),
+  R.always('table__session-length_admin-edited'),
+  R.always('')
+);
 
 const enhance = compose(
   withState('thisInstance', 'setThisInstance', null),
@@ -108,34 +116,29 @@ const enhance = compose(
     drawDuration: ({ isInEditing, onEditComplete, isFormatOfMinutes, onSessionInfoClick }) => (
       session: TableSessionStore
     ) => {
-      const { durationSeconds, id } = session;
-      const durationData = getSessionDurationData(durationSeconds);
-      const { hours, minutes, minutesTotal } = durationData;
-
       if (isInEditing) {
         return (
           <SessionEditBlock
-            durationSeconds={durationSeconds}
-            sessionId={id}
+            durationSeconds={R.prop('durationSeconds', session)}
+            sessionId={R.prop('id', session)}
             onEditComplete={onEditComplete}
           />
         );
       } else {
-        const getAdminEditedClassName = R.ifElse(
-          R.compose(Boolean, R.prop('adminEdited')),
-          R.always('table__session-length_admin-edited'),
-          R.always('')
-        );
-        const _getDurationString = R.partial(getDurationString, [
-          hours,
-          minutes,
-          minutesTotal,
-          isFormatOfMinutes
-        ]);
-        const getDurationTimeString = R.ifElse(
+        const getDurationStringApplied = R.compose(
+          R.partial(getDurationString),
+          R.juxt([
+            R.prop('hours'),
+            R.prop('minutes'),
+            R.prop('minutesTotal'),
+            R.always(isFormatOfMinutes)
+          ]),
+          getDurationData
+        )(session);
+        const getDurationInfo = R.ifElse(
           R.compose(Boolean, R.prop('isInPending')),
           R.always('wait...'),
-          _getDurationString
+          getDurationStringApplied
         );
 
         return (
@@ -143,7 +146,7 @@ const enhance = compose(
             className={`table__session-length ${getAdminEditedClassName(session)}`}
             onClick={onSessionInfoClick}
           >
-            {getDurationTimeString(session)}
+            {getDurationInfo(session)}
           </span>
         );
       }
