@@ -5,6 +5,4 @@ interface DefaultDispatchProps {
   readonly dispatch: Dispatch<BaseAction>;
 }
 
-type PropsExtendedByConnect<OwnProps, MappedProps> = OwnProps &
-  MappedProps &
-  DefaultDispatchProps;
+type PropsExtendedByConnect<OwnProps, MappedProps> = OwnProps & MappedProps & DefaultDispatchProps;

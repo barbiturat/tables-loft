@@ -1,8 +1,6 @@
 import { combineForms, FieldState, FormState } from 'react-redux-form';
 
-type FieldsOfType<FieldsSet, FieldsType> = {
-  [Field in keyof FieldsSet]: FieldsType
-};
+type FieldsOfType<FieldsSet, FieldsType> = { [Field in keyof FieldsSet]: FieldsType };
 
 interface FormStateWithValue<TValue> extends FormState {
   readonly initialValue: TValue;

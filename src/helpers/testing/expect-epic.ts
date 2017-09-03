@@ -16,9 +16,7 @@ interface TestObservableData<T> {
 const mockStore = configureMockStore();
 
 export const expectEpic = (
-  getEpic: (
-    getAjax: (url: string, dataToSend: any) => Observable<any>
-  ) => Epic<any, any>,
+  getEpic: (getAjax: (url: string, dataToSend: any) => Observable<any>) => Epic<any, any>,
   options: {
     action: TestObservableData<BaseAction | Action<any>>;
     expected: TestObservableData<BaseAction | Action<any>>;
@@ -34,11 +32,7 @@ export const expectEpic = (
   });
 
   const action$: ActionsObservable<{}> = new ActionsObservable<{}>(
-    testScheduler.createHotObservable<{}>(
-      action.marbles,
-      action.values,
-      action.error
-    )
+    testScheduler.createHotObservable<{}>(action.marbles, action.values, action.error)
   );
   const response$ = testScheduler.createColdObservable(
     response.marbles,
@@ -57,7 +51,5 @@ export const expectEpic = (
   expect(callsOfGetAjax.length).toEqual(1);
   expect(callsOfGetAjax[0]).toEqual(callAjaxArgs);
 
-  testScheduler
-    .expectSubscriptions(response$.subscriptions)
-    .toBe(responseMarbles);
+  testScheduler.expectSubscriptions(response$.subscriptions).toBe(responseMarbles);
 };

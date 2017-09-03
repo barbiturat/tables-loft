@@ -11,11 +11,7 @@ import {
   ResponseGetAdminTokenFailedPayload,
   ResponseGetAdminTokenPayload
 } from '../interfaces/api-responses';
-import {
-  AjaxResponseTyped,
-  AjaxErrorTyped,
-  AjaxResponseDefined
-} from '../interfaces/index';
+import { AjaxResponseTyped, AjaxErrorTyped, AjaxResponseDefined } from '../interfaces/index';
 import { RequestGetAdminTokenPayload } from '../interfaces/api-requests';
 import { urlGetAdminToken } from '../constants/urls';
 import { FormSubmitAction } from '../interfaces/actions';
@@ -39,82 +35,57 @@ const assertResponse = (ajaxData: ResponseOk) => {
 };
 
 const requestAdminToken = (action$ => {
-  return action$
-    .ofType(REQUESTING_ADMIN_TOKEN)
-    .switchMap((action: FormSubmitAction) => {
-      const { formModelPath } = action.payload;
-      const dataToSend: RequestGetAdminTokenPayload = action.payload.formData;
+  return action$.ofType(REQUESTING_ADMIN_TOKEN).switchMap((action: FormSubmitAction) => {
+    const { formModelPath } = action.payload;
+    const dataToSend: RequestGetAdminTokenPayload = action.payload.formData;
 
-      const formPendingTurnOn$ = Observable.of(
-        actions.setPending(formModelPath, true)
-      );
-      const blockingPendingTurnOn$ = Observable.of(
-        pendingBlockingRequest(true)
-      );
-      const tokenRequest$ = Observable.of(null).mergeMap(() =>
-        post(
-          `${API_URL}${urlGetAdminToken}`,
-          dataToSend
-        ).mergeMap((ajaxData: ResponseOk | ResponseError) => {
-          const blockingPendingTurnOffAction = pendingBlockingRequest(false);
+    const formPendingTurnOn$ = Observable.of(actions.setPending(formModelPath, true));
+    const blockingPendingTurnOn$ = Observable.of(pendingBlockingRequest(true));
+    const tokenRequest$ = Observable.of(null).mergeMap(() =>
+      post(
+        `${API_URL}${urlGetAdminToken}`,
+        dataToSend
+      ).mergeMap((ajaxData: ResponseOk | ResponseError) => {
+        const blockingPendingTurnOffAction = pendingBlockingRequest(false);
 
-          if (isAjaxResponseDefined<ResponseOkDefined>(ajaxData)) {
-            assertResponse(ajaxData);
+        if (isAjaxResponseDefined<ResponseOkDefined>(ajaxData)) {
+          assertResponse(ajaxData);
 
-            const adminToken = ajaxData.response.adminToken;
-            const passwordFieldModelPath =
-              'formsData.managerLoginForm.password';
+          const adminToken = ajaxData.response.adminToken;
+          const passwordFieldModelPath = 'formsData.managerLoginForm.password';
 
-            const setSubmittedAction = actions.setSubmitted(
-              formModelPath,
-              true
-            );
-            const setAdminTokenAction = adminTokenUpdated(adminToken);
-            const clearPasswordInputAction = actions.change(
-              passwordFieldModelPath,
-              ''
-            );
-            const resetPasswordInputAction = actions.setInitial(
-              passwordFieldModelPath
-            );
+          const setSubmittedAction = actions.setSubmitted(formModelPath, true);
+          const setAdminTokenAction = adminTokenUpdated(adminToken);
+          const clearPasswordInputAction = actions.change(passwordFieldModelPath, '');
+          const resetPasswordInputAction = actions.setInitial(passwordFieldModelPath);
 
-            return Observable.of<BaseAction>(
-              blockingPendingTurnOffAction,
-              setSubmittedAction,
-              setAdminTokenAction,
-              clearPasswordInputAction,
-              resetPasswordInputAction
-            );
-          } else {
-            const setFormSubmitFailedAction = actions.setSubmitFailed(
-              formModelPath
-            );
-            const passwordIsWrong =
-              ajaxData.status === STATUS_UNPROCESSABLE_ENTITY;
-            const setFieldsValidityAction = actions.setFieldsValidity(
-              formModelPath,
-              {
-                password: {
-                  isCorrect: !passwordIsWrong
-                }
-              }
-            );
+          return Observable.of<BaseAction>(
+            blockingPendingTurnOffAction,
+            setSubmittedAction,
+            setAdminTokenAction,
+            clearPasswordInputAction,
+            resetPasswordInputAction
+          );
+        } else {
+          const setFormSubmitFailedAction = actions.setSubmitFailed(formModelPath);
+          const passwordIsWrong = ajaxData.status === STATUS_UNPROCESSABLE_ENTITY;
+          const setFieldsValidityAction = actions.setFieldsValidity(formModelPath, {
+            password: {
+              isCorrect: !passwordIsWrong
+            }
+          });
 
-            return Observable.of<BaseAction>(
-              blockingPendingTurnOffAction,
-              setFormSubmitFailedAction,
-              setFieldsValidityAction
-            );
-          }
-        })
-      );
+          return Observable.of<BaseAction>(
+            blockingPendingTurnOffAction,
+            setFormSubmitFailedAction,
+            setFieldsValidityAction
+          );
+        }
+      })
+    );
 
-      return Observable.concat(
-        blockingPendingTurnOn$,
-        formPendingTurnOn$,
-        tokenRequest$
-      );
-    });
+    return Observable.concat(blockingPendingTurnOn$, formPendingTurnOn$, tokenRequest$);
+  });
 }) as Epic<BaseAction, StoreStructure>;
 
 export default requestAdminToken;

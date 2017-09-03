@@ -19,15 +19,8 @@ interface RenameKeys<B extends StringDict, A extends AnyDict>
   extends R.CurriedFunction2<B, A, ReplacedKeys<A, B>> {}
 
 // https://github.com/ramda/ramda/wiki/Cookbook#rename-keys-of-an-object
-export const renameKeys: RenameKeys<
-  StringDict,
-  AnyDict
-> = R.curry((keysMap, obj) =>
-  R.reduce<any, AnyDict>(
-    (acc, key) => R.assoc(keysMap[key] || key, obj[key], acc),
-    {},
-    R.keys(obj)
-  )
+export const renameKeys: RenameKeys<StringDict, AnyDict> = R.curry((keysMap, obj) =>
+  R.reduce<any, AnyDict>((acc, key) => R.assoc(keysMap[key] || key, obj[key], acc), {}, R.keys(obj))
 );
 
 export const indexedDictToArray = R.curry((key: string, object) =>

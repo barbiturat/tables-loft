@@ -40,16 +40,12 @@ const { validators: { password: passwordChecks } } = managerLoginForm;
 const WaitMessage = ({ isPending }: { readonly isPending: boolean }) =>
   isPending ? <div>Wait...</div> : null;
 
-const ErrorsBlock: React.StatelessComponent<
-  ErrorsProps & WrapperProps
-> = props =>
+const ErrorsBlock: React.StatelessComponent<ErrorsProps & WrapperProps> = props =>
   <div className="modal__form-errors">
     {props.children}
   </div>;
 
-const ErrorComponent: React.StatelessComponent<
-  ErrorsProps & CustomComponentProps
-> = props =>
+const ErrorComponent: React.StatelessComponent<ErrorsProps & CustomComponentProps> = props =>
   <div className="modal__form-error">
     {props.children}
   </div>;
@@ -69,10 +65,7 @@ const HandlersComponent = compose(
       dispatch(actions.setInitial('formsData.managerLoginForm.password'));
     },
     handleSubmit: ({ dispatch }) => (formModelData: StringDict) => {
-      R.compose(dispatch, requestingManagerLogin)(
-        'formsData.managerLoginForm',
-        formModelData
-      );
+      R.compose(dispatch, requestingManagerLogin)('formsData.managerLoginForm', formModelData);
     }
   }),
   withHandlers({
@@ -82,9 +75,7 @@ const HandlersComponent = compose(
     }
   }),
   withHandlers({
-    onCloseClick: ({ requestToClose }: any) => (
-      event: MouseEvent<HTMLAnchorElement>
-    ) => {
+    onCloseClick: ({ requestToClose }: any) => (event: MouseEvent<HTMLAnchorElement>) => {
       event.preventDefault();
       requestToClose();
     },
@@ -114,9 +105,7 @@ const Component = HandlersComponent(
       <div className="modal__header">
         <h3 className="modal__header-caption">Manager Mode</h3>
       </div>
-      <h4 className="modal__description">
-        Type password to enter manager mode
-      </h4>
+      <h4 className="modal__description">Type password to enter manager mode</h4>
 
       <WaitMessage isPending={pending} />
 
@@ -151,11 +140,7 @@ const Component = HandlersComponent(
         />
 
         <div className="modal__buttons-group">
-          <input
-            type="submit"
-            value="Login"
-            className="button button_type_modal-big"
-          />
+          <input type="submit" value="Login" className="button button_type_modal-big" />
         </div>
       </Form>
     </ReactModal>

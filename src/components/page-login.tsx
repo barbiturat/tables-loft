@@ -23,28 +23,18 @@ interface MappedProps {
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
-const {
-  validators: { email: emailChecks, password: passwordChecks }
-} = loginFormField;
+const { validators: { email: emailChecks, password: passwordChecks } } = loginFormField;
 
 const getWaitMessage = (isPending: boolean) =>
-  isPending
-    ? <div className="form-message form-message_type_wait">Wait...</div>
-    : null;
+  isPending ? <div className="form-message form-message_type_wait">Wait...</div> : null;
 
 const enhance = withHandlers({
   handleSubmit: (props: PropsFromConnect) => (formModelData: StringDict) =>
-    R.compose(props.dispatch, requestingLogin)(
-      'formsData.loginForm',
-      formModelData
-    )
+    R.compose(props.dispatch, requestingLogin)('formsData.loginForm', formModelData)
 });
 
 const PageLogin = enhance(
-  ({
-    loginForm,
-    handleSubmit
-  }: PropsFromConnect & { readonly handleSubmit: any }) =>
+  ({ loginForm, handleSubmit }: PropsFromConnect & { readonly handleSubmit: any }) =>
     <div>
       <Form model="formsData.loginForm" onSubmit={handleSubmit}>
         {getWaitMessage(loginForm.$form.pending)}

@@ -48,22 +48,21 @@ describe('DependencyContainer.handleError', () => {
     testScheduler.expectObservable(handled$).toBe('(a|)', expectedMap);
   });
 
-  testObservableProperty(
-    'works with any of error texts',
-    jsc.nestring,
-    function(propertyScheduler, errorText: string) {
-      const xhr = new XMLHttpRequest();
-      const request: AjaxRequest = {};
-      const sourceAjaxErrorData = new AjaxError(errorText, xhr, request);
+  testObservableProperty('works with any of error texts', jsc.nestring, function(
+    propertyScheduler,
+    errorText: string
+  ) {
+    const xhr = new XMLHttpRequest();
+    const request: AjaxRequest = {};
+    const sourceAjaxErrorData = new AjaxError(errorText, xhr, request);
 
-      const handled$ = DependencyContainer.handleError(sourceAjaxErrorData);
-      const expectedMap = {
-        a: sourceAjaxErrorData
-      };
+    const handled$ = DependencyContainer.handleError(sourceAjaxErrorData);
+    const expectedMap = {
+      a: sourceAjaxErrorData
+    };
 
-      propertyScheduler.expectObservable(handled$).toBe('(a|)', expectedMap);
-    }
-  );
+    propertyScheduler.expectObservable(handled$).toBe('(a|)', expectedMap);
+  });
 });
 
 describe('getExtendedHeaders', () => {
@@ -71,24 +70,18 @@ describe('getExtendedHeaders', () => {
     restoreGetProcessEnv();
   });
 
-  jsc.property(
-    'adds a proper "Authorization" field',
-    alphanumericSymbolsArb(20, '-'),
-    apiKey => {
-      mockGetProcessEnv(apiKey);
+  jsc.property('adds a proper "Authorization" field', alphanumericSymbolsArb(20, '-'), apiKey => {
+    mockGetProcessEnv(apiKey);
 
-      const extendedHeaders = getExtendedHeaders();
-      const authorization = extendedHeaders.Authorization;
+    const extendedHeaders = getExtendedHeaders();
+    const authorization = extendedHeaders.Authorization;
 
-      return equals(authorization)(`Token token=${apiKey}`);
-    }
-  );
+    return equals(authorization)(`Token token=${apiKey}`);
+  });
 
   jsc.property(
     'adds passed headers to result',
-    jsc.dict(
-      jsc.oneof<string | number | boolean>([jsc.string, jsc.integer, jsc.bool])
-    ),
+    jsc.dict(jsc.oneof<string | number | boolean>([jsc.string, jsc.integer, jsc.bool])),
     (passedHeaders: {}) => {
       const apiKey = 'some';
       mockGetProcessEnv(apiKey);
@@ -137,8 +130,7 @@ describe('get', () => {
 
       get(url);
 
-      const firstCall = (DependencyContainer.ajaxGet as Mock<any>).mock
-        .calls[0];
+      const firstCall = (DependencyContainer.ajaxGet as Mock<any>).mock.calls[0];
       const firstArg = firstCall[0];
 
       return equals(firstArg)(url);
@@ -152,14 +144,9 @@ describe('get', () => {
     DependencyContainer.ajaxGet = jest.fn(() => Observable.throw(errorData));
     DependencyContainer.handleError = jest.fn();
 
-    get('http://some-url.com').subscribe(
-      (data: any) => {},
-      (error: any) => {},
-      () => {}
-    );
+    get('http://some-url.com').subscribe((data: any) => {}, (error: any) => {}, () => {});
 
-    const handleErrorFirstCall = (DependencyContainer.handleError as Mock<any>)
-      .mock.calls[0];
+    const handleErrorFirstCall = (DependencyContainer.handleError as Mock<any>).mock.calls[0];
 
     expect(handleErrorFirstCall).toEqual([errorData]);
   });
@@ -175,14 +162,11 @@ describe('get', () => {
 
       const serializedData = queryString.stringify(dataToSend);
       const url = `http://${siteName}.com`;
-      const urlWithQueryString = `${url}${serializedData
-        ? '?'
-        : ''}${serializedData}`;
+      const urlWithQueryString = `${url}${serializedData ? '?' : ''}${serializedData}`;
 
       get(url, dataToSend);
 
-      const firstCall = (DependencyContainer.ajaxGet as Mock<any>).mock
-        .calls[0];
+      const firstCall = (DependencyContainer.ajaxGet as Mock<any>).mock.calls[0];
       const firstArg = firstCall[0];
 
       return equals(firstArg)(urlWithQueryString);
@@ -191,9 +175,7 @@ describe('get', () => {
 
   jsc.property(
     `DependencyContainer.ajaxGet is called with data from get's "headers" argument`,
-    jsc.dict(
-      jsc.oneof<string | number | boolean>([jsc.string, jsc.integer, jsc.bool])
-    ),
+    jsc.dict(jsc.oneof<string | number | boolean>([jsc.string, jsc.integer, jsc.bool])),
     (headers: {}) => {
       mockGetProcessEnv('apiKey');
       DependencyContainer.ajaxGet = jest.fn(() => Observable.of(null));
@@ -203,8 +185,7 @@ describe('get', () => {
 
       get(url, {}, extendedHeaders);
 
-      const firstCall = (DependencyContainer.ajaxGet as Mock<any>).mock
-        .calls[0];
+      const firstCall = (DependencyContainer.ajaxGet as Mock<any>).mock.calls[0];
 
       return equals(firstCall)([url, extendedHeaders]);
     }

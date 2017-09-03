@@ -1,9 +1,4 @@
-import {
-  TableSessionBackend,
-  TableBackend,
-  LoginErrors,
-  AdminTokenErrors
-} from './backend-models';
+import { TableSessionBackend, TableBackend, LoginErrors, AdminTokenErrors } from './backend-models';
 
 export interface ResponseDefaultPayload {
   readonly isOk: true;

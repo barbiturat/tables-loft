@@ -34,10 +34,7 @@ declare module 'tcomb-validation' {
     };
   }
 
-  export function irreducible<T>(
-    name: string,
-    predicate: Predicate<any>
-  ): Irreducible<T>;
+  export function irreducible<T>(name: string, predicate: Predicate<any>): Irreducible<T>;
 
   //
   // basic types
@@ -130,10 +127,7 @@ declare module 'tcomb-validation' {
       props: StructProps;
     };
     update: Update<T>;
-    extend<E extends T>(
-      mixins: StructMixin | Array<StructMixin>,
-      name?: string
-    ): Struct<E>;
+    extend<E extends T>(mixins: StructMixin | Array<StructMixin>, name?: string): Struct<E>;
   }
 
   export function struct<T>(props: StructProps, name?: string): Struct<T>;
@@ -150,10 +144,7 @@ declare module 'tcomb-validation' {
       props: StructProps;
     };
     update: Update<T>;
-    extend<E extends T>(
-      mixins: StructMixin | Array<StructMixin>,
-      name?: string
-    ): Struct<E>;
+    extend<E extends T>(mixins: StructMixin | Array<StructMixin>, name?: string): Struct<E>;
   }
 
   export function interface<T>(props: StructProps, name?: string): Interface<T>;
@@ -246,10 +237,7 @@ declare module 'tcomb-validation' {
     update: Update<T>;
   }
 
-  export function tuple<T>(
-    types: Array<Constructor<any>>,
-    name?: string
-  ): Tuple<T>;
+  export function tuple<T>(types: Array<Constructor<any>>, name?: string): Tuple<T>;
 
   //
   // union combinator
@@ -266,10 +254,7 @@ declare module 'tcomb-validation' {
     dispatch(x: any): Constructor<T>;
   }
 
-  export function union<T>(
-    types: Array<Constructor<T>>,
-    name?: string
-  ): Union<T>;
+  export function union<T>(types: Array<Constructor<T>>, name?: string): Union<T>;
 
   //
   // intersection combinator
@@ -285,10 +270,7 @@ declare module 'tcomb-validation' {
     update: Update<T>;
   }
 
-  export function intersection<T>(
-    types: Array<Constructor<any>>,
-    name?: string
-  ): Intersection<T>;
+  export function intersection<T>(types: Array<Constructor<any>>, name?: string): Intersection<T>;
 
   //
   // declare combinator

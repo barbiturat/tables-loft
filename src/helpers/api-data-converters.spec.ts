@@ -4,15 +4,8 @@ import * as jsc from 'jsverify';
 // tslint:disable-next-line:no-require-imports
 require('./testing/jasmineHelpers2'); // https://github.com/jsverify/jsverify#usage-with-jasmine
 
-import {
-  tablesToFront,
-  tableSessionsToFront,
-  tableSessionToFront
-} from './api-data-converters';
-import {
-  TableBackend,
-  TableSessionBackend
-} from '../interfaces/backend-models';
+import { tablesToFront, tableSessionsToFront, tableSessionToFront } from './api-data-converters';
+import { TableBackend, TableSessionBackend } from '../interfaces/backend-models';
 import { TableSessionStore } from '../interfaces/store-models';
 
 const getBackendSessionTemplate = (): TableSessionBackend => ({
@@ -129,15 +122,9 @@ describe('tablesToFront: ', () => {
     ];
     const resultTables = tablesToFront(sourceTables);
 
-    const currentSessionIds = pipe(values, pluck('currentSessionId'))(
-      resultTables
-    );
+    const currentSessionIds = pipe(values, pluck('currentSessionId'))(resultTables);
 
-    expect(currentSessionIds).toEqual([
-      backendSessionTemplate.id,
-      null,
-      backendSessionTemplate.id
-    ]);
+    expect(currentSessionIds).toEqual([backendSessionTemplate.id, null, backendSessionTemplate.id]);
   });
 
   test(`returns result tables with lastSessionId === null if corresponding source tables's lastSession === null`, () => {
@@ -164,15 +151,9 @@ describe('tablesToFront: ', () => {
     ];
     const resultTables = tablesToFront(sourceTables);
 
-    const currentSessionIds = pipe(values, pluck('lastSessionId'))(
-      resultTables
-    );
+    const currentSessionIds = pipe(values, pluck('lastSessionId'))(resultTables);
 
-    expect(currentSessionIds).toEqual([
-      backendSessionTemplate.id,
-      null,
-      backendSessionTemplate.id
-    ]);
+    expect(currentSessionIds).toEqual([backendSessionTemplate.id, null, backendSessionTemplate.id]);
   });
 
   test(`returns result tables with sessionsHistory that contains only ids of currentSession and lastSession`, () => {
@@ -203,9 +184,7 @@ describe('tablesToFront: ', () => {
     ];
     const resultTables = tablesToFront(sourceTables);
 
-    const sessionsHistories = pipe(values, pluck('sessionsHistory'))(
-      resultTables
-    );
+    const sessionsHistories = pipe(values, pluck('sessionsHistory'))(resultTables);
 
     expect(sessionsHistories).toEqual([[5, 7], [], [55]]);
   });
@@ -305,10 +284,7 @@ describe('tableSessionsToFront: ', () => {
     const result = tableSessionsToFront(sourceSessions);
     const goalValues = ['12', '33'];
 
-    const valuesIntersection = intersection<string>(
-      Object.keys(result),
-      goalValues
-    );
+    const valuesIntersection = intersection<string>(Object.keys(result), goalValues);
 
     expect(valuesIntersection.length).toEqual(goalValues.length);
   });
@@ -329,17 +305,8 @@ describe('tableSessionsToFront: ', () => {
     const result = tableSessionsToFront(sourceSessions);
     const exampleSession: TableSessionStore = result[33];
 
-    const goalValues = [
-      'id',
-      'startsAt',
-      'durationSeconds',
-      'adminEdited',
-      'isInPending'
-    ];
-    const valuesIntersection = intersection<string>(
-      Object.keys(exampleSession),
-      goalValues
-    );
+    const goalValues = ['id', 'startsAt', 'durationSeconds', 'adminEdited', 'isInPending'];
+    const valuesIntersection = intersection<string>(Object.keys(exampleSession), goalValues);
 
     expect(valuesIntersection.length).toEqual(goalValues.length);
     expect(typeof exampleSession.id).toBe('number');

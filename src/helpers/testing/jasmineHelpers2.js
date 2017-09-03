@@ -18,9 +18,7 @@ beforeEach(function() {
           if (pass) {
             message = 'Expected property not to hold.';
           } else {
-            message =
-              'Expected property to hold. Counterexample found: ' +
-              r.counterexamplestr;
+            message = 'Expected property to hold. Counterexample found: ' + r.counterexamplestr;
           }
 
           return {

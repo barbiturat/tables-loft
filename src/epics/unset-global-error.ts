@@ -9,8 +9,7 @@ import globalErrorExpired from '../action-creators/global-error-expired';
 // tslint:disable-next-line:no-require-imports
 const packageJson = require('../../package.json');
 
-const ERROR_DISPLAY_DURATION =
-  packageJson.appSettings.ERROR_DISPLAY_DURATION * 1000;
+const ERROR_DISPLAY_DURATION = packageJson.appSettings.ERROR_DISPLAY_DURATION * 1000;
 
 const unsetGlobalError = ((action$, store: Store<StoreStructure>) => {
   return action$

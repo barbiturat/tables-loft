@@ -51,10 +51,7 @@ const App = enhance(({ children, isMounted }: any) =>
   </div>
 );
 
-const mapStateToProps = (
-  state: StoreStructure,
-  ownProps?: AnyDict
-): MappedProps => {
+const mapStateToProps = (state: StoreStructure, ownProps?: AnyDict): MappedProps => {
   return {};
 };
 

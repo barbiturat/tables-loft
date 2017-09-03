@@ -4,11 +4,7 @@ import { Epic } from 'redux-observable';
 import { pipe, clone, map } from 'ramda';
 
 import { NEW_DAY_BEGUN } from '../constants/action-names';
-import {
-  StoreStructure,
-  TablesStore,
-  TableStore
-} from '../interfaces/store-models';
+import { StoreStructure, TablesStore, TableStore } from '../interfaces/store-models';
 import changingTables from '../action-creators/changing-tables';
 
 const startNewDay = ((action$, store: Store<StoreStructure>) => {

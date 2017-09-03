@@ -25,17 +25,10 @@ const Modal = (props: PropsFromConnect) =>
     overlayClassName="block-screen__overlay"
   />;
 
-const WithToBlock = branch<PropsFromConnect>(
-  R.compose(R.not, R.prop('toBlock')),
-  renderNothing
-);
+const WithToBlock = branch<PropsFromConnect>(R.compose(R.not, R.prop('toBlock')), renderNothing);
 
 const ScreenBlocker = compose(
-  connect<
-    any,
-    any,
-    Props
-  >((state: StoreStructure, ownProps: Props): MappedProps => ({
+  connect<any, any, Props>((state: StoreStructure, ownProps: Props): MappedProps => ({
     toBlock: state.app.isBlockingRequestPending
   })),
   WithToBlock

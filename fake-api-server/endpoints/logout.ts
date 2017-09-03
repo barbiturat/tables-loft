@@ -10,10 +10,7 @@ const logout = (server: Application) => {
   server.use(bodyParser.json()).post(
     urlLogout,
     sendWithTimeout(500, (req, res) => {
-      res
-        .clearCookie(SESSION_COOKIE_NAME)
-        .status(STATUS_OK)
-        .send(responseDefaultOk);
+      res.clearCookie(SESSION_COOKIE_NAME).status(STATUS_OK).send(responseDefaultOk);
     })
   );
 };

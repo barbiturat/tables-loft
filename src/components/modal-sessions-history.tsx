@@ -1,13 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import {
-  compose,
-  withHandlers,
-  withState,
-  branch,
-  renderNothing,
-  withProps
-} from 'recompose';
+import { compose, withHandlers, withState, branch, renderNothing, withProps } from 'recompose';
 import MouseEvent = React.MouseEvent;
 import ReactModal from 'react-modal';
 import * as ReactPaginate from 'react-paginate';
@@ -58,12 +51,9 @@ const getTableSessions = (
     TableSessionsStore,
     ReadonlyArray<TableSessionStore>,
     ReadonlyArray<TableSessionStore>
-  >(
-    R.map(String),
-    R.flip(R.pick)(allSessions),
-    R.values,
-    R.sortBy(R.prop('startsAt'))
-  )(table.sessionsHistory);
+  >(R.map(String), R.flip(R.pick)(allSessions), R.values, R.sortBy(R.prop('startsAt')))(
+    table.sessionsHistory
+  );
 
 const getSessionsPage = (
   sessions: ReadonlyArray<TableSessionStore>,
@@ -84,18 +74,12 @@ const enhance = compose(
       setCurrentPageNum(selected)
   }),
   withHandlers({
-    onCloseClick: ({ requestToClose }) => (
-      event: MouseEvent<HTMLAnchorElement>
-    ) => {
+    onCloseClick: ({ requestToClose }) => (event: MouseEvent<HTMLAnchorElement>) => {
       event.preventDefault();
       requestToClose();
     },
     handleRequestClose: ({ requestToClose }) => () => requestToClose(),
-    getPaginator: ({ onPageChangeHandler }) => ({
-      numOfPages,
-      currentPageNum,
-      isInPending
-    }: any) =>
+    getPaginator: ({ onPageChangeHandler }) => ({ numOfPages, currentPageNum, isInPending }: any) =>
       numOfPages > 1 && !isInPending
         ? <ReactPaginate
             pageCount={numOfPages}
@@ -178,11 +162,7 @@ const Component = enhance(
   }
 );
 
-const ModalSessionsHistory = connect<
-  any,
-  any,
-  Props
->(({ app }: StoreStructure): MappedProps => {
+const ModalSessionsHistory = connect<any, any, Props>(({ app }: StoreStructure): MappedProps => {
   const getModalSessionsHistory = R.path(['modals', 'modalSessionsHistory']);
   const getTables = R.path(['tablesData', 'tables']);
   const getTableId = R.compose(R.prop('tableId'), getModalSessionsHistory);

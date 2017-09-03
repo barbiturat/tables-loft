@@ -7,20 +7,9 @@ import { pipe, clone, merge, keys, map, concat, uniq } from 'ramda';
 const t = require('tcomb-validation');
 
 import { FETCHING_TABLE_SESSIONS_HISTORY } from '../constants/action-names';
-import {
-  get,
-  isAjaxResponseDefined,
-  getRequestFailedAction
-} from '../helpers/requests';
-import {
-  ResponseFailedPayload,
-  ResponseSessionsHistoryPayload
-} from '../interfaces/api-responses';
-import {
-  AjaxResponseTyped,
-  AjaxErrorTyped,
-  AjaxResponseDefined
-} from '../interfaces/index';
+import { get, isAjaxResponseDefined, getRequestFailedAction } from '../helpers/requests';
+import { ResponseFailedPayload, ResponseSessionsHistoryPayload } from '../interfaces/api-responses';
+import { AjaxResponseTyped, AjaxErrorTyped, AjaxResponseDefined } from '../interfaces/index';
 import { urlSessionHistory } from '../constants/urls';
 import { tableSessionsToFront } from '../helpers/api-data-converters';
 import changingTableSessions from '../action-creators/changing-table-sessions';
@@ -76,117 +65,105 @@ const assertResponse = (ajaxData: ResponseOk) => {
 };
 
 const fetchSessionsHistory = ((action$, store: Store<StoreStructure>) => {
-  return action$
-    .ofType(FETCHING_TABLE_SESSIONS_HISTORY)
-    .switchMap((action: ActionType) => {
-      const tableId = action.payload;
-      const dataToSend: RequestSessionHistoryPayload = {};
-      const url = `${API_URL}${urlSessionHistory}`.replace(
-        ':table_id',
-        String(tableId)
-      );
+  return action$.ofType(FETCHING_TABLE_SESSIONS_HISTORY).switchMap((action: ActionType) => {
+    const tableId = action.payload;
+    const dataToSend: RequestSessionHistoryPayload = {};
+    const url = `${API_URL}${urlSessionHistory}`.replace(':table_id', String(tableId));
 
-      const setTablesWithPending$ = pipe<
-        TablesStore,
-        TablesStore,
-        TablesStore,
-        Action<TablesStore>,
-        Observable<Action<TablesStore>>
-      >(
-        clone,
-        (currentTablesClone: TablesStore) =>
-          getTablesWithSetHistoryPending(currentTablesClone, tableId, true),
-        (tablesWithSetPending: TablesStore) =>
-          changingTables(tablesWithSetPending),
-        (tablesPendingAction: Action<TablesStore>) =>
-          Observable.of(tablesPendingAction)
-      )(store.getState().app.tablesData.tables);
+    const setTablesWithPending$ = pipe<
+      TablesStore,
+      TablesStore,
+      TablesStore,
+      Action<TablesStore>,
+      Observable<Action<TablesStore>>
+    >(
+      clone,
+      (currentTablesClone: TablesStore) =>
+        getTablesWithSetHistoryPending(currentTablesClone, tableId, true),
+      (tablesWithSetPending: TablesStore) => changingTables(tablesWithSetPending),
+      (tablesPendingAction: Action<TablesStore>) => Observable.of(tablesPendingAction)
+    )(store.getState().app.tablesData.tables);
 
-      const historyRequest$ = Observable.of(null).mergeMap(() =>
-        get<RequestSessionHistoryPayload>(
-          url,
-          dataToSend
-        ).mergeMap((ajaxData: ResponseOk | ResponseError) => {
-          if (isAjaxResponseDefined<ResponseOkDefined>(ajaxData)) {
-            assertResponse(ajaxData);
+    const historyRequest$ = Observable.of(null).mergeMap(() =>
+      get<RequestSessionHistoryPayload>(
+        url,
+        dataToSend
+      ).mergeMap((ajaxData: ResponseOk | ResponseError) => {
+        if (isAjaxResponseDefined<ResponseOkDefined>(ajaxData)) {
+          assertResponse(ajaxData);
 
-            const { tableSessionsData, tablesData } = store.getState().app;
+          const { tableSessionsData, tablesData } = store.getState().app;
 
-            const convertedResponseSessions = pipe<
-              ReadonlyArray<TableSessionBackend>,
-              TableSessionsStore
-            >((respSessions: ReadonlyArray<TableSessionBackend>) =>
-              tableSessionsToFront(respSessions)
-            )(ajaxData.response.sessions);
+          const convertedResponseSessions = pipe<
+            ReadonlyArray<TableSessionBackend>,
+            TableSessionsStore
+          >((respSessions: ReadonlyArray<TableSessionBackend>) =>
+            tableSessionsToFront(respSessions)
+          )(ajaxData.response.sessions);
 
-            const setSessionsAction = pipe<
-              TableSessionsStore,
-              TableSessionsStore,
-              Action<TableSessionsStore>
-            >(
-              merge(tableSessionsData.tableSessions),
-              (newSessionsAll: TableSessionsStore) =>
-                changingTableSessions(newSessionsAll)
-            )(convertedResponseSessions);
+          const setSessionsAction = pipe<
+            TableSessionsStore,
+            TableSessionsStore,
+            Action<TableSessionsStore>
+          >(merge(tableSessionsData.tableSessions), (newSessionsAll: TableSessionsStore) =>
+            changingTableSessions(newSessionsAll)
+          )(convertedResponseSessions);
 
-            const tablesClone = { ...tablesData.tables };
-            const currentTable = tablesClone[tableId];
-            const setTablesAction = currentTable
-              ? pipe<
-                  TableSessionsStore,
-                  ReadonlyArray<string>,
-                  ReadonlyArray<number>,
-                  ReadonlyArray<number>,
-                  ReadonlyArray<number>,
-                  TablesStore,
-                  Action<TablesStore>
-                >(
-                  keys,
-                  map(Number),
-                  concat(currentTable.sessionsHistory),
-                  uniq,
-                  (newSessionIds: ReadonlyArray<number>) =>
-                    replaceTable(tablesClone, tableId, {
-                      isSessionsHistoryInPending: false,
-                      sessionsHistory: newSessionIds
-                    }),
-                  changingTables
-                )(convertedResponseSessions) as Action<TablesStore>
-              : null;
+          const tablesClone = { ...tablesData.tables };
+          const currentTable = tablesClone[tableId];
+          const setTablesAction = currentTable
+            ? pipe<
+                TableSessionsStore,
+                ReadonlyArray<string>,
+                ReadonlyArray<number>,
+                ReadonlyArray<number>,
+                ReadonlyArray<number>,
+                TablesStore,
+                Action<TablesStore>
+              >(
+                keys,
+                map(Number),
+                concat(currentTable.sessionsHistory),
+                uniq,
+                (newSessionIds: ReadonlyArray<number>) =>
+                  replaceTable(tablesClone, tableId, {
+                    isSessionsHistoryInPending: false,
+                    sessionsHistory: newSessionIds
+                  }),
+                changingTables
+              )(convertedResponseSessions) as Action<TablesStore>
+            : null;
 
-            const actions: ReadonlyArray<BaseAction> = <ReadonlyArray<
-              BaseAction
-            >>[setSessionsAction, setTablesAction].filter(Boolean);
+          const actions: ReadonlyArray<BaseAction> = <ReadonlyArray<BaseAction>>[
+            setSessionsAction,
+            setTablesAction
+          ].filter(Boolean);
 
-            return Observable.from(actions);
-          } else {
-            const setTablesWithoutPendingAction = pipe<
-              TablesStore,
-              TablesStore,
-              TablesStore,
-              Action<TablesStore>
-            >(
-              clone,
-              tablesClone =>
-                getTablesWithSetHistoryPending(tablesClone, tableId, false),
-              changingTables
-            )(store.getState().app.tablesData.tables);
+          return Observable.from(actions);
+        } else {
+          const setTablesWithoutPendingAction = pipe<
+            TablesStore,
+            TablesStore,
+            TablesStore,
+            Action<TablesStore>
+          >(
+            clone,
+            tablesClone => getTablesWithSetHistoryPending(tablesClone, tableId, false),
+            changingTables
+          )(store.getState().app.tablesData.tables);
 
-            const fetchFailedAction = getRequestFailedAction(
-              ajaxData.status,
-              'Fetching table sessions error'
-            );
+          const fetchFailedAction = getRequestFailedAction(
+            ajaxData.status,
+            'Fetching table sessions error'
+          );
 
-            return Observable.of<BaseAction>(
-              setTablesWithoutPendingAction,
-              fetchFailedAction
-            );
-          }
-        })
-      );
+          return Observable.of<BaseAction>(setTablesWithoutPendingAction, fetchFailedAction);
+        }
+      })
+    );
 
-      return Observable.concat(setTablesWithPending$, historyRequest$);
-    });
+    return Observable.concat(setTablesWithPending$, historyRequest$);
+  });
 }) as Epic<BaseAction, StoreStructure>;
 
 export default fetchSessionsHistory;

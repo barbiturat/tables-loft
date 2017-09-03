@@ -13,10 +13,8 @@ const envVarStubs = packageJson.appSettings.envVarStubs;
 const publicPath = pathFromRoot('public');
 const app = express();
 const port = envVars.PORT || envVarStubs.ASSETS_PORT;
-const authUserName =
-  envVars.BASIC_AUTH_USERNAME || envVarStubs.BASIC_AUTH_USERNAME;
-const authUserPassword =
-  envVars.BASIC_AUTH_PASSWORD || envVarStubs.BASIC_AUTH_PASSWORD;
+const authUserName = envVars.BASIC_AUTH_USERNAME || envVarStubs.BASIC_AUTH_USERNAME;
+const authUserPassword = envVars.BASIC_AUTH_PASSWORD || envVarStubs.BASIC_AUTH_PASSWORD;
 
 if (!port) {
   throw 'The "PORT" env variable must be set';

@@ -1,11 +1,5 @@
 import * as React from 'react';
-import {
-  Router,
-  Route,
-  IndexRoute,
-  browserHistory,
-  RouterState
-} from 'react-router';
+import { Router, Route, IndexRoute, browserHistory, RouterState } from 'react-router';
 
 import App from './components/app';
 import LoginPage from './components/page-login';

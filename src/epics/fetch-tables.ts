@@ -6,30 +6,16 @@ import { pipe } from 'ramda';
 const t = require('tcomb-validation');
 
 import { FETCHING_TABLES } from '../constants/action-names';
-import {
-  get,
-  isAjaxResponseDefined,
-  getRequestFailedAction
-} from '../helpers/requests';
+import { get, isAjaxResponseDefined, getRequestFailedAction } from '../helpers/requests';
 import { ResponseTablesPayload } from '../interfaces/api-responses';
 import { AjaxResponseTyped, AjaxResponseDefined } from '../interfaces/index';
 import pendingTables from '../action-creators/pending-tables';
 import { urlTables } from '../constants/urls';
-import {
-  tablesToFront,
-  tableSessionsToFront
-} from '../helpers/api-data-converters';
-import {
-  TableSessionBackend,
-  TableBackend
-} from '../interfaces/backend-models';
+import { tablesToFront, tableSessionsToFront } from '../helpers/api-data-converters';
+import { TableSessionBackend, TableBackend } from '../interfaces/backend-models';
 import changingTableSessions from '../action-creators/changing-table-sessions';
 import changingTables from '../action-creators/changing-tables';
-import {
-  TablesStore,
-  TableSessionsStore,
-  StoreStructure
-} from '../interfaces/store-models';
+import { TablesStore, TableSessionsStore, StoreStructure } from '../interfaces/store-models';
 import { API_URL } from '../constants/index';
 import { validateResponse } from '../helpers/dynamic-type-validators/index';
 import { tTable } from '../helpers/dynamic-type-validators/types';
@@ -64,9 +50,7 @@ const fetchTables = (action$ => {
   return action$.ofType(FETCHING_TABLES).switchMap(() => {
     const tablesPendingStart$ = Observable.of(pendingTables(true));
     const tablesRequest$ = Observable.of(null).mergeMap(() =>
-      get(
-        `${API_URL}${urlTables}`
-      ).mergeMap((ajaxData: ResponseOk | AjaxError) => {
+      get(`${API_URL}${urlTables}`).mergeMap((ajaxData: ResponseOk | AjaxError) => {
         if (isAjaxResponseDefined<ResponseOkDefined>(ajaxData)) {
           assertResponse(ajaxData);
 
@@ -77,25 +61,16 @@ const fetchTables = (action$ => {
             ReadonlyArray<TableSessionBackend>,
             TableSessionsStore,
             Action<TableSessionsStore>
-          >(
-            getTableSessionsFromTables,
-            tableSessionsToFront,
-            changingTableSessions
-          )(tables);
+          >(getTableSessionsFromTables, tableSessionsToFront, changingTableSessions)(tables);
 
-          const setTables = pipe<
-            ReadonlyArray<TableBackend>,
-            TablesStore,
-            Action<TablesStore>
-          >(tablesToFront, changingTables)(tables);
+          const setTables = pipe<ReadonlyArray<TableBackend>, TablesStore, Action<TablesStore>>(
+            tablesToFront,
+            changingTables
+          )(tables);
 
           const tablesPendingStop = pendingTables(false);
 
-          return Observable.of<BaseAction>(
-            setTables,
-            setTableSessions,
-            tablesPendingStop
-          );
+          return Observable.of<BaseAction>(setTables, setTableSessions, tablesPendingStop);
         } else {
           const fetchFailedAction = getRequestFailedAction(
             ajaxData.status,
@@ -103,10 +78,7 @@ const fetchTables = (action$ => {
           );
           const tablesPendingStopAction = pendingTables(false);
 
-          return Observable.of<BaseAction>(
-            tablesPendingStopAction,
-            fetchFailedAction
-          );
+          return Observable.of<BaseAction>(tablesPendingStopAction, fetchFailedAction);
         }
       })
     );

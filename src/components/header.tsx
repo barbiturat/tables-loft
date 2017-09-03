@@ -19,21 +19,13 @@ type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 const ManagerButton = (props: any) => {
   if (props.toLogIn) {
     return (
-      <a
-        href=""
-        className="button button_role_manager"
-        onClick={props.onBtnManagerClick}
-      >
+      <a href="" className="button button_role_manager" onClick={props.onBtnManagerClick}>
         Manager Mode
       </a>
     );
   } else {
     return (
-      <a
-        href=""
-        className="button button_role_log-out"
-        onClick={props.onBtnLogOutClick}
-      >
+      <a href="" className="button button_role_log-out" onClick={props.onBtnLogOutClick}>
         Log Out
       </a>
     );
@@ -43,27 +35,20 @@ const ManagerButton = (props: any) => {
 const enhance = compose(
   withState('isAdminModalOpen', 'setAdminModalOpen', false),
   withHandlers({
-    onBtnManagerClick: ({ setAdminModalOpen }) => (
-      event: MouseEvent<HTMLAnchorElement>
-    ) => {
+    onBtnManagerClick: ({ setAdminModalOpen }) => (event: MouseEvent<HTMLAnchorElement>) => {
       event.preventDefault();
       setAdminModalOpen(true);
       event.currentTarget.blur();
     },
     onModalClose: ({ setAdminModalOpen }) => () => setAdminModalOpen(false),
-    onBtnLogOutClick: ({ dispatch }) => (
-      event: MouseEvent<HTMLAnchorElement>
-    ) => {
+    onBtnLogOutClick: ({ dispatch }) => (event: MouseEvent<HTMLAnchorElement>) => {
       event.preventDefault();
       dispatch(adminTokenRemoved);
     }
   }),
   lifecycle({
     componentWillReceiveProps(newProps: PropsFromConnect) {
-      if (
-        newProps.isAdminTokenSet !== this.props.isAdminTokenSet &&
-        !newProps.isAdminTokenSet
-      ) {
+      if (newProps.isAdminTokenSet !== this.props.isAdminTokenSet && !newProps.isAdminTokenSet) {
         (this.props as any).setAdminModalOpen(false);
       }
     }
@@ -71,13 +56,7 @@ const enhance = compose(
 );
 
 const Component = enhance(
-  ({
-    isAdminTokenSet,
-    onBtnManagerClick,
-    onBtnLogOutClick,
-    isAdminModalOpen,
-    onModalClose
-  }: any) =>
+  ({ isAdminTokenSet, onBtnManagerClick, onBtnLogOutClick, isAdminModalOpen, onModalClose }: any) =>
     <div className="header">
       <div className="header__section header__section_role_hamburger" />
       <div className="header__section header__section_role_caption">
@@ -95,11 +74,7 @@ const Component = enhance(
     </div>
 );
 
-const Header = connect<
-  any,
-  any,
-  Props
->((state: StoreStructure, ownProps: Props): MappedProps => {
+const Header = connect<any, any, Props>((state: StoreStructure, ownProps: Props): MappedProps => {
   return {
     isAdminTokenSet: state.app.adminToken === null
   };

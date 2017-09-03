@@ -30,9 +30,7 @@ interface SessionDurationData {
   readonly minutesTotal: number;
 }
 
-const getSessionDurationData = (
-  durationSeconds: number
-): SessionDurationData => {
+const getSessionDurationData = (durationSeconds: number): SessionDurationData => {
   const duration = moment.duration({ seconds: durationSeconds });
 
   return {
@@ -66,8 +64,7 @@ class Component extends React.Component<PropsFromConnect, State> {
   constructor(props: PropsFromConnect) {
     super(props);
 
-    this.editSessionButtonId =
-      'editSessionButton' + Math.floor(Math.random() * 10000000);
+    this.editSessionButtonId = 'editSessionButton' + Math.floor(Math.random() * 10000000);
 
     this.state = {
       isFormatOfMinutes: false,
@@ -155,17 +152,10 @@ class Component extends React.Component<PropsFromConnect, State> {
         </div>
       );
     } else {
-      const adminEditedClassName = adminEdited
-        ? 'table__session-length_admin-edited'
-        : '';
+      const adminEditedClassName = adminEdited ? 'table__session-length_admin-edited' : '';
       const durationString = isInPending
         ? 'wait...'
-        : getDurationString(
-            hours,
-            minutes,
-            minutesTotal,
-            this.state.isFormatOfMinutes
-          );
+        : getDurationString(hours, minutes, minutesTotal, this.state.isFormatOfMinutes);
 
       return (
         <span
@@ -203,9 +193,7 @@ class Component extends React.Component<PropsFromConnect, State> {
     } else {
       return (
         <div className="table__session-info">
-          <div className="table__label table__label_role_no-session">
-            No Sessions Today
-          </div>
+          <div className="table__label table__label_role_no-session">No Sessions Today</div>
         </div>
       );
     }

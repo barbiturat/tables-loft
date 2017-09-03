@@ -35,14 +35,12 @@ const mapTableProps = mapProps<TableProps, TableStore>(
 
 const MappedTable = mapTableProps(SimpleTable);
 
-const drawTable = (props: TableStore, idx: number) =>
-  <MappedTable key={idx} {...props} />;
+const drawTable = (props: TableStore, idx: number) => <MappedTable key={idx} {...props} />;
 
-const drawTables = R.compose<
-  TablesStore,
-  ReadonlyArray<JSX.Element>,
-  ReadonlyArray<TableStore>
->(R.addIndex(R.map)(drawTable), R.values);
+const drawTables = R.compose<TablesStore, ReadonlyArray<JSX.Element>, ReadonlyArray<TableStore>>(
+  R.addIndex(R.map)(drawTable),
+  R.values
+);
 
 const TablesGroup = ({ tables }: Props) =>
   <div className="tables-set">

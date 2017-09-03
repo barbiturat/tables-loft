@@ -30,12 +30,8 @@ const getTableSessions = (
     return (
       <div className="sessions-list">
         <div className="sessions-list__header">
-          <div className="sessions-list__th sessions-list__th_role_time">
-            Start Time
-          </div>
-          <div className="sessions-list__th sessions-list__th_role_duration">
-            Duration
-          </div>
+          <div className="sessions-list__th sessions-list__th_role_time">Start Time</div>
+          <div className="sessions-list__th sessions-list__th_role_duration">Duration</div>
         </div>
 
         {getRenderedSessions(sessions, firstIdx)}

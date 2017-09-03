@@ -5,11 +5,7 @@ import { pipe, objOf, ifElse, prop, merge, clone, flip } from 'ramda';
 
 import { CHANGING_TABLE_FIELDS } from '../constants/action-names';
 import { ActionType } from '../action-creators/changing-table-fields';
-import {
-  StoreStructure,
-  TablesStore,
-  TableStore
-} from '../interfaces/store-models';
+import { StoreStructure, TablesStore, TableStore } from '../interfaces/store-models';
 import changingTables from '../action-creators/changing-tables';
 import nothingDone from '../action-creators/nothing-done';
 

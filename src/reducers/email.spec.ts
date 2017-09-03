@@ -18,16 +18,12 @@ test(`returns proper result`, () => {
   expect(result).toEqual(actionPayload);
 });
 
-jsc.property(
-  'returns proper result with any string data',
-  jsc.nestring,
-  actionPayload => {
-    const action: Action<string> = {
-      type: USER_EMAIL_CHANGED,
-      payload: actionPayload
-    };
-    const result = email('', action);
+jsc.property('returns proper result with any string data', jsc.nestring, actionPayload => {
+  const action: Action<string> = {
+    type: USER_EMAIL_CHANGED,
+    payload: actionPayload
+  };
+  const result = email('', action);
 
-    return equals<any>(result)(actionPayload);
-  }
-);
+  return equals<any>(result)(actionPayload);
+});

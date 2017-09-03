@@ -23,8 +23,7 @@ type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
 const startsAtSelector = (props: PropsFromConnect) => props.startsAt;
 
-const utcMillisecondsSelector = (props: PropsFromConnect) =>
-  props.utcMilliseconds;
+const utcMillisecondsSelector = (props: PropsFromConnect) => props.utcMilliseconds;
 
 const getDurationActivityString = (
   startsAt: number,

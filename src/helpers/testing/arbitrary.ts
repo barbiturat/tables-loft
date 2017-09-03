@@ -8,10 +8,7 @@ const getRandomString = (length: number, chars: string) => {
   return result;
 };
 
-export const alphanumericSymbolsArb = (
-  maxLength: number,
-  additionalSymbols = ''
-) =>
+export const alphanumericSymbolsArb = (maxLength: number, additionalSymbols = '') =>
   jsc.bless<string>({
     generator: jsc.generator.bless(() => {
       const stringLength = jsc.random(1, maxLength);

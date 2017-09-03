@@ -132,17 +132,13 @@ export const request = (
   );
 };
 
-export const isAjaxResponseDefined = <
-  TResponseDefined extends AjaxResponseDefined<Defined>
->(
+export const isAjaxResponseDefined = <TResponseDefined extends AjaxResponseDefined<Defined>>(
   ajaxResponse: AjaxResponse | AjaxError
 ): ajaxResponse is TResponseDefined => {
   const responseField = (ajaxResponse as any)!.response;
 
   return (
-    responseField !== undefined &&
-    responseField !== null &&
-    ajaxResponse!.status === STATUS_OK
+    responseField !== undefined && responseField !== null && ajaxResponse!.status === STATUS_OK
   );
 };
 
@@ -165,10 +161,7 @@ export const getMessageFromAjaxErrorStatus = (status: number): string => {
   return ajaxStatusMessages[status] || 'Some strange error';
 };
 
-export const getRequestFailedAction = (
-  ajaxErrorStatus: number,
-  messagePrefix: string
-) => {
+export const getRequestFailedAction = (ajaxErrorStatus: number, messagePrefix: string) => {
   return pipe<number, string, string, Action<GlobalError>>(
     (status: number) => getMessageFromAjaxErrorStatus(status),
     (errorFromStatus: string) => `${messagePrefix}: ${errorFromStatus}`,

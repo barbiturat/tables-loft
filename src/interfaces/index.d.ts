@@ -29,9 +29,7 @@ export type Partial<Fields> = { [Field in keyof Fields]?: Fields[Field] };
 
 export type OfType<Fields, TGoal> = { [Field in keyof Fields]: TGoal };
 
-export type ReducersOfType<Fields> = {
-  [Field in keyof Fields]: Reducer<Fields[Field]>
-};
+export type ReducersOfType<Fields> = { [Field in keyof Fields]: Reducer<Fields[Field]> };
 
 interface CustomXHR<TResponse> extends XMLHttpRequest {
   readonly response: TResponse;
@@ -42,8 +40,7 @@ interface AjaxResponseTyped<TResponse> extends AjaxResponse {
   readonly response: TResponse | null;
 }
 
-export interface AjaxResponseDefined<TResponse>
-  extends AjaxResponseTyped<TResponse> {
+export interface AjaxResponseDefined<TResponse> extends AjaxResponseTyped<TResponse> {
   readonly response: TResponse;
 }
 

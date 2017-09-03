@@ -1,9 +1,7 @@
 import { combineReducers } from 'redux';
 import { routerStateReducer, ReduxRouter } from 'redux-router';
 
-import formsData, {
-  Structure as FormsDataStructure
-} from '../interfaces/forms';
+import formsData, { Structure as FormsDataStructure } from '../interfaces/forms';
 import { ReducersOfType } from '../interfaces/index';
 import app, { Structure as AppStructure } from './app';
 

@@ -7,15 +7,8 @@ import { pipe, merge, clone, ifElse } from 'ramda';
 const t = require('tcomb-validation');
 
 import { REQUESTING_TABLE_STOP } from '../constants/action-names';
-import {
-  post,
-  isAjaxResponseDefined,
-  getRequestFailedAction
-} from '../helpers/requests';
-import {
-  ResponseFailedPayload,
-  ResponseStopTablePayload
-} from '../interfaces/api-responses';
+import { post, isAjaxResponseDefined, getRequestFailedAction } from '../helpers/requests';
+import { ResponseFailedPayload, ResponseStopTablePayload } from '../interfaces/api-responses';
 import {
   AjaxResponseTyped,
   AjaxErrorTyped,
@@ -56,12 +49,7 @@ const createTableSessionsChangedAction = (
   storeTableSessions: TableSessionsStore,
   responseSession: TableSessionBackend
 ) =>
-  pipe<
-    TableSessionsStore,
-    TableSessionsStore,
-    TableSessionsStore,
-    Action<TableSessionsStore>
-  >(
+  pipe<TableSessionsStore, TableSessionsStore, TableSessionsStore, Action<TableSessionsStore>>(
     clone,
     sessions =>
       pipe<
@@ -99,67 +87,57 @@ const createChangingTableAction = (
   )(storeTable);
 
 const stopTable = ((action$, store: Store<StoreStructure>) => {
-  return action$
-    .ofType(REQUESTING_TABLE_STOP)
-    .switchMap((action: ActionType) => {
-      const tableId = action.payload;
-      const pendingStart$ = Observable.of(
-        changingTableFields(
-          {
-            isInPending: true
-          },
-          tableId
-        )
-      );
-      const url = `${API_URL}${urlStopTable}`.replace(
-        ':table_id',
-        String(tableId)
-      );
-      const request$ = Observable.of(null).mergeMap(() =>
-        post(url).mergeMap((ajaxData: ResponseOk | ResponseError) => {
-          if (isAjaxResponseDefined<ResponseOkDefined>(ajaxData)) {
-            assertResponse(ajaxData);
+  return action$.ofType(REQUESTING_TABLE_STOP).switchMap((action: ActionType) => {
+    const tableId = action.payload;
+    const pendingStart$ = Observable.of(
+      changingTableFields(
+        {
+          isInPending: true
+        },
+        tableId
+      )
+    );
+    const url = `${API_URL}${urlStopTable}`.replace(':table_id', String(tableId));
+    const request$ = Observable.of(null).mergeMap(() =>
+      post(url).mergeMap((ajaxData: ResponseOk | ResponseError) => {
+        if (isAjaxResponseDefined<ResponseOkDefined>(ajaxData)) {
+          assertResponse(ajaxData);
 
-            const { tableSessionsData, tablesData } = store.getState().app;
-            const responseSession = ajaxData.response.session;
+          const { tableSessionsData, tablesData } = store.getState().app;
+          const responseSession = ajaxData.response.session;
 
-            const tableSessionsChangedAction = createTableSessionsChangedAction(
-              tableSessionsData.tableSessions,
-              responseSession
-            );
-            const changingTableAction = createChangingTableAction(
-              tablesData.tables[tableId],
-              tableId,
-              responseSession.id
-            );
+          const tableSessionsChangedAction = createTableSessionsChangedAction(
+            tableSessionsData.tableSessions,
+            responseSession
+          );
+          const changingTableAction = createChangingTableAction(
+            tablesData.tables[tableId],
+            tableId,
+            responseSession.id
+          );
 
-            const actions: ReadonlyArray<BaseAction> = <ReadonlyArray<
-              BaseAction
-            >>[tableSessionsChangedAction, changingTableAction].filter(Boolean);
+          const actions: ReadonlyArray<BaseAction> = <ReadonlyArray<BaseAction>>[
+            tableSessionsChangedAction,
+            changingTableAction
+          ].filter(Boolean);
 
-            return Observable.from<BaseAction>(actions);
-          } else {
-            const pendingStopAction = changingTableFields(
-              {
-                isInPending: false
-              },
-              tableId
-            );
-            const fetchFailedAction = getRequestFailedAction(
-              ajaxData.status,
-              'Table stop error'
-            );
+          return Observable.from<BaseAction>(actions);
+        } else {
+          const pendingStopAction = changingTableFields(
+            {
+              isInPending: false
+            },
+            tableId
+          );
+          const fetchFailedAction = getRequestFailedAction(ajaxData.status, 'Table stop error');
 
-            return Observable.of<BaseAction>(
-              pendingStopAction,
-              fetchFailedAction
-            );
-          }
-        })
-      );
+          return Observable.of<BaseAction>(pendingStopAction, fetchFailedAction);
+        }
+      })
+    );
 
-      return Observable.concat(pendingStart$, request$);
-    });
+    return Observable.concat(pendingStart$, request$);
+  });
 }) as Epic<BaseAction, StoreStructure>;
 
 export default stopTable;

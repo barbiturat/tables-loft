@@ -7,8 +7,6 @@ type PayloadType = number;
 
 export type ActionType = ActionWithPayload<PayloadType>;
 
-const fetchingTableSessionsHistory = createAction<PayloadType>(
-  FETCHING_TABLE_SESSIONS_HISTORY
-);
+const fetchingTableSessionsHistory = createAction<PayloadType>(FETCHING_TABLE_SESSIONS_HISTORY);
 
 export default fetchingTableSessionsHistory;

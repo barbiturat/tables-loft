@@ -3,16 +3,9 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import { StoreStructure } from '../interfaces/store-models';
-import {
-  compose,
-  lifecycle,
-  withHandlers,
-  withProps,
-  withState
-} from 'recompose';
+import { compose, lifecycle, withHandlers, withProps, withState } from 'recompose';
 // tslint:disable-next-line:no-require-imports
-const ERROR_DISPLAY_DURATION = require('../../package.json').appSettings
-  .ERROR_DISPLAY_DURATION;
+const ERROR_DISPLAY_DURATION = require('../../package.json').appSettings.ERROR_DISPLAY_DURATION;
 
 interface Props {
   readonly message: string;

@@ -4,11 +4,7 @@ import { branch, compose, renderComponent } from 'recompose';
 
 import { PropsExtendedByConnect } from '../interfaces/component';
 import { connect } from 'react-redux';
-import {
-  StoreStructure,
-  TablesStore,
-  TableSessionsStore
-} from '../interfaces/store-models';
+import { StoreStructure, TablesStore, TableSessionsStore } from '../interfaces/store-models';
 import Header from './header';
 import TablesGroup from './tables-group';
 
@@ -23,9 +19,7 @@ type PropsFromConnect = PropsExtendedByConnect<any, MappedProps>;
 const TablesGroupEnhance = compose(
   branch(
     R.prop('areTablesInPending'),
-    renderComponent(() =>
-      <div className="label label_type_wait label_role_wait-tables" />
-    )
+    renderComponent(() => <div className="label label_type_wait label_role_wait-tables" />)
   )
 )(({ tables }: PropsFromConnect) => <TablesGroup tables={tables} />);
 

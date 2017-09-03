@@ -1,13 +1,7 @@
 import * as React from 'react';
-import {
-  ErrorsProps,
-  WrapperProps,
-  CustomComponentProps
-} from 'react-redux-form';
+import { ErrorsProps, WrapperProps, CustomComponentProps } from 'react-redux-form';
 
-export const renderErrorsBlock: React.StatelessComponent<
-  ErrorsProps & WrapperProps
-> = props =>
+export const renderErrorsBlock: React.StatelessComponent<ErrorsProps & WrapperProps> = props =>
   <div className="form-errors">
     {props.children}
   </div>;

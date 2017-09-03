@@ -25,7 +25,7 @@
     "start-locally": "npm run build-dev & npm run build-and-run-fake-api-server & npm run build-and-run-server",
     "test": "jest --config=./jest.config.json",
     "update-test-snapshots": "jest -u --config=./jest.config.json",
-    "prettier-all-pages": "prettier --write --single-quote '{src/**,js-server{,/!(out)/**},fake-api-server{,/!(out)/**}}/*.+(ts|tsx|js|jsx)'"
+    "prettier-all-pages": "prettier --write --single-quote --print-width 100 '{src/**,js-server{,/!(out)/**},fake-api-server{,/!(out)/**}}/*.+(ts|tsx|js|jsx)'"
   },
   "repository": {
     "type": "git",

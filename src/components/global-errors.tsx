@@ -2,10 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { branch, compose, renderNothing } from 'recompose';
 
-import {
-  StoreStructure,
-  GlobalError as GlobalErrorType
-} from '../interfaces/store-models';
+import { StoreStructure, GlobalError as GlobalErrorType } from '../interfaces/store-models';
 import { PropsExtendedByConnect } from '../interfaces/component';
 import GlobalError from './global-error';
 import * as R from 'ramda';
@@ -26,17 +23,10 @@ const ErrorsComponent = ({ errors }: PropsFromConnect) =>
     {drawErrors(errors)}
   </div>;
 
-const checkForErrors = branch<PropsFromConnect>(
-  R.compose(R.not, R.prop('errors')),
-  renderNothing
-);
+const checkForErrors = branch<PropsFromConnect>(R.compose(R.not, R.prop('errors')), renderNothing);
 
 const GlobalErrors = compose(
-  connect<
-    any,
-    any,
-    Props
-  >((state: StoreStructure, ownProps: Props): MappedProps => ({
+  connect<any, any, Props>((state: StoreStructure, ownProps: Props): MappedProps => ({
     errors: state.app.globalErrors
   })),
   checkForErrors

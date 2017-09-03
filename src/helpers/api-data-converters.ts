@@ -1,9 +1,6 @@
 import * as R from 'ramda';
 
-import {
-  TableBackend,
-  TableSessionBackend
-} from '../interfaces/backend-models';
+import { TableBackend, TableSessionBackend } from '../interfaces/backend-models';
 import {
   TableStore,
   TableSessionStore,
@@ -14,14 +11,11 @@ import * as moment from 'moment';
 import { PartialIndexedDict } from '../interfaces/index';
 
 const tableToFront = (table: TableBackend): TableStore => {
-  const currentSessionId = table.currentSession
-    ? table.currentSession.id
-    : null;
+  const currentSessionId = table.currentSession ? table.currentSession.id : null;
   const lastSessionId = table.lastSession ? table.lastSession.id : null;
-  const sessionsHistory: ReadonlyArray<number> = [
-    currentSessionId,
-    lastSessionId
-  ].filter(session => typeof session === 'number') as ReadonlyArray<number>;
+  const sessionsHistory: ReadonlyArray<number> = [currentSessionId, lastSessionId].filter(
+    session => typeof session === 'number'
+  ) as ReadonlyArray<number>;
 
   return {
     name: table.name,
@@ -36,9 +30,7 @@ const tableToFront = (table: TableBackend): TableStore => {
   };
 };
 
-export const tablesToFront = (
-  tables: ReadonlyArray<TableBackend>
-): TablesStore => {
+export const tablesToFront = (tables: ReadonlyArray<TableBackend>): TablesStore => {
   return tables.reduce((memo, table) => {
     const convertedTable = tableToFront(table);
 
@@ -46,9 +38,7 @@ export const tablesToFront = (
   }, {} as PartialIndexedDict<TableStore>);
 };
 
-export const tableSessionToFront = (
-  tableSession: TableSessionBackend
-): TableSessionStore => {
+export const tableSessionToFront = (tableSession: TableSessionBackend): TableSessionStore => {
   const startsAtMs = moment(tableSession.startsAt, moment.ISO_8601).valueOf();
 
   return {

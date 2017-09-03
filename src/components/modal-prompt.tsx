@@ -28,9 +28,7 @@ const enhance = compose(
     }
   }),
   withHandlers({
-    onClickOkInner: ({ close, onClickOk }) => (
-      event: MouseEvent<HTMLAnchorElement>
-    ) => {
+    onClickOkInner: ({ close, onClickOk }) => (event: MouseEvent<HTMLAnchorElement>) => {
       event.preventDefault();
       close();
       onClickOk();
@@ -42,44 +40,40 @@ const enhance = compose(
   }),
   lifecycle({
     componentWillReceiveProps(nextProps: PropsFromConnect) {
-      R.unless(
-        R.identical(this.props.isOpen),
-        (this.props as any).setOpenInner
-      )(nextProps.isOpen);
+      R.unless(R.identical(this.props.isOpen), (this.props as any).setOpenInner)(nextProps.isOpen);
     }
   })
 );
 
-const Component = enhance(
-  ({ isOpen, message, onClickOkInner, onClickCancel }: any) =>
-    <ReactModal
-      contentLabel="Prompt"
-      isOpen={isOpen}
-      shouldCloseOnOverlayClick={false}
-      className="modal modal_role_prompt"
-      overlayClassName="modal__overlay"
-    >
-      <h4 className="modal__description">
-        {message}
-      </h4>
+const Component = enhance(({ isOpen, message, onClickOkInner, onClickCancel }: any) =>
+  <ReactModal
+    contentLabel="Prompt"
+    isOpen={isOpen}
+    shouldCloseOnOverlayClick={false}
+    className="modal modal_role_prompt"
+    overlayClassName="modal__overlay"
+  >
+    <h4 className="modal__description">
+      {message}
+    </h4>
 
-      <div className="buttons-group">
-        <a
-          href=""
-          className="button button_role_ok buttons-group_adjust_button"
-          onClick={onClickOkInner}
-        >
-          Ok
-        </a>
-        <a
-          href=""
-          className="button button_role_cancel buttons-group_adjust_button"
-          onClick={onClickCancel}
-        >
-          Cancel
-        </a>
-      </div>
-    </ReactModal>
+    <div className="buttons-group">
+      <a
+        href=""
+        className="button button_role_ok buttons-group_adjust_button"
+        onClick={onClickOkInner}
+      >
+        Ok
+      </a>
+      <a
+        href=""
+        className="button button_role_cancel buttons-group_adjust_button"
+        onClick={onClickCancel}
+      >
+        Cancel
+      </a>
+    </div>
+  </ReactModal>
 );
 
 const ModalPrompt = connect<

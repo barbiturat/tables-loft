@@ -5,10 +5,7 @@ import * as jsc from 'jsverify';
 // tslint:disable-next-line:no-require-imports
 require('./jasmineHelpers2'); // https://github.com/jsverify/jsverify#usage-with-jasmine
 
-type TestPropertyHandler = (
-  propertyScheduler: TestScheduler,
-  ...args: ReadonlyArray<any>
-) => void;
+type TestPropertyHandler = (propertyScheduler: TestScheduler, ...args: ReadonlyArray<any>) => void;
 
 export function testObservableProperty(
   description: string,
@@ -39,18 +36,16 @@ export function testObservableProperty(
 
   const innerHandler = (...vars: ReadonlyArray<any>) => {
     let areEqual = false;
-    const propertyScheduler = new TestScheduler(
-      (actual: any, expected: any) => {
-        areEqual = equals(actual)(expected);
+    const propertyScheduler = new TestScheduler((actual: any, expected: any) => {
+      areEqual = equals(actual)(expected);
 
-        if (!areEqual) {
-          // to have a verbose information about marble test error
-          return expect(actual).toEqual(expected);
-        }
-
-        return areEqual;
+      if (!areEqual) {
+        // to have a verbose information about marble test error
+        return expect(actual).toEqual(expected);
       }
-    );
+
+      return areEqual;
+    });
 
     passedHandler(propertyScheduler, ...vars);
 

@@ -10,10 +10,7 @@ const t = require('tcomb-validation');
 
 type InputFormat = typeof t.interface;
 
-export const validateResponse = (
-  format: InputFormat,
-  ajaxData: AjaxResponse
-) => {
+export const validateResponse = (format: InputFormat, ajaxData: AjaxResponse) => {
   const validationRes = t.validate(ajaxData.response, format);
 
   if (!validationRes.isValid()) {

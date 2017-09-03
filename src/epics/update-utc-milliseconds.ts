@@ -18,12 +18,9 @@ const updateUtcMilliseconds = ((action$, store: Store<StoreStructure>) => {
     const newTime = moment.utc();
     const newHours = newTime.hours();
 
-    const isNewDayBegun =
-      lastHours < DAY_BEGIN_HOURS && newHours > DAY_BEGIN_HOURS;
+    const isNewDayBegun = lastHours < DAY_BEGIN_HOURS && newHours > DAY_BEGIN_HOURS;
 
-    const utcMillisecondsUpdatedAction = utcMillisecondsUpdated(
-      newTime.valueOf()
-    );
+    const utcMillisecondsUpdatedAction = utcMillisecondsUpdated(newTime.valueOf());
     const newDayBegunAction = isNewDayBegun ? newDayBegun : null;
 
     const actions: ReadonlyArray<BaseAction> = <ReadonlyArray<BaseAction>>[

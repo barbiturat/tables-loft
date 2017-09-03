@@ -5,11 +5,7 @@ import MouseEvent = React.MouseEvent;
 
 import TableSession from './table-session';
 import { TableType } from '../interfaces/backend-models';
-import {
-  TableSessionStore,
-  StoreStructure,
-  TableSessionsStore
-} from '../interfaces/store-models';
+import { TableSessionStore, StoreStructure, TableSessionsStore } from '../interfaces/store-models';
 import requestingTableStart from '../action-creators/requesting-table-start';
 import requestingTableStop from '../action-creators/requesting-table-stop';
 import TableTimer from './table-timer';
@@ -34,17 +30,14 @@ interface MappedProps {
   readonly sessions: TableSessionsStore;
 }
 
-const isTableActive = (currentSession?: TableSessionStore): boolean =>
-  !!currentSession;
+const isTableActive = (currentSession?: TableSessionStore): boolean => !!currentSession;
 
 const startsAtSelector = (currentSession?: TableSessionStore) =>
   currentSession && currentSession.startsAt;
 
 const getDisabledLabel = (isDisabled?: boolean) =>
   isDisabled
-    ? <span className="table__label table__label_role_disabled">
-        Pool Table 2 Is Not Active
-      </span>
+    ? <span className="table__label table__label_role_disabled">Pool Table 2 Is Not Active</span>
     : null;
 
 const renderActiveSessionStartTime = (currentSession?: TableSessionStore) => {
@@ -71,14 +64,11 @@ const enhance = compose(
     isDisabled: false
   }),
   withHandlers({
-    getCurrentSession: ({ sessions, currentSessionId }) => () =>
-      sessions[currentSessionId],
+    getCurrentSession: ({ sessions, currentSessionId }) => () => sessions[currentSessionId],
     onPromptClose: ({ setPromptOpen }) => () => {
       setPromptOpen(false);
     },
-    onViewMoreClick: ({ dispatch, id }) => (
-      event: MouseEvent<HTMLAnchorElement>
-    ) => {
+    onViewMoreClick: ({ dispatch, id }) => (event: MouseEvent<HTMLAnchorElement>) => {
       event.preventDefault();
 
       dispatch(fetchingTableSessionsHistory(id));
@@ -94,28 +84,22 @@ const enhance = compose(
       }
 
       const getActionCreator = (identyfier: number) =>
-        (isTableActive(getCurrentSession())
-          ? requestingTableStop
-          : requestingTableStart)(identyfier);
+        (isTableActive(getCurrentSession()) ? requestingTableStop : requestingTableStart)(
+          identyfier
+        );
 
       R.compose(dispatch, getActionCreator)(id);
     },
-    onChangeStatusClick: ({
-      getCurrentSession,
-      name,
-      setPromptOpen,
-      setPromptMessage
-    }) => (event: MouseEvent<HTMLAnchorElement>) => {
+    onChangeStatusClick: ({ getCurrentSession, name, setPromptOpen, setPromptMessage }) => (
+      event: MouseEvent<HTMLAnchorElement>
+    ) => {
       event.preventDefault();
       // throw('test rollbar sourcemaps support');
 
-      const getPromptMessage = (toStop: boolean) =>
-        `${toStop ? 'Stop' : 'Start'} table "${name}"`;
+      const getPromptMessage = (toStop: boolean) => `${toStop ? 'Stop' : 'Start'} table "${name}"`;
 
       setPromptOpen(true);
-      R.compose(setPromptMessage, getPromptMessage, isTableActive)(
-        getCurrentSession()
-      );
+      R.compose(setPromptMessage, getPromptMessage, isTableActive)(getCurrentSession());
     }
   })
 );
@@ -145,10 +129,8 @@ const Component = enhance(
             generic: 'table_type_default'
           } as StringDict)[type]
         : '';
-    const getStatusClassName = () =>
-      isActive ? 'table_status_active' : 'table_status_ready';
-    const getPendingClassName = () =>
-      isInPending ? 'table_state_in-pending' : '';
+    const getStatusClassName = () => (isActive ? 'table_status_active' : 'table_status_ready');
+    const getPendingClassName = () => (isInPending ? 'table_state_in-pending' : '');
     const getFullClassName = () =>
       `table ${getTableTypeClassName()} ${getStatusClassName()} ${getPendingClassName()} tables-set_adjust_table`;
 
@@ -164,16 +146,9 @@ const Component = enhance(
           className="table__button table__button_role_change-availability"
           onClick={onChangeStatusClick}
         />
-        <TableTimer
-          isActive={isActive}
-          startsAt={startsAtSelector(getCurrentSession())}
-        />
+        <TableTimer isActive={isActive} startsAt={startsAtSelector(getCurrentSession())} />
         <TableSession sessionId={lastSessionId} />
-        <a
-          href=""
-          className="table__btn-view-sessions"
-          onClick={onViewMoreClick}
-        >
+        <a href="" className="table__btn-view-sessions" onClick={onViewMoreClick}>
           View More
         </a>
 
@@ -188,11 +163,7 @@ const Component = enhance(
   }
 );
 
-const Table = connect<
-  any,
-  any,
-  Props
->((state: StoreStructure, ownProps: Props): MappedProps => ({
+const Table = connect<any, any, Props>((state: StoreStructure, ownProps: Props): MappedProps => ({
   sessions: state.app.tableSessionsData.tableSessions
 }))(Component);
 

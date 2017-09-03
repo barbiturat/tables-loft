@@ -7,11 +7,7 @@ import { pipe, when, merge, prop, objOf, flip, clone, ifElse } from 'ramda';
 const t = require('tcomb-validation');
 
 import { REQUESTING_TABLE_SESSION_CHANGE } from '../constants/action-names';
-import {
-  request,
-  getRequestFailedAction,
-  isAjaxResponseDefined
-} from '../helpers/requests';
+import { request, getRequestFailedAction, isAjaxResponseDefined } from '../helpers/requests';
 import {
   ResponseFailedPayload,
   ResponseUpdateTableSessionPayload
@@ -25,11 +21,7 @@ import {
 import { urlUpdateTableSession } from '../constants/urls';
 import changingTableSessions from '../action-creators/changing-table-sessions';
 import { RequestUpdateTableSessionPayload } from '../interfaces/api-requests';
-import {
-  StoreStructure,
-  TableSessionStore,
-  TableSessionsStore
-} from '../interfaces/store-models';
+import { StoreStructure, TableSessionStore, TableSessionsStore } from '../interfaces/store-models';
 import { ActionType } from '../action-creators/requesting-table-session-change';
 import { API_URL } from '../constants/index';
 import { validateResponse } from '../helpers/dynamic-type-validators/index';
@@ -63,99 +55,75 @@ const setNewParamsToSession = (
 };
 
 const requestTableSessionChange = ((action$, store: Store<StoreStructure>) => {
-  return action$
-    .ofType(REQUESTING_TABLE_SESSION_CHANGE)
-    .switchMap((action: ActionType) => {
-      const appData = store.getState().app;
-      const adminToken = appData.adminToken;
+  return action$.ofType(REQUESTING_TABLE_SESSION_CHANGE).switchMap((action: ActionType) => {
+    const appData = store.getState().app;
+    const adminToken = appData.adminToken;
 
-      if (!adminToken) {
-        return Observable.of(null);
-      }
+    if (!adminToken) {
+      return Observable.of(null);
+    }
 
-      const { sessionId, durationSeconds } = action.payload;
+    const { sessionId, durationSeconds } = action.payload;
 
-      const setSessionsWithPending$ = pipe<
-        TableSessionsStore,
-        TableSessionsStore,
-        TableSessionsStore,
-        Action<TableSessionsStore>,
-        Observable<Action<TableSessionsStore>>
-      >(
-        clone,
-        currSessionsClone =>
-          setNewParamsToSession(currSessionsClone, sessionId, {
-            isInPending: true
-          }),
-        changingTableSessions,
-        Observable.of
-      )(appData.tableSessionsData.tableSessions);
+    const setSessionsWithPending$ = pipe<
+      TableSessionsStore,
+      TableSessionsStore,
+      TableSessionsStore,
+      Action<TableSessionsStore>,
+      Observable<Action<TableSessionsStore>>
+    >(
+      clone,
+      currSessionsClone =>
+        setNewParamsToSession(currSessionsClone, sessionId, {
+          isInPending: true
+        }),
+      changingTableSessions,
+      Observable.of
+    )(appData.tableSessionsData.tableSessions);
 
-      const blockingPendingTurnOn$ = Observable.of(
-        pendingBlockingRequest(true)
-      );
+    const blockingPendingTurnOn$ = Observable.of(pendingBlockingRequest(true));
 
-      const url = `${API_URL}${urlUpdateTableSession}`.replace(
-        ':session_id',
-        String(sessionId)
-      );
-      const dataToSend: RequestUpdateTableSessionPayload = {
-        sessionId,
-        durationSeconds,
-        adminToken
-      };
+    const url = `${API_URL}${urlUpdateTableSession}`.replace(':session_id', String(sessionId));
+    const dataToSend: RequestUpdateTableSessionPayload = {
+      sessionId,
+      durationSeconds,
+      adminToken
+    };
 
-      const request$ = Observable.of(null).mergeMap(() =>
-        request(
-          'PATCH',
-          url,
-          dataToSend
-        ).mergeMap((ajaxData: ResponseOk | ResponseError) => {
-          const blockingPendingTurnOffAction = pendingBlockingRequest(false);
+    const request$ = Observable.of(null).mergeMap(() =>
+      request('PATCH', url, dataToSend).mergeMap((ajaxData: ResponseOk | ResponseError) => {
+        const blockingPendingTurnOffAction = pendingBlockingRequest(false);
 
-          if (isAjaxResponseDefined<ResponseOkDefined>(ajaxData)) {
-            assertResponse(ajaxData);
+        if (isAjaxResponseDefined<ResponseOkDefined>(ajaxData)) {
+          assertResponse(ajaxData);
 
-            const sessionsClone: TableSessionsStore = {
-              ...store.getState().app.tableSessionsData.tableSessions
-            };
-            const editedSessions = setNewParamsToSession(
-              sessionsClone,
-              sessionId,
-              {
-                isInPending: false,
-                durationSeconds,
-                adminEdited: true
-              }
-            );
-            const changingTableSessionsAction = changingTableSessions(
-              editedSessions
-            );
+          const sessionsClone: TableSessionsStore = {
+            ...store.getState().app.tableSessionsData.tableSessions
+          };
+          const editedSessions = setNewParamsToSession(sessionsClone, sessionId, {
+            isInPending: false,
+            durationSeconds,
+            adminEdited: true
+          });
+          const changingTableSessionsAction = changingTableSessions(editedSessions);
 
-            return Observable.of<BaseAction>(
-              blockingPendingTurnOffAction,
-              changingTableSessionsAction
-            );
-          } else {
-            const fetchFailedAction = getRequestFailedAction(
-              ajaxData.status,
-              'Table session change error'
-            );
+          return Observable.of<BaseAction>(
+            blockingPendingTurnOffAction,
+            changingTableSessionsAction
+          );
+        } else {
+          const fetchFailedAction = getRequestFailedAction(
+            ajaxData.status,
+            'Table session change error'
+          );
 
-            return Observable.of<BaseAction>(
-              blockingPendingTurnOffAction,
-              fetchFailedAction
-            );
-          }
-        })
-      );
+          return Observable.of<BaseAction>(blockingPendingTurnOffAction, fetchFailedAction);
+        }
+      })
+    );
 
-      return Observable.concat(
-        blockingPendingTurnOn$,
-        setSessionsWithPending$,
-        request$
-      );
-    });
+    return Observable.concat(blockingPendingTurnOn$, setSessionsWithPending$, request$);
+  });
 }) as Epic<BaseAction, StoreStructure>;
 
 export default requestTableSessionChange;

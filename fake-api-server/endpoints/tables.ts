@@ -39,9 +39,7 @@ const tables = (server: Application) => {
                   minutes: 11
                 })
                 .toISOString(),
-              durationSeconds: moment
-                .duration({ hours: 2, minutes: 54 })
-                .asSeconds(),
+              durationSeconds: moment.duration({ hours: 2, minutes: 54 }).asSeconds(),
               adminEdited: true
             }
           },

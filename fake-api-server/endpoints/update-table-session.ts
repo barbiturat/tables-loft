@@ -11,14 +11,11 @@ import { urlUpdateTableSession } from '../../src/constants/urls';
 const updateTableSession = (server: Application) => {
   server.use(bodyParser.urlencoded({ extended: false })).patch(
     urlUpdateTableSession,
-    sendWithTimeout(
-      500,
-      (req: CustomRequest<RequestUpdateTableSessionPayload, any, any>, res) => {
-        const response: ResponseUpdateTableSessionPayload = {};
+    sendWithTimeout(500, (req: CustomRequest<RequestUpdateTableSessionPayload, any, any>, res) => {
+      const response: ResponseUpdateTableSessionPayload = {};
 
-        res.status(STATUS_OK).send(response);
-      }
-    )
+      res.status(STATUS_OK).send(response);
+    })
   );
 };
 
