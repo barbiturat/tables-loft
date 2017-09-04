@@ -13,8 +13,10 @@ interface Props {
 }
 
 interface State {
+  readonly editSessionButtonId: string;
   readonly isFormatOfMinutes: boolean;
   readonly isInEditing: boolean;
+  readonly thisInstance: React.ReactInstance | null;
 }
 
 interface MappedProps {
@@ -59,18 +61,12 @@ const getDurationString = (
 };
 
 class Component extends React.Component<PropsFromConnect, State> {
-  editSessionButtonId: string;
-
-  constructor(props: PropsFromConnect) {
-    super(props);
-
-    this.editSessionButtonId = 'editSessionButton' + Math.floor(Math.random() * 10000000);
-
-    this.state = {
-      isFormatOfMinutes: false,
-      isInEditing: false
-    };
-  }
+  state = {
+    editSessionButtonId: '',
+    isFormatOfMinutes: false,
+    isInEditing: false,
+    thisInstance: null
+  };
 
   componentWillReceiveProps(nextProps: PropsFromConnect) {
     if (!nextProps.inAdminMode) {
@@ -79,6 +75,13 @@ class Component extends React.Component<PropsFromConnect, State> {
   }
 
   componentWillMount() {
+    this.setState({
+      ...this.state,
+      ...{
+        editSessionButtonId: 'editSessionButton' + Math.floor(Math.random() * 10000000),
+        thisInstance: this
+      }
+    });
     window.addEventListener('click', this.handleClick, false);
   }
 
@@ -89,8 +92,8 @@ class Component extends React.Component<PropsFromConnect, State> {
   handleClick = (event: any) => {
     const clickedEl = event.target;
     const isClickedOutside =
-      !ReactDOM.findDOMNode(this).contains(clickedEl) &&
-      !clickedEl.classList.contains(this.editSessionButtonId);
+      !ReactDOM.findDOMNode(this.state.thisInstance! as React.ReactInstance).contains(clickedEl) &&
+      !clickedEl.classList.contains(this.state.editSessionButtonId);
 
     if (isClickedOutside) {
       this.onClickOutside();
@@ -126,7 +129,7 @@ class Component extends React.Component<PropsFromConnect, State> {
   drawEditIcon(toDraw: boolean) {
     return toDraw
       ? <div
-          className={`table__session-edit ${this.editSessionButtonId}`}
+          className={`table__session-edit ${this.state.editSessionButtonId}`}
           onClick={this.onEditButtonClick}
         />
       : null;
