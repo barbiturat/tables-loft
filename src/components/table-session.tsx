@@ -2,7 +2,8 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import * as moment from 'moment';
-import MouseEvent = React.MouseEvent;
+import { compose, lifecycle, withHandlers, withState } from 'recompose';
+import * as R from 'ramda';
 
 import { StoreStructure, TableSessionStore } from '../interfaces/store-models';
 import { PropsExtendedByConnect } from '../interfaces/component';
@@ -12,13 +13,6 @@ interface Props {
   readonly sessionId?: number;
 }
 
-interface State {
-  readonly editSessionButtonId: string;
-  readonly isFormatOfMinutes: boolean;
-  readonly isInEditing: boolean;
-  readonly thisInstance: React.ReactInstance | null;
-}
-
 interface MappedProps {
   readonly inAdminMode: boolean;
   readonly session: TableSessionStore | null;
@@ -26,154 +20,133 @@ interface MappedProps {
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
+type InnerProps = PropsFromConnect & {
+  readonly setEditSessionButtonId: (val: string) => void;
+  readonly setThisInstance: (val: React.ReactInstance | null) => void;
+  readonly handleClick: (val: Event) => void;
+};
+
 interface SessionDurationData {
   readonly hours: number;
   readonly minutes: number;
   readonly minutesTotal: number;
 }
 
-const getSessionDurationData = (durationSeconds: number): SessionDurationData => {
-  const duration = moment.duration({ seconds: durationSeconds });
+const getDurationPart = R.converge(R.compose, [R.always(Math.floor), R.invoker(0)]);
 
-  return {
-    hours: Math.floor(duration.asHours()),
-    minutes: Math.floor(duration.minutes()),
-    minutesTotal: Math.floor(duration.asMinutes())
-  };
-};
+const getAdminEditedClassName = R.ifElse(
+  Boolean,
+  R.always('table__session-length_admin-edited'),
+  R.always('')
+);
+
+const getSessionDurationData: (val: number) => SessionDurationData = R.compose(
+  R.applySpec<SessionDurationData>({
+    hours: getDurationPart('asHours'),
+    minutes: getDurationPart('minutes'),
+    minutesTotal: getDurationPart('asMinutes')
+  }),
+  moment.duration,
+  R.objOf<string>('seconds')
+);
 
 const getDurationString = (
   hours: number,
   minutes: number,
   minutesTotal: number,
   isFormatOfMinutes: boolean
-): string => {
-  if (isFormatOfMinutes) {
-    return `${minutesTotal}m`;
-  } else {
-    return moment
-      .utc({
-        hours,
-        minutes
-      })
-      .format('H[h] mm[m]');
-  }
-};
+): string =>
+  isFormatOfMinutes
+    ? `${minutesTotal}m`
+    : moment
+        .utc({
+          hours,
+          minutes
+        })
+        .format('H[h] mm[m]');
 
-class Component extends React.Component<PropsFromConnect, State> {
-  state = {
-    editSessionButtonId: '',
-    isFormatOfMinutes: false,
-    isInEditing: false,
-    thisInstance: null
-  };
+const enhance = compose(
+  withState('editSessionButtonId', 'setEditSessionButtonId', ''),
+  withState('isFormatOfMinutes', 'setFormatOfMinutes', false),
+  withState('isInEditing', 'setInEditing', false),
+  withState('thisInstance', 'setThisInstance', null),
+  withHandlers({
+    onClickOutside: ({ setInEditing }) => () => setInEditing(false),
+    onSessionInfoClick: ({ setFormatOfMinutes, isFormatOfMinutes }) => () =>
+      setFormatOfMinutes(!isFormatOfMinutes),
+    onEditButtonClick: ({ setInEditing }) => () => setInEditing(true),
+    onEditComplete: ({ setInEditing }) => () => setInEditing(false)
+  }),
+  withHandlers({
+    handleClick: ({ onClickOutside, thisInstance, editSessionButtonId }) => (event: Event) => {
+      const isClickedOutside = ({ target }: any) =>
+        !ReactDOM.findDOMNode(thisInstance! as React.ReactInstance).contains(target) &&
+        !target.classList.contains(editSessionButtonId);
 
-  componentWillReceiveProps(nextProps: PropsFromConnect) {
-    if (!nextProps.inAdminMode) {
-      this.setEditingMode(false);
-    }
-  }
-
-  componentWillMount() {
-    this.setState({
-      ...this.state,
-      ...{
-        editSessionButtonId: 'editSessionButton' + Math.floor(Math.random() * 10000000),
-        thisInstance: this
-      }
-    });
-    window.addEventListener('click', this.handleClick, false);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('click', this.handleClick, false);
-  }
-
-  handleClick = (event: any) => {
-    const clickedEl = event.target;
-    const isClickedOutside =
-      !ReactDOM.findDOMNode(this.state.thisInstance! as React.ReactInstance).contains(clickedEl) &&
-      !clickedEl.classList.contains(this.state.editSessionButtonId);
-
-    if (isClickedOutside) {
-      this.onClickOutside();
-    }
-  };
-
-  onClickOutside = () => {
-    this.setEditingMode(false);
-  };
-
-  setEditingMode(turnOn: boolean) {
-    this.setState({
-      ...this.state,
-      ...{
-        isInEditing: turnOn
-      }
-    });
-  }
-
-  onSessionInfoClick = (event: MouseEvent<HTMLDivElement>) => {
-    this.setState({
-      ...this.state,
-      ...{
-        isFormatOfMinutes: !this.state.isFormatOfMinutes
-      }
-    });
-  };
-
-  onEditButtonClick = (event: MouseEvent<HTMLDivElement>) => {
-    this.setEditingMode(true);
-  };
-
-  drawEditIcon(toDraw: boolean) {
-    return toDraw
-      ? <div
-          className={`table__session-edit ${this.state.editSessionButtonId}`}
-          onClick={this.onEditButtonClick}
-        />
-      : null;
-  }
-
-  onEditComplete = () => {
-    this.setEditingMode(false);
-  };
-
-  drawDuration(session: TableSessionStore) {
-    const { adminEdited, isInPending, durationSeconds, id } = session;
-    const durationData = getSessionDurationData(durationSeconds);
-    const { hours, minutes, minutesTotal } = durationData;
-
-    if (this.state.isInEditing) {
-      return (
-        <div className="table__session-length-edit">
-          <SessionEditBlock
-            durationSeconds={durationSeconds}
-            sessionId={id}
-            onEditComplete={this.onEditComplete}
+      R.when(isClickedOutside, onClickOutside)(event);
+    },
+    drawEditIcon: ({ editSessionButtonId, onEditButtonClick }) => (toDraw: boolean) => {
+      return toDraw
+        ? <div
+            className={`table__session-edit ${editSessionButtonId}`}
+            onClick={onEditButtonClick}
           />
-        </div>
-      );
-    } else {
-      const adminEditedClassName = adminEdited ? 'table__session-length_admin-edited' : '';
-      const durationString = isInPending
-        ? 'wait...'
-        : getDurationString(hours, minutes, minutesTotal, this.state.isFormatOfMinutes);
+        : null;
+    },
+    drawDuration: ({ isInEditing, onEditComplete, isFormatOfMinutes, onSessionInfoClick }) => (
+      session: TableSessionStore
+    ) => {
+      const { adminEdited, isInPending, durationSeconds, id } = session;
 
-      return (
-        <span
-          className={`table__session-length ${adminEditedClassName}`}
-          onClick={this.onSessionInfoClick}
-        >
-          {durationString}
-        </span>
-      );
+      if (isInEditing) {
+        return (
+          <div className="table__session-length-edit">
+            <SessionEditBlock
+              durationSeconds={durationSeconds}
+              sessionId={id}
+              onEditComplete={onEditComplete}
+            />
+          </div>
+        );
+      } else {
+        const generateDurationString = R.compose(
+          R.apply(getDurationString),
+          R.append(isFormatOfMinutes),
+          R.props(['hours', 'minutes', 'minutesTotal']),
+          getSessionDurationData,
+          R.prop('durationSeconds')
+        );
+        const getDurationInfoString = R.ifElse(
+          Boolean,
+          R.always('wait...'),
+          R.partial(generateDurationString, [session])
+        );
+
+        return (
+          <span
+            className={`table__session-length ${getAdminEditedClassName(adminEdited)}`}
+            onClick={onSessionInfoClick}
+          >
+            {getDurationInfoString(isInPending)}
+          </span>
+        );
+      }
     }
-  }
+  }),
+  lifecycle<InnerProps, {}>({
+    componentWillMount() {
+      this.props.setEditSessionButtonId('editSessionButton' + Math.floor(Math.random() * 10000000));
+      this.props.setThisInstance(this as React.ReactInstance);
+      window.addEventListener('click', this.props.handleClick, false);
+    },
+    componentWillUnmount() {
+      window.removeEventListener('click', this.props.handleClick, false);
+    }
+  })
+);
 
-  render() {
-    const { session } = this.props;
-
+const Component = enhance(
+  ({ session, drawDuration, drawEditIcon, inAdminMode, isInEditing }: any) => {
     if (session) {
       const { durationSeconds, startsAt } = session;
       const finishTime = moment
@@ -189,8 +162,8 @@ class Component extends React.Component<PropsFromConnect, State> {
           <span className="table__session-finish-time">
             {finishTime}
           </span>
-          {this.drawDuration(session)}
-          {this.drawEditIcon(this.props.inAdminMode && !this.state.isInEditing)}
+          {drawDuration(session)}
+          {drawEditIcon(inAdminMode && !isInEditing)}
         </div>
       );
     } else {
@@ -201,7 +174,7 @@ class Component extends React.Component<PropsFromConnect, State> {
       );
     }
   }
-}
+);
 
 const TableSession = connect<
   any,
