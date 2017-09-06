@@ -51,7 +51,10 @@ const getSessionDurationData: (val: number) => SessionDurationData = R.compose(
   R.objOf<string>('seconds')
 );
 
-const drawWrappedSessionEditBlock = ({durationSeconds, id}: TableSessionStore, onEditComplete: () => void) =>
+const drawWrappedSessionEditBlock = (
+  { durationSeconds, id }: TableSessionStore,
+  onEditComplete: () => void
+) =>
   <div className="table__session-length-edit">
     <SessionEditBlock
       durationSeconds={durationSeconds}
@@ -95,17 +98,19 @@ const enhance = compose(
 
       R.when(isClickedOutside, onClickOutside)(event);
     },
-    drawEditIcon: ({ editSessionButtonId, onEditButtonClick, inAdminMode, isInEditing }) => () => {
-      return inAdminMode && !isInEditing
+    drawEditIcon: ({ editSessionButtonId, onEditButtonClick, inAdminMode, isInEditing }) => () =>
+      inAdminMode && !isInEditing
         ? <div
             className={`table__session-edit ${editSessionButtonId}`}
             onClick={onEditButtonClick}
           />
-        : null;
-    },
-    drawDuration: ({ isInEditing, onEditComplete, isFormatOfMinutes, onSessionInfoClick }) => () => (
-      session: TableSessionStore
-    ) => {
+        : null,
+    drawDuration: ({
+      isInEditing,
+      onEditComplete,
+      isFormatOfMinutes,
+      onSessionInfoClick
+    }) => () => (session: TableSessionStore) => {
       if (isInEditing) {
         return drawWrappedSessionEditBlock(session, onEditComplete);
       } else {
@@ -145,36 +150,34 @@ const enhance = compose(
   })
 );
 
-const Component = enhance(
-  ({ session, drawDuration, drawEditIcon }: any) => {
-    if (session) {
-      const { durationSeconds, startsAt } = session;
-      const finishTime = moment
-        .utc(startsAt)
-        .add({
-          seconds: durationSeconds
-        })
-        .format('hh:mm');
+const Component = enhance(({ session, drawDuration, drawEditIcon }: any) => {
+  if (session) {
+    const { durationSeconds, startsAt } = session;
+    const finishTime = moment
+      .utc(startsAt)
+      .add({
+        seconds: durationSeconds
+      })
+      .format('hh:mm');
 
-      return (
-        <div className="table__session-info table__session-info_state_editing">
-          <span className="table__session-name">Last Session</span>
-          <span className="table__session-finish-time">
-            {finishTime}
-          </span>
-          {drawDuration()}
-          {drawEditIcon()}
-        </div>
-      );
-    } else {
-      return (
-        <div className="table__session-info">
-          <div className="table__label table__label_role_no-session">No Sessions Today</div>
-        </div>
-      );
-    }
+    return (
+      <div className="table__session-info table__session-info_state_editing">
+        <span className="table__session-name">Last Session</span>
+        <span className="table__session-finish-time">
+          {finishTime}
+        </span>
+        {drawDuration()}
+        {drawEditIcon()}
+      </div>
+    );
+  } else {
+    return (
+      <div className="table__session-info">
+        <div className="table__label table__label_role_no-session">No Sessions Today</div>
+      </div>
+    );
   }
-);
+});
 
 const TableSession = connect<
   any,
