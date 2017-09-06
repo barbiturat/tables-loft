@@ -51,6 +51,14 @@ const getSessionDurationData: (val: number) => SessionDurationData = R.compose(
   R.objOf<string>('seconds')
 );
 
+const getFinishTime = ({ durationSeconds, startsAt }: TableSessionStore) =>
+  moment
+    .utc(startsAt)
+    .add({
+      seconds: durationSeconds
+    })
+    .format('hh:mm');
+
 const drawWrappedSessionEditBlock = (
   { durationSeconds, id }: TableSessionStore,
   onEditComplete: () => void
@@ -152,19 +160,11 @@ const enhance = compose(
 
 const Component = enhance(({ session, drawDuration, drawEditIcon }: any) => {
   if (session) {
-    const { durationSeconds, startsAt } = session;
-    const finishTime = moment
-      .utc(startsAt)
-      .add({
-        seconds: durationSeconds
-      })
-      .format('hh:mm');
-
     return (
       <div className="table__session-info table__session-info_state_editing">
         <span className="table__session-name">Last Session</span>
         <span className="table__session-finish-time">
-          {finishTime}
+          {getFinishTime(session)}
         </span>
         {drawDuration()}
         {drawEditIcon()}
@@ -183,14 +183,9 @@ const TableSession = connect<
   any,
   any,
   Props
->((state: StoreStructure, ownProps: Props): MappedProps => {
-  const tableSessions = state.app.tableSessionsData.tableSessions;
-  const sessionId = ownProps.sessionId;
-
-  return {
-    inAdminMode: !!state.app.adminToken,
-    session: typeof sessionId === 'number' ? tableSessions[sessionId] : null
-  };
-})(Component);
+>(({ app }: StoreStructure, { sessionId }: Props): MappedProps => ({
+  inAdminMode: !!app.adminToken,
+  session: R.is(Number, sessionId) ? R.path(['tableSessionsData', 'tableSessions'], app) : null
+}))(Component);
 
 export default TableSession;
