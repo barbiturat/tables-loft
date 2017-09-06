@@ -23,6 +23,7 @@ type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 type InnerProps = PropsFromConnect & {
   readonly setEditSessionButtonId: (val: string) => void;
   readonly setThisInstance: (val: React.ReactInstance | null) => void;
+  readonly setInEditing: (val: boolean) => void;
   readonly handleClick: (val: Event) => void;
 };
 
@@ -34,8 +35,8 @@ interface SessionDurationData {
 
 const getDurationPart = R.converge(R.compose, [R.always(Math.floor), R.invoker(0)]);
 
-const getAdminEditedClassName = R.ifElse(
-  Boolean,
+const getAdminEditedClassName: (session: TableSessionStore) => string = R.ifElse(
+  R.compose(Boolean, R.prop('adminEdited')),
   R.always('table__session-length_admin-edited'),
   R.always('')
 );
@@ -49,6 +50,15 @@ const getSessionDurationData: (val: number) => SessionDurationData = R.compose(
   moment.duration,
   R.objOf<string>('seconds')
 );
+
+const drawWrappedSessionEditBlock = ({durationSeconds, id}: TableSessionStore, onEditComplete: () => void) =>
+  <div className="table__session-length-edit">
+    <SessionEditBlock
+      durationSeconds={durationSeconds}
+      sessionId={id}
+      onEditComplete={onEditComplete}
+    />
+  </div>;
 
 const getDurationString = (
   hours: number,
@@ -85,49 +95,39 @@ const enhance = compose(
 
       R.when(isClickedOutside, onClickOutside)(event);
     },
-    drawEditIcon: ({ editSessionButtonId, onEditButtonClick }) => (toDraw: boolean) => {
-      return toDraw
+    drawEditIcon: ({ editSessionButtonId, onEditButtonClick, inAdminMode, isInEditing }) => () => {
+      return inAdminMode && !isInEditing
         ? <div
             className={`table__session-edit ${editSessionButtonId}`}
             onClick={onEditButtonClick}
           />
         : null;
     },
-    drawDuration: ({ isInEditing, onEditComplete, isFormatOfMinutes, onSessionInfoClick }) => (
+    drawDuration: ({ isInEditing, onEditComplete, isFormatOfMinutes, onSessionInfoClick }) => () => (
       session: TableSessionStore
     ) => {
-      const { adminEdited, isInPending, durationSeconds, id } = session;
-
       if (isInEditing) {
-        return (
-          <div className="table__session-length-edit">
-            <SessionEditBlock
-              durationSeconds={durationSeconds}
-              sessionId={id}
-              onEditComplete={onEditComplete}
-            />
-          </div>
-        );
+        return drawWrappedSessionEditBlock(session, onEditComplete);
       } else {
-        const generateDurationString = R.compose(
+        const generateDurationString: (session: TableSessionStore) => string = R.compose(
           R.apply(getDurationString),
           R.append(isFormatOfMinutes),
           R.props(['hours', 'minutes', 'minutesTotal']),
           getSessionDurationData,
           R.prop('durationSeconds')
         );
-        const getDurationInfoString = R.ifElse(
-          Boolean,
+        const getDurationInfoString: (session: TableSessionStore) => string = R.ifElse(
+          R.compose(Boolean, R.prop('isInPending')),
           R.always('wait...'),
-          R.partial(generateDurationString, [session])
+          generateDurationString
         );
 
         return (
           <span
-            className={`table__session-length ${getAdminEditedClassName(adminEdited)}`}
+            className={`table__session-length ${getAdminEditedClassName(session)}`}
             onClick={onSessionInfoClick}
           >
-            {getDurationInfoString(isInPending)}
+            {getDurationInfoString(session)}
           </span>
         );
       }
@@ -146,7 +146,7 @@ const enhance = compose(
 );
 
 const Component = enhance(
-  ({ session, drawDuration, drawEditIcon, inAdminMode, isInEditing }: any) => {
+  ({ session, drawDuration, drawEditIcon }: any) => {
     if (session) {
       const { durationSeconds, startsAt } = session;
       const finishTime = moment
@@ -162,8 +162,8 @@ const Component = enhance(
           <span className="table__session-finish-time">
             {finishTime}
           </span>
-          {drawDuration(session)}
-          {drawEditIcon(inAdminMode && !isInEditing)}
+          {drawDuration()}
+          {drawEditIcon()}
         </div>
       );
     } else {
