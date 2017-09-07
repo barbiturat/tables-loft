@@ -11,27 +11,34 @@ interface Props {
   readonly message: string;
 }
 
+type InnerProps = Props & {
+  readonly isMounted: boolean;
+  readonly errorContainer: HTMLDivElement;
+  readonly setErrorContainer: (val: HTMLDivElement) => void;
+  readonly getErrorContainer: () => HTMLDivElement;
+};
+
 interface MappedProps {}
 
 const TIME_TO_DISAPPEAR = (ERROR_DISPLAY_DURATION - 1) * 1000;
 
+const updateErrorContainer = (getErrorContainer: () => HTMLDivElement) =>
+  getErrorContainer().classList.add('global-errors-disappear');
+
 const enhance = compose(
   withState('isMounted', 'setMounted', false),
-  withProps({
-    errorContainer: HTMLDivElement
-  }),
+  withState('errorContainer', 'setErrorContainer', false),
   withHandlers({
-    updateErrorContainer: ({ errorContainer }) => () =>
-      errorContainer.classList.add('global-errors-disappear')
+    getErrorContainer: ({ errorContainer }) => () => errorContainer
   }),
-  lifecycle({
+  lifecycle<InnerProps, {}>({
     componentDidMount() {
       (this.props as any).setMounted(true);
 
       Observable.of(null)
         .delay(TIME_TO_DISAPPEAR)
-        .takeWhile(() => (this.props as any).isMounted)
-        .subscribe(() => (this.props as any).updateErrorContainer());
+        .takeWhile(() => this.props.isMounted)
+        .subscribe(() => updateErrorContainer(this.props.getErrorContainer));
     },
     componentWillUnmount() {
       (this.props as any).setMounted(false);
@@ -39,12 +46,12 @@ const enhance = compose(
   })
 );
 
-const Component = enhance(({ errorContainer, message }: any) =>
+const Component = enhance(({ setErrorContainer, message }: any) =>
   <div
     className="global-errors__error-window"
     ref={el => {
       if (el !== null) {
-        errorContainer = el;
+        setErrorContainer(el);
       }
     }}
   >
