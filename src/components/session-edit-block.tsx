@@ -42,10 +42,10 @@ const getSessionDurationData: (
 );
 
 const keyCodeIs = R.useWith(R.call, [R.identical, R.prop('keyCode')]);
-const isEsc = keyCodeIs(27);
-const isEnter = keyCodeIs(13);
+const getIsEsc = keyCodeIs(27);
+const getIsEnter = keyCodeIs(13);
 const preventDefaultOnControlKeys = R.when(
-  R.either(isEsc, isEnter),
+  R.either(getIsEsc, getIsEnter),
   R.invoker(0, 'preventDefault')
 );
 
@@ -73,27 +73,27 @@ const enhance = compose(
     onInputKeyDown: ({ sessionId, onEditComplete, dispatch, hours, minutes }) => (
       event: KeyboardEvent<HTMLInputElement>
     ) => {
-      const _dispatchTableSessionChange = R.compose(
+      const dispatchTableSessionChange = R.compose(
         dispatch,
         requestingTableSessionChange(sessionId),
         R.invoker(0, 'asSeconds'),
         moment.duration
       );
-      const dispatchTableSessionChange = R.partial(_dispatchTableSessionChange, [
+      const dispatchTableSessionChangeApplied = R.partial(dispatchTableSessionChange, [
         {
           hours,
           minutes
         }
       ]);
-      const ifEsc = R.when(isEsc, onEditComplete);
-      const enterCondition = R.ifElse(
-        isEnter,
-        R.juxt([dispatchTableSessionChange, onEditComplete]),
-        ifEsc
+      const onEsc = R.when(getIsEsc, onEditComplete);
+      const processKeyActions = R.ifElse(
+        getIsEnter,
+        R.juxt([dispatchTableSessionChangeApplied, onEditComplete]),
+        onEsc
       );
       const isSessionIdIsNumber = R.partial(R.is, [Number, sessionId]);
 
-      return R.when(isSessionIdIsNumber, R.juxt([preventDefaultOnControlKeys, enterCondition]))(
+      return R.when(isSessionIdIsNumber, R.juxt([preventDefaultOnControlKeys, processKeyActions]))(
         event
       );
     }
