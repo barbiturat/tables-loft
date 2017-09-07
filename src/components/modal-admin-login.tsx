@@ -55,49 +55,43 @@ type Handlers = {
   readonly handleSubmit: (formModelData: StringDict) => void;
   readonly requestToClose: () => void;
   readonly onCloseClick: () => void;
-  readonly handleRequestCloseFunc: () => void;
+  readonly onRequestClose: () => void;
+};
+
+const resetPasswordInput = (dispatch: Function) => {
+  dispatch(actions.change('formsData.managerLoginForm.password', ''));
+  dispatch(actions.setInitial('formsData.managerLoginForm.password'));
+};
+
+const requestToClose = (onClose: Function, dispatch: Function) => {
+  resetPasswordInput(dispatch);
+  onClose();
 };
 
 const HandlersComponent = compose(
   withHandlers({
-    resetPasswordInput: ({ dispatch }) => () => {
-      dispatch(actions.change('formsData.managerLoginForm.password', ''));
-      dispatch(actions.setInitial('formsData.managerLoginForm.password'));
-    },
     handleSubmit: ({ dispatch }) => (formModelData: StringDict) => {
       R.compose(dispatch, requestingManagerLogin)('formsData.managerLoginForm', formModelData);
     }
   }),
   withHandlers({
-    requestToClose: ({ resetPasswordInput, onClose }: any) => () => {
-      resetPasswordInput();
-      onClose();
-    }
-  }),
-  withHandlers({
-    onCloseClick: ({ requestToClose }: any) => (event: MouseEvent<HTMLAnchorElement>) => {
+    onCloseClick: ({ onClose, dispatch }: any) => (event: MouseEvent<HTMLAnchorElement>) => {
       event.preventDefault();
-      requestToClose();
+      requestToClose(onClose, dispatch);
     },
-    handleRequestCloseFunc: ({ requestToClose }: any) => () => {
-      requestToClose();
+    onRequestClose: ({ onClose, dispatch }: any) => () => {
+      requestToClose(onClose, dispatch);
     }
   })
 );
 
 const Component = HandlersComponent(
-  ({
-    isOpen,
-    pending,
-    handleRequestCloseFunc,
-    onCloseClick,
-    handleSubmit
-  }: PropsFromConnect & Handlers) =>
+  ({ isOpen, pending, onRequestClose, onCloseClick, handleSubmit }: PropsFromConnect & Handlers) =>
     <ReactModal
       contentLabel="Admin Login"
       isOpen={isOpen}
       shouldCloseOnOverlayClick={true}
-      onRequestClose={handleRequestCloseFunc}
+      onRequestClose={onRequestClose}
       className="modal modal_role_login-manager"
       overlayClassName="modal__overlay"
     >
