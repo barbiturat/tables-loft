@@ -15,10 +15,10 @@ import {
 
 import { StoreStructure } from '../interfaces/store-models';
 import { PropsExtendedByConnect } from '../interfaces/component';
-import { managerLoginForm } from '../constants/form-fields';
+import { managerLoginForm, ManagerLoginForm as LoginForm } from '../constants/form-fields';
 import { ManagerLoginForm } from '../interfaces/forms';
 import { isRequiredField } from '../constants/messages';
-import { isNotEmpty as isFilled } from '../helpers';
+import { isNotEmpty } from '../helpers';
 import { StringDict } from '../interfaces/index';
 import requestingManagerLogin from '../action-creators/requesting-admin-token';
 import * as R from 'ramda';
@@ -35,7 +35,10 @@ interface MappedProps {
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
-const { validators: { password: passwordChecks } } = managerLoginForm;
+const getValidators = ({ validators: { password: { isCorrect, isFilled } } }: LoginForm) => ({
+  [isFilled]: isNotEmpty,
+  [isCorrect]: () => true
+});
 
 const WaitMessage = ({ isPending }: { readonly isPending: boolean }) =>
   isPending ? <div>Wait...</div> : null;
@@ -115,10 +118,7 @@ const Component = HandlersComponent(
             autoComplete="false"
             autoFocus={true}
             model=".password"
-            validators={{
-              [passwordChecks.isFilled]: isFilled,
-              [passwordChecks.isCorrect]: () => true
-            }}
+            validators={getValidators(managerLoginForm)}
           />
         </label>
 

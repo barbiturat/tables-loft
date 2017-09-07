@@ -1,3 +1,12 @@
+export type ManagerLoginForm = {
+  readonly validators: {
+    readonly password: {
+      readonly isFilled: string,
+      readonly isCorrect: string
+    }
+  }
+};
+
 export const loginForm = {
   validators: {
     email: {
@@ -12,7 +21,7 @@ export const loginForm = {
   }
 };
 
-export const managerLoginForm = {
+export const managerLoginForm: ManagerLoginForm = {
   validators: {
     password: {
       isFilled: 'isFilled',
