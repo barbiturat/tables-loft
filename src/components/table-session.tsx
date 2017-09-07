@@ -142,11 +142,11 @@ const enhance = compose(
   }),
   withHandlers({
     handleClick: ({ onEditComplete, thisInstance, editSessionButtonId }) => (event: Event) => {
-      const isClickedOutside = ({ target }: any) =>
+      const getIsClickedOutside = ({ target }: any) =>
         !ReactDOM.findDOMNode(thisInstance! as React.ReactInstance).contains(target) &&
         !target.classList.contains(editSessionButtonId);
 
-      R.when(isClickedOutside, onEditComplete)(event);
+      R.when(getIsClickedOutside, onEditComplete)(event);
     }
   }),
   lifecycle<InnerProps, {}>({
