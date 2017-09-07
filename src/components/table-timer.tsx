@@ -1,26 +1,24 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import * as moment from 'moment';
+import { compose, withHandlers, withState } from 'recompose';
 
 import { StoreStructure } from '../interfaces/store-models';
-import { PropsExtendedByConnect } from '../interfaces/component';
 
 interface Props {
   readonly isActive: boolean;
   readonly startsAt?: number;
 }
 
-interface State {
-  readonly isFormatOfMinutes: boolean;
-}
-
 interface MappedProps {
   readonly utcMilliseconds: number;
 }
 
-type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
-
-const getDurationActivityString = (isFormatOfMinutes: boolean, utcMilliseconds: number, startsAt?: number) => {
+const getDurationActivityString = (
+  isFormatOfMinutes: boolean,
+  utcMilliseconds: number,
+  startsAt?: number
+) => {
   if (!startsAt || !utcMilliseconds) {
     return 'Wrong Parameters!';
   }
@@ -38,37 +36,31 @@ const getDurationActivityString = (isFormatOfMinutes: boolean, utcMilliseconds: 
   }
 };
 
-export class Component extends React.Component<PropsFromConnect, State> {
-  constructor(props: PropsFromConnect) {
-    super(props);
+const enhance = compose(
+  withState('isFormatOfMinutes', 'setFormatOfMinutes', false),
+  withHandlers({
+    onClick: ({ isFormatOfMinutes, setFormatOfMinutes }) => () =>
+      setFormatOfMinutes(isFormatOfMinutes)
+  })
+);
 
-    this.state = {
-      isFormatOfMinutes: false
-    };
-  }
-
-  onClick = () => {
-    this.setState({
-      isFormatOfMinutes: !this.state.isFormatOfMinutes
-    });
-  };
-
-  render() {
-    const isAvailable = !this.props.isActive;
+const Component = enhance(
+  ({ isActive, isFormatOfMinutes, utcMilliseconds, startsAt, onClick }: any) => {
+    const isAvailable = !isActive;
     const labelAvailableText = isAvailable
       ? 'Available'
-      : getDurationActivityString(this.state.isFormatOfMinutes, this.props.utcMilliseconds, this.props.startsAt);
+      : getDurationActivityString(isFormatOfMinutes, utcMilliseconds, startsAt);
     const availabilityClass = isAvailable
       ? 'table__label table__label_role_availability'
       : 'table__label table__label_role_counter';
 
     return (
-      <div className={availabilityClass} onClick={this.onClick}>
+      <div className={availabilityClass} onClick={onClick}>
         {labelAvailableText}
       </div>
     );
   }
-}
+);
 
 const TableTimer = connect<
   any,
