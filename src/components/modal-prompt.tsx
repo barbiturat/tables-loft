@@ -19,23 +19,24 @@ interface MappedProps {}
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
+const close = (setOpenInner: Function, onClose: Function) => {
+  setOpenInner(false);
+  onClose();
+};
+
 const enhance = compose(
   withState('isOpenInner', 'setOpenInner', false),
   withHandlers({
-    close: ({ setOpenInner, onClose }) => () => {
-      setOpenInner(false);
-      onClose();
-    }
-  }),
-  withHandlers({
-    onClickOkInner: ({ close, onClickOk }) => (event: MouseEvent<HTMLAnchorElement>) => {
+    onClickOkInner: ({ onClickOk, setOpenInner, onClose }) => (
+      event: MouseEvent<HTMLAnchorElement>
+    ) => {
       event.preventDefault();
-      close();
+      close(setOpenInner, onClose);
       onClickOk();
     },
-    onClickCancel: ({ close }) => (event: MouseEvent<HTMLAnchorElement>) => {
+    onClickCancel: ({ setOpenInner, onClose }) => (event: MouseEvent<HTMLAnchorElement>) => {
       event.preventDefault();
-      close();
+      close(setOpenInner, onClose);
     }
   }),
   lifecycle({
