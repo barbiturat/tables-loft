@@ -10,15 +10,15 @@ interface Props {
   readonly tables: TablesStore;
 }
 
-const numOrUndefined = R.unless(R.is(Number), R.always(undefined));
+const getNumOrUndefined = R.unless(R.is(Number), R.always(undefined));
 
 const SimpleTable = (props: TableProps): JSX.Element => <Table {...props} />;
 
 const mapTableProps = mapProps<TableProps, TableStore>(
   R.compose(
     R.evolve<TableProps>({
-      currentSessionId: numOrUndefined,
-      lastSessionId: numOrUndefined
+      currentSessionId: getNumOrUndefined,
+      lastSessionId: getNumOrUndefined
     }),
     renameKeys({ tableType: 'type' }),
     R.pickAll([
