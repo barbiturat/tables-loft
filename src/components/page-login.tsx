@@ -23,7 +23,16 @@ interface MappedProps {
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
-const { validators: { email: emailChecks, password: passwordChecks } } = loginFormField;
+const getEmailValidators = ({ validators: { email: emailChecks } }: any) => ({
+  [emailChecks.isEmail]: isEmail,
+  [emailChecks.isFilled]: isFilled,
+  [emailChecks.isRegistered]: () => true
+});
+
+const getPasswordValidators = ({ validators: { password: passwordChecks } }: any) => ({
+  [passwordChecks.isFilled]: isFilled,
+  [passwordChecks.isCorrect]: () => true
+});
 
 const getWaitMessage = (isPending: boolean) =>
   isPending ? <div className="form-message form-message_type_wait">Wait...</div> : null;
@@ -43,11 +52,7 @@ const PageLogin = enhance(
           <Control.text
             model=".email"
             validateOn="blur"
-            validators={{
-              [emailChecks.isEmail]: isEmail,
-              [emailChecks.isFilled]: isFilled,
-              [emailChecks.isRegistered]: () => true
-            }}
+            validators={getEmailValidators(loginFormField)}
           />
           <Errors
             model=".email"
@@ -67,10 +72,7 @@ const PageLogin = enhance(
           <Control
             type="password"
             model=".password"
-            validators={{
-              [passwordChecks.isFilled]: isFilled,
-              [passwordChecks.isCorrect]: () => true
-            }}
+            validators={getPasswordValidators(loginFormField)}
           />
           <Errors
             model=".password"
