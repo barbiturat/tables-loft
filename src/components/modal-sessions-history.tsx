@@ -94,6 +94,19 @@ const getPaginator = (
       />
     : null;
 
+const getAddedProps = (
+  currentPageNum: number,
+  currentTable: TableStore,
+  sessions: ReadonlyArray<TableSessionStore>
+) => ({
+  historyPending: getSessionsHistoryInPending(currentTable),
+  modalClass: MODAL_CLASSES[currentTable.tableType as string] || '',
+  caption: currentTable.name,
+  sessionsPage: getSessionsPage(sessions, currentPageNum),
+  numOfPages: Math.ceil(sessions.length / PAGE_SIZE),
+  firstIdx: currentPageNum * PAGE_SIZE
+});
+
 const enhance = compose(
   withState('currentPageNum', 'setCurrentPageNum', 0),
   withHandlers({
@@ -108,18 +121,9 @@ const enhance = compose(
     onRequestClose: ({ dispatch }) => () => requestToClose(dispatch)
   }),
   branch(R.compose(R.not, R.prop('currentTable')), renderNothing),
-  withProps(({ allTableSessions, currentTable, currentPageNum }) => {
-    const sessions = getTableSessions(allTableSessions, currentTable);
-
-    return {
-      historyPending: getSessionsHistoryInPending(currentTable),
-      modalClass: MODAL_CLASSES[currentTable.tableType as string] || '',
-      caption: currentTable.name,
-      sessionsPage: getSessionsPage(sessions, currentPageNum),
-      numOfPages: Math.ceil(sessions.length / PAGE_SIZE),
-      firstIdx: currentPageNum * PAGE_SIZE
-    };
-  })
+  withProps(({ allTableSessions, currentTable, currentPageNum }) =>
+    getAddedProps(currentPageNum, currentTable, getTableSessions(allTableSessions, currentTable))
+  )
 );
 
 const Component = enhance(
