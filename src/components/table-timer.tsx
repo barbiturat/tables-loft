@@ -20,11 +20,7 @@ interface MappedProps {
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
-const getDurationActivityString = (props: PropsFromConnect, state: State) => {
-  const startsAt = props.startsAt;
-  const utcMilliseconds = props.utcMilliseconds;
-  const isFormatOfMinutes = state.isFormatOfMinutes;
-
+const getDurationActivityString = (isFormatOfMinutes: boolean, utcMilliseconds: number, startsAt?: number) => {
   if (!startsAt || !utcMilliseconds) {
     return 'Wrong Parameters!';
   }
@@ -61,7 +57,7 @@ export class Component extends React.Component<PropsFromConnect, State> {
     const isAvailable = !this.props.isActive;
     const labelAvailableText = isAvailable
       ? 'Available'
-      : getDurationActivityString(this.props, this.state);
+      : getDurationActivityString(this.state.isFormatOfMinutes, this.props.utcMilliseconds, this.props.startsAt);
     const availabilityClass = isAvailable
       ? 'table__label table__label_role_availability'
       : 'table__label table__label_role_counter';
