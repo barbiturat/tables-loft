@@ -68,7 +68,6 @@
     "redux-actions": "^2.2.1",
     "redux-observable": "^0.16.0",
     "redux-router": "^2.1.2",
-    "reselect": "^3.0.1",
     "rxjs": "^5.4.3",
     "tcomb-validation": "^3.4.1",
     "validator": "^8.1.0"
