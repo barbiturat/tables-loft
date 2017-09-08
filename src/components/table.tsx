@@ -30,9 +30,9 @@ interface MappedProps {
   readonly sessions: TableSessionsStore;
 }
 
-const isTableActive = (currentSession?: TableSessionStore): boolean => !!currentSession;
+const getIsTableActive = (currentSession?: TableSessionStore): boolean => !!currentSession;
 
-const startsAtSelector = (currentSession?: TableSessionStore) =>
+const getIsStartsAtSelector = (currentSession?: TableSessionStore) =>
   currentSession && currentSession.startsAt;
 
 const getDisabledLabel = (isDisabled?: boolean) =>
@@ -84,7 +84,7 @@ const enhance = compose(
       }
 
       const getActionCreator = (identyfier: number) =>
-        (isTableActive(getCurrentSession()) ? requestingTableStop : requestingTableStart)(
+        (getIsTableActive(getCurrentSession()) ? requestingTableStop : requestingTableStart)(
           identyfier
         );
 
@@ -99,7 +99,7 @@ const enhance = compose(
       const getPromptMessage = (toStop: boolean) => `${toStop ? 'Stop' : 'Start'} table "${name}"`;
 
       setPromptOpen(true);
-      R.compose(setPromptMessage, getPromptMessage, isTableActive)(getCurrentSession());
+      R.compose(setPromptMessage, getPromptMessage, getIsTableActive)(getCurrentSession());
     }
   })
 );
@@ -119,7 +119,7 @@ const Component = enhance(
     isPromptOpen,
     promptMessage
   }: any) => {
-    const isActive = isTableActive(getCurrentSession());
+    const isActive = getIsTableActive(getCurrentSession());
     const getTableTypeClassName = () =>
       type
         ? ({
@@ -146,7 +146,7 @@ const Component = enhance(
           className="table__button table__button_role_change-availability"
           onClick={onChangeStatusClick}
         />
-        <TableTimer isActive={isActive} startsAt={startsAtSelector(getCurrentSession())} />
+        <TableTimer isActive={isActive} startsAt={getIsStartsAtSelector(getCurrentSession())} />
         <TableSession sessionId={lastSessionId} />
         <a href="" className="table__btn-view-sessions" onClick={onViewMoreClick}>
           View More
