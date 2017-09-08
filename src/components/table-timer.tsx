@@ -2,6 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import * as moment from 'moment';
 import { compose, withHandlers, withState } from 'recompose';
+import * as R from 'ramda';
 
 import { StoreStructure } from '../interfaces/store-models';
 
@@ -18,7 +19,7 @@ const getDurationActivityString = (
   isFormatOfMinutes: boolean,
   utcMilliseconds: number,
   startsAt?: number
-) => {
+): string => {
   if (!startsAt || !utcMilliseconds) {
     return 'Wrong Parameters!';
   }
@@ -46,17 +47,21 @@ const enhance = compose(
 
 const Component = enhance(
   ({ isActive, isFormatOfMinutes, utcMilliseconds, startsAt, onClick }: any) => {
-    const isAvailable = !isActive;
-    const labelAvailableText = isAvailable
-      ? 'Available'
-      : getDurationActivityString(isFormatOfMinutes, utcMilliseconds, startsAt);
-    const availabilityClass = isAvailable
-      ? 'table__label table__label_role_availability'
-      : 'table__label table__label_role_counter';
+    const getIsAvailable = () => !isActive;
+    const getLabelAvailableText = R.ifElse(
+      getIsAvailable,
+      R.always('Available'),
+      R.partial(getDurationActivityString, [isFormatOfMinutes, utcMilliseconds, startsAt])
+    );
+    const getAvailabilityClass = R.ifElse(
+      getIsAvailable,
+      R.always('table__label table__label_role_availability'),
+      R.always('table__label table__label_role_counter')
+    );
 
     return (
-      <div className={availabilityClass} onClick={onClick}>
-        {labelAvailableText}
+      <div className={getAvailabilityClass(null)} onClick={onClick}>
+        {getLabelAvailableText(null)}
       </div>
     );
   }
