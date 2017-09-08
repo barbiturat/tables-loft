@@ -30,6 +30,8 @@ interface MappedProps {
   readonly sessions: TableSessionsStore;
 }
 
+const getStartTime = R.compose(R.invoker(1, 'format')('H[h] mm[m]'), moment.utc);
+
 const getIsTableActive = (currentSession?: TableSessionStore): boolean => !!currentSession;
 
 const getIsStartsAtSelector = (currentSession?: TableSessionStore) =>
@@ -39,20 +41,14 @@ const getDisabledLabel = (isDisabled?: boolean) =>
   isDisabled
     ? <span className="table__label table__label_role_disabled">Pool Table 2 Is Not Active</span>
     : null;
+    
+const StartTimeLabel = ({startsAt}: any) =>
+  <div className="table__label table__label_role_start-time">
+    {getStartTime(startsAt)}
+  </div>;
 
-const renderActiveSessionStartTime = (currentSession?: TableSessionStore) => {
-  if (!currentSession) {
-    return null;
-  } else {
-    const startTime = moment.utc(currentSession.startsAt).format('H[h] mm[m]');
-
-    return (
-      <div className="table__label table__label_role_start-time">
-        {startTime}
-      </div>
-    );
-  }
-};
+const renderActiveSessionStartTime: (currentSession?: TableSessionStore) => React.ReactNode =
+  R.when(Boolean, R.compose(StartTimeLabel, R.objOf('startsAt'), R.prop('startsAt')));
 
 const enhance = compose(
   withState('isPromptOpen', 'setPromptOpen', false),
