@@ -60,7 +60,7 @@ const Component = enhance(
     <div className="header">
       <div className="header__section header__section_role_hamburger" />
       <div className="header__section header__section_role_caption">
-        <span className="header__caption">Boston Pool Loft</span>
+        <span className="header__caption">Tables Loft</span>
       </div>
       <div className="header__section header__section_role_utils">
         <ManagerButton

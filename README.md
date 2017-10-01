@@ -1,4 +1,4 @@
-# Pool-loft-app #
+# Tables-loft-app #
 
 ## Running a server locally ##
 1. Install all packages: `yarn`
